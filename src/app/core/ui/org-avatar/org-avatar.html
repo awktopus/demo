@@ -1,0 +1,17 @@
+<!-- org avatar -->
+<div *ngIf="_imageUrl">
+  <img [src]="_imageUrl" />
+</div>
+
+<!-- org initials icon -->
+<div class="org-initial-avatar" *ngIf="!_imageUrl && _initials" 
+[style.background-color]="bgColor" 
+[style.color]="fontColor">
+  <img class="default-org-avatar" src="/assets/avatars/home.png" />
+  <div>{{_initials}}</div>
+</div>
+
+<!-- default org icon -->
+<div item-left *ngIf="!_imageUrl && !_initials">
+  <img [src]="_default" />
+</div>

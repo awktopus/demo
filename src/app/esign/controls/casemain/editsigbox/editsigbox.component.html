@@ -1,0 +1,29 @@
+
+ <div class='sigformlyr'>
+  <div class='tag1' ngDraggable (stopped)="dragStop($event)" *ngIf="showbox" [style.top.px]="top1" [style.left.px]="left1">signing box1</div>
+  <div class='tag2' ngDraggable (stopped)="dragStop($event)" *ngIf="showbox">signing box2</div>
+  <img src='/assets/imgs/1040ez.jpg' width=540pt >
+ </div>
+ 
+  <div class='coverlettercontainer'>
+   <table width=100%>
+    <tr>
+      <td width=24% align=center>
+          <span>
+              <button mat-raised-button color="accent" class="text-upper" (click)='enableEdit()'>Edit Box</button>
+             </span>
+      </td>
+      <td width=24% align=center>
+          <span>
+              <button mat-raised-button color="accent" class="text-upper" (click)='saveEdit()'>Save</button>
+             </span>
+      </td>
+      <td width=24% align=center>
+        <span>
+          <button mat-raised-button color="accent" class="text-upper" (click)='closeme()'>Cancel</button>
+         </span>
+      </td>
+      <td width=28%></td>
+    </tr>
+  </table>
+</div>

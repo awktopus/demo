@@ -1,0 +1,87 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="sideNavOpened" class="left-sidenav"
+    (open)="resizeService.resizeInformer$.next()" (close)="resizeService.resizeInformer$.next()">
+    <header class="sidenav-header" fxLayout="row" fxLayoutAlign="space-between center">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div fxFlex class="text-center">
+        <ui-current-ou></ui-current-ou>
+        <!-- <a href="/">
+          <img *ngIf="darkTheme; else darkLogo" src="/assets/logo/logo_new_long.png">
+          <ng-template #darkLogo>
+            <img src="/assets/logo/logo_new_long.png">
+          </ng-template>
+        </a> -->
+      </div>
+    </header>
+    <perfect-scrollbar class="perfect-scrollbar" *ngIf="!isSuspended">
+      <mat-divider></mat-divider>
+      <px-gdn-sidemenu>
+        <px-gdn-sideitem title="Dashboard" [routerLinkUrl]="'dashboard'">
+          <mat-icon>dashboard</mat-icon>
+        </px-gdn-sideitem>
+        <px-gdn-sideitem title="ESign" *ngIf='isAccountingFirm || isClient'>
+          <mat-icon>border_color</mat-icon>
+          <px-gdn-sideitem title="Case Management" [routerLinkUrl]="['esign/history', 'reviewcases']"
+            *ngIf='isAccountingFirm && !isClient'>
+            <mat-icon>note_add</mat-icon>
+          </px-gdn-sideitem>
+          <px-gdn-sideitem title="Settings" [routerLinkUrl]="'esign/settings'" *ngIf='isAccountingFirm && !isClient'>
+            <mat-icon>settings_applications</mat-icon>
+          </px-gdn-sideitem>
+          <px-gdn-sideitem title="My eSign Cases" [routerLinkUrl]="'esign/mycases'"
+            *ngIf='isAccountingFirm && isClient'>
+            <mat-icon>assignment</mat-icon>
+          </px-gdn-sideitem>
+        </px-gdn-sideitem>
+        <px-gdn-sideitem title="Income & Expense" el-permission permission-type="TOOL_EXPENSES_READ">
+          <mat-icon>receipt</mat-icon>
+          <px-gdn-sideitem title="Tracker" [routerLinkUrl]="'incomeexpense/settings'">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </px-gdn-sideitem>
+        </px-gdn-sideitem>
+      </px-gdn-sidemenu>
+    </perfect-scrollbar>
+    <footer class="secondary-text-color">
+      <mat-divider></mat-divider>
+      <p class="footer-container" fxLayout="row" fxLayoutAlign="space-around none">
+        <span class="footer-text"> Everleagues © All Rights Reserved</span>
+        <span class="push-left-sm" fxLayout="row">
+          <mat-icon mat-icon-button class="icon-app icon-color" fontSet="fontawesome" fontIcon="fa-apple"></mat-icon>
+          <mat-icon mat-icon-button class="icon-app icon-color" fontSet="fontawesome" fontIcon="fa-android"></mat-icon>
+        </span>
+      </p>
+    </footer>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h4> EVERLEAGUES </h4>
+      <span fxFlex></span>
+
+      <img src="assets/avatars/admin.png" class="cursor-pointer push-left-sm" [matMenuTriggerFor]="userMenu">
+      <mat-menu #userMenu="matMenu">
+        <mat-list>
+          <mat-list-item>
+            <img mat-list-avatar src="assets/avatars/admin.png">
+            <h4 matLine> {{displayName}} </h4>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </mat-list>
+        <mat-nav-list>
+          <a mat-list-item (click)="logout($event)">
+            <h4 matLine>Sign out</h4>
+          </a>
+        </mat-nav-list>
+      </mat-menu>
+    </mat-toolbar>
+    <div class="wrapper" [class.wrapper-box]="boxedLayout">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

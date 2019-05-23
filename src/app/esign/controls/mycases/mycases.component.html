@@ -1,0 +1,442 @@
+<div class='row'>
+  <table width=60%>
+    <tr>
+      <td>
+        <label class="heading-label">eSign Cases</label>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <mat-radio-group [(ngModel)]="casefilter">
+          <mat-radio-button value=0>All &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button value=1>To be Signed&nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button value=2>Signed&nbsp;&nbsp;&nbsp;</mat-radio-button>
+        </mat-radio-group>
+      </td>
+    </tr>
+    <tr>
+      <br>
+    </tr>
+  </table>
+  <div class='caselist'>
+    <div *ngFor="let case of mycases">
+      <mat-card *ngIf='casefilter==0||(casefilter==1&&case.status=="ESign")||(casefilter==2&&case.status=="Signed")' class='casecard'
+        (click)='selectcase(case.caseId)' [style.background]="case.selected ? '#ffffee':''">
+        <mat-card-header>
+          <img src="/assets/imgs/esign.png" mat-card-avatar big>
+          <mat-card-title style='flex:1;'>{{case.caseId}} </mat-card-title>
+          <mat-icon *ngIf='case.selected' class='cardlbl'>check</mat-icon>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Created: {{case.createdDate}}</p>
+          <p>eSign Status: {{tStatus(case.status)}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class='casecontent' style="word-break:break-word;white-space:normal !important;">
+    <span *ngIf="!selectedcase">
+      <mat-icon class="information-label">arrow_back</mat-icon>
+      <label class="information-label">Select a case as listed on the left to view details</label>
+    </span>
+    <div *ngIf='casedocs'>
+      <u>
+        <p>
+          <strong>Tax Forms for Review/Records</strong>
+        </p>
+      </u>
+      <mat-card *ngFor="let pd of casedocs" class='casecard' (click)="displayReviewDoc(pd);" [style.background]="pd.selected ? '#ffffee':''">
+        <mat-card-content>
+          <table width=98%>
+            <tr>
+              <td valign="center">
+                <img src="/assets/imgs/tax_1.png" mat-card-avatar>
+              </td>
+              <td>
+                <div style="word-break:break-all;white-space:normal !important;">{{pd.name}}</div>
+                <mat-icon *ngIf='pd.selected' class='cardlbl'>check</mat-icon>
+                <p>
+                  <font color=green>{{pd.docSizeKB}} KB</font>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+      <span *ngIf='casedocs.length==0'>
+        <br>
+        <font color=#ccc size=-1>No data for this case.</font>
+      </span>
+    </div>
+    <div *ngIf="caseinfo">
+      <hr>
+      <u>
+        <p>
+          <strong>Tax Forms for Signature</strong>
+        </p>
+      </u>
+      <mat-card *ngIf="primary&&fprimary" class='casecard' (click)='switchOffPDFCard(); goCaseSec(primary,fprimary,"esign") ; '
+        [style.background]="primary.selected ? '#ffffee':''">
+        <mat-card-header>
+          <table width=98%>
+            <tr>
+              <td valign="center">
+                <img src="/assets/imgs/esign_pen.png" mat-card-avatar>
+              </td>
+              <td>
+                <p text-wrap>Signing as Primary:
+                  <br>
+                  <u>{{primary.firstName}} {{primary.lastName}} </u>
+                </p>
+                <p>Signed:{{caseinfo.priEsignedFormCount}}
+                  <font color=green>unSigned: {{caseinfo.priUnEsignedFormCount}}</font>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </mat-card-header>
+      </mat-card>
+      <mat-card *ngIf="secondary&&fsecondary" class='casecard' (click)='goCaseSec(secondary,fsecondary,"esign") ; switchOffPDFCard()'
+        [style.background]="secondary.selected ? '#ffffee':''">
+        <mat-card-header>
+          <table width=98%>
+            <tr>
+              <td valign="center">
+                <img src="/assets/imgs/esign_pen.png" mat-card-avatar>
+              </td>
+              <td>
+                <p text-wrap>Signing as secondary:
+                  <br>
+                  <u>{{secondary.firstName}} {{secondary.lastName}} </u>
+                </p>
+                <p>Signed:{{caseinfo.secEsignedFormCount}}
+                  <font color=green>unSigned: {{caseinfo.secUnEsignedFormCount}}</font>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </mat-card-header>
+      </mat-card>
+      <mat-card *ngIf="primary&&fNoneSign" class='casecard' (click)='switchOffPDFCard(); goCaseSec(primary,fNoneSign,"nonesign");'
+        [style.background]="viewtype==='esignformview' ? '#ffffee':''">
+        <mat-card-header>
+          <table width=98%>
+            <tr>
+              <td valign="center">
+                <img src="/assets/imgs/nonesign.png" mat-card-avatar>
+              </td>
+              <td>
+                <p>Paper forms: Please
+                  <br> print, sign and upload
+                  <mat-icon *ngIf="viewtype==='esignformview'"></mat-icon>
+                </p>
+                <p>Completed:{{caseinfo.esignedFormCount}}</p>
+                <font color=green>Pending: {{caseinfo.nonEsignFormCount}}</font>
+              </td>
+            </tr>
+          </table>
+        </mat-card-header>
+      </mat-card>
+      <mat-card class='casecard' (click)="goEsignFormView() ;  switchOffPDFCard()" [style.background]="viewtype==='esignformview' ? '#ffffee':''">
+        <mat-card-header>
+          <table width=98%>
+            <tr>
+              <td valign="center">
+                <img src="/assets/imgs/esign.1.png" mat-card-avatar>
+              </td>
+              <td>
+                <p>Review eSign Forms
+                  <mat-icon *ngIf="viewtype==='esignformview'" class='cardlbl'>check</mat-icon>
+                </p>
+                <p>Total:{{caseinfo.totalFormCount}}</p>
+
+                <font color=green>Signed: {{caseinfo.esignedFormCount}}</font>
+              </td>
+            </tr>
+          </table>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+  <br>
+  <div *ngIf="viewtype == 'reviewdoc'" class="casedoc">
+    <p>Form Name:
+      <strong>{{docData.name}}</strong>
+    </p>
+    <iframe width="95%" height="600" [src]="pdfUrl | safe">
+    </iframe>
+  </div>
+  <div *ngIf="viewtype == 'seccheck'" class="casedoc">
+    <table width=100%>
+      <tr>
+        <td align=center width="100%">
+          <p>
+            <strong>Identity Verification</strong>
+          </p>
+          <hr>
+        </td>
+      </tr>
+      <tr>
+        <td align=center width="100%">
+          <h5>{{signer.firstName}} {{signer.lastName}}</h5>
+          <td>
+      </tr>
+      <tr>
+        <td align=center>
+          <div style='width:80%; word-break:break-all;white-space:normal !important;'>
+            <font color='warning' size=-1>
+              <i>Tax authorities requires us to verify your identity prior to accepting your signature,
+                <br> please answer the following question(s)</i>
+            </font>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+    </table>
+    <br>
+    <table width=100%>
+      <tr>
+        <td align=right width=40%>
+          <span *ngIf="cliIdQuestion1" class='casecard'>
+            {{cliIdQuestion1.question}}
+          </span>
+        </td>
+        <td align=left width=30%>
+          <mat-form-field *ngIf="cliIdQuestion1" class="questionfield">
+            <input matInput placeholder="Answer here" [(ngModel)]="cliIdAnswer1">
+          </mat-form-field>
+        </td>
+        <td align=left width=30%>
+          <label *ngIf="message1" style="color: orangered">{{message1}}</label>
+        </td>
+      </tr>
+      <tr>
+        <td align=right>
+          <span *ngIf="cliIdQuestion2" class='casecard'>
+            {{cliIdQuestion2.question}}
+          </span>
+        </td>
+        <td align=left>
+          <mat-form-field *ngIf="cliIdQuestion2" class="questionfield">
+            <input matInput placeholder="Answer here" [(ngModel)]="cliIdAnswer2">
+          </mat-form-field>
+        </td>
+        <td align=left>
+          <label *ngIf="message2" style="color: orangered">{{message2}}</label>
+        </td>
+      </tr>
+      <tr>
+        <td align=right>
+          <span *ngIf="cliIdQuestion3" class='casecard'>
+            {{cliIdQuestion3.question}}
+          </span>
+        </td>
+        <td align=left>
+          <mat-form-field *ngIf="cliIdQuestion3" class="questionfield">
+            <input matInput placeholder="Answer here" [(ngModel)]="cliIdAnswer3">
+          </mat-form-field>
+        </td>
+        <td align=left>
+          <label *ngIf="message3" style="color: orangered">{{message3}}</label>
+        </td>
+      </tr>
+      <br>
+      <tr>
+        <td></td>
+        <td align=left>
+          <button mat-raised-button color="accent" class="text-upper" (click)="validateAnswer()">
+            Submit
+          </button>
+        </td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="viewtype == 'consentview'" class="casedoc">
+    <table width=98%>
+      <tr>
+        <td align="center">
+          <p>
+            <strong>eSign Consent</strong>
+          </p>
+          <hr>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <b>Check the checkbox indicating your consent to sign this document electronically and click “BEGIN”
+              <br/> when you are ready to begin the e-sign process.</b>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            By checking the checkbox below, I agree that my electronic signatures on the following document
+            <br/> are my own and are legally valid as if I had signed the document with ink on paper, in accordance
+            <br/> with the Electronic Signatures in Global and National Commerce Act (E-SIGN) of 2000 and the
+            <br/> Uniform Electronic Transactions Act (UETA).
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-checkbox (change)="selected=!selected">I have read and agree to the above.</mat-checkbox>
+        </td>
+      </tr>
+      <br/>
+      <tr>
+        <td align="center">
+          <!-- <a routerLink="/" style="color: black" *ngIf="selected"> -->
+          <button mat-raised-button color="accent" *ngIf="selected" (click)="completeConsent(signer.firstName,signer.lastName)">BEGIN</button>
+          <!-- </a> -->
+          <button mat-raised-button class="off" *ngIf="!selected">BEGIN</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- the signing view -->
+  <div *ngIf="viewtype == 'signingview'" class="casedoc">
+    <table width=98%>
+      <tr>
+        <td colspan=2 align=center>
+          <p>Form Name:
+            <strong>{{form.formId}}</strong>
+          </p>
+          <iframe width="80%" height="500" [src]="pdfUrl | safe">
+          </iframe>
+          <br>
+        </td>
+      </tr>
+    </table>
+    <br/>
+    <table>
+      <tr>
+        <td colsplan=3></td>
+        <td colsplan=3></td>
+        <td colsplan=3 align=center>
+            <button *ngIf='isEsignForm == "Y" ' mat-raised-button color="accent" class="text-upper" (click)="goSigCap(form,signer)">
+                CLICK HERE TO SIGN AS {{signer.lastName}},{{signer.firstName}}
+              </button>
+        </td>
+        <td></td>
+      </tr>
+      </table>
+    <table>
+      <tr>
+        <td></td>
+        <td colspan=3 align=center>
+          <mat-form-field *ngIf='isEsignForm == "N" ' tdFileDrop (fileDrop)="nonEsignfiles = $event" flex>
+            <input matInput placeholder="UPLOAD SIGNED FORM" [value]="nonEsignfiles ? nonEsignfiles.name : ''" />
+          </mat-form-field>
+        </td>
+        <td align=center> 
+          <td-file-input *ngIf='isEsignForm == "N" ' [(ngModel)]="nonEsignfiles" color="primary">
+            <mat-icon>file_upload</mat-icon>
+          </td-file-input>
+        </td>
+        <td align=center>          
+          <button mat-raised-button *ngIf='isEsignForm == "N" ' color="accent" [disabled]="!nonEsignfiles" class="row text-upper" 
+          (click)="uploadNonEsignForm(form,signer,'nonesign',nonEsignfiles)">Submit</button>
+        </td>
+      </tr>
+      </table>
+      <br>
+    <table>
+      <tr>
+        <td align='left' *ngIf='fprev'>          
+          <button mat-raised-button color="secondary" class="text-upper" (click)="displaySigningView(fprev,signer)">
+            <mat-icon>arrow_back</mat-icon>
+            Prev
+          </button>
+        </td>
+        <td align="right" *ngIf='fnext'>
+          <button mat-raised-button color="secondary" class="text-upper" (click)="displaySigningView(fnext,signer)">
+            Next
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="viewtype == 'sigcap'" class="casedoc">
+    <div class='sig-container'>
+      <signature-pad [options]="signaturePadOptions" id="signaturepad">
+      </signature-pad>
+    </div>
+    <br>
+    <div>
+      <font size=-1>
+        <i>Signing your name with mouse or your finger (for touch screen only) or load from previous saved signature</i>
+      </font>
+    </div>
+
+    <br>
+    <!-- <button mat-raised-button color="accent" (click)="loadDrawing()">Load</button> -->
+    <button mat-raised-button color="accent" (click)="drawClear()">Clear</button>
+    <!-- <button mat-raised-button color="accent" (click)="savedrawing()">Save</button> -->
+    <br>
+    <br>
+    <mat-form-field class='casefield'>
+      <input matInput id='fddate' [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]='myDate'>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <br>
+    <p>
+      <button mat-raised-button color="accent" (click)='submitCap()'>Submit</button>
+    </p>
+  </div>
+  <div *ngIf="viewtype == 'esignformview'" class="casedoc">
+    <table width=98%>
+      <tr>
+        <td colspan=2 align=center>
+          <p>Form Name:
+            <strong>{{form.formId}}</strong>
+          </p>
+          <iframe width="80%" height="500" [src]="pdfUrl | safe">
+          </iframe>
+          <br>
+          <p></p>
+          <p></p>
+        </td>
+      </tr>
+      <tr>
+        <td align=center width=50%>
+          <button mat-raised-button color="accent" *ngIf='primary'>
+            <mat-icon *ngIf='primary.esignStatus == "Esign"'>create</mat-icon>
+            <mat-icon *ngIf='primary.esignStatus == "Signed"'>checkmark</mat-icon>
+            Primary</button>
+        </td>
+        <td align=center>
+          <button mat-raised-button color="accent" *ngIf='secondary'>
+            <mat-icon *ngIf='secondary.esignStatus == "Esign"'>create</mat-icon>
+            <mat-icon *ngIf='secondary.esignStatus == "Signed"'>checkmark</mat-icon>Secondary
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <br>
+      </tr>
+      <tr>
+        <td align='left'>
+          <button mat-raised-button color="secondary" class="text-upper" (click)="goEsignFormView(fprev)" *ngIf='fprev'>
+            <mat-icon>arrow_back</mat-icon>
+            Prev
+          </button>
+        </td>
+        <td align="right">
+          <button mat-raised-button color="secondary" class="text-upper" (click)="goEsignFormView(fnext)" *ngIf='fnext'>
+            Next
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

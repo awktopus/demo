@@ -1,0 +1,8 @@
+<h4>Case Documents</h4> 
+    <ul class="pdfdoc">
+        <li *ngFor='let doc of mypdfs'>
+            <span class="badge">*</span>{{doc.name}}
+            <span><mat-icon class='docicon' (click)="showDoc(doc.docId)">visibility</mat-icon></span>    
+        </li>
+    </ul>
+

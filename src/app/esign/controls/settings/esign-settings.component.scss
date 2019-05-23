@@ -1,0 +1,83 @@
+.row{
+    white-space: nowrap;
+    float: right
+}
+
+.history{
+    margin: .8em;
+    width: 98%;
+}
+
+
+    .docicon{
+        width:30px;
+        float:right;
+      }
+
+    .docicon:hover {
+        background-color: #ccccff;
+      }
+
+.historyrow:hover{
+    background-color: #ccffcc;
+}
+
+.searchcase {
+    width: 240pt;
+}
+.remindericon{
+    margin-left: 25px; /* optional */   
+}
+.docicon{
+    margin-right:30px; /* optional */
+}
+.emailsettingstable {
+    margin-top: 15px;     
+    padding-left:15px;
+    padding-bottom: 15px;
+    max-width: 600px;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+
+  .emailsettingsfield {
+    padding-left:15px;
+    width: 50%;
+  }
+  
+  .emailsettingsfield > * {
+    width: 100%;
+  }
+  .identityfield {
+    padding-left:15px;
+    width: 63%;
+    font:25px;
+  }
+
+  .identitytable {
+    margin-top: 15px;     
+    padding-left:15px;
+    padding-bottom: 15px;
+    min-width: 150px;
+    max-width: 800px;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+  .orgsettingstable {
+    padding-left:15px;
+    padding-bottom: 15px;
+    max-width: 600px;
+    width: 100%;
+    border: 2px solid #ddd;
+  }
+
+  .orgsettingsfield {
+    padding-left:15px;
+    width: 50%;
+  }
+  
+  .orgsettingsfield > * {
+    width: 100%;
+  }
+  
+  

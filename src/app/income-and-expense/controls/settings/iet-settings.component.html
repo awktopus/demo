@@ -1,0 +1,99 @@
+<table>
+    <tr>
+        <th>
+            <label class="heading-label">Income & Expense Tracker</label>
+        </th>
+    </tr>
+</table>
+
+<table class="trackertable4">
+    <tr align="right">
+        <td colspan="12">
+            <button mat-raised-button color="accent" matTooltip="Create new company" (click)="setupNewCompany()">
+                + SETUP NEW COMPANY
+            </button>
+        </td>
+    </tr>
+</table>
+<div *ngIf='!hasCompanies && !setupNewCmpny'>
+        <table class="trackertable">
+            <tr>
+                <td>
+                    <mat-label>
+                        Keep track of all your income and expenses here by dropping receipts
+                        <br/> or invoice files and inputting relevant information.
+                        <br/> You can even collaborate with your colleagues and accountant.
+                        <br/> Everything that happens here is also synced to your mobile app
+                    </mat-label>
+                </td>
+                <td>
+                    <mat-icon class="iconcss">attach_file</mat-icon>
+                </td>
+                &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                <td>
+                    <mat-label>
+                        You currently do not have any company associated with this account.
+                        <br/> You may add one by clicking the
+                        <b>+</b> icon.
+                    </mat-label>
+                </td>
+            </tr>
+        </table>
+    </div>
+<div *ngFor="let clientCompany of companies">
+    <table class="trackertable3">
+        <tr align="center">
+            <td colspan="12">
+                <h6>
+                    <b> {{ clientCompany.companyName }} </b> ({{ clientCompany.companyType }}) ({{ clientCompany.closingMonthName
+                    }})
+                </h6>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+            </td>
+            <td colspan="3">
+                Account Holder:
+                <b>{{ clientCompany.companyOwner}}</b>
+            </td>
+            <td colspan="3">
+                Shared with:
+                <b>{{ clientCompany.sharedUsers }} </b>
+            </td>
+            <td colspan="3">
+                Last login:
+                <b>{{ clientCompany.lastUpdate }}</b>
+            </td>
+        </tr>
+        <br/>
+        <br/>
+        <tr>
+            <td colspan="3">
+            </td>
+            <td colspan="2">
+                <button  mat-icon-button matTooltip="Edit Company" 
+                [disabled]='clientCompany.hasSettingsAccess =="N"'>
+                    <mat-icon class="iconcss" (click)="editCompany(clientCompany)">settings</mat-icon>Settings
+                </button>
+            </td>
+            <td colspan="2">
+                <button mat-icon-button matTooltip="Add Receipt">
+                    <mat-icon class='iconcss' (click)="addReceipt(clientCompany.companyTypeId,clientCompany.companyId)">attach_file</mat-icon>Add Receipt
+                </button>
+            </td>
+            <td colspan="2">
+                <button mat-icon-button matTooltip="View Report">
+                    <mat-icon class="iconcss" (click)="viewReport(clientCompany.companyTypeId,
+                        clientCompany.companyId,clientCompany.companyName)">insert_chart_outlined</mat-icon>View Report
+                </button>
+            </td>
+            <td colspan="2">
+                <button mat-icon-button matTooltip="Delete Company" [disabled]='clientCompany.hasSettingsAccess =="N"'>
+                    <mat-icon class="iconcss" (click)="deleteCompany(clientCompany.companyId)">delete</mat-icon>Delete Company
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+

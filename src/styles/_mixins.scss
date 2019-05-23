@@ -1,0 +1,74 @@
+//Helper mixins
+@mixin transition($transition...) {
+    -moz-transition: $transition;
+    -o-transition: $transition;
+    -webkit-transition: $transition;
+    transition: $transition;
+}
+
+@mixin transform($transforms) {
+    -moz-transform: $transforms;
+    -o-transform: $transforms;
+    -ms-transform: $transforms;
+    -webkit-transform: $transforms;
+    transform: $transforms;
+}
+
+@mixin transform-origin($origin) {
+    -moz-transform-origin: $origin;
+    -o-transform-origin: $origin;
+    -ms-transform-origin: $origin;
+    -webkit-transform-origin: $origin;
+    transform-origin: $origin;
+}
+
+@mixin md-icon-size($size: 24px) {
+    font-size: $size;
+    height: $size;
+    width: $size;
+    line-height: $size;
+}
+
+//Responsive Mixins
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+$screen-lg-min: 1200px;
+$screen-md-min: 992px;
+$screen-sm-min: 768px;
+$screen-xs-min: 480px;
+
+$screen-md-max: 1199px;
+$screen-sm-max: 991px;
+$screen-xs-max: 767px;
+$screen-xxs-max: 479px;
+
+
+@mixin screen-xxs {
+  @media (max-width: #{$screen-xxs-max}) {
+      @content;
+  }
+}
+@mixin screen-xs {
+    @media (min-width: #{$screen-xs-min}) and (max-width: #{$screen-xs-max}) {
+        @content;
+    }
+}
+
+@mixin screen-sm {
+    @media (min-width: #{$screen-sm-min}) and (max-width: #{$screen-sm-max}) {
+        @content;
+    }
+}
+
+@mixin screen-md {
+  @media (min-width: #{$screen-md-min}) and (max-width: #{$screen-md-max}) {
+      @content;
+  }
+}
+
+@mixin screen-lg {
+  @media (min-width: #{$screen-lg-min}) and (max-width: #{$screen-lg-max}) {
+      @content;
+  }
+}

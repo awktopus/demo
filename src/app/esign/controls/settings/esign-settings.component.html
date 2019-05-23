@@ -1,0 +1,174 @@
+<mat-tab-group style='padding-left:20pt;padding-top:10pt'>
+
+  <mat-tab label="Identity Verification">
+    <table class="identitytable">
+      <tr>
+        <th>
+          <h6>Organization's Client ID Verification Question(s) Setup</h6>
+        </th>
+      </tr>
+      <br>
+      <tr>
+        <div class="check-element animate-show-hide" *ngIf='isOrgClientIdQuestionsExists =="N"'>
+          <mat-icon class='remindericon' mdbRippleRadius>thumb_up_alt</mat-icon>
+          ID Verification Question(s) are not defined for the organization, Please click on "Add Verification Question".
+        </div>
+      </tr>
+      <tr>
+        <td>
+          <ol type="1">
+            <li *ngFor='let orgCliQuestion of orgClientQuestions'>
+              <span>
+                <mat-form-field class="identityfield" *ngIf='orgCliQuestion.activeInd =="Y"'>
+                  <input matInput placeholder="Question" [(ngModel)]="orgCliQuestion.question">
+                </mat-form-field>
+                <button mat-raised-button color="accent" *ngIf='orgCliQuestion.activeInd =="Y"' class="text-upper" (click)="makeIdentityQuestionInactive(orgCliQuestion)">
+                  DELETE
+                </button>
+              </span>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <br>
+      <br>
+      <tr>
+        <span>
+          <button mat-raised-button color="accent" class="text-upper" [disabled]="orgClientIdQuestionCount == 3" (click)="addIdentityQuestion()">
+            ADD VERIFICATION QUESTION
+          </button>
+          <button mat-raised-button color="accent" *ngIf='isOrgClientIdQuestionsExists =="Y"' class="text-upper" (click)="setClientAnswer()">
+            SETUP CLIENT IDENTIY
+          </button>
+          <button mat-raised-button color="accent" class="text-upper" (click)="createNewQuestion()">
+            CREATE NEW QUESTION
+          </button>
+        </span>
+      </tr>
+    </table>
+  </mat-tab>
+
+  <mat-tab label="Email Server">
+    <table class="emailsettingstable">
+      <th>
+        <span>
+          <mat-label>
+            <h6>Configure Email Server Settings</h6>
+          </mat-label>
+          <mat-label>Setup the mail server settings for your organization.</mat-label>
+        </span>
+      </th>
+      <tr>
+        <br>
+      </tr>
+      <tr>
+        <mat-radio-group [(ngModel)]="emailSettingsFilter" (change)="onEmailSettingsChange($event)">
+          <mat-radio-button value=0>Custom &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button value=1>Yahoo&nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button value=2>Gmail&nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button value=3>Default&nbsp;&nbsp;&nbsp;</mat-radio-button>
+        </mat-radio-group>
+      </tr>
+      <tr>
+        <br>
+      </tr>
+      <tr>
+        <mat-label>
+          <b>Outgoing Server (SMTP) Information</b>
+        </mat-label>
+      </tr>
+      <tr>
+        <mat-form-field class="emailsettingsfield">
+          <input matInput placeholder="Outgoing mail server (SMTP)" [(ngModel)]="outMailServer" [disabled]='emailSettingsFilter!=0'
+            value='smtp.mailanyone.net'>
+        </mat-form-field>
+      </tr>
+      <tr>
+        <mat-form-field class="emailsettingsfield">
+          <input matInput placeholder="Outgoing server port number" [(ngModel)]="outMailServerPort" [disabled]='emailSettingsFilter!=0'
+            value='2500'>
+        </mat-form-field>
+      </tr>
+      <tr>
+        <mat-checkbox class="emailsettingsfield" [(ngModel)]="enableSSL" [disabled]='emailSettingsFilter!=0'>
+          Enable SSL (Secure Sockets Layer)
+        </mat-checkbox>
+      </tr>
+      <tr>
+        <br>
+      </tr>
+      <tr>
+        <mat-label>
+          <b>Incoming Server (POP3) Information</b>
+        </mat-label>
+      </tr>
+      <tr>
+        <mat-form-field class="emailsettingsfield">
+          <input matInput placeholder="Incoming mail server" [(ngModel)]="inMailServer" value='pop.mailanyone.net' [disabled]='emailSettingsFilter!=0'>
+        </mat-form-field>
+      </tr>
+      <tr>
+        <mat-form-field class="emailsettingsfield">
+          <input matInput placeholder="Incoming server port number" [(ngModel)]="inMailServerPort" [disabled]='emailSettingsFilter!=0'
+            value='2500'>
+        </mat-form-field>
+      </tr>
+      <tr>
+        <br>
+      </tr>
+
+      <tr>
+        <mat-label>
+          <b>Logon Information</b>
+        </mat-label>
+      </tr>
+      <tr>
+        <mat-form-field class="emailsettingsfield">
+          <input matInput placeholder="User Name" [(ngModel)]="userName" value='tax@yslcpa.com' [disabled]='emailSettingsFilter==3'>
+        </mat-form-field>
+      </tr>
+      <tr>
+        <mat-form-field class="emailsettingsfield" *ngIf='emailSettingsFilter!=3'>
+          <input matInput placeholder="Password" [(ngModel)]="password" [type]="hide ? 'text' : 'password'">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        </mat-form-field>
+      </tr>
+      <tr>
+        <span>
+          <button mat-raised-button color="accent" class="text-upper" (click)='addupdateEmailSettings()'>Update</button>
+          <!-- <button mat-raised-button color="accent" class="text-upper" (click)='resetToDefaultSettings()'>Reset To Default Settings</button> -->
+        </span>
+      </tr>
+    </table>
+  </mat-tab>
+  <!-- <mat-tab label="Organization Settings">
+    <table class="orgsettingstable">
+      <th>
+        <span>
+          <mat-label>
+            <h6>Configure CPA Organization Settings for eSign </h6>
+          </mat-label>
+         </span>
+      </th>
+      <tr>
+        <br>
+      </tr>
+      <tr>
+        <mat-label>
+          <b>Organization Website URL</b>
+        </mat-label>
+      </tr>
+      <tr>
+        <mat-form-field class="orgsettingsfield">
+          <input matInput placeholder="Organization website url" [(ngModel)]="orgWebSiteUrl">
+        </mat-form-field>
+      </tr>  
+      <tr>
+        <span>
+          <button mat-raised-button color="accent" class="text-upper" (click)='addUpdateOrgSettings()'>Update</button>
+        </span>
+      </tr>
+    </table>
+  </mat-tab> -->
+</mat-tab-group>
+<router-outlet></router-outlet>

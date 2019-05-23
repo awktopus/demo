@@ -1,0 +1,98 @@
+.row{
+    white-space: nowrap;
+    float: right
+}
+
+.history{
+    margin: .8em;
+    width: 98%;
+}
+
+
+    .docicon{
+        width:30px;
+        float:right;
+      }
+
+    .docicon:hover {
+        background-color: #ccccff;
+      }
+
+.historyrow:hover{
+    background-color: #ccffcc;
+}
+
+.searchcase {
+    width: 240pt;
+}
+.remindericon{
+    margin-left: 25px; /* optional */   
+}
+.docicon{
+    margin-right:30px; /* optional */
+}
+.trackertable {
+    margin-top: 20px;
+    margin-left: 20px;
+    padding-top: 30px;
+    padding-left:30px;
+    padding-bottom: 30px;
+    padding-right: 30px;
+    max-width: 1200px;
+    width: 100%;
+  border: 1px solid #ddd;
+  background-color:white;
+  }
+  .iconcss {
+    font-size: 45px;
+  }
+  .heading-label {
+    margin-left:10px;
+    color: #03a9f4;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    font-size: 25px;
+    line-height: 48px;
+  }
+
+  .trackertable2 {
+    margin-top: 20px;
+    margin-left: 420px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left:30px;
+    max-width: 600px;
+    width: 100%;
+  border: 1px solid #ddd;
+  }
+
+  .trackertable3 {
+    margin-top: 20px;
+    margin-left:30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left:10px;
+    padding-right:10px;
+    max-width: 1200px;
+    width: 100%;
+    background-color:white;
+  border: 1px solid #ddd;
+  }
+  .trackertable4 {
+    margin-top: 5px;
+    margin-left:30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left:10px;
+    padding-right:10px;
+    max-width: 1200px;
+    width: 100%;
+  }
+  .casefield {
+    padding-left:15px;
+    width: 90%
+  }
+  
+  .casefield > * {
+    width: 90%
+  }

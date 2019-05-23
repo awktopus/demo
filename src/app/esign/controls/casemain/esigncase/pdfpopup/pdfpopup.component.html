@@ -1,0 +1,47 @@
+<div class='row'>
+  <label>Document</label>    
+     </div>
+
+<hr>
+<iframe width="635pt" height="480" [src]="pdfSrc | safe">
+</iframe>
+<br>
+<table width="95%">
+  <tr *ngIf="pageObj && pageObj.esignFields">
+    <td>
+      <ul>
+        <li *ngFor="let ff of pageObj.esignFields">
+            {{ff.name}} {{ff.type}}
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+   
+        <div *ngIf="showclassify" >
+            <td >
+            <mat-form-field class="casefield">
+                <input type="text" placeholder="Select Correct FormCode"  matInput [matAutocomplete]="formauto"
+               [formControl]="fcctrl" [(ngModel)]="selectedForm">
+                <mat-autocomplete #formauto="matAutocomplete">
+                  <mat-option *ngFor="let fc of formlist" [value]="fc"  >
+                      {{fc}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              </td>
+              <td align=right width=20% >
+        <button mat-raised-button color="accent" class="text-upper" (click)="assignForm();closeme();" >Assign Form Code</button>
+    </td>
+    <td align=right > 
+        <button mat-raised-button color="accent" class="text-upper" (click)="closeme()">Cancel</button>
+      </td>
+  </div>
+    <td align=right *ngIf="!showclassify" > 
+      <span style='margin-bottom: -4px;'>
+      <button mat-raised-button color="accent" class="text-upper" (click)="closeme()">Cancel</button>
+    </span>
+    </td>
+  </tr>
+</table>
+   

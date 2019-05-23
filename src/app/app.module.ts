@@ -1,0 +1,82 @@
+import { AuthGuard } from './core/auth/auth.guard';
+import { CoreModule } from './core/core.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { SharedBaseModule } from './shared/shared.module'
+
+import { AppComponent } from './app.component';
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+
+import { MainPageComponent } from './pages/main-page/main-page.component';
+import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { SignUpPageComponent } from './pages/sign-up-page/sign-up-page.component';
+import { AppRoutesModule } from './routes/app-routes.module';
+import { SidemenuModule } from './sidemenu/sidemenu.module';
+
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { PortalModule } from '@angular/cdk/portal';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { CurrentOUComponent } from './core/ui/current-ou/current-ou.component';
+import { EsignserviceService } from './esign/service/esignservice.service';
+import { EsignuiserviceService } from './esign/service/esignuiservice.service';
+import { EsignAuthService } from './esign/service/esignauth.service';
+import { TreeTableModule } from 'primeng/treetable';
+import { NgIdleModule } from '@ng-idle/core'
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {};
+
+// AoT requires an exported function for factories for translate module
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    MainPageComponent,
+    PageNotFoundComponent,
+    DashboardPageComponent,
+    LoginPageComponent,
+    CurrentOUComponent,
+    SignUpPageComponent,
+  ],
+  entryComponents: [],
+  imports: [
+    SharedBaseModule,
+    BrowserModule,
+    CoreModule,
+    BrowserAnimationsModule,
+    SidemenuModule,
+    PortalModule,
+    PerfectScrollbarModule,
+    NgxEchartsModule,
+    HttpClientModule,
+    TreeTableModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    }),
+    NgIdleModule.forRoot(),
+    AppRoutesModule
+  ],
+  providers: [{
+    provide: PERFECT_SCROLLBAR_CONFIG,
+    useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+  }, AuthGuard,
+    EsignserviceService,
+    EsignuiserviceService,
+    EsignAuthService
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule {
+}

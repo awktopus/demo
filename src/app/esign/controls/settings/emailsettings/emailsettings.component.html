@@ -1,0 +1,77 @@
+<table class="emailsettingstable">
+  <th>
+    <span>
+      <mat-label>
+        <h6>Configure Email Server Settings</h6>
+      </mat-label>
+      <mat-label>Setup the mail server settings for your organization.</mat-label>
+    </span>
+  </th>
+  <tr>
+    <br>
+  </tr>
+  <tr>
+    <mat-label>
+      <b>Outgoing Server (SMTP) Information</b>
+    </mat-label>
+  </tr>
+  <tr>
+    <mat-form-field class="emailsettingsfield">
+      <input matInput placeholder="Outgoing mail server (SMTP)" [(ngModel)]="outMailServer" value='smtp.mailanyone.net'>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="emailsettingsfield">
+      <input matInput placeholder="Outgoing server port number" [(ngModel)]="outMailServerPort" value='2500'>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-checkbox class="emailsettingsfield" [(ngModel)]="enableSSL">
+      Enable SSL (Secure Sockets Layer)
+    </mat-checkbox>
+  </tr>
+  <tr>
+    <br>
+  </tr>
+  <tr>
+    <mat-label>
+      <b>Incoming Server (POP3) Information</b>
+    </mat-label>
+  </tr>
+  <tr>
+    <mat-form-field class="emailsettingsfield">
+      <input matInput placeholder="Incoming mail server" [(ngModel)]="inMailServer" value='pop.mailanyone.net'>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="emailsettingsfield">
+      <input matInput placeholder="Incoming server port number" [(ngModel)]="inMailServerPort" value='2500'>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <br>
+  </tr>
+
+  <tr>
+    <mat-label>
+      <b>Logon Information</b>
+    </mat-label>
+  </tr>
+  <tr>
+    <mat-form-field class="emailsettingsfield">
+      <input matInput placeholder="User Name" [(ngModel)]="userName" value='tax@yslcpa.com'>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="emailsettingsfield">
+      <input matInput placeholder="Password" [(ngModel)]="password" [type]="hide ? 'text' : 'password'">
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <span>
+      <button mat-raised-button color="accent" class="text-upper" (click)='addupdateEmailSettings()'>Update</button>
+      <button mat-raised-button color="accent" class="text-upper" (click)='resetToDefaultSettings()'>Reset To Default Settings</button>      
+    </span>
+  </tr>
+</table>

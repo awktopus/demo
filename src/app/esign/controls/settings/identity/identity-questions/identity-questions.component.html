@@ -1,0 +1,29 @@
+<div class="container">
+    <table width=100%>
+        <tr>
+            <h6>ID Verification Question selection for Organization</h6>
+        </tr>
+        <tr>
+            <span>
+                <mat-form-field class="casefield">
+                    <mat-select placeholder="Select ID Verification Question" [(value)]='selIdentityQuestion' 
+                                (selectionChange)="selectIdQuestion($event)">
+                        <mat-option *ngFor="let qstn of idQuestions" [value]='qstn.qtnId'>
+                            {{ qstn.question }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </span>
+        </tr>
+        <br>
+        <!--<tr>
+              <mat-checkbox class="casefield"  [(ngModel)]="defaultQuestion">Mark as default identity verification question</mat-checkbox>
+        </tr>-->
+        <tr>
+            <span>
+                <button mat-raised-button color="accent" class="text-upper" (click)='saveQuestion()'>Save</button>
+                <button mat-raised-button color="accent" class="text-upper" (click)='closeme()'>Cancel</button>
+            </span>
+        </tr>
+    </table>
+</div>

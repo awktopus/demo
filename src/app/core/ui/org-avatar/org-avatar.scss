@@ -1,0 +1,28 @@
+div img {
+    border-radius: 50%;
+    box-shadow: 0 3px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid #E9E9E9;
+    display: block;
+    width: 33px;
+}
+
+.org-initial-avatar {
+    text-align: center;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 33px;
+    height: 33px;
+    font-weight: bold;
+
+    .default-org-avatar {
+        width: 33px;
+        position: absolute;
+        display: block;
+        opacity: 0.3;
+        max-width: 33px;
+    }
+
+    div {
+        padding-top: 8px;
+    }
+}

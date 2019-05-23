@@ -1,0 +1,27 @@
+<div class="container">
+  <table width='95%'>
+    <tr>
+      <td>Case #:</td>
+      <td>
+        <font color='#336699'>{{mycaseId}}</font>
+      </td>
+    </tr>
+    <tr>
+      <td colspan=2>
+        <mat-form-field class="rejectReason">
+          <textarea  matInput placeholder="Add a Reject Reason" [(ngModel)]="newRejectReason"></textarea>
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <span>
+          <button mat-raised-button color="accent" class="text-upper" (click)='reject()'>Reject</button>
+          <button mat-raised-button color="accent" class="text-upper" (click)="closeme()">Cancel</button>
+        </span>
+      </td>
+    </tr>
+  </table>
+
+</div>

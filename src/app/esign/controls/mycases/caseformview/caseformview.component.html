@@ -1,0 +1,24 @@
+<div style='left:20'>
+<h4 *ngIf='form'>{{form.formId}}</h4>
+<p></p>
+<iframe width="480pt" height="540" [src]="pdfSrc | safe">
+</iframe>
+<br>
+<table width=480>
+  <tr>
+    <td>
+        <button mat-raised-button color="accent" (click)='goSigCap(primary)' *ngIf='primary'>
+            <mat-icon *ngIf='primary.esignStatus == "Esign"'>create</mat-icon>
+            <mat-icon *ngIf='primary.esignStatus == "Signed"'>checkmark</mat-icon>
+            Primary</button>
+    </td>
+    <td>
+        <button mat-raised-button color="accent" (click)='goSigCap(secondary)' *ngIf='secondary'>
+            <mat-icon  *ngIf='secondary.esignStatus == "Esign"'>create</mat-icon>
+            <mat-icon  *ngIf='secondary.esignStatus == "Signed"'>checkmark</mat-icon>Secondary
+        </button>
+    </td>
+  </tr>
+
+</table>
+</div>

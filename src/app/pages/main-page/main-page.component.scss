@@ -1,0 +1,96 @@
+@import "~@angular/material/theming";
+@import "../../../styles/mixins";
+
+:host {
+    .left-sidenav {
+        padding-bottom: 50px;
+        padding-top: 115px;
+    }
+
+    .sidenav-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+
+        div {
+            height: 100%;
+
+            img {
+                height: 100%;
+            }
+        }
+    }
+
+    footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        p {
+            padding-left: 15px;
+            padding-right: 15px;
+            align-items: center !important;
+
+            .footer-text {
+                font-size: 13px;
+            }
+
+            mat-icon {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .logo {
+        height: 100%;
+
+        img {
+            height: 100%;
+        }
+    }
+
+    .header-search {
+        width: 300px;
+    }
+
+    .wrapper {
+        padding: 20px 70px;
+
+        @media screen and (max-width: 960px) {
+            padding: 15px 30px;
+        }
+
+        header {
+            padding: 0 10px;
+        }
+
+        &.wrapper-box {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    }
+
+    /deep/ .mat-drawer-content {
+        margin-left: 300px;
+    }
+
+    /deep/ .img-profile {
+        border-radius: 50px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .version {
+        font-size: 14px;
+    }
+
+    mat-icon.icon-app {
+        @include md-icon-size(20px);
+        margin: 0px 5px;
+    }
+}

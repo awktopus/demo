@@ -1,0 +1,141 @@
+<!--<div class='container'>-->
+<!-- <mat-card *ngIf="isLoading" style="display: flex; justify-content: center; align-items: center">
+  <mat-progress-spinner color="primary" mode="indeterminate">
+  </mat-progress-spinner>
+</mat-card> -->
+<table class="container">
+  <tr>
+    <mat-form-field class="casefield">
+      <mat-select placeholder="Case Category" [(ngModel)]="category" (selectionChange)="categoryChange($event)">
+        <mat-option *ngFor="let cate of casecates" [value]="cate.id">
+          {{ cate.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="casefield">
+      <mat-select placeholder="Sub Category" [(ngModel)]="subcategory">
+        <mat-option *ngFor="let subcate of subcates" [value]="subcate.id">
+          {{ subcate.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="casefield">
+      <mat-select placeholder="Tax Year" [(ngModel)]="taxYear" [disabled]="disableTaxYear">
+        <mat-option *ngFor="let tYear of taxYears" value="{{ tYear.id }}">{{ tYear.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="casefield">
+      <input matInput placeholder="Return Name" [(ngModel)]="returnName">
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="casefield">
+      <input matInput placeholder="Tax Return ID Number" [(ngModel)]="taxReturnIdNo">
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="casefield">
+      <mat-chip-list #primarychips placeholder="Primary Signer">
+        <mat-chip *ngIf="primarysigner" [selectable]="selectable" [removable]="removable" (remove)="removeSinger('primary')">
+          {{primarysigner.firstName}} {{primarysigner.lastName}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input type="text" placeholder="Primary Signer" [matChipInputFor]="primarychips" matInput [matAutocomplete]="autoprimary"
+          [formControl]="clientctrl">
+        <mat-autocomplete #autoprimary="matAutocomplete">
+          <mat-option *ngFor="let cc of clients" [value]="cc.clientId" (onSelectionChange)="addPrimary($event)">
+            {{ cc.firstName }} {{ cc.lastName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-chip-list>
+    </mat-form-field>
+    <button mat-icon-button matTooltip="Set client idenity answer" color="accent" class="text-upper" (click)="setClientIdentityAnswer(primarysigner.clientId,'primary',primarysigner.ansId)"
+      *ngIf='primarysigner && primarysigner.isIdentityAnswerSet =="N"'>
+      <mat-icon class='remindericon' mdbRippleRadius>warningicon</mat-icon>
+    </button>
+
+    <button mat-icon-button matTooltip="Client idenity answer is set" color="primary" class="text-upper" (click)="setClientIdentityAnswer(primarysigner.clientId,'primary',primarysigner.ansId)"
+      *ngIf='primarysigner && primarysigner.isIdentityAnswerSet =="Y"'>
+      <mat-icon class='remindericon' mdbRippleRadius>check_circle</mat-icon>
+    </button>
+  </tr>
+  <tr>
+    <mat-form-field class="casefield">
+      <mat-chip-list #secondarychips placeholder="Secondary Signer">
+        <mat-chip *ngIf="secondarysigner" [selectable]="selectable" [removable]="removable" (remove)="removeSinger('secondary')">
+          {{secondarysigner.firstName}} {{secondarysigner.lastName}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input type="text" placeholder="Secondary Signer (optional)" [matChipInputFor]="secondarychips" matInput [matAutocomplete]="autosecondary"
+          [formControl]="secclientctrl">
+        <mat-autocomplete #autosecondary="matAutocomplete">
+          <mat-option *ngFor="let cc of secclients" [value]="cc.clientId" (onSelectionChange)="addSecondary($event)">
+            {{ cc.firstName }} {{ cc.lastName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-chip-list>
+    </mat-form-field>
+    <button mat-icon-button matTooltip="Set client idenity answer" color="accent" class="text-upper" (click)="setClientIdentityAnswer(secondarysigner.clientId,'secondary',secondarysigner.ansId)"
+      *ngIf='secondarysigner && secondarysigner.isIdentityAnswerSet =="N"'>
+      <mat-icon class='remindericon' mdbRippleRadius>warningicon</mat-icon>
+    </button>
+
+    <button mat-icon-button matTooltip="Client idenity answer is set" color="primary" class="text-upper" (click)="setClientIdentityAnswer(secondarysigner.clientId,'secondary',secondarysigner.ansId)"
+      *ngIf='secondarysigner && secondarysigner.isIdentityAnswerSet =="Y"'>
+      <mat-icon class='remindericon' mdbRippleRadius>check_circle</mat-icon>
+    </button>
+
+  </tr>
+  <tr>
+    <mat-form-field class="casefield">
+      <mat-chip-list #clientchips placeholder="clients">
+        <mat-chip *ngFor="let sclient of recSelclients" [selectable]="selectable" [removable]="removable" (remove)="removeClient(sclient)">
+          {{sclient.firstName}} {{sclient.lastName}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input type="text" placeholder="Client Recipient" [value]="searchRecClient" [matChipInputFor]="clientchips" matInput [matAutocomplete]="auto"
+          [formControl]="recclientctrl">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let cc of recclients" [value]="cc.clientId" (onSelectionChange)="add($event)">
+            {{ cc.firstName }} {{ cc.lastName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-chip-list>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <mat-form-field class="casefield">
+      <mat-chip-list #cpachips placeholder="cpas">
+        <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" [removable]="removable" (remove)="removeCPA(scpa)">
+          {{scpa.firstName}} {{scpa.lastName}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input type="text" placeholder="CC" [value]="searchCPA" [matChipInputFor]="cpachips" matInput [matAutocomplete]="cpaauto"
+          [formControl]="cpactrl">
+        <mat-autocomplete #cpaauto="matAutocomplete">
+          <mat-option *ngFor="let cpa of cpas" [value]="cpa.cpaId" (onSelectionChange)="addcpa($event)">
+            {{cpa.firstName}} {{ cpa.lastName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-chip-list>
+    </mat-form-field>
+  </tr>
+  <tr>
+    <span>
+      <button mat-raised-button color="accent" class="text-upper" (click)="saveCase()" *ngIf="!(mycase.caseId)">
+        Save
+      </button>
+      <button mat-raised-button color="accent" class="text-upper" (click)="updateCase()" *ngIf="mycase.caseId">
+        Update
+      </button>
+      <br>
+    </span>
+  </tr>
+  <!--</div>-->
+</table>

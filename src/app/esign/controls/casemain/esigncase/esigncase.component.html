@@ -1,0 +1,216 @@
+<table width=98% *ngIf="mycase.caseId">
+  <tr>
+    <th>
+      <strong>Case #:</strong>
+    </th>
+    <td>
+      <font>{{mycase.caseId}}</font>
+    </td>
+    <th>
+      <strong>Tax Year:</strong>
+    </th>
+    <td>
+      <font>{{mycase.taxYear}}</font>
+    </td>
+    <th>
+      <strong>Status:</strong>
+    </th>
+    <td>
+      <font>{{mycase.status}}</font>
+    </td>
+  </tr>
+
+  <tr>
+    <th>
+      <strong>Category:</strong>
+    </th>
+    <td colspan=3>
+      <font *ngIf='mycase.cate'>{{mycase.cate.name}}</font>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <strong>Sub Category:</strong>
+    </th>
+    <td colspan=2>
+      <font *ngIf='mycase.subCate'>{{mycase.subCate.name}}</font>
+    </td>
+    <th>
+      <strong>Return Name:</strong>
+    </th>
+    <td>
+      <font *ngIf='mycase.returnName'>{{mycase.returnName}}</font>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <strong>Primary Signer:</strong>
+    </th>
+    <td>
+      <span *ngIf="mycase.primarySigner">{{mycase.primarySigner.firstName}} {{mycase.primarySigner.lastName}}; </span>
+    </td>
+    <th>
+      <strong>Secondary Signer:</strong>
+    </th>
+    <td>
+      <span *ngIf="mycase.secondarySigner">{{mycase.secondarySigner.firstName}} {{mycase.secondarySigner.lastName}}; </span>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <strong>Clients:</strong>
+    </th>
+    <td>
+      <span *ngFor="let cc of mycase.recipientClients">{{cc.firstName}} {{cc.lastName}}; </span>
+    </td>
+    <td colspan=2 rowspan=2>
+      <ul class='coverletter pdfdoc'>
+        <li *ngFor="let doc of mycase.coverLetters">
+          <span class="badge">*</span>
+          <span>Cover Letter</span>
+          <span>
+            <mat-icon class='docicon' (click)="showDoc(doc.docId)">visibility</mat-icon>
+            <mat-icon class='docicon' (click)="deleteCoverLetter(doc.docId)">delete</mat-icon>
+          </span>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <strong>CC:</strong>
+    </th>
+    <td>
+      <span *ngFor="let cc of mycase.copyCpas">{{cc.firstName}} {{cc.lastName}}; </span>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <strong>Reject Reason:</strong>
+    </th>
+    <td colspan=2>
+      <font *ngIf='mycase.rejectReason'>{{mycase.rejectReason}}</font>
+    </td>
+    <th>
+      <strong>Tax Return ID Number:</strong>
+    </th>
+    <td>
+      <font *ngIf='mycase.taxReturnIdNo'>{{mycase.taxReturnIdNo}}</font>
+    </td>
+  </tr>
+</table>
+<mat-divider></mat-divider>
+<table width=98%>
+  <tr *ngIf='mycase.reviewDocs'>
+    <td valign=top colspan=4>
+      <strong>Review Documents:</strong>
+      <ul class="pdfdoc">
+        <li *ngFor="let doc of mycase.reviewDocs; let ii=index ">
+          <span class="badge">{{ii}} </span>
+          <font size=-1>{{ (doc.fileName.length>40)? (doc.fileName|slice:0:36) +"..." : doc.fileName}}</font>
+          <span>
+            <mat-icon class='docicon' (click)="showDoc(doc.docId)">visibility</mat-icon>
+            <mat-icon class='docicon' (click)="deleteDoc(doc.docId,'review')">delete</mat-icon>
+          </span>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr *ngIf='mycase.esignDocs'>
+    <td valign=top colspan=4>
+      <strong>ESign Documents:</strong>
+      <ul class="pdfdoc">
+        <li *ngFor="let doc of mycase.esignDocs; let ii=index">
+          <span class="badge">{{ii}}</span>
+          <font size=-1>{{ (doc.fileName.length>40)? (doc.fileName|slice:0:36) +"..." : doc.fileName}}</font>
+          <span>
+            <mat-icon class='docicon' *ngIf='mycase.status=="Signed" || mycase.status=="Filed" ' (click)="downloadDoc(mycase.caseId)">cloud_download</mat-icon>
+            <mat-icon class='docicon' (click)="showDoc(doc.docId)">visibility</mat-icon>
+            <mat-icon class='docicon' (click)="deleteDoc(doc.docId,'esign')">delete</mat-icon>
+          </span>
+        </li>
+      </ul>
+    </td>
+    <td>
+      <a></a>
+    </td>
+  </tr>
+  <tr *ngIf='mycase.paymentDocs'>
+    <td valign=top colspan=4>
+      <strong>Payment Voucher:</strong>
+      <ul class="pdfdoc">
+        <li *ngFor="let doc of mycase.paymentDocs; let ii=index ">
+          <span class="badge">{{ii}} </span>
+          <font size=-1>{{ (doc.fileName.length>40)? (doc.fileName|slice:0:36) +"..." : doc.fileName}}</font>
+          <span>
+            <mat-icon class='docicon' (click)="showDoc(doc.docId)">visibility</mat-icon>
+            <mat-icon class='docicon' (click)="deleteDoc(doc.docId,'paymentvoucher')">delete</mat-icon>
+          </span>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr *ngIf='mycase.paperDocs'>
+    <td valign=top colspan=4>
+      <strong>Paper Documents:</strong>
+      <ul class="pdfdoc">
+        <li *ngFor="let doc of mycase.paperDocs; let ii=index">
+          <span class="badge">{{ii}}</span>
+          <font size=-1>{{ (doc.fileName.length>40)? (doc.fileName|slice:0:36) +"..." : doc.fileName}}</font>
+          <span>
+            <mat-icon class='docicon' (click)="showDoc(doc.docId)">visibility</mat-icon>
+            <mat-icon class='docicon' (click)="deleteDoc(doc.docId,'paper')">delete</mat-icon>
+          </span>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr *ngIf='mycase.k1Docs'>
+      <td valign=top colspan=4>
+        <strong>K1 Documents:</strong>
+        <ul class="pdfdoc">
+          <li *ngFor="let doc of mycase.k1Docs; let ii=index">
+            <span class="badge">{{ii}}</span>
+            <font size=-1>{{ (doc.fileName.length>40)? (doc.fileName|slice:0:36) +"..." : doc.fileName}}</font>
+            <span>
+              <mat-icon class='docicon' (click)="showDoc(doc.docId)">visibility</mat-icon>
+              <mat-icon class='docicon' (click)="deleteDoc(doc.docId,'k1')">delete</mat-icon>
+            </span>
+          </li>
+        </ul>
+      </td>
+    </tr>
+</table>
+<mat-divider></mat-divider>
+<strong *ngIf='mycase.cpages'>Classified Forms:</strong>
+<ul class="pdfdocpage">
+  <li *ngFor="let page of mycase.cpages ">
+    <span class="badge">*</span>
+    <font size=-1>{{page.formCode}} - {{ (page.fileName.length>40)? (page.fileName|slice:0:36) +"..." : page.fileName}}</font>
+    <span>
+      <mat-icon class='docicon' matTooltip="Select signer" color='warn' *ngIf='page.signerManualSelection =="Y"' 
+            (click)="selectSigner(mycase.caseId,page.docId,page.seqNo,page.signedPartyOption,page.signatureBoxCount)">warning</mat-icon>
+      <mat-icon matTooltip="Select signer" class='docicon' *ngIf='page.signerManualSelection =="N"' 
+            (click)="selectSigner(mycase.caseId,page.docId,page.seqNo,page.signedPartyOption,page.signatureBoxCount)">person</mat-icon>
+      <mat-icon matTooltip="Edit Signature Box Position" class='docicon' (click)="showEditSigBoxPage(page)">settings</mat-icon>
+      <mat-icon matTooltip="View eSigned form" class='docicon' *ngIf='page.esignStatus=="Signed"' (click)="showMergePage(page)">done_all</mat-icon>
+      <mat-icon matTooltip="View classified form" class='docicon' (click)="showPage(page)">visibility</mat-icon>
+      <mat-icon matTooltip="Delete form" class='docicon' (click)="deletePage(page.docId,page.seqNo)">delete</mat-icon>  
+      <mat-icon matTooltip="View eSign boxes" class='docicon' (click)="showPageWithESignbox(page)">aspect_ratio</mat-icon>    
+    </span>
+  </li>
+</ul>
+
+<strong *ngIf='mycase.upages'>Un-Classified Forms:</strong>
+<ul class="pdfdocpage">
+  <li *ngFor="let page of mycase.upages;">
+    <span class="badge">*</span>
+    <font size=-1>
+      {{ (page.fileName.length>40)? (page.fileName|slice:0:36) +"..." : page.fileName}}</font>
+    <font color=red>Un-Classified</font>
+    <span>
+      <mat-icon class='docicon' (click)="showPageUC(page)">visibility</mat-icon>
+      <mat-icon class='docicon' (click)="deletePage(page.docId,page.seqNo)">delete</mat-icon>
+    </span>
+  </li>
+</ul>

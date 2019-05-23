@@ -1,0 +1,89 @@
+<table class="trackertable2">
+  <tr align="center">
+    <td colspan="12">
+      <h6> {{ title }} </h6>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="12">
+      <mat-form-field class="casefield">
+        <input matInput placeholder="Company Name" [(ngModel)]="companyName">
+      </mat-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="12">
+      <mat-form-field class="casefield">
+        <mat-select placeholder="Company Type" [(ngModel)]="companyType">
+          <mat-option *ngFor="let cmpnyType of companyTypes" value="{{ cmpnyType.companyTypeId }}">
+            {{ cmpnyType.companyType }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>    
+    </td>
+  </tr>
+  <tr>
+    <td colspan="12">
+      <mat-form-field class="casefield">
+        <mat-select value="{{ closeDate }}">
+          <mat-option value="1">Closing Date:End of January</mat-option>
+          <mat-option value="2">Closing Date:End of Frebruary</mat-option>
+          <mat-option value="3">Closing Date:End of March</mat-option>
+          <mat-option value="4">Closing Date:End of April</mat-option>
+          <mat-option value="5">Closing Date:End of May</mat-option>
+          <mat-option value="6">Closing Date:End of June</mat-option>
+          <mat-option value="7">Closing Date:End of July</mat-option>
+          <mat-option value="8">Closing Date:End of August</mat-option>
+          <mat-option value="9">Closing Date:End of September</mat-option>
+          <mat-option value="10">Closing Date:End of October</mat-option>
+          <mat-option value="11">Closing Date:End of November</mat-option>
+          <mat-option value="12">Closing Date:End of December</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="12">
+      <mat-form-field class="casefield">
+        <mat-chip-list #cpachips placeholder="cpas">
+          <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" [removable]="removable" (remove)="removeCPA(scpa)">
+            {{scpa.firstName}} {{scpa.lastName}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input type="text" placeholder="Share with.." [value]="searchCPA" [matChipInputFor]="cpachips" matInput [matAutocomplete]="cpaauto" [formControl]="cpactrl">
+          <mat-autocomplete #cpaauto="matAutocomplete">
+            <mat-option *ngFor="let cpa of cpas" [value]="cpa.clientId" (onSelectionChange)="addcpa($event)">
+              {{cpa.firstName}} {{ cpa.lastName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-chip-list>
+      </mat-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="12">
+         <mat-checkbox  *ngIf='operation =="editcompany"' class="casefield" 
+         [(ngModel)]='includeAccountNumber'>
+           Include Account Number</mat-checkbox>
+    </td>
+    <br/>
+  </tr>
+  <tr>
+    <td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td colspan="6">
+      <span>
+        <button *ngIf='operation !="editcompany"' mat-raised-button color="accent" class="text-upper" (click)="createCompany()">
+            Begin
+        </button>
+        <button *ngIf='operation =="editcompany"' mat-raised-button color="accent" class="text-upper" (click)="updateCompanySettings()">
+            Update
+        </button>
+        <button mat-raised-button color="accent" class="text-upper" (click)="cancelNewCompany()">
+          Cancel
+        </button>
+        <br/>
+      </span>
+    </td>
+  </tr>
+</table>
