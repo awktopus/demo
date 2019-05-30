@@ -32,7 +32,7 @@ import { CasesigcapComponent } from './controls/mycases/casesigcap/casesigcap.co
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { RejectreasonpopupComponent } from './controls/casemain/step4panel/rejectreasonpopup/rejectreasonpopup.component';
 import { CoverletterComponent } from './controls/casemain/coverletter/coverletter.component';
-import { NgxEditorModule } from 'ngx-editor-n';
+import { NgxEditorModule } from 'ngx-editor';
 import { EmailpopupComponent } from './controls/casemain/step2panel/emailpopup/emailpopup.component';
 import { UploadscanpopupComponent } from './controls/casemain/step2panel/uploadscanpopup/uploadscanpopup.component';
 import { ClientreminderComponent } from './controls/casemain/esigncase/clientreminder/clientreminder.component';
