@@ -60,8 +60,9 @@ export class EsigncaseComponent implements OnInit {
 
   showEditSigBoxPage(page) {
     console.log(page);
-    const dialogRef = this.dialog.open(EditSigboxComponent, { width: '640pt', height: '100%'});
-  }
+    const dialogRef = this.dialog.open(EditSigboxComponent, { width: '615pt', height: '793pt'});
+    dialogRef.componentInstance.initiateEditSigBox(page.docId, page.seqNo);
+   }
 
   deletePage(docId: string, pageSeq: number) {
     this.service.deletePage(docId, pageSeq).subscribe(result => {
@@ -94,7 +95,7 @@ export class EsigncaseComponent implements OnInit {
       dialogRef.componentInstance.eSignCaseComponent = this;
   }
   showPageWithESignbox(page: ClassifyPage) {
-    const dialogRef = this.dialog.open(PdfpopupComponent, { width: '520pt'});
+    const dialogRef = this.dialog.open(PdfpopupComponent, {  width: '615pt', height: '650pt'});
     dialogRef.componentInstance.setPDF(this.service.auth.baseurl + '/Contents/' + page.docId + '/' + page.seqNo + '/formwithesignboxes');
     dialogRef.componentInstance.setclassify(page, false);
   }

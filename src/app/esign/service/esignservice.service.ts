@@ -809,5 +809,16 @@ export class EsignserviceService {
   }
   // IET related server api - end
 
+  getPdfFormMirrorImage(docId: string, seqNo: string) {
+    console.log('calling getPdfFormMirrorImage api:' + docId + ',' + seqNo);
+    const url: string = this.auth.baseurl + '/Contents/docid/' +  docId + '/pageSeqNo/' + seqNo + '/formmirrorimage'
+    console.log(url);
+    return this.http.get(url, this.auth.getESignOptions());
+  }
+  updateSignatureBoxCoordinates(docId: string, seqNo: string, eSignFields: any) {
+    console.log('calling updateSignatureBoxCoordinates api:');
+    const url: string = this.auth.baseurl + '/Contents/docid/' +  docId + '/pageSeqNo/' + seqNo + '/formboxcoordinates/update'
+    return this.http.put(url, eSignFields, this.auth.getESignOptions());
+  }
 }
 

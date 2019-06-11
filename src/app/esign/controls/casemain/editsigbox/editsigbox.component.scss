@@ -5,31 +5,61 @@
 }
 
 .sigformlyr {
-    border: 1px solid #DDDDDD;
+    // border: 1px solid #DDDDDD;
     position: relative;
- }
- .tag1 {
-    float: left;
-    position: absolute;
-    z-index: 1000;
-    background-color: #92AD40;
-    padding: 5px;
-    color: #FFFFFF;
-    font-weight: bold;
-    width:120pt;
-    border:3pt double green
+    margin-left: 10%;
+    margin-top: 10%;
  }
 
- .tag2 {
+ .tpSignatureTag {
     float: left;
-    width:120pt;
     position: absolute;
-    left: 300px;
-    top: 400px;
     z-index: 1000;
-    background-color: #92AD40;
+    background-color: #03a9f4;
     padding: 5px;
     color: #FFFFFF;
     font-weight: bold;
-    border:3pt double green
+    border:1pt double black
+ }
+
+ .spSignatureTag {
+    float: left;
+    position: absolute;
+    z-index: 1000;
+    background-color: #03a9f4;
+    padding: 5px;
+    color: #FFFFFF;
+    font-weight: bold;
+    border:1pt double black
+ }
+
+ .tpDateTag {
+    float: left;
+    position: absolute;
+    z-index: 1000;
+    background-color: #03a9f4;
+    padding: 5px;
+    color: #FFFFFF;
+    font-weight: bold;
+    border:1pt double black
+ }
+ .spDateTag {
+    float: left;
+    position: absolute;
+    z-index: 1000;
+    background-color: #03a9f4;
+    padding: 5px;
+    color: #FFFFFF;
+    font-weight: bold;
+    border:1pt double black
+ }
+ .titleTag {
+    float: left;
+    position: absolute;
+    z-index: 1000;
+    background-color: #03a9f4;
+    padding: 5px;
+    color: #FFFFFF;
+    font-weight: bold;
+    border:pt double black
  }

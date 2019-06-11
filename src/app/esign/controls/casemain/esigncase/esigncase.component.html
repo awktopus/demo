@@ -188,15 +188,15 @@
     <span class="badge">*</span>
     <font size=-1>{{page.formCode}} - {{ (page.fileName.length>40)? (page.fileName|slice:0:36) +"..." : page.fileName}}</font>
     <span>
-      <mat-icon class='docicon' matTooltip="Select signer" color='warn' *ngIf='page.signerManualSelection =="Y"' 
-            (click)="selectSigner(mycase.caseId,page.docId,page.seqNo,page.signedPartyOption,page.signatureBoxCount)">warning</mat-icon>
+      <mat-icon matTooltip="Select signer" class='docicon' color='warn' *ngIf='page.signerManualSelection =="Y"' 
+      (click)="selectSigner(mycase.caseId,page.docId,page.seqNo,page.signedPartyOption,page.signatureBoxCount)">warning</mat-icon>
       <mat-icon matTooltip="Select signer" class='docicon' *ngIf='page.signerManualSelection =="N"' 
             (click)="selectSigner(mycase.caseId,page.docId,page.seqNo,page.signedPartyOption,page.signatureBoxCount)">person</mat-icon>
-      <mat-icon matTooltip="Edit Signature Box Position" class='docicon' (click)="showEditSigBoxPage(page)">settings</mat-icon>
       <mat-icon matTooltip="View eSigned form" class='docicon' *ngIf='page.esignStatus=="Signed"' (click)="showMergePage(page)">done_all</mat-icon>
       <mat-icon matTooltip="View classified form" class='docicon' (click)="showPage(page)">visibility</mat-icon>
       <mat-icon matTooltip="Delete form" class='docicon' (click)="deletePage(page.docId,page.seqNo)">delete</mat-icon>  
-      <mat-icon matTooltip="View eSign boxes" class='docicon' (click)="showPageWithESignbox(page)">aspect_ratio</mat-icon>    
+      <mat-icon matTooltip="View eSign boxes" class='docicon' *ngIf='page.approvedForEsign =="Y"' (click)="showPageWithESignbox(page)">aspect_ratio</mat-icon>    
+      <mat-icon matTooltip="Edit Signature Box Position" *ngIf='page.approvedForEsign =="Y"' class='docicon' (click)="showEditSigBoxPage(page)">settings</mat-icon>
     </span>
   </li>
 </ul>

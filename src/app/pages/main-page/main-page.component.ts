@@ -41,8 +41,10 @@ export class MainPageComponent implements OnInit, AfterViewInit {
         this.userRole = org.role;
         this.industryName = org.industryName;
         this.industryId = org.industryId;
-
-        if (this.industryId === '10') {
+        console.log('inside main page org:');
+        console.log(org);
+        console.log(org.userRole.normalizedName);
+        if (this.industryId === '10' && org.userRole.normalizedName !== 'PARTNER') {
           this.isAccountingFirm = true;
         } else {
           this.isAccountingFirm = false;

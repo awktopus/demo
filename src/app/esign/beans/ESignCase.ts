@@ -95,6 +95,7 @@ export class ClassifyPage {
   signedPartyOption?: string;
   signatureBoxCount?: number;
   esignFields?: ESignField[];
+  approvedForEsign?: string;
 }
 
 export class ESignField {
@@ -248,4 +249,20 @@ sharedUsersList: CompanyStaff[];
 closeDate: number;
 includeAccountNumber: string;
 hasSettingsAccess: string;
+}
+export class FormMirrorImageData {
+  docId: string;
+  seqNo: string;
+  formCode: string;
+  signatureBoxCount: number;
+  dataUrl: string;
+  esignFields: EsignFormField[];
+}
+export class EsignFormField {
+name: string;
+type: string;
+posX: number;
+posY: number;
+length: number;
+width: number;
 }
