@@ -28,14 +28,24 @@ export class CasemainComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
       this.route.paramMap.subscribe(para => {
       this.mycaseID = para.get('caseId');
+      console.log('my case id with in case main' + this.mycaseID);
       if (this.mycaseID === 'newcaseID') {
+        console.log('first if loop');
         const cc = new ESignCase();
         this.service.updateCase(cc);
         this.cstep1.setInitCase(cc);
         this.uiservice.setStepper(0);
        // this.cstep1.setcaseHeader(cc);
       // this.cstep1.clearCaseHeader();
+      } else if (this.mycaseID.includes('-') === true) {
+        console.log('second if loop');
+       console.log('new case from previous case' + this.mycaseID);
+        const cc = new ESignCase();
+        this.service.updateCase(cc);
+        this.cstep1.setInitCase(cc);
+        this.uiservice.setStepper(0);
       } else {
+        console.log('third if loop');
         console.log(this.mycaseID);
         this.service.getESignCase(this.mycaseID).subscribe(resp => {
           const cc: ESignCase = <ESignCase> resp;

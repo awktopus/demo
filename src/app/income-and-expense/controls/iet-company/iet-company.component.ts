@@ -29,6 +29,7 @@ export class IetCompanyComponent implements OnInit {
   cpactrl: FormControl = new FormControl();
   companyId: string;
   removable = true;
+  // selectable = true;
   constructor(private service: EsignserviceService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router,
     private uiservice: EsignuiserviceService, public dialogRef: MatDialogRef<IetCompanyComponent>
@@ -107,6 +108,8 @@ export class IetCompanyComponent implements OnInit {
   }
 
   removeCPA(c: CompanyStaff): void {
+    console.log('remove cpa');
+    console.log(this.scpas);
     const index = this.scpas.indexOf(c);
     if (index >= 0) {
       this.scpas.splice(index, 1);

@@ -48,11 +48,13 @@ import { AgGridModule } from 'ag-grid-angular';
 import { RouterLinkRendererComponent } from './controls/history/RouterLinkRenderer.component';
 import { ReminderRendererComponent } from './controls/history/ReminderRenderer.component';
 import { NotesRendererComponent } from './controls/history/NotesRenderer.component';
+import { NewCaseRendererComponent } from './controls/history/NewCaseRenderer.component';
 import { GridColConfigPopupComponent } from './controls/history/gridcolpopup/grid-col-config-popup.component';
 import { AuditpopupComponent } from './controls/history/auditpopup/auditpopup.component';
 import { AuditRendererComponent } from './controls/history/AuditRenderer.component';
 import { EditSigboxComponent } from './controls/casemain/editsigbox/editsigbox.component';
 import { AngularDraggableModule } from 'angular2-draggable';
+import { CasetemplatesComponent } from './controls/history/casetemplates/casetemplates.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -74,7 +76,8 @@ import { AngularDraggableModule } from 'angular2-draggable';
     NgxEditorModule,
     MatProgressSpinnerModule,
     AngularDraggableModule,
-    AgGridModule.withComponents([AuditRendererComponent, RouterLinkRendererComponent, ReminderRendererComponent, NotesRendererComponent])
+    AgGridModule.withComponents([AuditRendererComponent, RouterLinkRendererComponent, 
+      ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent])
   ],
   declarations: [
     GridColConfigPopupComponent,
@@ -115,14 +118,16 @@ import { AngularDraggableModule } from 'angular2-draggable';
     NewidentityQuestionComponent,
     EmailsettingsComponent,
     SignerselectionComponent,
-    EditSigboxComponent
+    EditSigboxComponent,
+    NewCaseRendererComponent,
+    CasetemplatesComponent
   ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
      RejectreasonpopupComponent, EmailpopupComponent, UploadscanpopupComponent,
      ClientreminderComponent, ClientAnswerComponent, IdentityQuestionsComponent,
      SetClientAnswerComponent, NewidentityQuestionComponent, HistoryComponent,
      SignerselectionComponent,
-    GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent],
+    GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent, CasetemplatesComponent],
   providers: [
     ESignGuard,
     // AuthGuard,

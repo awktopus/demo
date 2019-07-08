@@ -266,3 +266,10 @@ posY: number;
 length: number;
 width: number;
 }
+export class CaseTemplate {
+  taxReturnIdNumber: string;
+  returnName: string;
+  signer: string;
+  coSigner: string;
+  taxYear: number;
+}

@@ -10,7 +10,7 @@
     </mat-form-field> -->
     <mat-form-field class="casefield">
       <mat-chip-list #vendorchips placeholder="Vendor/Customer Name">
-        <mat-chip *ngIf="vendorName" [selectable]="selectable" [removable]="removable" (remove)="removeVendor()">
+        <mat-chip *ngIf="vendorName" [selectable]="selectable" [removable]="removable" (removed)="removeVendor()">
           {{ vendorName }}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>

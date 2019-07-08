@@ -820,5 +820,26 @@ export class EsignserviceService {
     const url: string = this.auth.baseurl + '/Contents/docid/' +  docId + '/pageSeqNo/' + seqNo + '/formboxcoordinates/update'
     return this.http.put(url, eSignFields, this.auth.getESignOptions());
   }
+
+  getCaseTemplatesData() {
+    console.log('calling getCaseTemplatesData server api');
+    const url: string = this.auth.baseurl + '/cases/casetemplates';
+    return this.http.get(url, this.auth.getESignOptions());
+  }
+
+  uploadCaseTemplates( fileToUpload: File | FileList) {
+    console.log('uploadCaseTemplates...')
+    let ff: File;
+    if (fileToUpload instanceof (FileList)) {
+      ff = fileToUpload.item(0);
+    } else {
+      ff = fileToUpload;
+    }
+    const formData: FormData = new FormData();
+    formData.append('ff', ff, ff.name);
+    console.log(formData.getAll('ff'));
+    return this.http.post(this.auth.baseurl + '/Cases/casetemplates/upload', formData,
+    this.auth.getESignOptionswithoutElToken());
+  }
 }
 

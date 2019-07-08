@@ -10,9 +10,11 @@ import { ClientreminderComponent } from '../casemain/esigncase/clientreminder/cl
 import { RouterLinkRendererComponent } from './RouterLinkRenderer.component';
 import { ReminderRendererComponent } from './ReminderRenderer.component';
 import { NotesRendererComponent } from './NotesRenderer.component';
-import { AuditRendererComponent} from './AuditRenderer.component'
+import { AuditRendererComponent} from './AuditRenderer.component';
+import { NewCaseRendererComponent } from './NewCaseRenderer.component';
 import { GridColConfigPopupComponent } from './gridcolpopup/grid-col-config-popup.component';
 import { AuditpopupComponent } from './auditpopup/auditpopup.component';
+import { CasetemplatesComponent } from './casetemplates/casetemplates.component';
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
@@ -41,6 +43,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
   reviewcaseapi: any = {};
   statusBar: any;
   autoHeight: any;
+  selectedIndex = 0;
   constructor(private service: EsignserviceService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -94,7 +97,8 @@ export class HistoryComponent implements OnInit, AfterViewInit {
       linkRenderer: RouterLinkRendererComponent,
       reminderRenderer: ReminderRendererComponent,
       notesRenderer: NotesRendererComponent,
-      auditRender: AuditRendererComponent
+      auditRender: AuditRendererComponent,
+      newCaseRenderer: NewCaseRendererComponent
     };
     this.route.paramMap.subscribe(para => {
       this.filtertype = para.get('type');
@@ -221,27 +225,25 @@ export class HistoryComponent implements OnInit, AfterViewInit {
         console.log('tab:' + e.index);
         this.loadSearchData('reviewcases', '');
         break;
-      // case 1:
-      //   console.log('tab:' + e.index);
-      //   this.loadSearchData('mycases', '');
-      //   break;
       case 1:
         console.log('tab:' + e.index);
         this.loadSearchData('allcases', '');
         break;
       case 2:
-        console.log('tab:' + e.index);
-        this.router.navigateByUrl('main/esign/case/newcaseID');
-        break;
+      console.log('tab:' + e.index);
+      this.showCaseTemplatesPopup();
+      break;
     }
   }
   configColDef() {
     const res = [
       {
         headerName: 'Case #', field: 'caseId',
-        cellRenderer: 'linkRenderer', width: 150,
+        cellRenderer: 'linkRenderer', width: 120,
         suppressSizeToFit: true
       },
+      { headerName: '+', field: 'newCase', cellRenderer: 'newCaseRenderer', width: 50,
+      suppressSizeToFit: true },
       { headerName: 'Status', field: 'status', cellStyle: { color: 'blue' } },
       { headerName: 'Category', field: 'type' },
       { headerName: 'Return Name', field: 'returnName' },
@@ -406,5 +408,19 @@ export class HistoryComponent implements OnInit, AfterViewInit {
     });
     dialogRef.componentInstance.setCaseInfo(caseID);
     // this.dialog.open(AuditpopupComponent, { width: '900px', data: caseID });
+  }
+
+  showCaseTemplatesPopup() {
+    console.log('showCaseTemplatesPopup');
+    const dialogRef = this.dialog.open(CasetemplatesComponent, {
+      width: '1260px'
+    });
+    dialogRef.componentInstance.historyref = this;
+  }
+  createNewCaseFromPrevious(caseId: string) {
+    console.log('Create new case from previous:' + caseId);
+    // this.router.navigateByUrl('main/esign/case/newcaseID');
+    const url = '/main/esign/case/' + caseId + '-' + 'newcase';
+    this.router.navigateByUrl(url);
   }
 }

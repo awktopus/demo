@@ -42,7 +42,7 @@
   <tr>
     <mat-form-field class="casefield">
       <mat-chip-list #primarychips placeholder="Primary Signer">
-        <mat-chip *ngIf="primarysigner" [selectable]="selectable" [removable]="removable" (remove)="removeSinger('primary')">
+        <mat-chip *ngIf="primarysigner" [selectable]="selectable" [removable]="removable" (removed)="removeSinger('primary')">
           {{primarysigner.firstName}} {{primarysigner.lastName}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
@@ -68,7 +68,7 @@
   <tr>
     <mat-form-field class="casefield">
       <mat-chip-list #secondarychips placeholder="Secondary Signer">
-        <mat-chip *ngIf="secondarysigner" [selectable]="selectable" [removable]="removable" (remove)="removeSinger('secondary')">
+        <mat-chip *ngIf="secondarysigner" [selectable]="selectable" [removable]="removable" (removed)="removeSinger('secondary')">
           {{secondarysigner.firstName}} {{secondarysigner.lastName}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
@@ -95,7 +95,7 @@
   <tr>
     <mat-form-field class="casefield">
       <mat-chip-list #clientchips placeholder="clients">
-        <mat-chip *ngFor="let sclient of recSelclients" [selectable]="selectable" [removable]="removable" (remove)="removeClient(sclient)">
+        <mat-chip *ngFor="let sclient of recSelclients" [selectable]="selectable" [removable]="removable" (removed)="removeClient(sclient)">
           {{sclient.firstName}} {{sclient.lastName}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
@@ -112,7 +112,7 @@
   <tr>
     <mat-form-field class="casefield">
       <mat-chip-list #cpachips placeholder="cpas">
-        <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" [removable]="removable" (remove)="removeCPA(scpa)">
+        <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" [removable]="removable" (removed)="removeCPA(scpa)">
           {{scpa.firstName}} {{scpa.lastName}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
