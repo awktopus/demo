@@ -14,7 +14,7 @@
         </td>
       </tr>
     </table>
-    <ag-grid-angular #agGridReviewCase style="width: 98%; height: 540px;font-size:10pt" class="ag-theme-balham" [rowData]="reviewcasegridData"
+    <ag-grid-angular #agGridReviewCase style="width: 98%; height: 740px; font-size:11pt" class="ag-theme-balham" [rowData]="reviewcasegridData"
       [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
       [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'reviewcase')"
       [domLayout]="autoHeight">
@@ -58,7 +58,7 @@
         </td>
       </tr>
     </table>
-    <ag-grid-angular #agGridAllCase style="width: 98%; height: 540px; font-size:10pt" class="ag-theme-balham" [rowData]="allcasegridData"
+    <ag-grid-angular #agGridAllCase style="width: 98%; height: 740px; font-size:11pt" class="ag-theme-balham" [rowData]="allcasegridData"
       [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
       [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="50" 
       (firstDataRendered)="onFirstDataRendered($event,'allcase')"

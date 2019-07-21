@@ -47,6 +47,14 @@
 </table>
 <table>
   <tr>
+    <td>
+        <div class="loading-screen-wrapper" *ngIf="gridActionInprogress">
+            <mat-progress-spinner [diameter]="50" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+          </div>
+    </td>
+  </tr>
+  <tr>
     <ag-grid-angular #agGridIncomeReceipts style="width: 1150px; height: 500px; font-size:12pt; " class="ag-theme-balham" [rowData]="allReceiptsgridData"
       [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
       [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" 

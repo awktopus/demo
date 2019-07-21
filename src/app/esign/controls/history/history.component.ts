@@ -299,9 +299,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
   }
 
   nameRenderer(params) {
-    // return '<a class="dropdown-item waves-light" mdbRippleRadius routerLink="../case/' + params.value + '">'
-    // + '<font color="#336699"><b>' + params.value + '</b></font></a>';
-    if (!params.value.firstName) {
+   if (!params.value.firstName) {
       params.value.firstName = '';
     }
     if (!params.value.lastName) {

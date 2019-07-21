@@ -6,6 +6,7 @@ import { GridColConfigPopupComponent } from '../../../esign/controls/history/gri
 import { TaxYearReceipts, Receipts, CoAReceipts, ChartOfAccounts } from '../../../esign/beans/ESignCase';
 import { ButtonRendererComponent } from '../../button-renderer.component';
 import { IetAddreceiptComponent } from '../../controls/iet-addreceipt/iet-addreceipt.component';
+import { ConfirmationDialogComponent } from '../../../esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
 @Component({
   selector: 'app-iet-viewreport',
   templateUrl: './iet-viewreport.component.html',
@@ -34,6 +35,7 @@ export class IetViewreportComponent implements OnInit {
   statusBar: any;
   defaultColDef: any;
   autoHeight: any;
+  gridActionInprogress = false;
   constructor(private service: EsignserviceService, public dialog: MatDialog,
     public dialogRef: MatDialogRef<IetViewreportComponent>) {
     this.frameworkComponents = {
@@ -153,7 +155,7 @@ export class IetViewreportComponent implements OnInit {
         width: 100,
         cellRenderer: 'buttonRenderer',
         cellRendererParams: {
-          onClick: this.deleteReceipt.bind(this),
+          onClick: this.openConfirmationDialogforCompanyDeletion.bind(this),
           label: 'DELETE'
         },
         suppressSizeToFit: true,
@@ -195,6 +197,21 @@ export class IetViewreportComponent implements OnInit {
     console.log('docId:' + deletedRow.rowData.docId);
     this.service.deleteReceiptImage(this.service.auth.getOrgUnitID(), this.companyId, deletedRow.rowData.docId).subscribe(resp => {
       this.loadReceiptsGrid();
+      this.gridActionInprogress = false;
+    });
+  }
+
+  openConfirmationDialogforCompanyDeletion(deletedRow: any): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '450px', height: '150px',
+      data: "Do you confirm the deletion of this receipt?"
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Yes clicked');
+        this.gridActionInprogress = true;
+         this.deleteReceipt(deletedRow);
+      }
     });
   }
 
@@ -208,7 +225,7 @@ export class IetViewreportComponent implements OnInit {
     console.log('edit Receipt...');
 
     const dialogRef = this.dialog.open(IetAddreceiptComponent, {
-      width: '900px', height: '650px'
+      width: '700px', height: '600px'
     });
     dialogRef.componentInstance.ietViewReportRef = this;
     dialogRef.componentInstance.setOperation('editreceipt');
