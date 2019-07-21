@@ -28,7 +28,8 @@ import { EsignuiserviceService } from './esign/service/esignuiservice.service';
 import { EsignAuthService } from './esign/service/esignauth.service';
 import { TreeTableModule } from 'primeng/treetable';
 import { NgIdleModule } from '@ng-idle/core'
-
+import { ConfirmationDialogComponent } from './esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {};
 
 // AoT requires an exported function for factories for translate module
@@ -45,8 +46,9 @@ export function createTranslateLoader(http: HttpClient) {
     LoginPageComponent,
     CurrentOUComponent,
     SignUpPageComponent,
+    ConfirmationDialogComponent
   ],
-  entryComponents: [],
+  entryComponents: [ConfirmationDialogComponent],
   imports: [
     SharedBaseModule,
     BrowserModule,
@@ -66,7 +68,9 @@ export function createTranslateLoader(http: HttpClient) {
       }
     }),
     NgIdleModule.forRoot(),
-    AppRoutesModule
+    AppRoutesModule,
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule 
   ],
   providers: [{
     provide: PERFECT_SCROLLBAR_CONFIG,

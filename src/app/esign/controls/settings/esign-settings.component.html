@@ -3,25 +3,30 @@
   <mat-tab label="Identity Verification">
     <table class="identitytable">
       <tr>
-        <th>
+
+        <td colspan="3">
           <h6>Organization's Client ID Verification Question(s) Setup</h6>
-        </th>
+        </td>
+
       </tr>
       <br>
       <tr>
-        <div class="check-element animate-show-hide" *ngIf='isOrgClientIdQuestionsExists =="N"'>
-          <mat-icon class='remindericon' mdbRippleRadius>thumb_up_alt</mat-icon>
-          ID Verification Question(s) are not defined for the organization, Please click on "Add Verification Question".
-        </div>
+        <td colspan="3">
+          <div class="check-element animate-show-hide" *ngIf='isOrgClientIdQuestionsExists =="N"'>
+            <mat-icon class='remindericon' mdbRippleRadius>thumb_up_alt</mat-icon>
+            ID Verification Question(s) are not defined for the organization, Please click on "Add Verification Question".
+          </div>
+        </td>
       </tr>
       <tr>
-        <td>
+        <td colspan="3">
           <ol type="1">
             <li *ngFor='let orgCliQuestion of orgClientQuestions'>
               <span>
                 <mat-form-field class="identityfield" *ngIf='orgCliQuestion.activeInd =="Y"'>
                   <input matInput placeholder="Question" [(ngModel)]="orgCliQuestion.question">
                 </mat-form-field>
+                &nbsp;
                 <button mat-raised-button color="accent" *ngIf='orgCliQuestion.activeInd =="Y"' class="text-upper" (click)="makeIdentityQuestionInactive(orgCliQuestion)">
                   DELETE
                 </button>
@@ -33,17 +38,20 @@
       <br>
       <br>
       <tr>
-        <span>
+        <td colsplan="3">
           <button mat-raised-button color="accent" class="text-upper" [disabled]="orgClientIdQuestionCount == 3" (click)="addIdentityQuestion()">
             ADD VERIFICATION QUESTION
           </button>
+          &nbsp;
+     
           <button mat-raised-button color="accent" *ngIf='isOrgClientIdQuestionsExists =="Y"' class="text-upper" (click)="setClientAnswer()">
             SETUP CLIENT IDENTIY
           </button>
+          &nbsp;
           <button mat-raised-button color="accent" class="text-upper" (click)="createNewQuestion()">
             CREATE NEW QUESTION
           </button>
-        </span>
+        </td>
       </tr>
     </table>
   </mat-tab>

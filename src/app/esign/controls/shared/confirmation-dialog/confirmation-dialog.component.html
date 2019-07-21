@@ -1,0 +1,10 @@
+<div class="dialogtable">
+<div mat-dialog-content>
+  <b>{{message}}</b>
+</div>
+<br/>
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" class="text-upper" (click)="onNoClick()" cdkFocusInitial>No</button>
+  <button mat-raised-button color="accent" class="text-upper" [mat-dialog-close]="true">Yes</button>
+</div>
+</div>

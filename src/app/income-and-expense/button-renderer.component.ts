@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 // import { ICellRendererParams, IAfterGuiAttachedParams } from 'ag-grid';
+// <button mat-icon-button (click)="onClick($event)">{{label}}</button>
 
 @Component({
   selector: 'app-button-renderer',
   template: `
-    <button type="button" (click)="onClick($event)">{{label}}</button>
+    <button mat-raised-button color="accent" (click)="onClick($event)">
+    {{label}}
+    </button>
     `
 })
 

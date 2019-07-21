@@ -29,6 +29,8 @@ export class IetCompanyComponent implements OnInit {
   cpactrl: FormControl = new FormControl();
   companyId: string;
   removable = true;
+  showNewCompanyspinner = false;
+  showEditCompanyspinner = false;
   // selectable = true;
   constructor(private service: EsignserviceService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router,
@@ -117,6 +119,7 @@ export class IetCompanyComponent implements OnInit {
   }
 
   createCompany() {
+    this.showNewCompanyspinner = true;
     console.log('create company');
     console.log('companyName:' + this.companyName);
     console.log('companyType:' + this.companyType);
@@ -142,10 +145,12 @@ export class IetCompanyComponent implements OnInit {
       this.ietSettingsRef.clientCompanies = resp;
       this.ietSettingsRef.loadCompanies();
       this.dialogRef.close();
+      this.showNewCompanyspinner = false;
     });
   }
 
   updateCompanySettings() {
+    this.showEditCompanyspinner = true;
     console.log('updateCompanySettings');
     console.log('companyName:' + this.companyName);
     console.log('companyType:' + this.companyType);
@@ -181,6 +186,7 @@ export class IetCompanyComponent implements OnInit {
       this.ietSettingsRef.clientCompanies = resp;
       this.ietSettingsRef.loadCompanies();
       this.dialogRef.close();
+      this.showEditCompanyspinner = false;
     });
   }
 

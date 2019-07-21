@@ -20,6 +20,7 @@ export class UploadscanpopupComponent implements OnInit {
   scandoc: any;
   mycaseID: string;
   errormsg: string;
+  showSubmitSpinner = false;
   constructor( private service: EsignserviceService,
     private uiservice: EsignuiserviceService,
     public dialogRef: MatDialogRef<UploadscanpopupComponent>) { }
@@ -115,6 +116,7 @@ export class UploadscanpopupComponent implements OnInit {
   }
 
   submitDoc() {
+    this.showSubmitSpinner = true;
     console.log('submit esign docs');
     const pp = [];
     this.scandoc.pages.forEach(p => {
@@ -132,6 +134,7 @@ export class UploadscanpopupComponent implements OnInit {
       const docs = <ESignDoc[]> (<any>resp).classification;
       this.service.updateDocs(docs, 'esign')
       this.service.updateClassificationPages(docs);
+      this.showSubmitSpinner = false;
       this.closeme();
     });
   }

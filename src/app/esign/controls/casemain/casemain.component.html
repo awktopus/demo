@@ -1,27 +1,34 @@
-  <div  class='stepperContainer row'>
-    <table  style="width:100%">
-       <tr>
-           <td>
+<div class='stepperContainer row'>
+    <table style="width:100%">
+        <tr>
+            <td>
+                <!-- <div class="loader" *ngIf="caseDataloading">
+                        <h2>Case data loading...</h2>
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div> -->
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <label class="heading-label">New eSign Case</label>
-           </td>
-           <td>
+            </td>
+            <td>
                 <button mat-button color="primary" style="margin-left: 50px;" (click)="navigateCaseManagement()">
-                 Case Management   
-                 <mat-icon>
-                      reply</mat-icon>
+                    Case Management
+                    <mat-icon>
+                        reply</mat-icon>
                 </button>
-           </td>
-       </tr> 
+            </td>
+        </tr>
     </table>
-      <mat-vertical-stepper [linear]="false" 
-       #eSignWFStepper="matVerticalStepper" [selectedIndex] = "ui_ctrl.stepperIndex">
-      <mat-step>
-          <ng-template matStepLabel>Tax Category Information</ng-template>
-        <app-step1panel></app-step1panel>
-      </mat-step>
-      <mat-step>
-          <ng-template matStepLabel>Upload Tax Document</ng-template>
-          <app-step2panel></app-step2panel>
+    <mat-vertical-stepper [linear]="false" #eSignWFStepper="matVerticalStepper" [selectedIndex]="ui_ctrl.stepperIndex">
+        <mat-step>
+            <ng-template matStepLabel>Tax Category Information</ng-template>
+            <app-step1panel></app-step1panel>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Upload Tax Document</ng-template>
+            <app-step2panel></app-step2panel>
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>Classification, Validation and Send for Review</ng-template>
@@ -36,7 +43,7 @@
             <app-step5panel></app-step5panel>
         </mat-step>
     </mat-vertical-stepper>
-    </div>
-    <div class='caseinfo row'>
-        <app-esigncase></app-esigncase>
-    </div>
+</div>
+<div class='caseinfo row'>
+    <app-esigncase></app-esigncase>
+</div>

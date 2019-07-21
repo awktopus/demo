@@ -42,7 +42,8 @@ import { ButtonRendererComponent } from '../income-and-expense/button-renderer.c
     IetViewreportComponent,
     IetCompanyComponent, ButtonRendererComponent
   ],
-  entryComponents: [IetAddreceiptComponent, IetViewreportComponent, IetCompanyComponent
+  entryComponents: [IetAddreceiptComponent, IetViewreportComponent,
+    IetCompanyComponent
     ],
   providers: [
   ESignGuard

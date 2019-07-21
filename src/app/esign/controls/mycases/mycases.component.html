@@ -319,13 +319,13 @@
         <td colsplan=3></td>
         <td colsplan=3></td>
         <td colsplan=3 align=center>
-            <button *ngIf='isEsignForm == "Y" ' mat-raised-button color="accent" class="text-upper" (click)="goSigCap(form,signer)">
-                CLICK HERE TO SIGN AS {{signer.lastName}},{{signer.firstName}}
-              </button>
+          <button *ngIf='isEsignForm == "Y" ' mat-raised-button color="accent" class="text-upper" (click)="goSigCap(form,signer)">
+            CLICK HERE TO SIGN AS {{signer.lastName}},{{signer.firstName}}
+          </button>
         </td>
         <td></td>
       </tr>
-      </table>
+    </table>
     <table>
       <tr>
         <td></td>
@@ -334,21 +334,20 @@
             <input matInput placeholder="UPLOAD SIGNED FORM" [value]="nonEsignfiles ? nonEsignfiles.name : ''" />
           </mat-form-field>
         </td>
-        <td align=center> 
+        <td align=center>
           <td-file-input *ngIf='isEsignForm == "N" ' [(ngModel)]="nonEsignfiles" color="primary">
             <mat-icon>file_upload</mat-icon>
           </td-file-input>
         </td>
-        <td align=center>          
-          <button mat-raised-button *ngIf='isEsignForm == "N" ' color="accent" [disabled]="!nonEsignfiles" class="row text-upper" 
-          (click)="uploadNonEsignForm(form,signer,'nonesign',nonEsignfiles)">Submit</button>
+        <td align=center>
+          <button mat-raised-button *ngIf='isEsignForm == "N" ' color="accent" [disabled]="!nonEsignfiles" class="row text-upper" (click)="uploadNonEsignForm(form,signer,'nonesign',nonEsignfiles)">Submit</button>
         </td>
       </tr>
-      </table>
-      <br>
+    </table>
+    <br>
     <table>
       <tr>
-        <td align='left' *ngIf='fprev'>          
+        <td align='left' *ngIf='fprev'>
           <button mat-raised-button color="secondary" class="text-upper" (click)="displaySigningView(fprev,signer)">
             <mat-icon>arrow_back</mat-icon>
             Prev
@@ -388,7 +387,11 @@
     </mat-form-field>
     <br>
     <p>
-      <button mat-raised-button color="accent" (click)='submitCap()'>Submit</button>
+      <span *ngIf='!showspinner'>
+        <button mat-raised-button color="accent" (click)='submitCap()'>Submit</button>
+      </span>
+      <mat-spinner *ngIf='showspinner' diameter='40'></mat-spinner>
+      <span *ngIf='showspinner'>Processing...</span>
     </p>
   </div>
   <div *ngIf="viewtype == 'esignformview'" class="casedoc">

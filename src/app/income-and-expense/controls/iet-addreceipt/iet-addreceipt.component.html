@@ -1,13 +1,10 @@
-<table class="trackertable2">
+<table class="trackertable">
   <tr align="center">
-    <td colspan="12">
+    <td colspan="8">
       <h6> {{ title }} </h6>
     </td>
   </tr>
   <tr>
-    <!-- <mat-form-field class="casefield">
-      <input matInput placeholder="Vendor/Customer Name" [(ngModel)]="vendorName">
-    </mat-form-field> -->
     <mat-form-field class="casefield">
       <mat-chip-list #vendorchips placeholder="Vendor/Customer Name">
         <mat-chip *ngIf="vendorName" [selectable]="selectable" [removable]="removable" (removed)="removeVendor()">
@@ -15,12 +12,12 @@
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
 
-        <input type="text" placeholder="Vendor/Customer Name" [matChipInputFor]="vendorchips" 
-        matInput [matAutocomplete]="autovendor" [formControl]="clientctrl" [(ngModel)] ="vendorNameInput">
+        <input type="text" placeholder="Vendor/Customer Name" [matChipInputFor]="vendorchips" matInput [matAutocomplete]="autovendor"
+          [formControl]="clientctrl" [(ngModel)]="vendorNameInput">
 
         <mat-autocomplete #autovendor="matAutocomplete">
           <mat-option *ngFor="let vendor of vendors" [value]="vendor" (onSelectionChange)="selectVendor($event)">
-            {{ vendor }} 
+            {{ vendor }}
           </mat-option>
         </mat-autocomplete>
 
@@ -57,8 +54,7 @@
       <span>
         <td>
           <mat-form-field class="casefield" tdFileDrop (fileDrop)="receiptFiles = $event" flex>
-            <input matInput placeholder="Upload Receipt" [value]="receiptFiles ? receiptFiles.name : ''"
-            />
+            <input matInput placeholder="Upload Receipt" [value]="receiptFiles ? receiptFiles.name : ''" />
           </mat-form-field>
         </td>
         <td>
@@ -67,38 +63,41 @@
           </td-file-input>
         </td>
         <td>
-          <button mat-raised-button color="accent" [disabled]="!receiptFiles" class="row text-upper" 
-          (click)="uploadReceiptFile(receiptFiles)">Upload</button>
+          <button mat-raised-button color="accent" [disabled]="!receiptFiles" class="row text-upper" (click)="uploadReceiptFile(receiptFiles)">Upload</button>
         </td>
         <td>
-          <mat-error *ngIf="!isPdfFile">Please upload only pdf file..</mat-error>        
+          <mat-error *ngIf="!isPdfFile">Please upload only pdf file..</mat-error>
           <b> {{ uploadedReceiptFile }} </b>
         </td>
       </span>
     </tr>
-    <br/>
-    <tr>
-      <span>
-        <span *ngIf='!showAddspinner'>
-          <button *ngIf='operation =="addreceipt"' [disabled]="!receiptUploaded" mat-raised-button color="accent" class="text-upper"
-            (click)="finalizeAddReceipt()">
-            Finish
-          </button>
-        </span>
-        <mat-spinner *ngIf='showAddspinner' diameter='40'></mat-spinner>
-        <span *ngIf='showAddspinner'>Processing...</span>
-
-        <span *ngIf='!showEditspinner'>
-          <button *ngIf='operation =="editreceipt"' mat-raised-button color="accent" class="text-upper" (click)="finalizeUpdateReceipt()">
-            Update
-          </button>
-        </span>
-        <mat-spinner *ngIf='showEditspinner' diameter='40'></mat-spinner>
-        <span *ngIf='showEditspinner'>Processing...</span>
-        
-        <button mat-raised-button color="accent" class="text-upper" (click)="cancelAddReceipt()">
-          Cancel
+</table>
+<br/>
+<table class="trackertable2">
+  <tr>
+    <td>
+      <span *ngIf='!showAddspinner'>
+        <button *ngIf='operation =="addreceipt"' [disabled]="!receiptUploaded" mat-raised-button color="accent" class="text-upper"
+          (click)="finalizeAddReceipt()">
+          Finish
         </button>
       </span>
-    </tr>
+    </td>
+    <td>
+      <mat-spinner *ngIf='showAddspinner' diameter='40'></mat-spinner>
+      <span *ngIf='showAddspinner'>Processing...</span>
+      <span *ngIf='!showEditspinner'>
+        <button *ngIf='operation =="editreceipt"' mat-raised-button color="accent" class="text-upper" (click)="finalizeUpdateReceipt()">
+          Update
+        </button>
+      </span>
+    </td>
+    <td>
+      <mat-spinner *ngIf='showEditspinner' diameter='40'></mat-spinner>
+      <span *ngIf='showEditspinner'>Processing...</span>
+      <button mat-raised-button color="accent" class="text-upper" (click)="cancelAddReceipt()">
+        Cancel
+      </button>
+    </td>
+  </tr>
 </table>

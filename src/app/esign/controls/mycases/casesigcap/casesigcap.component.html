@@ -1,19 +1,38 @@
 <title> signature capture </title>
-  <div class='sig-container'>
-    <signature-pad [options]="signaturePadOptions"  id="signaturepad">
-    </signature-pad>
-  </div>
+<div class='sig-container'>
+  <signature-pad [options]="signaturePadOptions" id="signaturepad">
+  </signature-pad>
+</div>
 <br>
-    <!-- <button mat-raised-button color="accent" (click)="loadDrawing()">Load</button> -->
-    <button mat-raised-button color="accent" (click)="drawClear()">Clear</button>
-    <!-- <button mat-raised-button color="accent" (click)="savedrawing()">Save</button> -->
-    <br><br>
-  <mat-form-field class='casefield'>
-        <input matInput id='fddate' [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]='myDate' >
+<!-- <button mat-raised-button color="accent" (click)="loadDrawing()">Load</button> -->
+<button mat-raised-button color="accent" (click)="drawClear()">Clear</button>
+<!-- <button mat-raised-button color="accent" (click)="savedrawing()">Save</button> -->
+<br>
+<br>
+<table>
+  <tr>
+    <td>
+      <mat-form-field class='casefield'>
+        <input matInput id='fddate' [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]='myDate'>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field><br>
-    <mat-form-field class='casefield'>
-      <input matInput placeholder="Personal Pin" type='password' id='fdpin' [(ngModel)]='securitypin' >
-    </mat-form-field>
- <p> <button mat-raised-button color="accent" (click)='submitCap()'>Submit</button> </p>
+      </mat-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <mat-form-field class='casefield'>
+        <input matInput placeholder="Personal Pin" type='password' id='fdpin' [(ngModel)]='securitypin'>
+      </mat-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span *ngIf='!showspinner'>
+          <button mat-raised-button color="accent" class="row text-upper" (click)='submitCap()'>Submit</button>
+      </span>
+      <mat-spinner *ngIf='showspinner' diameter='40'></mat-spinner>
+      <span *ngIf='showspinner'>Processing...</span>
+    </td>
+  </tr>
+</table>

@@ -10,13 +10,13 @@ import { IetAddreceiptComponent } from '../iet-addreceipt/iet-addreceipt.compone
 import { IetViewreportComponent } from '../iet-viewreport/iet-viewreport.component';
 import { EsignuiserviceService } from '../../../esign/service/esignuiservice.service';
 import { IetCompanyComponent } from '../iet-company/iet-company.component';
+import { ConfirmationDialogComponent } from '../../../esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
 @Component({
   selector: 'app-iet-settings',
   templateUrl: './iet-settings.component.html',
   styleUrls: ['./iet-settings.component.scss']
 })
 export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
-
   companyId: any;
   sharedUsers: any;
   closeDate: any;
@@ -85,7 +85,7 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
     // this.setupNewCmpny = true;
     console.log('setupNewCompany:');
     const dialogRef = this.dialog.open(IetCompanyComponent, {
-      width: '600px', height: '500px'
+      width: '700px', height: '500px'
     });
     dialogRef.componentInstance.ietSettingsRef = this;
     dialogRef.componentInstance.setMode('newcompany');
@@ -94,7 +94,7 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
   editCompany(clientCompany: Company) {
     console.log('editCompany:');
     const dialogRef = this.dialog.open(IetCompanyComponent, {
-      width: '600px', height: '500px'
+      width: '700px', height: '500px'
     });
     dialogRef.componentInstance.ietSettingsRef = this;
     dialogRef.componentInstance.setMode('editcompany');
@@ -115,7 +115,7 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
     console.log(companyTypeId);
     console.log(companyId);
     const dialogRef = this.dialog.open(IetAddreceiptComponent, {
-      width: '900px', height: '650px'
+      width: '700px', height: '600px'
     });
     dialogRef.componentInstance.ietSettingsRef = this;
     dialogRef.componentInstance.setOperation('addreceipt');
@@ -132,5 +132,18 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
     });
     dialogRef.componentInstance.ietSettingsRef = this;
     dialogRef.componentInstance.setViewReportInfo(companyTypeId, companyId, companyName);
+  }
+
+  openConfirmationDialogforCompanyDeletion(cmpnyId: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '450px', height: '150px',
+      data: "Do you confirm the deletion of this company?"
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Yes clicked');
+         this.deleteCompany(cmpnyId);
+      }
+    });
   }
 }

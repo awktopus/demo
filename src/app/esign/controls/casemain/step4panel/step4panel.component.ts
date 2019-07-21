@@ -15,6 +15,7 @@ import { EmailpopupComponent } from '../../casemain/step2panel/emailpopup/emailp
 export class Step4panelComponent implements OnInit {
   mycase: ESignCase;
   sendToClientOption: any;
+  showSendToClientspinner = false;
   constructor(public dialog: MatDialog,
     private service: EsignserviceService, private uiservice: EsignuiserviceService) { }
   ngOnInit() {
@@ -26,8 +27,10 @@ export class Step4panelComponent implements OnInit {
 
   sendToClient() {
     if (this.sendToClientOption === '0') {
+      this.showSendToClientspinner = true;
       this.mycase.rejectReason = '';
       this.service.sendToESign(this.mycase.caseId);
+      this.showSendToClientspinner = false;
     } else if (this.sendToClientOption === '1') {
       this.openEmailPop();
     }

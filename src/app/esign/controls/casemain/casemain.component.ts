@@ -5,6 +5,7 @@ import { ESignCase, ESignUI, ESignDoc} from '../../beans/ESignCase';
 import { Router, ActivatedRoute } from '@angular/router';
 import {Step1panelComponent} from './step1panel/step1panel.component';
 import { EsignuiserviceService } from '../../service/esignuiservice.service';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-casemain',
   templateUrl: './casemain.component.html',
@@ -21,42 +22,52 @@ export class CasemainComponent implements OnInit, AfterViewInit {
    }
 
   ngOnInit() {
-    this.uiservice.cur_ui.subscribe(c => {
+      this.uiservice.cur_ui.subscribe(c => {
       this.ui_ctrl = c;
     });
   }
   ngAfterViewInit() {
       this.route.paramMap.subscribe(para => {
       this.mycaseID = para.get('caseId');
-      console.log('my case id with in case main' + this.mycaseID);
       if (this.mycaseID === 'newcaseID') {
-        console.log('first if loop');
         const cc = new ESignCase();
         this.service.updateCase(cc);
         this.cstep1.setInitCase(cc);
         this.uiservice.setStepper(0);
-       // this.cstep1.setcaseHeader(cc);
-      // this.cstep1.clearCaseHeader();
+        // setTimeout (() => {
+        //   console.log("Hello from setTimeout");
+        //   this.caseDataloading = false;
+        //   console.log('BRAND NEW CASE DATA LOADING END...');
+        //   console.log(this.caseDataloading);
+        // }, 4000);
       } else if (this.mycaseID.includes('-') === true) {
-        console.log('second if loop');
-       console.log('new case from previous case' + this.mycaseID);
-        const cc = new ESignCase();
+         const cc = new ESignCase();
         this.service.updateCase(cc);
         this.cstep1.setInitCase(cc);
         this.uiservice.setStepper(0);
+        // setTimeout (() => {
+        //   console.log("Hello from setTimeout");
+        //   this.caseDataloading = false;
+        //   console.log('NEW CASE DATA FROM PREVIOUS CASE DATA LOADING END...');
+        //   console.log(this.caseDataloading);
+        // }, 4000);
       } else {
-        console.log('third if loop');
         console.log(this.mycaseID);
         this.service.getESignCase(this.mycaseID).subscribe(resp => {
           const cc: ESignCase = <ESignCase> resp;
           console.log(resp);
-         // console.log(cc);
-          const rr: any = <{classification: ESignDoc[]}> resp;
+         const rr: any = <{classification: ESignDoc[]}> resp;
           console.log(rr);
           this.service.updateCase(cc);
           this.service.updateClassificationPages(rr.classification);
           this.cstep1.setInitCase(cc);
           this.uiservice.setStepper(this.getStepByStatus(cc.status));
+          // setTimeout (() => {
+          //   console.log("Hello from setTimeout");
+          //   this.caseDataloading = false;
+          //   console.log('Existing CASE DATA LOADING END...');
+          //   console.log(this.caseDataloading);
+          // }, 4000);
         });
       }
     });

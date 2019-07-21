@@ -1,8 +1,7 @@
-<!--<div class='container'>-->
-<!-- <mat-card *ngIf="isLoading" style="display: flex; justify-content: center; align-items: center">
-  <mat-progress-spinner color="primary" mode="indeterminate">
-  </mat-progress-spinner>
-</mat-card> -->
+<div class="loading-screen-wrapper" *ngIf="caseDataloading">
+    <mat-progress-spinner [diameter]="50" [mode]="'indeterminate'">
+    </mat-progress-spinner>
+  </div>
 <table class="container">
   <tr>
     <mat-form-field class="casefield">
@@ -128,14 +127,22 @@
   </tr>
   <tr>
     <span>
-      <button mat-raised-button color="accent" class="text-upper" (click)="saveCase()" *ngIf="mycase && !(mycase.caseId)">
-        Save
-      </button>
-      <button mat-raised-button color="accent" class="text-upper" (click)="updateCase()" *ngIf="mycase && mycase.caseId">
-        Update
-      </button>
+      <span *ngIf='!showSavespinner'>
+        <button mat-raised-button color="accent" class="text-upper" (click)="saveCase()" *ngIf="mycase && !(mycase.caseId)">
+          Save
+        </button>
+      </span>
+      <mat-spinner *ngIf='showSavespinner' diameter='40'></mat-spinner>
+      <span *ngIf='showSavespinner'>Processing...</span>
+
+      <span *ngIf='!showUpdatespinner'>
+        <button mat-raised-button color="accent" class="text-upper" (click)="updateCase()" *ngIf="mycase && mycase.caseId">
+          Update
+        </button>
+      </span>
+      <mat-spinner *ngIf='showUpdatespinner' diameter='40'></mat-spinner>
+      <span *ngIf='showUpdatespinner'>Processing...</span>
       <br>
     </span>
   </tr>
-  <!--</div>-->
 </table>

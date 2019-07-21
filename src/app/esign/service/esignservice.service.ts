@@ -559,7 +559,7 @@ export class EsignserviceService {
 
   getIdentityQuestions(orgUnitId: string) {
     const url: string = this.auth.baseurl + '/Configs/orgunitid/' + orgUnitId
-      + '/identity/questions';
+      + '/identity/questions/nonselected';
     return this.http.get(url, this.auth.getESignOptions());
   }
 

@@ -36,10 +36,10 @@ export class IetViewreportComponent implements OnInit {
   autoHeight: any;
   constructor(private service: EsignserviceService, public dialog: MatDialog,
     public dialogRef: MatDialogRef<IetViewreportComponent>) {
-      this.frameworkComponents = {
-        buttonRenderer: ButtonRendererComponent,
-      }
-     }
+    this.frameworkComponents = {
+      buttonRenderer: ButtonRendererComponent,
+    }
+  }
 
   ngOnInit() {
     console.log('iet-viewreport initialization...');
@@ -105,38 +105,59 @@ export class IetViewreportComponent implements OnInit {
   }
   configColDef() {
     const res = [
-      { headerName: 'Account Type', field: 'accountType', width: 250, suppressSizeToFit: true },
-      { headerName: 'Receipt Date', field: 'receiptDate', width: 100, suppressSizeToFit: true },
-      { headerName: 'Name', field: 'vendorName', width: 200, suppressSizeToFit: true },
-      { headerName: 'Amount', field: 'amount', width: 100, suppressSizeToFit: true },
-      { headerName: 'Notes', field: 'notes', width: 150, suppressSizeToFit: true },
-      { headerName: 'Content Type', hide: 'true', field: 'contentType', width: 250, suppressSizeToFit: true },
       {
-         width: 100,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.editReceipt.bind(this),
-          label: 'Edit'
-        },
-        suppressSizeToFit: true
+        headerName: 'Account Type', field: 'accountType', width: 250, suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "flex-end" }
+      },
+      {
+        headerName: 'Receipt Date', field: 'receiptDate', width: 100, suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "flex-end" }
+      },
+      {
+        headerName: 'Name', field: 'vendorName', width: 200, suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "flex-end" }
+      },
+      {
+        headerName: 'Amount', field: 'amount', width: 100, suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "flex-end" }
+      },
+      {
+        headerName: 'Notes', field: 'notes', width: 150, suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "center" }
+      },
+      {
+        headerName: 'Content Type', hide: 'true', field: 'contentType', width: 250, suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "center" }
       },
       {
         width: 100,
         cellRenderer: 'buttonRenderer',
         cellRendererParams: {
-          onClick: this.downloadReceipt.bind(this),
-          label: 'Download'
+          onClick: this.editReceipt.bind(this),
+          label: 'EDIT',
         },
-        suppressSizeToFit: true
+        suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "center" }
+      },
+      {
+        width: 120,
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: {
+          onClick: this.downloadReceipt.bind(this),
+          label: 'DOWNLOAD'
+        },
+        suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "center" }
       },
       {
         width: 100,
         cellRenderer: 'buttonRenderer',
         cellRendererParams: {
           onClick: this.deleteReceipt.bind(this),
-          label: 'Delete'
+          label: 'DELETE'
         },
-        suppressSizeToFit: true
+        suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "center" }
       }
     ]
     //  this.context = { componentParent: this, allreceipts: false };
@@ -180,7 +201,7 @@ export class IetViewreportComponent implements OnInit {
   downloadReceipt(downloadRow: any) {
     console.log('downloadReceipt...');
     this.service.downloadReceipt(this.service.auth.getOrgUnitID(),
-    this.companyId, downloadRow.rowData.docId);
+      this.companyId, downloadRow.rowData.docId);
   }
 
   editReceipt(editRow: any) {
@@ -193,7 +214,7 @@ export class IetViewreportComponent implements OnInit {
     dialogRef.componentInstance.setOperation('editreceipt');
     dialogRef.componentInstance.setEditReceiptInfo(this.companyTypeId, this.companyId,
       this.fiscalYear, editRow.rowData.accountType, editRow.rowData.accountTypeSeqNo,
-    editRow.rowData.receiptDate, editRow.rowData.vendorName, editRow.rowData.amount,
-    editRow.rowData.notes, editRow.rowData.docId);
+      editRow.rowData.receiptDate, editRow.rowData.vendorName, editRow.rowData.amount,
+      editRow.rowData.notes, editRow.rowData.docId);
   }
 }

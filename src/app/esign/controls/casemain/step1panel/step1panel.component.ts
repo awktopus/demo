@@ -54,11 +54,15 @@ export class Step1panelComponent implements OnInit {
   taxYears: TaxYears[];
   // isLoading = true;
   disableTaxYear = false;
+  showSavespinner = false;
+  showUpdatespinner = false;
+  caseDataloading = false;
   constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService, public dialog: MatDialog) {
     this.recSelclients = [];
     this.scpas = [];
   }
   ngOnInit() {
+    this.caseDataloading = true;
     forkJoin([
       this.service.getEsignConfig(),
       this.service.getCPAs()
@@ -70,14 +74,13 @@ export class Step1panelComponent implements OnInit {
       this.cachecpas = <ESignCPA[]>results[1];
       this.CPAID = this.service.auth.getUserID();
       this.cpas.forEach(ele => {
-        // if (ele.cpaId === this.CPAID) {
-        if (ele.cpaClients) {
+          if (ele.cpaClients) {
           this.clients = ele.cpaClients;
           this.secclients = ele.cpaClients;
           this.recclients = ele.cpaClients;
           console.log(this.recclients);
         }
-       // }
+        this.caseDataloading = false;
       });
       if (this.initcaseheader) {
         this.setcaseHeader(this.initcaseheader);
@@ -332,6 +335,7 @@ export class Step1panelComponent implements OnInit {
     return casejson;
   }
   saveCase(): void {
+    this.showSavespinner = true;
     const casejson = this.captureCaseJson();
     console.log(casejson);
     this.service.saveCase(casejson).subscribe(resp => {
@@ -341,10 +345,12 @@ export class Step1panelComponent implements OnInit {
       console.log(rr);
       this.service.mergeCaseHeader(rr);
       this.uiservice.setStepper(1);
+      this.showSavespinner = false;
     });
   }
 
   updateCase() {
+    this.showUpdatespinner = true;
     const casejson = this.captureCaseJson();
     this.service.updateCaseHeader(casejson).subscribe(resp => {
       //  console.log(resp);
@@ -352,6 +358,7 @@ export class Step1panelComponent implements OnInit {
       console.log(rr);
       this.service.mergeCaseHeader(rr);
       this.uiservice.setStepper(1);
+      this.showUpdatespinner = false;
     });
   }
   setClientIdentityAnswer(clientId: string, clientType: string, ansId: string) {

@@ -44,6 +44,7 @@ export class MycasesComponent implements OnInit, AfterViewInit {
   fnext: any;
   nonEsignfiles: File;
   isEsignForm: any;
+  showspinner = false;
   // signing cap
   @ViewChild(SignaturePad) public signaturePad: SignaturePad;
 
@@ -505,6 +506,7 @@ export class MycasesComponent implements OnInit, AfterViewInit {
   }
 
   submitCap() {
+    this.showspinner = true;
     console.log(this.myDate);
     console.log(this.form);
     const data = {
@@ -542,6 +544,7 @@ export class MycasesComponent implements OnInit, AfterViewInit {
         // need to refresh the case pages
         this.loadCaseContent(this.selectedcase.caseId);
       }
+      this.showspinner = false;
     });
   }
 

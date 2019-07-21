@@ -24,6 +24,7 @@ export class CasesigcapComponent implements OnInit, AfterViewInit  {
   myDate:  Date = new Date();
   caseID: string;
   type: string;
+  showspinner = false;
   constructor( private service: EsignserviceService,
     private route: ActivatedRoute, private router: Router) { }
 
@@ -89,6 +90,8 @@ export class CasesigcapComponent implements OnInit, AfterViewInit  {
     });
   }
   submitCap() {
+    console.log('submit cap...');
+    this.showspinner = true;
       console.log(this.myDate);
       console.log(this.securitypin);
       console.log(this.form);
@@ -108,6 +111,7 @@ export class CasesigcapComponent implements OnInit, AfterViewInit  {
       console.log(data);
       this.service.submitSignatureForm(data).subscribe(resp => {
         console.log(resp);
+        this.showspinner = false;
         // route back to the form
         this.router.navigate(['/main/esign/mycases/caseformview/' + this.form.caseId + '/' +
         this.form.docId + '/' + this.form.seqNo]);

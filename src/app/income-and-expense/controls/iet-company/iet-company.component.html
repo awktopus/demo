@@ -1,29 +1,29 @@
 <table class="trackertable2">
   <tr align="center">
-    <td colspan="12">
+    <td colspan="8">
       <h6> {{ title }} </h6>
     </td>
   </tr>
   <tr>
-    <td colspan="12">
+    <td>
       <mat-form-field class="casefield">
         <input matInput placeholder="Company Name" [(ngModel)]="companyName">
       </mat-form-field>
     </td>
   </tr>
   <tr>
-    <td colspan="12">
+    <td>
       <mat-form-field class="casefield">
         <mat-select placeholder="Company Type" [(ngModel)]="companyType">
           <mat-option *ngFor="let cmpnyType of companyTypes" value="{{ cmpnyType.companyTypeId }}">
             {{ cmpnyType.companyType }}
           </mat-option>
         </mat-select>
-      </mat-form-field>    
+      </mat-form-field>
     </td>
   </tr>
   <tr>
-    <td colspan="12">
+    <td>
       <mat-form-field class="casefield">
         <mat-select value="{{ closeDate }}">
           <mat-option value="1">Closing Date:End of January</mat-option>
@@ -43,15 +43,15 @@
     </td>
   </tr>
   <tr>
-    <td colspan="12">
+    <td>
       <mat-form-field class="casefield">
         <mat-chip-list #cpachips placeholder="cpas">
-          <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" 
-          [removable]="removable" (removed)="removeCPA(scpa)">
+          <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" [removable]="removable" (removed)="removeCPA(scpa)">
             {{scpa.firstName}} {{scpa.lastName}}
             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
-          <input type="text" placeholder="Share with.." [value]="searchCPA" [matChipInputFor]="cpachips" matInput [matAutocomplete]="cpaauto" [formControl]="cpactrl">
+          <input type="text" placeholder="Share with.." [value]="searchCPA" [matChipInputFor]="cpachips" matInput [matAutocomplete]="cpaauto"
+            [formControl]="cpactrl">
           <mat-autocomplete #cpaauto="matAutocomplete">
             <mat-option *ngFor="let cpa of cpas" [value]="cpa.clientId" (onSelectionChange)="addcpa($event)">
               {{cpa.firstName}} {{ cpa.lastName }}
@@ -62,29 +62,38 @@
     </td>
   </tr>
   <tr>
-    <td colspan="12">
-         <mat-checkbox  *ngIf='operation =="editcompany"' class="casefield" 
-         [(ngModel)]='includeAccountNumber'>
-           Include Account Number</mat-checkbox>
+    <td>
+      <mat-checkbox *ngIf='operation =="editcompany"' class="casefield" [(ngModel)]='includeAccountNumber'>
+        Include Account Number</mat-checkbox>
     </td>
     <br/>
   </tr>
+</table>
+<br/>
+<table class="trackertable">
   <tr>
-    <td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td colspan="6">
-      <span>
+    <td>
+      <span *ngIf='!showNewCompanyspinner'>
         <button *ngIf='operation !="editcompany"' mat-raised-button color="accent" class="text-upper" (click)="createCompany()">
-            Begin
+          Begin
         </button>
-        <button *ngIf='operation =="editcompany"' mat-raised-button color="accent" class="text-upper" (click)="updateCompanySettings()">
-            Update
-        </button>
-        <button mat-raised-button color="accent" class="text-upper" (click)="cancelNewCompany()">
-          Cancel
-        </button>
-        <br/>
       </span>
+      <mat-spinner *ngIf='showNewCompanyspinner' diameter='40'></mat-spinner>
+      <span *ngIf='showNewCompanyspinner'>Processing...</span>
+    </td>
+    <td>
+      <span *ngIf='!showEditCompanyspinner'>
+        <button *ngIf='operation =="editcompany"' mat-raised-button color="accent" class="text-upper" (click)="updateCompanySettings()">
+          Update
+        </button>
+      </span>
+      <mat-spinner *ngIf='showEditCompanyspinner' diameter='40'></mat-spinner>
+      <span *ngIf='showEditCompanyspinner'>Processing...</span>
+    </td>
+    <td>
+      <button mat-raised-button color="accent" class="text-upper" (click)="cancelNewCompany()">
+        Cancel
+      </button>
     </td>
   </tr>
 </table>

@@ -55,6 +55,7 @@ import { AuditRendererComponent } from './controls/history/AuditRenderer.compone
 import { EditSigboxComponent } from './controls/casemain/editsigbox/editsigbox.component';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { CasetemplatesComponent } from './controls/history/casetemplates/casetemplates.component';
+import { ConfirmationDialogComponent } from './controls/shared/confirmation-dialog/confirmation-dialog.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -76,8 +77,8 @@ import { CasetemplatesComponent } from './controls/history/casetemplates/casetem
     NgxEditorModule,
     MatProgressSpinnerModule,
     AngularDraggableModule,
-    AgGridModule.withComponents([AuditRendererComponent, RouterLinkRendererComponent, 
-      ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent])
+    AgGridModule.withComponents([AuditRendererComponent, RouterLinkRendererComponent,
+      ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent]), 
   ],
   declarations: [
     GridColConfigPopupComponent,
@@ -121,7 +122,7 @@ import { CasetemplatesComponent } from './controls/history/casetemplates/casetem
     EditSigboxComponent,
     NewCaseRendererComponent,
     CasetemplatesComponent
-  ],
+    ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
      RejectreasonpopupComponent, EmailpopupComponent, UploadscanpopupComponent,
      ClientreminderComponent, ClientAnswerComponent, IdentityQuestionsComponent,

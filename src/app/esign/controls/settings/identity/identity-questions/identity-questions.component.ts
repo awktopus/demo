@@ -13,7 +13,7 @@ export class IdentityQuestionsComponent implements OnInit {
   selIdentityQuestion: any;
   esignSettingsRef: EsignSettingsComponent;
   orgUnitId: string;
-  idQstnId: string;
+  idQstnId: number;
 
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<IdentityQuestionsComponent>) { }
@@ -24,7 +24,7 @@ export class IdentityQuestionsComponent implements OnInit {
       console.log(rr);
       this.idQuestions = resp;
       console.log(this.idQuestions);
-      this.selIdentityQuestion = this.idQuestions[0].qtnId;
+    //  this.selIdentityQuestion = this.idQuestions[0].qtnId;
     });
   }
 
