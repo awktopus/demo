@@ -29,6 +29,7 @@ export class CasetemplatesComponent implements OnInit {
   statusBar: string;
   context: string;
   frameworkComponents: any;
+  casetemplatefiles: any;
   constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService,
     private router: Router,
     public dialogRef: MatDialogRef<CasetemplatesComponent>) { }

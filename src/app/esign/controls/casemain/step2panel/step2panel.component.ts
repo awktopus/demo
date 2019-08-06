@@ -17,6 +17,10 @@ export class Step2panelComponent implements OnInit {
   paperfiles: File ;
   k1files: File;
   showspinner = false;
+  showreviewfilesspinner = false;
+  showpaymentfilesspinner = false;
+  showpaperfilesspinner = false;
+  showk1filesspinner = false;
   constructor(private service: EsignserviceService, public dialog: MatDialog) {
   }
 
@@ -27,6 +31,20 @@ export class Step2panelComponent implements OnInit {
   }
 
   uploadDoc(type: string, ff: File | FileList) {
+    switch (type) {
+      case 'review':
+      this.showreviewfilesspinner = true;
+      break;
+      case 'paper':
+      this.showpaperfilesspinner = true;
+      break;
+      case 'paymentvoucher':
+      this.showpaymentfilesspinner = true;
+      break;
+      case 'k1':
+      this.showk1filesspinner = true;
+      break;
+    }
     this.service.uploadFile(this.mycase.caseId, type, ff).subscribe( resp => {
       console.log(resp);
       const rr = <{files: ESignDoc[]}> resp;
@@ -37,21 +55,25 @@ export class Step2panelComponent implements OnInit {
      switch (type) {
        case 'review':
        this.reviewfiles = null;
+       this.showreviewfilesspinner = false;
        break;
        case 'esign':
        this.esignfiles = null;
        break;
        case 'paper':
        this.paperfiles = null;
+       this.showpaperfilesspinner = false;
        break;
        case 'paymentvoucher':
        this.paymentfiles = null;
+       this.showpaymentfilesspinner = false;
        break;
        case 'k1':
        this.k1files = null;
+       this.showk1filesspinner = false;
        break;
      }
-  },
+   },
   error => console.log(error)
   );
   }
