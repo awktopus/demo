@@ -44,12 +44,13 @@ export class MainPageComponent implements OnInit, AfterViewInit {
         console.log('inside main page org:');
         console.log(org);
         console.log(org.userRole.normalizedName);
-        if (this.industryId === '10' && org.userRole.normalizedName !== 'PARTNER') {
+        if (this.industryId.toUpperCase() === 'ACCOUNT'
+                      && org.userRole.normalizedName !== 'PARTNER') {
           this.isAccountingFirm = true;
         } else {
           this.isAccountingFirm = false;
         }
-        if (this.userRole === 'Client') {
+        if (org.userRole.normalizedName.toUpperCase() === 'CLIENT') {
           this.isClient = true;
         } else {
           this.isClient = false;
