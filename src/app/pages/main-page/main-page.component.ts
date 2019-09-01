@@ -30,6 +30,7 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   isAccountingFirm = false;
   industryName: string;
   industryId: string;
+  isIETfunctionAccessible = false;
 
   // tslint:disable-next-line:max-line-length
   constructor(public resizeService: ResizeService, private router: Router,
@@ -45,10 +46,13 @@ export class MainPageComponent implements OnInit, AfterViewInit {
         console.log(org);
         console.log(org.userRole.normalizedName);
         if (this.industryId.toUpperCase() === 'ACCOUNT'
-                      && org.userRole.normalizedName !== 'PARTNER') {
+                      && org.userRole.normalizedName !== 'PARTNER'
+                      && this.industryId.toUpperCase() !== 'PERSONAL') {
           this.isAccountingFirm = true;
+          this.isIETfunctionAccessible = true;
         } else {
           this.isAccountingFirm = false;
+          this.isIETfunctionAccessible = false;
         }
         if (org.userRole.normalizedName.toUpperCase() === 'CLIENT') {
           this.isClient = true;
