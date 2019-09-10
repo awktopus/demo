@@ -50,7 +50,7 @@ export class Step1panelComponent implements OnInit {
   identityAnswer: string;
   answerId: string;
   orgQtnId: string;
-  taxYear: string;
+  taxYear: any;
   taxYears: TaxYears[];
   // isLoading = true;
   disableTaxYear = false;
@@ -179,6 +179,15 @@ export class Step1panelComponent implements OnInit {
     } else {
       this.disableTaxYear = false;
     }
+    console.log('disable tax year:' + this.disableTaxYear);
+   // console.log(this.taxYears);
+    if (this.disableTaxYear === false && this.taxYears) {
+      console.log('inside tax year setup if');
+      this.taxYear = this.taxYears[0].id;
+     } else {
+      console.log('inside tax year setup else');
+      this.taxYear = 0;
+     }
   }
   addcpa(event: MatOptionSelectionChange): void {
     const value = event.source.value;
