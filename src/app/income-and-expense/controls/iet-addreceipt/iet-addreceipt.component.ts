@@ -20,7 +20,7 @@ export class IetAddreceiptComponent implements OnInit {
   accountType: string;
   // receiptDate: string;
   amount: string;
-  notes: string;
+  notes: any = '';
   accountTypes: any;
   uploadedReceiptFile: string;
   receiptUploaded = false;
@@ -183,6 +183,9 @@ export class IetAddreceiptComponent implements OnInit {
     }
     this.vendorName = this.vendorNameInput;
     if (this.operation === 'addreceipt') {
+      if (this.notes === 'undefined' || this.notes !== null) {
+        this.notes = "";
+      }
       this.service.addNewReceiptPDF(this.service.auth.getOrgUnitID(),
         this.service.auth.getUserID(), this.companyId, this.amount, this.notes, this.service.auth.getUserID(),
         this.receiptDate,
@@ -210,7 +213,10 @@ export class IetAddreceiptComponent implements OnInit {
     this.vendorName = this.vendorNameInput;
     this.receiptDate = currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear();
     console.log('receipt date:' + this.receiptDate);
-      const newReceiptJson = {
+    if (this.notes === 'undefined' && this.notes !== null) {
+      this.notes = "";
+    }
+    const newReceiptJson = {
         amount: this.amount,
         notes: this.notes,
         uploadCustomerId: this.service.auth.getUserID(),

@@ -81,7 +81,7 @@
         <mat-card-header>
           <table width=98%>
             <tr>
-              <td valign="center">
+              <td valign="left">
                 <img src="/assets/imgs/esign_pen.png" mat-card-avatar>
               </td>
               <td>
@@ -102,7 +102,7 @@
         <mat-card-header>
           <table width=98%>
             <tr>
-              <td valign="center">
+              <td valign="left">
                 <img src="/assets/imgs/esign_pen.png" mat-card-avatar>
               </td>
               <td>
@@ -118,31 +118,42 @@
           </table>
         </mat-card-header>
       </mat-card>
-      <mat-card *ngIf="primary&&fNoneSign" class='casecard' (click)='switchOffPDFCard(); goCaseSec(primary,fNoneSign,"nonesign");'
-        [style.background]="viewtype==='esignformview' ? '#ffffee':''">
-        <mat-card-header>
-          <table width=98%>
-            <tr>
-              <td valign="center">
-                <img src="/assets/imgs/nonesign.png" mat-card-avatar>
-              </td>
-              <td>
-                <p>Paper forms: Please
-                  <br> print, sign and upload
-                  <mat-icon *ngIf="viewtype==='esignformview'"></mat-icon>
-                </p>
-                <p>Completed:{{caseinfo.esignedFormCount}}</p>
-                <font color=green>Pending: {{caseinfo.nonEsignFormCount}}</font>
-              </td>
-            </tr>
-          </table>
-        </mat-card-header>
-      </mat-card>
+      <table>
+        <tr>
+          <td style="width:90%">
+            <mat-card *ngIf="primary&&fNoneSign" class='casecard' (click)='switchOffPDFCard(); goCaseSec(primary,fNoneSign,"nonesign");'
+              [style.background]="viewtype==='esignformview' ? '#ffffee':''">
+              <mat-card-header>
+                <table width=98%>
+                  <tr>
+                    <td valign="left">
+                      <img src="/assets/imgs/nonesign.png" mat-card-avatar>
+                    </td>
+                    <td>
+                      <p>Paper forms: Please download,
+                        <br>print, sign and upload
+                        <mat-icon *ngIf="viewtype==='esignformview'"></mat-icon>
+                      </p>
+                      <p>Completed:{{caseinfo.esignedFormCount}}</p>
+                      <font color=green>Pending: {{caseinfo.nonEsignFormCount}}</font>
+                    </td>
+                    <td style="width:10%">
+                        <button mat-raised-button class="text-upper" (click)="downloadPaperForm()" matTooltip="Download paper forms">
+                          <mat-icon>cloud_download</mat-icon>
+                        </button>
+                   </td>                
+                  </tr>
+                </table>
+              </mat-card-header>
+            </mat-card>
+          </td>
+        </tr>
+      </table>
       <mat-card class='casecard' (click)="goEsignFormView() ;  switchOffPDFCard()" [style.background]="viewtype==='esignformview' ? '#ffffee':''">
         <mat-card-header>
           <table width=98%>
             <tr>
-              <td valign="center">
+              <td valign="left">
                 <img src="/assets/imgs/esign.1.png" mat-card-avatar>
               </td>
               <td>
@@ -298,7 +309,6 @@
       </tr>
     </table>
   </div>
-
   <!-- the signing view -->
   <div *ngIf="viewtype == 'signingview'" class="casedoc">
     <table width=98%>

@@ -841,5 +841,20 @@ export class EsignserviceService {
     return this.http.post(this.auth.baseurl + '/Cases/casetemplates/upload', formData,
     this.auth.getESignOptionswithoutElToken());
   }
+
+  downTaxPaperForms(caseId: string): any {
+    const url: string = this.auth.baseurl + '/Clients' + '/case/' + caseId + '/download/paperforms';
+    console.log(url);
+    this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      console.log('set pdf:' + fileURL);
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = fileURL;
+      link.download = caseId + '_Tax paper forms to be signed.pdf';
+      link.click();
+    });
+  }
 }
 

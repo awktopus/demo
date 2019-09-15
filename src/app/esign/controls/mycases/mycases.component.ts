@@ -199,6 +199,14 @@ export class MycasesComponent implements OnInit, AfterViewInit {
     }
   }
 
+
+  downloadPaperForm() {
+   console.log('Download paper form');
+   console.log(this.selectedcase.caseId);
+   this.service.downTaxPaperForms(this.selectedcase.caseId);
+  }
+
+
   goCaseSec(signer: any, form, formType: any) {
     console.log('clicked sign card...go case sec' + formType);
     if (formType === 'esign') {
