@@ -18,7 +18,6 @@ export class IetAddreceiptComponent implements OnInit {
   companyTypeId: string;
   vendorName: string;
   accountType: string;
-  // receiptDate: string;
   amount: string;
   notes: any = '';
   accountTypes: any;
@@ -39,9 +38,12 @@ export class IetAddreceiptComponent implements OnInit {
   isPdfFile = true;
   receiptFiles: File;
   clientctrl: FormControl = new FormControl();
+  accounttypeclientctrl: FormControl = new FormControl();
   removable = true;
+  atremovable = true;
   vendors: any;
   vendorNameInput: any;
+  accounttypeInput: any;
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<IetAddreceiptComponent>) { }
 
@@ -67,7 +69,6 @@ export class IetAddreceiptComponent implements OnInit {
            console.log(element.acctId);
             if (Number(element.acctId) === Number(this.accountTypeSeqNo)) {
               console.log('matched');
-              // this.accountType = element.acctNo + '-' + element.acctDescription;
               this.accountType = element.acctId;
               console.log('elementttt:' + this.accountType);
             }
@@ -91,6 +92,31 @@ export class IetAddreceiptComponent implements OnInit {
     } else {
       this.service.getVendors(this.service.auth.getOrgUnitID(), val).subscribe(vResp => {
         this.vendors = vResp;
+      });
+    }
+  });
+
+  this.accounttypeclientctrl.valueChanges.subscribe(val => {
+    console.log('account type client control auto typing...' + val);
+    console.log('account type name:' + this.accountType);
+    if (this.accountType === '') {
+      return;
+    }
+    if (val && typeof val !== 'object') {
+      if (this.accountType === val.trim()) {
+        return;
+      } else {
+        this.service.getAccountTypesBySearchToken(this.companyTypeId, val).subscribe(resp => {
+          this.accountTypes = resp;
+          console.log('account types');
+          console.log(this.accountTypes);
+        });
+      }
+    } else {
+      this.service.getAccountTypesBySearchToken(this.companyTypeId, val).subscribe(resp => {
+        this.accountTypes = resp;
+        console.log('account types');
+        console.log(this.accountTypes);
       });
     }
   });
@@ -145,6 +171,29 @@ export class IetAddreceiptComponent implements OnInit {
         this.vendors = vResp;
       });
   }
+
+  selectAccountType(event: MatOptionSelectionChange): void {
+    const value = event.source.value;
+    console.log('add account type:' + value);
+    if ((value && event.isUserInput && this.accountTypes)) {
+      let c: any = null;
+      this.accountTypes.forEach(cc => { if (cc === value) { c = cc; } });
+      this.accountType = c;
+      this.accounttypeclientctrl.setValue('');
+    }
+    console.log('account Type:' + this.accountType);
+  }
+
+  removeAccountType(): void {
+    console.log('remove account type');
+      this.accountType = null;
+      this.service.getAccountTypes(this.companyTypeId).subscribe(resp => {
+        this.accountTypes = resp;
+        console.log('account types');
+        console.log(this.accountTypes);
+      });
+  }
+
 
   uploadReceiptFile(recFiles: File | FileList) {
     console.log('uploadReceiptFile...')

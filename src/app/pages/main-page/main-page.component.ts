@@ -45,15 +45,28 @@ export class MainPageComponent implements OnInit, AfterViewInit {
         console.log('inside main page org:');
         console.log(org);
         console.log(org.userRole.normalizedName);
-        if (this.industryId.toUpperCase() === 'ACCOUNT'
-                      && org.userRole.normalizedName !== 'PARTNER'
-                      && this.industryId.toUpperCase() !== 'PERSONAL') {
+        // if (this.industryId.toUpperCase() === 'ACCOUNT'
+        //               && org.userRole.normalizedName !== 'PARTNER'
+        //               && this.industryId.toUpperCase() !== 'PERSONAL') {
+        //   this.isAccountingFirm = true;
+        //   this.isIETfunctionAccessible = true;
+        // } else {
+        //   this.isAccountingFirm = false;
+        //   this.isIETfunctionAccessible = false;
+        // }
+
+        if (this.industryId.toUpperCase() === 'ACCOUNT') {
           this.isAccountingFirm = true;
-          this.isIETfunctionAccessible = true;
         } else {
           this.isAccountingFirm = false;
+        }
+
+        if (this.industryId.toUpperCase() !== 'PERSONAL') {
+          this.isIETfunctionAccessible = true;
+        } else {
           this.isIETfunctionAccessible = false;
         }
+
         if (org.userRole.normalizedName.toUpperCase() === 'CLIENT') {
           this.isClient = true;
         } else {

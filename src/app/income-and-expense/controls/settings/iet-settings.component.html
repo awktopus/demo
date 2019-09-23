@@ -11,6 +11,10 @@
             <button mat-raised-button color="accent" matTooltip="Create new company" (click)="setupNewCompany()">
                 + SETUP NEW COMPANY
             </button>
+            <!-- &nbsp;
+            <button mat-raised-button color="accent" matTooltip="Create new account type" (click)="setupNewAccountType()">
+                + NEW ACCOUNT TYPE
+            </button> -->
         </td>
     </tr>
 </table>
@@ -40,7 +44,7 @@
     </table>
 </div>
 <div *ngFor="let clientCompany of companies">
-        <br/> 
+    <br/>
     <table class="trackertable3">
         <tr align="center">
             <td colspan="8">
@@ -50,7 +54,7 @@
                 </h6>
             </td>
         </tr>
-        <br/>       
+        <br/>
         <tr>
             <td colspan="2" style="width:150px">
                 Account Holder:
@@ -69,7 +73,7 @@
         </tr>
         <br/>
         <br/>
-        <tr>    
+        <tr>
             <td colspan="2">
                 <button mat-icon-button matTooltip="Add Receipt">
                     <mat-icon class='iconcss' (click)="addReceipt(clientCompany.companyTypeId,clientCompany.companyId)">attach_file</mat-icon>Add Receipt
@@ -78,14 +82,14 @@
             <td colspan="2">
                 <button mat-icon-button matTooltip="View Report">
                     <mat-icon class="iconcss" (click)="viewReport(clientCompany.companyTypeId,
-                        clientCompany.companyId,clientCompany.companyName)">insert_chart_outlined</mat-icon>View Report
+                        clientCompany.companyId,clientCompany.companyName, clientCompany.includeAccountNumber)">insert_chart_outlined</mat-icon>View Report
                 </button>
             </td>
             <td colspan="2">
-                    <button mat-icon-button matTooltip="Edit Company" [disabled]='clientCompany.hasSettingsAccess =="N"'>
-                        <mat-icon class="iconcss" (click)="editCompany(clientCompany)">settings</mat-icon>Settings
-                    </button>
-                </td>
+                <button mat-icon-button matTooltip="Edit Company" [disabled]='clientCompany.hasSettingsAccess =="N"'>
+                    <mat-icon class="iconcss" (click)="editCompany(clientCompany)">settings</mat-icon>Settings
+                </button>
+            </td>
             <td colspan="2">
                 <button mat-icon-button matTooltip="Delete Company" [disabled]='clientCompany.hasSettingsAccess =="N"'>
                     <mat-icon class="iconcss" (click)="openConfirmationDialogforCompanyDeletion(clientCompany.companyId)">delete</mat-icon>Delete Company

@@ -36,6 +36,8 @@ export class IetViewreportComponent implements OnInit {
   defaultColDef: any;
   autoHeight: any;
   gridActionInprogress = false;
+  includeAccountNumber: any;
+  showDownloadSpinner = false;
   constructor(private service: EsignserviceService, public dialog: MatDialog,
     public dialogRef: MatDialogRef<IetViewreportComponent>) {
     this.frameworkComponents = {
@@ -65,6 +67,16 @@ export class IetViewreportComponent implements OnInit {
   loadReceiptsGrid() {
     this.receipts = [];
     console.log('getCompanyYearlyReceipts...');
+    // show account number based company's view account number settings
+    console.log('showing account number based on company settings')
+    console.log('include accout number setting:')
+    console.log(this.includeAccountNumber);
+    if (this.includeAccountNumber === "Y") {
+      this.allReceiptsGridColumnApi.setColumnsVisible(["accountNumber"], true);
+    } else {
+      this.allReceiptsGridColumnApi.setColumnsVisible(["accountNumber"], false);
+    }
+
     this.service.getCompanyAccountLevelReceipts(this.service.auth.getOrgUnitID(),
       this.companyId, this.fiscalYear).subscribe(resp => {
         if (resp) {
@@ -88,6 +100,7 @@ export class IetViewreportComponent implements OnInit {
                 receipt.vendorName = coaRec.vendorName;
                 receipt.accountTypeSeqNo = coaAcct.accountTypeSeqNo;
                 receipt.contentType = coaRec.contentType;
+                receipt.accountNumber = coaAcct.accountNumber;
                 this.receipts.push(receipt);
               });
             });
@@ -108,15 +121,19 @@ export class IetViewreportComponent implements OnInit {
   configColDef() {
     const res = [
       {
-        headerName: 'Account Type', field: 'accountType', width: 250, suppressSizeToFit: true,
+        headerName: 'Account Type', field: 'accountType', width: 150, suppressSizeToFit: true,
         cellStyle: { 'justify-content': "flex-end" }
       },
       {
-        headerName: 'Receipt Date', field: 'receiptDate', width: 100, suppressSizeToFit: true,
+        headerName: 'Account Number', field: 'accountNumber', width: 100, suppressSizeToFit: true,
         cellStyle: { 'justify-content': "flex-end" }
       },
       {
-        headerName: 'Name', field: 'vendorName', width: 200, suppressSizeToFit: true,
+        headerName: 'Receipt Date', field: 'receiptDate', width: 125, suppressSizeToFit: true,
+        cellStyle: { 'justify-content': "flex-end" }
+      },
+      {
+        headerName: 'Name', field: 'vendorName', width: 150, suppressSizeToFit: true,
         cellStyle: { 'justify-content': "flex-end" }
       },
       {
@@ -173,10 +190,11 @@ export class IetViewreportComponent implements OnInit {
     this.allReceiptsGridApi.exportDataAsCsv(params);
   }
 
-  setViewReportInfo(companyTypeId: string, companyId: string, companyName: string) {
+  setViewReportInfo(companyTypeId: string, companyId: string, companyName: string, includeAccountNumber: any) {
     this.companyId = companyId;
     this.companyTypeId = companyTypeId;
     this.companyName = companyName;
+    this.includeAccountNumber = includeAccountNumber;
   }
   cancelViewReport() {
     this.dialogRef.close();
@@ -188,8 +206,10 @@ export class IetViewreportComponent implements OnInit {
 
   downloadYearlyReceipts() {
     console.log('download Yearly Receipts...');
+    this.showDownloadSpinner = true;
     this.service.downloadYearlyReceipts(this.service.auth.getOrgUnitID(),
       this.companyId, this.fiscalYear);
+    this.showDownloadSpinner = false;
   }
 
   deleteReceipt(deletedRow: any) {

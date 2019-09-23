@@ -25,13 +25,33 @@
     </mat-form-field>
   </tr>
   <tr>
-    <mat-form-field class="casefield">
+      <!-- <mat-form-field class="casefield">
+          <mat-chip-list #accounttypechips placeholder="Account Type">
+            <mat-chip *ngIf="accountType" [selectable]="selectable" [removable]="removable" (removed)="removeAccountType()">
+                {{ acctType.acctNo }}-{{ acctType.acctDescription }}
+              <mat-icon matChipRemove *ngIf="atremovable">cancel</mat-icon>
+            </mat-chip>
+    
+            <input type="text" placeholder="Account Type" [matChipInputFor]="accounttypechips" 
+            matInput [matAutocomplete]="autoaccounttype"
+              [formControl]="accounttypeclientctrl" [(ngModel)]="accounttypeInput">
+    
+            <mat-autocomplete #autoaccounttype="matAutocomplete">
+                <mat-option *ngFor="let acctType of accountTypes" [value]="acctType.acctId" 
+                (onSelectionChange)="selectAccountType($event)">
+                    {{ acctType.acctNo }}-{{ acctType.acctDescription }}
+                  </mat-option>
+            </mat-autocomplete>    
+          </mat-chip-list>
+        </mat-form-field> -->
+
+     <mat-form-field class="casefield">
       <mat-select placeholder="Account Type" [(ngModel)]="accountType">
         <mat-option *ngFor="let acctType of accountTypes" [value]="acctType.acctId">
           {{ acctType.acctNo }}-{{ acctType.acctDescription }}
         </mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> 
   </tr>
   <tr>
     <mat-form-field class="casefield">

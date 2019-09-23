@@ -122,16 +122,17 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
     dialogRef.componentInstance.setAddReceiptInfo(companyTypeId, companyId);
   }
 
-  viewReport(companyTypeId: string, companyId: string, companyName: string) {
+  viewReport(companyTypeId: string, companyId: string, companyName: string, includeAccountNumber: any) {
     console.log('viewReport');
     console.log(companyTypeId);
     console.log(companyId);
     console.log(companyName);
+    console.log(includeAccountNumber);
     const dialogRef = this.dialog.open(IetViewreportComponent, {
       width: '1200px'
     });
     dialogRef.componentInstance.ietSettingsRef = this;
-    dialogRef.componentInstance.setViewReportInfo(companyTypeId, companyId, companyName);
+    dialogRef.componentInstance.setViewReportInfo(companyTypeId, companyId, companyName, includeAccountNumber);
   }
 
   openConfirmationDialogforCompanyDeletion(cmpnyId: string): void {

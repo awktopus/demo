@@ -31,9 +31,11 @@
         <input matInput placeholder='New Template Name' [(ngModel)]="newTemplateType">
       </mat-form-field>
     </span>
+    &nbsp;
     <span>
       <button mat-raised-button color="accent" class="text-upper" [disabled]=" (noedit) && (!(cnew))" (click)='saveTemplate()'>save</button>
     </span>
+    &nbsp;
     <span>
       <button mat-raised-button color="accent" class="text-upper" [disabled]="(noedit)" (click)='deleteCoverTmplt()'>Delete</button>
     </span>

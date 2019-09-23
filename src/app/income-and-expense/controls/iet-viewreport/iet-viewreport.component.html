@@ -10,10 +10,14 @@
       <h6>Grand Total ($): {{ yearlySummaryAmount }} </h6>
     </td>
     <td colspan="6" align="center">
-      <button mat-icon-button matTooltip="Yearly Receipts PDF Export ">
-        <mat-icon class="iconcss" (click)="downloadYearlyReceipts()">cloud_download</mat-icon>
-      </button>
-    </td>
+      <span *ngIf='!showDownloadSpinner'>
+        <button mat-icon-button matTooltip="Yearly Receipts PDF Export ">
+          <mat-icon class="iconcss" (click)="downloadYearlyReceipts()">cloud_download</mat-icon>
+        </button>
+      </span>
+      <mat-spinner *ngIf='showDownloadSpinner' diameter='40'></mat-spinner>
+      <span *ngIf='showDownloadSpinner'>Processing...</span>
+   </td>
     <td colspan="6" align="center">
       <button mat-icon-button matTooltip="Yearly Receipts CSV Export ">
         <mat-icon class="iconcss" (click)="downloadYearlyReceiptsCSV()">archive
@@ -48,19 +52,17 @@
 <table>
   <tr>
     <td>
-        <div class="loading-screen-wrapper" *ngIf="gridActionInprogress">
-            <mat-progress-spinner [diameter]="50" [mode]="'indeterminate'">
-            </mat-progress-spinner>
-          </div>
+      <div class="loading-screen-wrapper" *ngIf="gridActionInprogress">
+        <mat-progress-spinner [diameter]="50" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+      </div>
     </td>
   </tr>
   <tr>
     <ag-grid-angular #agGridIncomeReceipts style="width: 1150px; height: 500px; font-size:12pt; " class="ag-theme-balham" [rowData]="allReceiptsgridData"
       [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
-      [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" 
-      [paginationPageSize]="50" (gridReady)="onGridReady($event)" [rowHeight]="45" 
-      [autoGroupColumnDef]="autoGroupColumnDef" [defaultColDef]="defaultColDef" 
-      [domLayout]="autoHeight"></ag-grid-angular>
+      [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="50" (gridReady)="onGridReady($event)"
+      [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef" [defaultColDef]="defaultColDef" [domLayout]="autoHeight"></ag-grid-angular>
   </tr>
 
 </table>

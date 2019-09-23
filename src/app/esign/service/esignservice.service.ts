@@ -807,6 +807,12 @@ export class EsignserviceService {
     const url: string = this.auth.baseurl + '/iet/ClientCompanies/orgunitid/' +  orgUnitId + '/vendor/' + searchToken
     return this.http.get(url, this.auth.getESignOptions());
   }
+
+  getAccountTypesBySearchToken(companyId: string, searchToken: string) {
+    console.log('calling getAccountTypesBySearchToken server api');
+    const url: string = this.auth.baseurl + '/iet/ClientCompanies/orgunitid/' +  companyId + '/accountype/' + searchToken
+    return this.http.get(url, this.auth.getESignOptions());
+  }
   // IET related server api - end
 
   getPdfFormMirrorImage(docId: string, seqNo: string) {

@@ -235,6 +235,7 @@ export class Receipts {
   attachment: string;
   docId: string;
   contentType: string;
+  accountNumber: number;
 }
 export class Company {
 companyId: string;
