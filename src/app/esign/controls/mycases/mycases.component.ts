@@ -58,6 +58,7 @@ export class MycasesComponent implements OnInit, AfterViewInit {
   myDate: Date = new Date();
   type: string;
   selected: any = false;
+  selectedPaperConsent: any = false;
   constructor(private service: EsignserviceService) { }
   ngOnInit() {
     this.service.getESignCases().subscribe(resp => {
@@ -66,6 +67,7 @@ export class MycasesComponent implements OnInit, AfterViewInit {
       console.log(this.mycases)
       this.mycases.forEach(cc => {
         cc.selected = false;
+
       })
       this.casedocs = null;
       this.selectedcase = null;
@@ -315,7 +317,11 @@ export class MycasesComponent implements OnInit, AfterViewInit {
                 console.log('validated answer1');
                 if (this.secQuestionsCount === 1) {
                   console.log('all the questions are answered..');
+                  if (this.isEsignForm === 'Y') {
                   this.viewtype = 'consentview';
+                } else if (this.isEsignForm === 'N') {
+                  this.viewtype = 'paperconsentview';
+                }
                 }
               } else {
                 this.isValidAnswer1 = 'N';
@@ -328,7 +334,11 @@ export class MycasesComponent implements OnInit, AfterViewInit {
                 console.log('validated answer2');
                 if (this.isValidAnswer1 === 'Y' && this.secQuestionsCount === 2) {
                   console.log('all the questions are answered..');
-                  this.viewtype = 'consentview';
+                  if (this.isEsignForm === 'Y') {
+                    this.viewtype = 'consentview';
+                  } else if (this.isEsignForm === 'N') {
+                    this.viewtype = 'paperconsentview';
+                  }
                 }
               } else {
                 this.isValidAnswer2 = 'N';
@@ -341,7 +351,11 @@ export class MycasesComponent implements OnInit, AfterViewInit {
                 console.log('validated answer3');
                 if (this.isValidAnswer1 === 'Y' && this.isValidAnswer2 === 'Y' && this.secQuestionsCount === 3) {
                   console.log('all the questions are answered..');
-                  this.viewtype = 'consentview';
+                  if (this.isEsignForm === 'Y') {
+                    this.viewtype = 'consentview';
+                  } else if (this.isEsignForm === 'N') {
+                    this.viewtype = 'paperconsentview';
+                  }
                 }
               } else {
                 this.isValidAnswer3 = 'N';

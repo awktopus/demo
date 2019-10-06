@@ -17,7 +17,6 @@ public baseurl = environment.apiEsignLink;
 
   searchClientContacts(cpaID: string, newVar: string) {
     const tk = newVar.trim();
-    console.log('tk:' + tk);
     // http://localhost:55940/api/clients/OrgUnitId/<OrgUnitId>/staff/<StaffId>/client/<SearchToken>
     const url = this.baseurl + '/clients/OrgUnitId/' + this.auth.getOrgUnitID() + '/staff/'
       + this.auth.getUserID() + '/client/' + tk;

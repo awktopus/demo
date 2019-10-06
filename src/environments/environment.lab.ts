@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
   version: require('../../package.json').version,
-  apiLink: 'https://ellabapi.azurewebsites.net/api',
+  apiLink: 'https://labapi.everleagues.com/api',
   apiEsignLink: 'https://ellab-esign.azurewebsites.net/api',
   roomHubLink: 'https://ellabapi.azurewebsites.net/roomhub',
   orgHubLink: 'https://ellabapi.azurewebsites.net/orghub'

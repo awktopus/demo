@@ -231,8 +231,10 @@ export class IetAddreceiptComponent implements OnInit {
       this.vendorNameInput = '';
     }
     this.vendorName = this.vendorNameInput;
+    console.log('notes:');
+    console.log(this.notes);
     if (this.operation === 'addreceipt') {
-      if (this.notes === 'undefined' || this.notes !== null) {
+      if (this.notes === 'undefined' || this.notes === null) {
         this.notes = "";
       }
       this.service.addNewReceiptPDF(this.service.auth.getOrgUnitID(),

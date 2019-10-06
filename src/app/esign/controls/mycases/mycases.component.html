@@ -265,6 +265,48 @@
     </table>
   </div>
 
+  <div *ngIf="viewtype == 'paperconsentview'" class="casedoc">
+    <table width=98%>
+      <tr>
+        <td align="center">
+          <p>
+            <strong>Sign form with pen on paper</strong>
+          </p>
+          <hr>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <b>You can print the document, sign, and either take photos and upload via mobile or scan and upload the document 
+              <br/>via web app when you are ready to begin the e-sign process.</b>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+              Check the checkbox indicating your consent to print, sign and upload the document and click “BEGIN” 
+              <br/> when you are ready to begin the upload process.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-checkbox (change)="selected=!selected">I have read and agree to the above.</mat-checkbox>
+        </td>
+      </tr>
+      <br/>
+      <tr>
+        <td align="center">
+          <!-- <a routerLink="/" style="color: black" *ngIf="selected"> -->
+          <button mat-raised-button color="accent" *ngIf="selected" (click)="completeConsent(signer.firstName,signer.lastName)">BEGIN</button>
+          <!-- </a> -->
+          <button mat-raised-button class="off" *ngIf="!selected">BEGIN</button>
+        </td>
+      </tr>
+    </table>
+  </div>
   <div *ngIf="viewtype == 'consentview'" class="casedoc">
     <table width=98%>
       <tr>
@@ -309,6 +351,8 @@
       </tr>
     </table>
   </div>
+
+
   <!-- the signing view -->
   <div *ngIf="viewtype == 'signingview'" class="casedoc">
     <table width=98%>

@@ -68,6 +68,7 @@ export class Step1panelComponent implements OnInit {
       this.service.getCPAs()
     ]).subscribe(results => {
       this.config = <ESignConfig>results[0];
+      console.log('esign config');
       console.log(results);
       this.casecates = this.config.eSignCates;
       this.cpas = <ESignCPA[]>results[1];
@@ -78,23 +79,32 @@ export class Step1panelComponent implements OnInit {
           this.clients = ele.cpaClients;
           this.secclients = ele.cpaClients;
           this.recclients = ele.cpaClients;
-          console.log(this.recclients);
+          console.log('cpa clients');
+          console.log(this.clients);
         }
         this.caseDataloading = false;
       });
       if (this.initcaseheader) {
         this.setcaseHeader(this.initcaseheader);
       }
-    });
-    this.service.cur_case.subscribe(c => {
-      this.mycase = c; // this is to sync caseID
-      if (this.initcaseheader !== this.mycase) {
-        this.initcaseheader = this.mycase;
-        this.setcaseHeader(this.initcaseheader);
-      }
+      this.service.cur_case.subscribe(c => {
+        this.mycase = c; // this is to sync caseID
+        if (this.initcaseheader !== this.mycase) {
+          this.initcaseheader = this.mycase;
+          this.setcaseHeader(this.initcaseheader);
+        }
+      });
     });
     this.clientctrl.valueChanges.subscribe(val => {
+      console.log('clientctrl search clients called');
+      console.log(val.trim());
+      console.log(this.client_var);
+      console.log(typeof val);
+      console.log(this.primarysigner);
       if (this.CPAID === '') {
+        return;
+      }
+      if (this.primarysigner) {
         return;
       }
       if (val && typeof val !== 'object') {
@@ -106,13 +116,22 @@ export class Step1panelComponent implements OnInit {
           });
         }
       } else {
+        console.log('else');
+        console.log(this.CPAID);
+        console.log(val);
         this.uiservice.searchClientContacts(this.CPAID, val).subscribe(resp => {
           this.clients = <ESignClient[]>resp;
         });
       }
     });
     this.secclientctrl.valueChanges.subscribe(val => {
+      console.log('secclientctrl search clients called');
+      console.log(val.trim());
+      console.log(this.secclient_var);
       if (this.CPAID === '') {
+        return;
+      }
+      if (this.secondarysigner) {
         return;
       }
       if (val && typeof val !== 'object') {
@@ -130,7 +149,9 @@ export class Step1panelComponent implements OnInit {
       }
     });
     this.recclientctrl.valueChanges.subscribe(val => {
-      console.log('search recipient clients');
+      console.log('recclientctrl search clients called')
+      console.log(val.trim());
+      console.log(this.recclient_var);
       if (val && typeof val !== 'object') {
         console.log('val:' + val);
         console.log('recclient_var' + this.recclient_var);
@@ -147,7 +168,6 @@ export class Step1panelComponent implements OnInit {
         }
       }
     });
-
     this.cpactrl.valueChanges.subscribe(val => {
       if (val && typeof val !== 'object') {
         // console.log(val);
@@ -164,7 +184,6 @@ export class Step1panelComponent implements OnInit {
         }
       }
     });
-
     this.uiservice.getDistinctTaxYears().subscribe(resp => {
       this.taxYears = <TaxYears[]>resp;
     });
