@@ -44,6 +44,7 @@ export class IetAddreceiptComponent implements OnInit {
   vendors: any;
   vendorNameInput: any;
   accounttypeInput: any;
+  accIdentifier: any;
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<IetAddreceiptComponent>) { }
 
@@ -69,7 +70,7 @@ export class IetAddreceiptComponent implements OnInit {
            console.log(element.acctId);
             if (Number(element.acctId) === Number(this.accountTypeSeqNo)) {
               console.log('matched');
-              this.accountType = element.acctId;
+              this.accountType = element.acctDescription;
               console.log('elementttt:' + this.accountType);
             }
          });
@@ -99,17 +100,25 @@ export class IetAddreceiptComponent implements OnInit {
   this.accounttypeclientctrl.valueChanges.subscribe(val => {
     console.log('account type client control auto typing...' + val);
     console.log('account type name:' + this.accountType);
-    if (this.accountType === '') {
-      return;
-    }
+    // if (this.accountType === '' || this.accountType === null) {
+    //   return;
+    // }
+     if (val === '' || val === null) {
+       return;
+     }
+    if (val !== "undefined") {
     if (val && typeof val !== 'object') {
       if (this.accountType === val.trim()) {
         return;
       } else {
         this.service.getAccountTypesBySearchToken(this.companyTypeId, val).subscribe(resp => {
+          console.log('resp');
+          console.log(resp);
+          if (resp) {
           this.accountTypes = resp;
           console.log('account types');
           console.log(this.accountTypes);
+        }
         });
       }
     } else {
@@ -119,6 +128,7 @@ export class IetAddreceiptComponent implements OnInit {
         console.log(this.accountTypes);
       });
     }
+  }
   });
   }
 
@@ -137,12 +147,34 @@ export class IetAddreceiptComponent implements OnInit {
     this.companyTypeId = companyTypeId;
     this.accountType = accountType;
     this.accountTypeSeqNo = accountTypeSeqNo;
+    this.accIdentifier = this.accountTypeSeqNo;
     this.receiptDate = receiptDate;
     this.vendorName = vendorName;
     this.amount = amount;
     this.notes = notes;
     this.docId = docId;
     this.fiscalYear = fiscalYear;
+    console.log('set edit receipt info');
+    console.log('companyId:');
+    console.log(this.companyId);
+    console.log('companyTypeId:');
+    console.log(this.companyTypeId);
+    console.log('accountType:');
+    console.log(this.accountType);
+    console.log('accountTypeSeqNo:');
+    console.log(this.accountTypeSeqNo);
+    console.log('receiptDate:');
+    console.log(this.receiptDate);
+    console.log('vendorName:');
+    console.log(this.vendorName);
+    console.log('amount:');
+    console.log(this.amount);
+    console.log('notes:');
+    console.log(this.notes);
+    console.log('docId:');
+    console.log(this.docId);
+    console.log('fiscalYear:');
+    console.log(this.fiscalYear)
   }
 
   cancelAddReceipt() {
@@ -173,15 +205,22 @@ export class IetAddreceiptComponent implements OnInit {
   }
 
   selectAccountType(event: MatOptionSelectionChange): void {
+    console.log('select account type');
+    console.log(event);
     const value = event.source.value;
-    console.log('add account type:' + value);
+    console.log('add account type selection value:' + value);
     if ((value && event.isUserInput && this.accountTypes)) {
+      console.log('inside if');
       let c: any = null;
-      this.accountTypes.forEach(cc => { if (cc === value) { c = cc; } });
-      this.accountType = c;
-      this.accounttypeclientctrl.setValue('');
+      this.accountTypes.forEach(cc => { if (cc.acctNo === value) { c = cc; } });
+      console.log('value of c');
+      console.log(c);
+      this.accountType = c.acctDescription;
+      this.accIdentifier = c.acctId;
+     this.accounttypeclientctrl.setValue('');
     }
-    console.log('account Type:' + this.accountType);
+    console.log('account Type:');
+    console.log(this.accountType);
   }
 
   removeAccountType(): void {
@@ -240,7 +279,7 @@ export class IetAddreceiptComponent implements OnInit {
       this.service.addNewReceiptPDF(this.service.auth.getOrgUnitID(),
         this.service.auth.getUserID(), this.companyId, this.amount, this.notes, this.service.auth.getUserID(),
         this.receiptDate,
-         this.vendorName, this.accountType, this.receiptFile).subscribe(resp => {
+         this.vendorName, this.accIdentifier, this.receiptFile).subscribe(resp => {
           console.log(resp);
           this.dialogRef.close();
           this.showAddspinner = false;
@@ -258,10 +297,15 @@ export class IetAddreceiptComponent implements OnInit {
     console.log('date:' + currentDate.getDate());
     console.log('month:' + currentDate.getMonth());
     console.log('year:' + currentDate.getFullYear());
+    console.log('vendorNameInput');
+    console.log(this.vendorNameInput);
     if (typeof this.vendorNameInput === 'undefined') {
       this.vendorNameInput = '';
     }
+    if (this.vendorNameInput !== '') {
     this.vendorName = this.vendorNameInput;
+  }
+    console.log(this.vendorName);
     this.receiptDate = currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear();
     console.log('receipt date:' + this.receiptDate);
     if (this.notes === 'undefined' && this.notes !== null) {
@@ -273,7 +317,7 @@ export class IetAddreceiptComponent implements OnInit {
         uploadCustomerId: this.service.auth.getUserID(),
         receiptDate: this.receiptDate,
         vendorName: this.vendorName,
-        accountTypeSeqNo: this.accountType,
+        accountTypeSeqNo: this.accIdentifier,
         docId: this.docId
       };
       console.log(newReceiptJson);
@@ -281,7 +325,7 @@ export class IetAddreceiptComponent implements OnInit {
         this.showEditspinner = false;
       } else {
         this.service.updateReceipt(this.service.auth.getOrgUnitID(),
-        this.companyId, this.fiscalYear, this.accountType, newReceiptJson).subscribe(resp => {
+        this.companyId, this.fiscalYear, this.accIdentifier, newReceiptJson).subscribe(resp => {
           console.log(resp);
           this.ietViewReportRef.loadReceiptsGrid();
           this.dialogRef.close();

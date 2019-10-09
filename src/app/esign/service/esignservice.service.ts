@@ -808,9 +808,9 @@ export class EsignserviceService {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
-  getAccountTypesBySearchToken(companyId: string, searchToken: string) {
+  getAccountTypesBySearchToken(companyTypeId: string, searchToken: string) {
     console.log('calling getAccountTypesBySearchToken server api');
-    const url: string = this.auth.baseurl + '/iet/ClientCompanies/orgunitid/' +  companyId + '/accountype/' + searchToken
+    const url: string = this.auth.baseurl + '/iet/Lookups/company/' +  companyTypeId + '/accounttype/' + searchToken
     return this.http.get(url, this.auth.getESignOptions());
   }
   // IET related server api - end
