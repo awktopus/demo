@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatOptionSelectionChange } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatOptionSelectionChange, MatSelect } from '@angular/material';
 import { ESignCase, ESignCate, ESignClient, ESignCPA, ESignConfig, ClientAnswer, TaxYears } from '../../../beans/ESignCase';
 import { forkJoin } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EsignserviceService } from '../../../service/esignservice.service';
 import { EsignuiserviceService } from '../../../service/esignuiservice.service';
 import { ClientAnswerComponent } from '../../settings/identity/client-answer/client-answer.component';
@@ -16,10 +16,10 @@ export class Step1panelComponent implements OnInit {
   initcaseheader: ESignCase;
   searchCPA = '';
   CPAID = '';
-  clientctrl: FormControl = new FormControl();
-  secclientctrl: FormControl = new FormControl();
-  recclientctrl: FormControl = new FormControl();
-  cpactrl: FormControl = new FormControl();
+//  clientctrl: FormControl = new FormControl();
+//   secclientctrl: FormControl = new FormControl();
+//   recclientctrl: FormControl = new FormControl();
+//   cpactrl: FormControl = new FormControl();
   casecates: ESignCate[] = [];
   subcates: ESignCate[] = [];
   clients: ESignClient[];
@@ -33,8 +33,8 @@ export class Step1panelComponent implements OnInit {
   primarysigner: ESignClient = null;
   secondarysigner: ESignClient = null;
   // binding values
-  category: number;
-  subcategory: number;
+  // category: number;
+  // subcategory: number;
   ccCPA: string;
   removable = true;
   config: ESignConfig;
@@ -44,25 +44,41 @@ export class Step1panelComponent implements OnInit {
   cap_var = '';
   mycase: ESignCase;
   cachecpas: ESignCPA[];
-  returnName: string;
-  taxReturnIdNo: string;
+  // returnName: string;
+  // taxReturnIdNo: string;
   identityQuestion: string;
   identityAnswer: string;
   answerId: string;
   orgQtnId: string;
-  taxYear: any;
+  // taxYear: any;
   taxYears: TaxYears[];
   // isLoading = true;
   disableTaxYear = false;
   showSavespinner = false;
   showUpdatespinner = false;
   caseDataloading = false;
+
+  caseStep1Form: FormGroup = new FormGroup({
+    category: new FormControl('', Validators.required),
+    subcategory: new FormControl('', Validators.required),
+    taxYear: new FormControl('', Validators.required),
+    returnName: new FormControl('', Validators.required),
+    taxReturnIdNo: new FormControl('', Validators.required),
+    clientctrl: new FormControl('', Validators.required),
+    secclientctrl: new FormControl(''),
+    recclientctrl: new FormControl(''),
+    cpactrl: new FormControl('')
+  });
+
+  @ViewChild('focusField') focusField: MatSelect;
+
   constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService, public dialog: MatDialog) {
     this.recSelclients = [];
     this.scpas = [];
   }
   ngOnInit() {
     this.caseDataloading = true;
+    this.focusField.focused = true;
     forkJoin([
       this.service.getEsignConfig(),
       this.service.getCPAs()
@@ -95,7 +111,7 @@ export class Step1panelComponent implements OnInit {
         }
       });
     });
-    this.clientctrl.valueChanges.subscribe(val => {
+    this.caseStep1Form.controls['clientctrl'].valueChanges.subscribe(val => {
       console.log('clientctrl search clients called');
       console.log(val.trim());
       console.log(this.client_var);
@@ -124,7 +140,7 @@ export class Step1panelComponent implements OnInit {
         });
       }
     });
-    this.secclientctrl.valueChanges.subscribe(val => {
+    this.caseStep1Form.controls['secclientctrl'].valueChanges.subscribe(val => {
       console.log('secclientctrl search clients called');
       console.log(val.trim());
       console.log(this.secclient_var);
@@ -148,7 +164,7 @@ export class Step1panelComponent implements OnInit {
         });
       }
     });
-    this.recclientctrl.valueChanges.subscribe(val => {
+    this.caseStep1Form.controls['recclientctrl'].valueChanges.subscribe(val => {
       console.log('recclientctrl search clients called')
       console.log(val.trim());
       console.log(this.recclient_var);
@@ -168,7 +184,7 @@ export class Step1panelComponent implements OnInit {
         }
       }
     });
-    this.cpactrl.valueChanges.subscribe(val => {
+    this.caseStep1Form.controls['cpactrl'].valueChanges.subscribe(val => {
       if (val && typeof val !== 'object') {
         // console.log(val);
         if (this.cap_var === val.trim()) {
@@ -202,10 +218,10 @@ export class Step1panelComponent implements OnInit {
    // console.log(this.taxYears);
     if (this.disableTaxYear === false && this.taxYears) {
       console.log('inside tax year setup if');
-      this.taxYear = this.taxYears[0].id;
+      this.caseStep1Form.controls['taxYear'].setValue(this.taxYears[0].id);
      } else {
       console.log('inside tax year setup else');
-      this.taxYear = 0;
+      this.caseStep1Form.controls['taxYear'].setValue(0);
      }
   }
   addcpa(event: MatOptionSelectionChange): void {
@@ -238,7 +254,7 @@ export class Step1panelComponent implements OnInit {
         // console.log(c);
         this.recSelclients.push(c);
       }
-      this.recclientctrl.setValue('');
+      this.caseStep1Form.controls['recclientctrl'].setValue('');
     }
     console.log(this.searchRecClient);
     this.searchRecClient = '';
@@ -250,7 +266,7 @@ export class Step1panelComponent implements OnInit {
       let c: ESignClient = null;
       this.clients.forEach(cc => { if (cc.clientId === value) { c = cc; } });
       this.primarysigner = c;
-      this.clientctrl.setValue('');
+      this.caseStep1Form.controls['clientctrl'].setValue('');
     }
   }
   addSecondary(event: MatOptionSelectionChange): void {
@@ -260,7 +276,7 @@ export class Step1panelComponent implements OnInit {
       let c: ESignClient = null;
       this.secclients.forEach(cc => { if (cc.clientId === value) { c = cc; } });
       this.secondarysigner = c;
-      this.secclientctrl.setValue('');
+      this.caseStep1Form.controls['secclientctrl'].setValue('');
     }
   }
   removeClient(c: ESignClient): void {
@@ -310,32 +326,32 @@ export class Step1panelComponent implements OnInit {
       this.scpas = [];
     }
     if (caseheader.cate) {
-      this.category = caseheader.cate.id;
+      this.caseStep1Form.controls['category'].setValue(caseheader.cate.id)
       // here we need to populate the subcate first
-      this.casecates.forEach(ele => { if (ele.id === this.category) { this.subcates = ele.subCates; } });
+      this.casecates.forEach(ele => { if (ele.id === this.caseStep1Form.controls['category'].value) { this.subcates = ele.subCates; } });
 
       // console.log(this.casecates);
       if (caseheader.subCate) {
-        this.subcategory = caseheader.subCate.id;
+        this.caseStep1Form.controls['subcategory'].setValue(caseheader.subCate.id);
       }
     } else {
-      this.category = null;
+      this.caseStep1Form.controls['subcategory'].setValue(null);
       this.subcates = [];
     }
     if (caseheader.returnName) {
-      this.returnName = caseheader.returnName;
+      this.caseStep1Form.controls['returnName'].setValue(caseheader.returnName);
     } else {
-      this.returnName = null;
+      this.caseStep1Form.controls['returnName'].setValue(null);
     }
     if (caseheader.taxReturnIdNo) {
-      this.taxReturnIdNo = caseheader.taxReturnIdNo;
+      this.caseStep1Form.controls['taxReturnIdNo'].setValue(caseheader.taxReturnIdNo);
     } else {
-      this.taxReturnIdNo = null;
+      this.caseStep1Form.controls['taxReturnIdNo'].setValue(null);
     }
     if (caseheader.taxYear) {
-      this.taxYear = caseheader.taxYear;
+      this.caseStep1Form.controls['taxYear'].setValue(caseheader.taxYear);
     } else {
-      this.taxYear = null;
+      this.caseStep1Form.controls['taxYear'].setValue(null);
     }
   }
 
@@ -351,13 +367,13 @@ export class Step1panelComponent implements OnInit {
       OrgUnitId: this.service.auth.getOrgUnitID(),
       PrimarySigner: this.primarysigner,
       SecondarySigner: this.secondarysigner,
-      TaxReturnCategory: this.category,
-      TaxReturnSubCategory: this.subcategory,
+      TaxReturnCategory: this.caseStep1Form.controls['category'].value,
+      TaxReturnSubCategory: this.caseStep1Form.controls['subcategory'].value,
       RecipientClients: clients,
       copyCpas: cpas,
-      returnName: this.returnName,
-      taxReturnIdNo: this.taxReturnIdNo,
-      taxYear: this.taxYear
+      returnName: this.caseStep1Form.controls['returnName'].value,
+      taxReturnIdNo: this.caseStep1Form.controls['taxReturnIdNo'].value,
+      taxYear: this.caseStep1Form.controls['taxYear'].value
     };
     console.log(casejson);
     return casejson;
@@ -398,14 +414,4 @@ export class Step1panelComponent implements OnInit {
     dialogRef.componentInstance.step1panelref = this;
   }
 }
-
-export interface Jsonresp {
-  caseId: String;
-  caseStatus: String;
-  caseType: String;
-  cpaId: String;
-  createdDate: String;
-  createdUserId: String;
-}
-
 

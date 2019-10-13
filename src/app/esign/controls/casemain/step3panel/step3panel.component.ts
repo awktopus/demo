@@ -6,6 +6,7 @@ import { ESignCase, ESignDoc, ESignCPA } from '../../../beans/ESignCase';
 import { EsignserviceService } from '../../../service/esignservice.service';
 import { forEach } from '@angular/router/src/utils/collection';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CasetemplatesComponent } from './../../history/casetemplates/casetemplates.component';
 @Component({
   selector: 'app-step3panel',
   templateUrl: './step3panel.component.html',
@@ -95,7 +96,12 @@ export class Step3panelComponent implements OnInit {
   }
 
   createAnotherCase() {
-    this.router.navigateByUrl('main/esign/case/newcaseID');
+   // this.router.navigateByUrl('main/esign/case/newcaseID');
+   // this.router.navigateByUrl('main/esign/case/newcase');
+   console.log('showCaseTemplatesPopup');
+    const dialogRef = this.dialog.open(CasetemplatesComponent, {
+      width: '1260px'
+    });
   }
 }
 

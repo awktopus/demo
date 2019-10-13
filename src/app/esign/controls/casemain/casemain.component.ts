@@ -34,7 +34,7 @@ export class CasemainComponent implements OnInit, AfterViewInit {
         this.service.updateCase(cc);
         this.cstep1.setInitCase(cc);
         this.uiservice.setStepper(0);
-      } else if (this.mycaseID.includes('-') === true) {
+      }  else if (this.mycaseID.includes('-') === true) {
         console.log('Inside ' + this.mycaseID + ' if condition');
         var existingCaseId = this.mycaseID.split('-');
         console.log('case id: ' + existingCaseId[0]);
