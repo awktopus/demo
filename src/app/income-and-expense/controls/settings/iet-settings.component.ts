@@ -45,8 +45,8 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
 
   loadCompanies() {
     this.companies = [];
-    if (this.clientCompanies.companies) {
-      if (this.clientCompanies.companies.length === 0) {
+    if (this.clientCompanies.companies === null) {
+      console.log('organization has no companies');
         this.hasCompanies = false;
         this.companies = [];
       } else {
@@ -78,7 +78,6 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
           this.companies.push(cmpny);
         });
       }
-    }
   }
 
   setupNewCompany() {
