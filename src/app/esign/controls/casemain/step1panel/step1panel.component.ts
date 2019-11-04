@@ -101,10 +101,13 @@ export class Step1panelComponent implements OnInit {
         this.caseDataloading = false;
       });
       if (this.initcaseheader) {
+        console.log('init case header inside if');
         this.setcaseHeader(this.initcaseheader);
       }
       this.service.cur_case.subscribe(c => {
         this.mycase = c; // this is to sync caseID
+        console.log('cur case:');
+        console.log(this.mycase);
         if (this.initcaseheader !== this.mycase) {
           this.initcaseheader = this.mycase;
           this.setcaseHeader(this.initcaseheader);

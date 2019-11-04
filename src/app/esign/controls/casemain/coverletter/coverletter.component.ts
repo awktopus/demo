@@ -19,6 +19,8 @@ export class CoverletterComponent implements OnInit {
   errorMessage: string = null;
   inputValues: any = [];
   noedit = false;
+  showSavespinner = false;
+  showDeleteSpinner = false;
   constructor(private service: EsignserviceService) {
     this.viewControl = {
       view: true,
@@ -128,6 +130,7 @@ export class CoverletterComponent implements OnInit {
   }
 
   saveTemplate(): any {
+    this.showSavespinner = true;
     if (this.viewControl.createNew) {
       const json = this.buildTemplateJson();
       console.log(json);
@@ -141,6 +144,7 @@ export class CoverletterComponent implements OnInit {
         this.cnew = false;
         this.viewControl.createNew = false;
         this.setTemplate(ct.templateId);
+        this.showSavespinner = false;
       });
     } else {
       // here doing the update
@@ -155,15 +159,18 @@ export class CoverletterComponent implements OnInit {
             this.covers[i] = ct;
           }
         }
+        this.showSavespinner = false;
       });
     }
   }
   deleteCoverTmplt(): any {
+    this.showDeleteSpinner = true;
     this.service.deleteCoverTemplate(this.selectedCover).subscribe(resp => {
       console.log(resp);
       this.covers = resp;
       this.selectedCover = this.covers[0].templateId;
       this.setTemplate(this.selectedCover);
+      this.showDeleteSpinner = false;
     });
   }
   checkInputs(): boolean {

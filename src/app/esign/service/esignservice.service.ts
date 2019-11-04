@@ -295,21 +295,16 @@ export class EsignserviceService {
   }
 
   sendToReview(caseID: string, reviewCPA: ESignCPA) {
-    this.http.put(this.auth.baseurl + '/Cases/' + caseID + '/review',
-      { 'ReviewCPA': reviewCPA }, this.auth.getESignOptions()).subscribe(resp => {
-        this.updateCaseStatusLocal('Review');
-      });
-  }
+   return this.http.put(this.auth.baseurl + '/Cases/' + caseID + '/review',
+      { 'ReviewCPA': reviewCPA }, this.auth.getESignOptions());
+   }
 
   sendToESign(caseID: string) {
-    this.http.put(this.auth.baseurl + '/Cases/' + caseID + '/sendtoclient',
+    return this.http.put(this.auth.baseurl + '/Cases/' + caseID + '/sendtoclient',
       {
         Cpaid: this.auth.getUserID(),
         status: 'ESign'
-      }, this.auth.getESignOptions()).subscribe(resp => {
-        console.log(resp);
-        this.updateCaseStatusLocal('ESign');
-      })
+      }, this.auth.getESignOptions());
   }
 
   getESignCases() {

@@ -42,9 +42,13 @@ export class CasemainComponent implements OnInit, AfterViewInit {
           const existingCase: ESignCase = <ESignCase>resp;
           console.log(existingCase);
           const newCopyCase = new ESignCase();
+          console.log('calling update case');
           this.service.updateCase(newCopyCase);
+          console.log('calling set init case');
           this.cstep1.setInitCase(existingCase);
+          console.log('set stepper');
           this.uiservice.setStepper(0);
+         // this.cstep1.setcaseHeader(existingCase);
         });
       } else {
         console.log(this.mycaseID);

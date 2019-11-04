@@ -20,6 +20,7 @@ export class Step3panelComponent implements OnInit {
   coverletter_type: string;
   caseValidated = false;
   reviewcpa: ESignCPA;
+  showSavespinner = false;
   constructor( public dialog: MatDialog, private service: EsignserviceService, private router: Router) {
 
     this.cpas = []; // need service to pull this data
@@ -80,9 +81,13 @@ export class Step3panelComponent implements OnInit {
   }
 
   sendToReview() {
+    this.showSavespinner = true;
     console.log(this.reviewcpa);
     if (this.reviewcpa) {
-      this.service.sendToReview(this.mycase.caseId, this.reviewcpa);
+      this.service.sendToReview(this.mycase.caseId, this.reviewcpa).subscribe(resp => {
+        this.service.updateCaseStatusLocal('Review');
+        this.showSavespinner = false;
+      });
     }
   }
 

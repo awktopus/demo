@@ -29,8 +29,10 @@ export class Step4panelComponent implements OnInit {
     if (this.sendToClientOption === '0') {
       this.showSendToClientspinner = true;
       this.mycase.rejectReason = '';
-      this.service.sendToESign(this.mycase.caseId);
-      this.showSendToClientspinner = false;
+      this.service.sendToESign(this.mycase.caseId).subscribe(resp => {
+        this.service.updateCaseStatusLocal('ESign');
+        this.showSendToClientspinner = false;
+      });
     } else if (this.sendToClientOption === '1') {
       this.openEmailPop();
     }

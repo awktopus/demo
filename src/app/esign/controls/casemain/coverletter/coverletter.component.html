@@ -23,21 +23,23 @@
     <span></span>
   </ng-container>
   <div class="controls" *ngIf='viewControl.edit'>
-
     <mat-checkbox class="casefield" (change)='updateSaveAsControl($event)' [(ngModel)]="cnew">Create New?</mat-checkbox>
-
     <span *ngIf='viewControl.createNew'>
       <mat-form-field>
         <input matInput placeholder='New Template Name' [(ngModel)]="newTemplateType">
       </mat-form-field>
     </span>
     &nbsp;
-    <span>
+    <span *ngIf='!showSavespinner'>
       <button mat-raised-button color="accent" class="text-upper" [disabled]=" (noedit) && (!(cnew))" (click)='saveTemplate()'>save</button>
     </span>
+    <mat-spinner *ngIf='showSavespinner' diameter='30'></mat-spinner>
+    <span *ngIf='showSavespinner'>Processing...</span>
     &nbsp;
-    <span>
+    <span *ngIf='!showDeleteSpinner'>
       <button mat-raised-button color="accent" class="text-upper" [disabled]="(noedit)" (click)='deleteCoverTmplt()'>Delete</button>
     </span>
+    <mat-spinner *ngIf='showDeleteSpinner' diameter='30'></mat-spinner>
+    <span *ngIf='showDeleteSpinner'>Processing...</span>  
   </div>
 </div>

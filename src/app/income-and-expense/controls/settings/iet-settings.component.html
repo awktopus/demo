@@ -86,12 +86,14 @@
                 </button>
             </td>
             <td colspan="2">
-                <button mat-icon-button matTooltip="Edit Company" [disabled]='clientCompany.hasSettingsAccess =="N"'>
+                <button mat-icon-button matTooltip="Edit Company" 
+                *ngIf ='clientCompany.hasSettingsAccess !="N"'>
                     <mat-icon class="iconcss" (click)="editCompany(clientCompany)">settings</mat-icon>Settings
                 </button>
             </td>
             <td colspan="2">
-                <button mat-icon-button matTooltip="Delete Company" [disabled]='clientCompany.hasSettingsAccess =="N"'>
+                <button mat-icon-button matTooltip="Delete Company" 
+                *ngIf ='clientCompany.hasSettingsAccess !="N"'>
                     <mat-icon class="iconcss" (click)="openConfirmationDialogforCompanyDeletion(clientCompany.companyId)">delete</mat-icon>Delete Company
                 </button>
             </td>

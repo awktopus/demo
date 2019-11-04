@@ -9,12 +9,13 @@
   <br>
   <tr>
     <span>
-        <span *ngIf='!showSendToClientspinner'>
-      <button mat-raised-button color="accent" class="text-upper" [disabled]='(mycase.status !== "Review" || sendToClientOption === "2")'
-        (click)="sendToClient()">Approve and Send to Client</button>
+      <span *ngIf='!showSendToClientspinner'>
+        <button mat-raised-button color="accent" class="text-upper" [disabled]='(mycase.status !== "Review" || sendToClientOption === "2")'
+          (click)="sendToClient()">Approve and Send to Client</button>
       </span>
       <mat-spinner *ngIf='showSendToClientspinner' diameter='40'></mat-spinner>
       <span *ngIf='showSendToClientspinner'>Processing...</span>
+      
       &nbsp;&nbsp;
       <button mat-raised-button color="accent" class="text-upper" [disabled]='(mycase.status !== "Review" || sendToClientOption !== "2")'
         (click)="showRejectReasonPopup()">Reject to Preparer</button>
@@ -25,8 +26,7 @@
     <span>
       <mat-icon class='remindericon' mdbRippleRadius>scheduleicon</mat-icon>
       <font color="green">Esign reminder for client</font>&nbsp;
-      <button mat-raised-button color="accent" class="text-upper" 
-      [disabled]= '(mycase.status != "ESign" && mycase.status != "Emailed") || mycase.clientReminderFlag == "Y"'
+      <button mat-raised-button color="accent" class="text-upper" [disabled]='(mycase.status != "ESign" && mycase.status != "Emailed") || mycase.clientReminderFlag == "Y"'
         (click)="createClientReminder(mycase.caseId)">Create</button>
     </span>
   </tr>
