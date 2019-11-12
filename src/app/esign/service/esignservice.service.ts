@@ -668,7 +668,8 @@ export class EsignserviceService {
 
   getCompanyStaff() {
     console.log('calling getCompanyStaff server api');
-    const url: string = this.auth.baseurl + '/iet/Lookups/OrgUnitId/' + this.auth.getOrgUnitID() + '/staff';
+    const url: string = this.auth.baseurl + '/iet/Lookups/OrgUnitId/' + this.auth.getOrgUnitID()
+    + '/staff/' + this.auth.getUserID();
     return this.http.get(url, this.auth.getESignOptions());
   }
 
