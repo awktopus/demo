@@ -4,10 +4,10 @@
   </div>
   <form [formGroup]="caseStep1Form" >
 
-    <div fxLayout="column">
+  <div fxLayout="column">
     <mat-form-field class="casefield">
       <mat-select placeholder="Case Category"  formControlName="category" 
-      (selectionChange)="categoryChange($event)" #focusField required #focusField>
+      (selectionChange)="categoryChange($event)" #focusField required>
         <mat-option *ngFor="let cate of casecates" [value]="cate.id">
           {{ cate.name }}
         </mat-option>
@@ -126,7 +126,8 @@
     <span>
       <span *ngIf='!showSavespinner'>
         <button mat-raised-button color="accent" class="text-upper" (click)="saveCase()" 
-        *ngIf="mycase && !(mycase.caseId)" type="submit" [disabled]="caseStep1Form.invalid">
+        *ngIf="(mycase && !(mycase.caseId)) || caseType == 'copycase'" type="submit" 
+        [disabled]="caseStep1Form.invalid">
           Save
         </button>
       </span>
@@ -135,7 +136,8 @@
 
       <span *ngIf='!showUpdatespinner'>
         <button mat-raised-button color="accent" class="text-upper" (click)="updateCase()" 
-        *ngIf="mycase && mycase.caseId" type="submit" [disabled]="caseStep1Form.invalid">
+        *ngIf="(mycase && mycase.caseId) || caseType == 'updatecase'" type="submit"
+        [disabled]="caseStep1Form.invalid">
           Update
         </button>
       </span>

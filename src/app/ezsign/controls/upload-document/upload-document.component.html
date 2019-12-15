@@ -1,0 +1,16 @@
+<div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
+  <label class="heading-label">Drag and drop document here</label>
+  <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
+</div>
+<div class="files-list" *ngFor="let file of files;let i=index">
+  <p>{{ file }}</p>
+  <button class="delete-file" (click)="deleteAttachment(i)">
+    <img src="../../../../assets/imgs/Recycle_Bin_Full.png">
+  </button>  
+</div>
+<div>
+  <button mat-raised-button color="accent" matTooltip="Create new ezsign document" 
+    (click)="createNewEZSignDocument()">
+    + CREATE NEW EZSIGN DOCUMENT
+  </button>
+</div>

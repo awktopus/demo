@@ -11,6 +11,7 @@ const APP_ROUTES: Routes = [
     path: 'main', canActivate: [AuthGuard], component: MainPageComponent, children: [
       { path: 'dashboard', component: DashboardPageComponent },
       { path: 'esign', loadChildren: 'app/esign/esign.module#EsignModule' },
+      { path: 'ezsign', loadChildren: 'app/ezsign/ezsign.module#EZSignModule' },
       { path: 'incomeexpense', loadChildren: 'app/income-and-expense/income-and-expense.module#IncomeExpenseModule' },
       { path: '', redirectTo: 'dashboard', pathMatch: 'prefix' },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'prefix' }

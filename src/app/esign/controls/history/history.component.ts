@@ -229,10 +229,10 @@ export class HistoryComponent implements OnInit, AfterViewInit {
         console.log('tab:' + e.index);
         this.loadSearchData('allcases', '');
         break;
-      case 2:
-      console.log('tab:' + e.index);
-      this.showCaseTemplatesPopup();
-      break;
+      // case 2:
+      // console.log('tab:' + e.index);
+      // this.showCaseTemplatesPopup();
+      // break;
     }
   }
   configColDef() {
@@ -418,7 +418,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
   createNewCaseFromPrevious(caseId: string) {
     console.log('Create new case from previous:' + caseId);
     // this.router.navigateByUrl('main/esign/case/newcaseID');
-    const url = '/main/esign/case/' + caseId + '-' + 'newcase';
+    const url = '/main/esign/case/' + caseId + '-' + 'copycase';
     this.router.navigateByUrl(url);
   }
 }

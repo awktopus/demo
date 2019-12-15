@@ -57,7 +57,7 @@ export class Step1panelComponent implements OnInit {
   showSavespinner = false;
   showUpdatespinner = false;
   caseDataloading = false;
-
+  caseType: string;
   caseStep1Form: FormGroup = new FormGroup({
     category: new FormControl('', Validators.required),
     subcategory: new FormControl('', Validators.required),
@@ -101,9 +101,11 @@ export class Step1panelComponent implements OnInit {
         this.caseDataloading = false;
       });
       if (this.initcaseheader) {
-        console.log('init case header inside if');
+        console.log('step1 panel: init case header inside if');
+        console.log(this.initcaseheader);
         this.setcaseHeader(this.initcaseheader);
       }
+      if (this.caseType === 'newcase') {
       this.service.cur_case.subscribe(c => {
         this.mycase = c; // this is to sync caseID
         console.log('cur case:');
@@ -113,9 +115,11 @@ export class Step1panelComponent implements OnInit {
           this.setcaseHeader(this.initcaseheader);
         }
       });
+    }
     });
     this.caseStep1Form.controls['clientctrl'].valueChanges.subscribe(val => {
       console.log('clientctrl search clients called');
+
       console.log(val.trim());
       console.log(this.client_var);
       console.log(typeof val);
@@ -309,13 +313,21 @@ export class Step1panelComponent implements OnInit {
       this.scpas.splice(index, 1);
     }
   }
-  setInitCase(caseheader: ESignCase) {
+  setInitCase(caseheader: ESignCase, caseType: string) {
     console.log('set init case', caseheader);
+    console.log('case type:', caseType);
     this.initcaseheader = caseheader;
+    this.caseType = caseType;
   }
   setcaseHeader(caseheader: ESignCase) {
     this.primarysigner = caseheader.primarySigner;
+    if (this.primarysigner) {
+      this.caseStep1Form.controls['clientctrl'].setValue(this.primarysigner.clientId);
+    }
     this.secondarysigner = caseheader.secondarySigner;
+    if (this.secondarysigner) {
+    this.caseStep1Form.controls['clientctrl'].setValue(this.secondarysigner.clientId);
+  }
     console.log('inside set case header..primary signer');
     console.log(this.primarysigner);
     if (caseheader.recipientClients) {
@@ -331,12 +343,13 @@ export class Step1panelComponent implements OnInit {
     if (caseheader.cate) {
       this.caseStep1Form.controls['category'].setValue(caseheader.cate.id)
       // here we need to populate the subcate first
-      this.casecates.forEach(ele => { if (ele.id === this.caseStep1Form.controls['category'].value) { this.subcates = ele.subCates; } });
-
+      this.casecates.forEach(ele => { if (ele.id === this.caseStep1Form.controls['category'].value) {
+         this.subcates = ele.subCates;
+         if (caseheader.subCate) {
+          this.caseStep1Form.controls['subcategory'].setValue(caseheader.subCate.id);
+        }
+        } });
       // console.log(this.casecates);
-      if (caseheader.subCate) {
-        this.caseStep1Form.controls['subcategory'].setValue(caseheader.subCate.id);
-      }
     } else {
       this.caseStep1Form.controls['subcategory'].setValue(null);
       this.subcates = [];
@@ -356,6 +369,19 @@ export class Step1panelComponent implements OnInit {
     } else {
       this.caseStep1Form.controls['taxYear'].setValue(null);
     }
+    console.log('FORM GROUP');
+    console.log(this.caseStep1Form);
+    // this.caseStep1Form.reset();
+    // this.caseStep1Form.get['category'].updateValueAndValidity();
+    // this.caseStep1Form.get['subcategory'].updateValueAndValidity();
+    // this.caseStep1Form.get['taxReturnIdNo'].updateValueAndValidity();
+    // this.caseStep1Form.get['returnName'].updateValueAndValidity();
+    // this.caseStep1Form.get['taxYear'].updateValueAndValidity();
+    // this.caseStep1Form.get['clientctrl'].updateValueAndValidity();
+    // this.caseStep1Form.get['secclientctrl'].updateValueAndValidity();
+    // this.caseStep1Form.get['recclientctrl'].updateValueAndValidity();
+    // this.caseStep1Form.get['cpactrl'].updateValueAndValidity();
+    // this.caseStep1Form.updateValueAndValidity();
   }
 
   captureCaseJson(): any {

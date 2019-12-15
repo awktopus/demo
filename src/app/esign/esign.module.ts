@@ -78,7 +78,7 @@ import { ConfirmationDialogComponent } from './controls/shared/confirmation-dial
     MatProgressSpinnerModule,
     AngularDraggableModule,
     AgGridModule.withComponents([AuditRendererComponent, RouterLinkRendererComponent,
-      ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent]), 
+      ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent]),
   ],
   declarations: [
     GridColConfigPopupComponent,

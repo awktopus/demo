@@ -2,7 +2,7 @@
   <table width=60%>
     <tr>
       <td>
-        <label class="heading-label">eSign Cases</label>
+        <label class="heading-label">Tax Cases</label>
       </td>
     </tr>
     <tr>
@@ -394,7 +394,8 @@
           </td-file-input>
         </td>
         <td align=center>
-          <button mat-raised-button *ngIf='isEsignForm == "N" ' color="accent" [disabled]="!nonEsignfiles" class="row text-upper" (click)="uploadNonEsignForm(form,signer,'nonesign',nonEsignfiles)">Submit</button>
+          <button mat-raised-button *ngIf='isEsignForm == "N" ' color="accent" [disabled]="!nonEsignfiles" 
+          class="row text-upper" (click)="uploadNonEsignForm(form,signer,'nonesign',nonEsignfiles)">Submit</button>
         </td>
       </tr>
     </table>

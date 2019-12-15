@@ -32,24 +32,39 @@ export class CasemainComponent implements OnInit, AfterViewInit {
       if (this.mycaseID === 'newcaseID') {
         const cc = new ESignCase();
         this.service.updateCase(cc);
-        this.cstep1.setInitCase(cc);
+        this.cstep1.setInitCase(cc, 'newcase');
         this.uiservice.setStepper(0);
-      }  else if (this.mycaseID.includes('-') === true) {
-        console.log('Inside ' + this.mycaseID + ' if condition');
+      } else if (this.mycaseID.includes('-') === true) {
         var existingCaseId = this.mycaseID.split('-');
-        console.log('case id: ' + existingCaseId[0]);
-        this.service.getESignCase(existingCaseId[0]).subscribe(resp => {
-          const existingCase: ESignCase = <ESignCase>resp;
-          console.log(existingCase);
-          const newCopyCase = new ESignCase();
-          console.log('calling update case');
-          this.service.updateCase(newCopyCase);
-          console.log('calling set init case');
-          this.cstep1.setInitCase(existingCase);
-          console.log('set stepper');
-          this.uiservice.setStepper(0);
-         // this.cstep1.setcaseHeader(existingCase);
-        });
+        if (existingCaseId[1] === 'copycase') {
+          console.log('copycase scenario - start');
+          console.log('case id: ' + existingCaseId[0]);
+          this.service.getESignCase(existingCaseId[0]).subscribe(resp => {
+            const existingCopyCase: ESignCase = <ESignCase>resp;
+            const newCopyCase2 = new ESignCase();
+            console.log('calling update case');
+            this.service.updateCase(newCopyCase2);
+            console.log('calling set init case');
+            this.cstep1.setInitCase(existingCopyCase, 'copycase');
+            console.log('set stepper');
+            this.uiservice.setStepper(0);
+            console.log('copycase scenario - end');
+          });
+        } else {
+          console.log('case id: ' + existingCaseId[0]);
+          this.service.getESignCase(existingCaseId[0]).subscribe(resp => {
+            const existingCase: ESignCase = <ESignCase>resp;
+            console.log(existingCase);
+            const newCopyCase = new ESignCase();
+            console.log('calling update case');
+            this.service.updateCase(newCopyCase);
+            console.log('calling set init case');
+            this.cstep1.setInitCase(existingCase, 'update-case');
+            console.log('set stepper');
+            this.uiservice.setStepper(0);
+            // this.cstep1.setcaseHeader(existingCase);
+          });
+        }
       } else {
         console.log(this.mycaseID);
         this.service.getESignCase(this.mycaseID).subscribe(resp => {
@@ -59,7 +74,7 @@ export class CasemainComponent implements OnInit, AfterViewInit {
           console.log(rr);
           this.service.updateCase(cc);
           this.service.updateClassificationPages(rr.classification);
-          this.cstep1.setInitCase(cc);
+          this.cstep1.setInitCase(cc, 'updatecase');
           this.uiservice.setStepper(this.getStepByStatus(cc.status));
         });
       }

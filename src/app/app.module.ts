@@ -70,7 +70,7 @@ export function createTranslateLoader(http: HttpClient) {
     NgIdleModule.forRoot(),
     AppRoutesModule,
     BrowserAnimationsModule,
-    MatProgressSpinnerModule 
+    MatProgressSpinnerModule
   ],
   providers: [{
     provide: PERFECT_SCROLLBAR_CONFIG,

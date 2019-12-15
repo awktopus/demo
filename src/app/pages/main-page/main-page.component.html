@@ -22,8 +22,8 @@
         <px-gdn-sideitem title="Dashboard" [routerLinkUrl]="'dashboard'">
           <mat-icon>dashboard</mat-icon>
         </px-gdn-sideitem>
-        <px-gdn-sideitem title="ESign" *ngIf='isAccountingFirm || isClient'>
-          <mat-icon>border_color</mat-icon>
+        <px-gdn-sideitem title="US Tax" *ngIf='isAccountingFirm || isClient'>
+          <mat-icon>account_balance</mat-icon>
           <px-gdn-sideitem title="Case Management" [routerLinkUrl]="['esign/history', 'reviewcases']"
             *ngIf='isAccountingFirm && !isClient'>
             <mat-icon>note_add</mat-icon>
@@ -31,17 +31,29 @@
           <px-gdn-sideitem title="Settings" [routerLinkUrl]="'esign/settings'" *ngIf='isAccountingFirm && !isClient'>
             <mat-icon>settings_applications</mat-icon>
           </px-gdn-sideitem>
-          <px-gdn-sideitem title="My eSign Cases" [routerLinkUrl]="'esign/mycases'"
+          <px-gdn-sideitem title="My Tax Cases" [routerLinkUrl]="'esign/mycases'"
             *ngIf='isAccountingFirm && isClient'>
             <mat-icon>assignment</mat-icon>
           </px-gdn-sideitem>
         </px-gdn-sideitem>
+
         <px-gdn-sideitem title="Income & Expense" *ngIf='isIETfunctionAccessible' el-permission permission-type="TOOL_EXPENSES_READ">
           <mat-icon>account_balance_wallet</mat-icon>
           <px-gdn-sideitem title="Tracker" [routerLinkUrl]="'incomeexpense/settings'">
             <mat-icon>chrome_reader_mode</mat-icon>
           </px-gdn-sideitem>
         </px-gdn-sideitem>
+
+        <px-gdn-sideitem title="EZSign" el-permission permission-type="TOOL_EXPENSES_READ">
+          <mat-icon>create</mat-icon>
+          <px-gdn-sideitem title="Sender Documents" [routerLinkUrl]="'ezsign/senderdocuments'">
+            <mat-icon>open_in_browser</mat-icon>
+          </px-gdn-sideitem>
+          <px-gdn-sideitem title="Receiver Documents" [routerLinkUrl]="'ezsign/receiverdocuments'">
+            <mat-icon>assignment_returned</mat-icon>
+          </px-gdn-sideitem>
+        </px-gdn-sideitem>
+
       </px-gdn-sidemenu>
     </perfect-scrollbar>
     <footer class="secondary-text-color">
