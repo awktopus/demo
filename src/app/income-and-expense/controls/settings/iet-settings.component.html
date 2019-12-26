@@ -75,6 +75,23 @@
         <br/>
         <tr>
             <td colspan="2">
+                <button mat-raised-button color="warn" matTooltip="Add Receipt" (click)="addReceipt(clientCompany.companyTypeId,clientCompany.companyId)">
+                    <mat-icon>attach_file</mat-icon>&nbsp;Add Receipt</button>
+            </td>
+            <td colspan="2">
+                <button mat-raised-button color="warn" matTooltip="View Report" (click)="viewReport(clientCompany.companyTypeId,
+                    clientCompany.companyId,clientCompany.companyName, clientCompany.includeAccountNumber)">
+                    <mat-icon>insert_chart_outlined</mat-icon>&nbsp;View Report</button>
+            </td>
+            <td colspan="2">
+                <button mat-raised-button color="warn" matTooltip="Edit Company" *ngIf='clientCompany.hasSettingsAccess !="N"' (click)="editCompany(clientCompany)">
+                    <mat-icon>settings</mat-icon>&nbsp;Settings</button>
+            </td>
+            <td colspan="2">
+                <button mat-raised-button color="warn" matTooltip="Add Receipt" *ngIf='clientCompany.hasSettingsAccess !="N"' (click)="openConfirmationDialogforCompanyDeletion(clientCompany.companyId)">
+                    <mat-icon>delete</mat-icon>&nbsp;Delete Company</button>
+            </td>
+            <!-- <td colspan="2">
                 <button mat-icon-button matTooltip="Add Receipt">
                     <mat-icon class='iconcss' (click)="addReceipt(clientCompany.companyTypeId,clientCompany.companyId)">attach_file</mat-icon>Add Receipt
                 </button>
@@ -96,7 +113,7 @@
                 *ngIf ='clientCompany.hasSettingsAccess !="N"'>
                     <mat-icon class="iconcss" (click)="openConfirmationDialogforCompanyDeletion(clientCompany.companyId)">delete</mat-icon>Delete Company
                 </button>
-            </td>
+            </td> -->
         </tr>
     </table>
 </div>

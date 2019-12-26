@@ -274,3 +274,54 @@ export class CaseTemplate {
   coSigner: string;
   taxYear: number;
 }
+
+export class Signer {
+  id?: string;
+  name: string;
+  email: string;
+  signerSequence: string;
+}
+
+export class MetaData {
+  created_at: Date;
+  updated_at: Date;
+}
+
+export class EZSignDocResource {
+  ezSignTrackingId: string;
+  status: string;
+  thumbnailDataUrl: string;
+  documentName: string;
+  docId: string;
+  lastModifiedDateTime: string;
+  ezSignDocSigners?: EZSignDocSigner[];
+  eZSignDocPages?: EZSignDocPage[];
+}
+
+export class EZSignDocSigner {
+  receiverSeqNo: number;
+  receiverId: string;
+  receiverFirstName: string;
+  receiverLastName: string;
+  receiverEmailId: string
+}
+
+export class EZSignDocPage {
+  pageSeqNo: number;
+  status: string;
+  contentMergeFlag: string;
+  ezSignDocPageFields: EZSignDocPageField[];
+}
+
+export class EZSignDocPageField {
+  fieldSeqNo: number;
+  fieldTypeId: number;
+  labelName: string;
+  boxX: number;
+  boxY: number;
+  width: number;
+  height: number;
+  receiverId: string;
+  status: string;
+  createdDateTime: string;
+}

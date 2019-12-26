@@ -7,7 +7,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {
   MatDividerModule, MatTableModule,
   MatStepperModule, MatFormFieldModule, MatSortModule, MatDatepickerModule,
-   MatNativeDateModule
+   MatNativeDateModule, MatMenuModule
 } from '@angular/material';
 import { CovalentLayoutModule } from '@covalent/core/layout';
 import { SharedBaseModule } from '../shared/shared.module';
@@ -20,6 +20,11 @@ import { ReceiverdocumentsComponent } from './controls/receiverdocuments/receive
 import { SenderdocumentsComponent } from './controls/senderdocuments/senderdocuments.component';
 import { UploadDocumentComponent } from './controls/upload-document/upload-document.component';
 import { DragDropDirective } from './../ezsign/controls/upload-document/drag-drop.directive';
+import { AddsignersComponent } from './controls/addsigners/addsigners.component';
+import { EzsigndataService } from './service/ezsigndata.service';
+import { EzsignConfirmationDialogComponent } from './controls/shared/ezsign-confirmation-dialog/ezsign-confirmation-dialog.component';
+import { EzsignButtonRendererComponent } from './controls/Ezsignbutton-renderer.component';
+import { AddfieldsComponent } from './controls/addfields/addfields.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +46,7 @@ import { DragDropDirective } from './../ezsign/controls/upload-document/drag-dro
     NgxEditorModule,
     MatProgressSpinnerModule,
     AngularDraggableModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([EzsignButtonRendererComponent])
   ],
   declarations: [
     EzsignComponent,
@@ -50,15 +55,19 @@ import { DragDropDirective } from './../ezsign/controls/upload-document/drag-dro
     ReceiverdocumentsComponent,
     UploadDocumentComponent,
     DragDropDirective,
-    UploadDocumentComponent
-    ],
-  entryComponents: [],
+    UploadDocumentComponent,
+    AddsignersComponent,
+    EzsignConfirmationDialogComponent,
+    EzsignButtonRendererComponent,
+    AddfieldsComponent,     ],
+  entryComponents: [AddsignersComponent, UploadDocumentComponent, EzsignConfirmationDialogComponent],
   providers: [
     ESignGuard,
+    EzsigndataService
     // AuthGuard,
     // EsignserviceService,
     // EsignuiserviceService
   ],
-  exports: [SafePipe, MatDatepickerModule]
+  exports: [SafePipe, MatDatepickerModule, MatMenuModule]
 })
 export class EZSignModule { }

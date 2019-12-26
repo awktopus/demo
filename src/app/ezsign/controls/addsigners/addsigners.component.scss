@@ -1,0 +1,86 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+  }
+  
+  .mat-header-cell.mat-sort-header-sorted {
+    color: black;
+  }
+  
+  mat-sidenav {
+    //width: 200px;
+    //height: 500px;
+  }
+  
+  mat-sidenav-content {
+    //margin-left: 250px !important;
+  }
+  
+  .mat-table {
+    overflow: auto;
+    max-height: 500px;
+  }
+  
+  .mat-row {
+    cursor: pointer;
+  }
+  
+  .mat-column-select {
+    overflow: visible;
+  }
+  
+  ::ng-deep img {
+    max-width: 100%;
+    object-fit: cover;
+  }
+  
+  ::ng-deep div .avatar {
+    width: 40px;
+    line-height: 40px !important;
+    height: 40px;
+    font-size: 18px !important;
+    max-width: 40px;
+    max-height: 40px;
+  }
+  
+  .ngx-avatar {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 8px 0 0;
+    border-radius: 50%;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .cell-shrink-checkbox {
+    flex-grow: 0.1;
+    flex-shrink: 1;
+    flex-basis: 48px;
+  }
+  
+  .cell-shrink-more {
+    flex-grow: 0.1;
+  }
+  
+  .fill-remaining {
+    flex: 1 1 auto;
+  }
+  
+  .fab-add {
+    margin-top: 55px;
+    margin-right: 20px;
+  }
+  
+  ::ng-deep .new-contact-dialog {
+    .mat-dialog-container {
+      padding: 0 0 24px 0;
+      min-width: 350px;
+    }
+  }
+  

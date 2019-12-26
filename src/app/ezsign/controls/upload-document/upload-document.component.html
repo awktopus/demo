@@ -1,16 +1,64 @@
+<div>
+    <mat-toolbar color="primary">
+          Create New EZSign Document
+      <span class="fill-remaining"></span>   
+      <button mat-fab
+              color="accent"
+              class="fab-add"
+              (click)="closeMe()">
+        <mat-icon>cancel</mat-icon>
+      </button> 
+    </mat-toolbar>
+    <br>
+  <table>
+      <tr>
+          <td>
+              <mat-horizontal-stepper labelPosition="bottom" [linear]="isLinear" #stepper #eZSignWFStepper="matHorizontalStepper">
+                  <mat-step completed="true" editable="false">
+                      <ng-template matStepLabel matStepperIcon="edit">
+                          <mat-icon>insert_drive_file</mat-icon>
+                          <br>
+                          <strong>Upload Document</strong>
+                          <br> Upload PDF document to send for signing</ng-template>
+                  </mat-step>
+                  <mat-step>
+                      <ng-template matStepLabel matStepperIcon="edit">
+                          <mat-icon>group</mat-icon>
+                          <br>
+                          <strong>Add Signers</strong>
+                          <br/> Add signers by their email addresses</ng-template>
+                  </mat-step>
+                  <mat-step>
+                      <ng-template matStepLabel matStepperIcon="edit">
+                          <mat-icon>list_alt</mat-icon>
+                          <br>
+                          <strong>Add Fields</strong>
+                          <br> Add fields (signature,date,text) in document</ng-template>
+                  </mat-step>
+                  <mat-step>
+                      <ng-template matStepLabel matStepperIcon="edit">
+                          <mat-icon>mail</mat-icon>
+                          <br>
+                          <strong>Send Invites</strong>
+                          <br> Review and send invites for signing the document</ng-template>
+                  </mat-step>
+              </mat-horizontal-stepper>
+          </td>
+      </tr>
+  </table>
 <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
-  <label class="heading-label">Drag and drop document here</label>
+  <label class="heading-label">Drag and drop or Upload PDF document here</label>
   <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
 </div>
 <div class="files-list" *ngFor="let file of files;let i=index">
   <p>{{ file }}</p>
   <button class="delete-file" (click)="deleteAttachment(i)">
     <img src="../../../../assets/imgs/Recycle_Bin_Full.png">
-  </button>  
+  </button>
 </div>
 <div>
-  <button mat-raised-button color="accent" matTooltip="Create new ezsign document" 
-    (click)="createNewEZSignDocument()">
+  <button *ngIf="files.length != 0" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="createNewEZSignDocument()">
     + CREATE NEW EZSIGN DOCUMENT
   </button>
+</div>
 </div>

@@ -3,8 +3,8 @@
     background-repeat: no-repeat;
     background-size: 100px;
     background-position: center;
-    height: 200px;
-    width: 80%;
+    height: 300px;
+    width: 95%;
     margin: 20px auto;
     border: 2px dashed #1C8ADB;
     border-radius: 10px;
@@ -43,4 +43,12 @@
     margin-top: 1rem;
     font-size: 25px;
     line-height: 48px;
+  }
+  .fill-remaining {
+    flex: 1 1 auto;
+  }
+  
+  .fab-add {
+    margin-top: 1px;
+    margin-right: 20px;
   }
