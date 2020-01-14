@@ -23,8 +23,13 @@ import { DragDropDirective } from './../ezsign/controls/upload-document/drag-dro
 import { AddsignersComponent } from './controls/addsigners/addsigners.component';
 import { EzsigndataService } from './service/ezsigndata.service';
 import { EzsignConfirmationDialogComponent } from './controls/shared/ezsign-confirmation-dialog/ezsign-confirmation-dialog.component';
-import { EzsignButtonRendererComponent } from './controls/Ezsignbutton-renderer.component';
+import { EzsignHistoryButtonRendererComponent } from './controls/Ezsignhistorybutton-renderer.component';
 import { AddfieldsComponent } from './controls/addfields/addfields.component';
+import { ResizableModule } from 'angular-resizable-element';
+import { InvitesignersComponent } from './controls/invitesigners/invitesigners.component';
+import { EzsignAddSignersButtonRendererComponent } from './controls/Ezsignaddsignersbutton-renderer.component';
+import { EzsignDeleteButtonRendererComponent } from './controls/Ezsigndeletebutton-renderer.component';
+import { DocumenthistoryComponent } from './controls/senderdocuments/documenthistory/documenthistory.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -46,7 +51,9 @@ import { AddfieldsComponent } from './controls/addfields/addfields.component';
     NgxEditorModule,
     MatProgressSpinnerModule,
     AngularDraggableModule,
-    AgGridModule.withComponents([EzsignButtonRendererComponent])
+    AgGridModule.withComponents([EzsignHistoryButtonRendererComponent,
+      EzsignAddSignersButtonRendererComponent, EzsignDeleteButtonRendererComponent]),
+    ResizableModule
   ],
   declarations: [
     EzsignComponent,
@@ -58,9 +65,15 @@ import { AddfieldsComponent } from './controls/addfields/addfields.component';
     UploadDocumentComponent,
     AddsignersComponent,
     EzsignConfirmationDialogComponent,
-    EzsignButtonRendererComponent,
-    AddfieldsComponent,     ],
-  entryComponents: [AddsignersComponent, UploadDocumentComponent, EzsignConfirmationDialogComponent],
+    EzsignAddSignersButtonRendererComponent,
+    EzsignDeleteButtonRendererComponent,
+    EzsignHistoryButtonRendererComponent,
+    AddfieldsComponent,
+    InvitesignersComponent,
+    DocumenthistoryComponent,
+    ],
+  entryComponents: [AddsignersComponent, UploadDocumentComponent,
+    EzsignConfirmationDialogComponent, InvitesignersComponent, DocumenthistoryComponent],
   providers: [
     ESignGuard,
     EzsigndataService

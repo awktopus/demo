@@ -6,3 +6,119 @@
     </tr>
 </table>
 <br>
+<table class="trackertable4">
+        <tr align="left">
+            <td colspan="12">
+                <button *ngIf="ezSignDocsgridData" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="launchNewEZSignDocument()">
+                    + CREATE NEW EZSIGN DOCUMENT
+                </button>
+            </td>
+            <!-- <td>
+                <button mat-raised-button color="accent" 
+                 matTooltip="Add Signers" (click)="addSigners()">
+                  + ADD SIGNERS
+              </button>
+            </td> -->
+        </tr>
+    </table>
+    
+    <div *ngIf="!ezSignDocsgridData">
+        <table class="trackertable">
+            <tr align="center">
+                <td colspan="12">
+                    <label class="heading-label">Start Sending PDF Document for Signing</label>
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    <mat-horizontal-stepper labelPosition="bottom" [linear]="isLinear" #stepper #eZSignWFStepper="matHorizontalStepper">
+    
+                        <mat-step completed="true" editable="false">
+                            <ng-template matStepLabel matStepperIcon="edit">
+                                <mat-icon>insert_drive_file</mat-icon>
+                                <br>
+                                <strong>Upload Document</strong>
+                                <br> Upload PDF document to send for signing</ng-template>
+                        </mat-step>
+                        <mat-step>
+                            <ng-template matStepLabel matStepperIcon="edit">
+                                <mat-icon>group</mat-icon>
+                                <br>
+                                <strong>Add Signers</strong>
+                                <br/> Add signers by their email addresses</ng-template>
+                        </mat-step>
+                        <mat-step>
+                            <ng-template matStepLabel matStepperIcon="edit">
+                                <mat-icon>list_alt</mat-icon>
+                                <br>
+                                <strong>Add Fields</strong>
+                                <br> Add fields (signature,date,text) in document</ng-template>
+                        </mat-step>
+                        <mat-step>
+                            <ng-template matStepLabel matStepperIcon="edit">
+                                <mat-icon>mail</mat-icon>
+                                <br>
+                                <strong>Send Invites</strong>
+                                <br> Review and send invites for signing the document</ng-template>
+                        </mat-step>
+                    </mat-horizontal-stepper>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    <div>
+                        <table>
+                            <tr>
+                                <td>
+                                    <label class="heading-label">Create New EZSign Document</label>
+                                    <hr>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
+                        <label class="heading-label">Drag and drop or Upload PDF document here</label>
+                        <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
+                    </div>
+                    <div class="files-list" *ngFor="let file of files;let i=index">
+                        <p>{{ file.name }}</p>
+                        <button class="delete-file" (click)="deleteAttachment(i)">
+                            <img src="../../../../assets/imgs/Recycle_Bin_Full.png">
+                        </button>
+                    </div>
+                    <div>
+                        <button *ngIf="files.length != 0" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="createNewEZSignDocument()">
+                            + CREATE NEW EZSIGN DOCUMENT
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div *ngIf="ezSignDocsgridData">
+        <!-- <mat-tab-group style='padding-left:20pt;padding-top:10pt' (focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
+            <mat-tab label="EZSign Documents"> -->
+        <br>
+        <table>
+            <tr>
+                <td align=right width='30'>
+                </td>
+                <td align=right>
+                    <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(ezsignapi)'>list_alt</mat-icon>
+                    <mat-icon class='docicon' mdbRippleRadius (click)="gridExport('ezsign')" matTooltip="Export CSV">insert_link</mat-icon>
+                    <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('ezsign')" matTooltip="Expand All">swap_horiz</mat-icon>
+                    <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('ezsign')" matTooltip="Refit">tune</mat-icon>
+                </td>
+            </tr>
+        </table>
+        <ag-grid-angular #agGrid id="ezSignDocsGrid" style="width: 98%; height: 700px; font-size:11pt" class="ag-theme-balham" [rowData]="ezSignDocsgridData"
+            [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+            [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'ezsign')"
+            [rowHeight]="rowHeight" [rowClass]="rowClass">
+        </ag-grid-angular>
+        <!-- </mat-tab>
+        </mat-tab-group> -->
+        <!-- <router-outlet></router-outlet> -->
+    </div>

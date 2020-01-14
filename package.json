@@ -45,6 +45,7 @@
     "angular-froala-wysiwyg": "^2.9.5",
     "angular-material": "^1.1.18",
     "angular-messages": "^1.7.8",
+    "angular-resizable-element": "^3.2.6",
     "angular-tree-component": "8.4.0",
     "angular2-draggable": "^2.3.0",
     "angular2-signaturepad": "^2.8.0",

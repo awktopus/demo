@@ -1,3 +1,71 @@
-<p>
-  receiverdocuments works!
-</p>
+<div id="academy-courses" class="page-layout simple">
+
+  <!-- CONTENT -->
+  <div class="content p-24">
+
+    <div fxLayout="column" fxLayoutAlign="center">
+
+      <div class="filters" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+        <mat-form-field appearance="outline" class="category-selector">
+          <mat-label>EZSign Documents</mat-label>
+
+          <mat-select [(ngModel)]="currentCategory" (selectionChange)="filterDocumentsByCategory()">
+            <mat-option [value]="'all'">
+              All
+            </mat-option>
+            <mat-option [value]="'to-be-signed'">
+              To be Signed
+            </mat-option>
+            <mat-option [value]="'signed'">
+              Signed
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <div class="courses" fxLayout="row wrap" fxLayoutAlign="center">
+
+        <div class="course" *ngFor="let ezSignDoc of ezSignDocs" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33" [ngClass]="ezSignDoc.status"
+          [@animate]="{value:'*',params:{y:'100%'}}">
+
+          <div class="course-content" fxLayout="column" fxFlex="1 1 auto">
+
+            <div class="header" fxLayout="row" fxLayoutAlign="center center" [ngClass]="ezSignDoc.status + '-bg'">
+              <div class="category" fxFlex>
+                {{ezSignDoc.status}}
+              </div>
+
+              <!-- <div class="length" fxLayout="row" fxLayoutAlign="center center">
+                                <mat-icon class="length-icon s-20">access_time</mat-icon>
+                                <div class="min">{{ezSignDoc.length}} min</div>
+                            </div> -->
+
+            </div>
+
+            <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex="1 1 auto">
+              <div class="h1">{{ezSignDoc.documentName}}</div>
+              <div class="updated">Updated {{ezSignDoc.lastModifiedDateTime}}</div>
+            </div>
+
+            <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+              <button mat-button color="accent" [routerLink]="'/apps/academy/courses/' + ezSignDoc.ezSignTrackingId">
+                START
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- <div class="no-courses" *ngIf="ezSignDocs.length === 0">
+          No courses found!
+        </div> -->
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

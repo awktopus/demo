@@ -1,8 +1,11 @@
 <table class="container">
   <tr>
-    <mat-radio-group [(ngModel)]="sendToClientOption">
+    <mat-radio-group [(ngModel)]="sendToClientOption" 
+    style="display: flex; flex-direction: column">
       <mat-radio-button value=0>Send through EverLeagues Portal &nbsp;&nbsp;</mat-radio-button>
+     <br/>
       <mat-radio-button value=1>Send by Email&nbsp;&nbsp;</mat-radio-button>
+      <br/>
       <mat-radio-button value=2>Reject To Preparer&nbsp;&nbsp;</mat-radio-button>
     </mat-radio-group>
   </tr>

@@ -1,112 +1,121 @@
-<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
-  <div fxFlex>
-    <mat-toolbar color="primary">
-      <div *ngIf="selection.selected.length > 0; then contactSelected else none"></div>
-      <ng-template #contactSelected>
-        {{selection.selected.length}}
-        <button mat-icon-button matTooltip="remove" (click)="removeSelected()">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </ng-template>
-      <ng-template #none>
-       Signers
-      </ng-template>
-      <span class="fill-remaining"></span>
-      <button *ngIf="!readonly"
-              fxHide.xs
-              mat-fab
-              color="accent"
-              class="fab-add"
-              matTooltip="add new signer"
-              (click)="openAddDialogContainer(methods.POST)">
-        <mat-icon>add</mat-icon>
-      </button>
-      <button *ngIf="!readonly" fxHide
-              fxShow.xs
-              mat-icon-button
-              matTooltip="add new signer"
-              (click)="openAddDialogContainer(methods.POST)">
-        <mat-icon>add</mat-icon>
-      </button>
-    </mat-toolbar>
+  <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center" *ngIf='!isImageDataUrlFetched'>
+    <div fxFlex>
+      <mat-toolbar color="primary">
+        <div *ngIf="selection.selected.length > 0; then contactSelected else none"></div>
+        <ng-template #none>
+          Signers
+        </ng-template>
+        <span class="fill-remaining"></span>
+        <form [formGroup]="signerSearchForm" style="margin: 15px;">
+          <!-- SEARCH -->
+          <div class="search-wrapper mx-32 mx-md-0">
+            <!-- <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center"> -->
+            <div class="search">
+              <mat-icon>search</mat-icon>
+              <!-- <input #filter placeholder="Search for a signer"> -->
+              <mat-form-field>
+                <mat-chip-list #primarychips placeholder="Search for a signer">
+                  <mat-chip *ngIf="primarysigner" [selectable]="selectable" [removable]="removable" (removed)="removeSinger('primary')">
+                    {{primarysigner.firstName}} {{primarysigner.lastName}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                  </mat-chip>
+                  <input type="text" class="search" placeholder="Search for a signer" [matChipInputFor]="primarychips" matInput [matAutocomplete]="autoprimary"
+                    formControlName="clientctrl">
+                  <mat-autocomplete #autoprimary="matAutocomplete">
+                    <mat-option *ngFor="let cc of clients" [value]="cc.clientId" (onSelectionChange)="addPrimary($event)">
+                      {{ cc.firstName }} {{ cc.lastName }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-chip-list>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+        <!-- / SEARCH -->
 
-    <div class="example-container mat-elevation-z8" style="margin-bottom: 50px">
+        <!-- ADD BUTTON -->
+        <span *ngIf='!showProcessSpinner'>
+          <button [disabled]="!primarysigner" mat-raised-button color="accent" class="text-upper" (click)="addNewSigner()">
+            <span> ADD SIGNER </span>
+          </button>
+        </span>
+        <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
+        <span *ngIf='showProcessSpinner'>Processing...</span>
+        <!-- / ADD BUTTON -->
+      </mat-toolbar>
+      <div>
+        <br>
+      </div>
+      <div *ngIf="contactsDataSource" class="example-container mat-elevation-z8" style="margin-bottom: 50px">
         <mat-table #table [dataSource]="contactsDataSource" matSort>
-  
-          <ng-container *ngIf="!readonly" matColumnDef="select">
-            <mat-header-cell *matHeaderCellDef class="cell-shrink-checkbox">
-              <mat-checkbox (change)="$event ? masterToggle() : null"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()">
-              </mat-checkbox>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row" class="cell-shrink-checkbox">
-              <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null"
-                            [checked]="selection.isSelected(row)">
-              </mat-checkbox>
-            </mat-cell>
+
+          <ng-container matColumnDef="receiverSeqNo">
+            <mat-header-cell *matHeaderCellDef>Signer Sequence</mat-header-cell>
+            <mat-cell *matCellDef="let element"> Signer {{element.signerSequenceNo}}</mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="name">
+          <ng-container matColumnDef="receiverFullName">
             <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
             <mat-cell *matCellDef="let element">
               <!-- <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
                 <div *ngIf="element.photoURL; then image else avatar"></div>                -->
-                <span>{{element.name}}</span>
+              <span>{{element.receiverFullName}}</span>
               <!-- </div> -->
             </mat-cell>
           </ng-container>
-  
-       
-          <ng-container matColumnDef="email">
-            <mat-header-cell *matHeaderCellDef> Email</mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.email}}</mat-cell>
-          </ng-container>
-  
 
-          <ng-container matColumnDef="signerSequence">
-            <mat-header-cell *matHeaderCellDef>Signer Sequence</mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.signerSequence}}</mat-cell>
+
+          <ng-container matColumnDef="receiverEmailId">
+            <mat-header-cell *matHeaderCellDef> Email</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.receiverEmailId}}</mat-cell>
           </ng-container>
-  
+
+
+
+          <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>Signer is Sender</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="cell-shrink-checkbox">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
           <!--More Options Column-->
           <ng-container *ngIf="!readonly" matColumnDef="more">
             <mat-header-cell *matHeaderCellDef class="cell-shrink-more">
             </mat-header-cell>
-            <mat-cell *matCellDef="let element"
-                      class="cell-shrink-more"
-                      (click)="$event.stopPropagation()">
-              <button mat-icon-button
-                      [matMenuTriggerFor]="posXMenu"
-                      class="mat-24"
-                      aria-label="Open x-positioned menu">
+            <mat-cell *matCellDef="let element" class="cell-shrink-more" (click)="$event.stopPropagation()">
+              <button mat-icon-button [matMenuTriggerFor]="posXMenu" class="mat-24" aria-label="Open x-positioned menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu xPosition="before" #posXMenu="matMenu">
-                <button mat-menu-item [disabled]="false" (click)="remove(element)">
+                <button mat-menu-item [disabled]="false" (click)="deleteSigner(element)">
                   <mat-icon>delete</mat-icon>
                   remove
                 </button>
               </mat-menu>
             </mat-cell>
           </ng-container>
-  
+
           <mat-header-row *matHeaderRowDef="contactsDisplayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: contactsDisplayedColumns; matRipple"
-                   (click)="select(row)">
+          <mat-row *matRowDef="let row; columns: contactsDisplayedColumns; matRipple" (click)="select(row)">
           </mat-row>
         </mat-table>
-    </div>
+      </div>
 
-
-  <button mat-raised-button color="accent" class="text-upper" (click)="startAddingFields()">
-      START ADDING FIELDS
-    </button>
-   &nbsp;
-    <button mat-raised-button color="accent" class="text-upper"
-    (click)="closeMe()">
-    CANCEL
-  </button>
+      <div *ngIf="!contactsDataSource" style="margin-bottom: 50px">
+        <label class="heading-label">No signers added, please search using name of all the signers that need to sign this document.</label>
+      </div>
+      <div>
+          <button mat-raised-button color="accent" class="text-upper" (click)="startAddingFields()">
+            START ADDING FIELDS
+          </button>
+          &nbsp;
+          <button mat-raised-button color="accent" class="text-upper" (click)="closeMe()">
+            CANCEL
+          </button>
+        </div>
+    </div>   
   </div>
-</div>
+<mat-spinner *ngIf='isImageDataUrlFetched'>' diameter='10'></mat-spinner>
+<span *ngIf='isImageDataUrlFetched'>Processing...</span>

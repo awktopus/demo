@@ -13,8 +13,10 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 export class UploadDocumentComponent implements OnInit, AfterViewInit {
 
   files: any = [];
+  ezSignDoc: File;
   uploadedFileName: string;
   senderDocumentCompomentRef: SenderdocumentsComponent;
+  showProcessSpinner = false;
   constructor(private dialogRef: MatDialogRef<UploadDocumentComponent> , private ezSignDataService: EzsigndataService) { }
 
   ngOnInit() {
@@ -25,19 +27,23 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
   uploadFile(event) {
     for (let index = 0; index < event.length; index++) {
       const element = event[index];
-      this.files.push(element.name)
+      this.files.push(element);
+      this.ezSignDoc = element;
       this.uploadedFileName = element.name;
     }
   }
   deleteAttachment(index) {
-    this.files.splice(index, 1)
+    this.files.splice(index, 1);
+    this.ezSignDoc = null;
   }
 
   createNewEZSignDocument() {
-    this.ezSignDataService.createNewEZSignDocument().subscribe(resp => {
+    this.showProcessSpinner = true;
+    this.ezSignDataService.createNewEZSignDocument(this.ezSignDoc).subscribe(resp => {
       console.log(resp);
       this.senderDocumentCompomentRef.loadEZSignDocuments();
       this.dialogRef.close();
+      this.showProcessSpinner = false;
     });
   }
 

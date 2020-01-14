@@ -1,3 +1,257 @@
-<p>
-  addfields works!
-</p>
+<table *ngIf="isImageDataUrlFetched" width=90%>
+  <tr>
+    <td>
+      <button mat-raised-button color="accent" matTooltip="Go to EZSign documents view" (click)="goToEZSignDocumentsView()">
+        EZSIGN DOCUMENTS
+      </button>
+    </td>
+    <td>
+      <label class="heading-label">Document Title:</label>
+      <label class="heading-label2">{{title}}</label>
+    </td>
+    <td>
+      <label class="heading-label">Tracking Id:</label>
+      <label class="heading-label2"> {{ezSignTrackingId}}</label>
+    </td>
+    <td>
+      <button mat-raised-button color="accent" matTooltip="Edit Signers" (click)="editSigners()">
+        EDIT SIGNERS
+      </button>
+    </td>
+    <td>
+      <button mat-raised-button color="accent" matTooltip="Preview and Send Invite" (click)="previewAndSendInvite()">
+        SEND INVITE
+      </button>
+    </td>
+  </tr>
+</table>
+
+<div class='row'>
+  <div>
+    <hr>
+  </div>
+  <div class="leftpane" *ngIf="isImageDataUrlFetched">
+    <mat-card class='casecard' (click)="addField('signature')" [style.background]="sigFieldSelected=='signature' ? '#CDCDCD':'#FFFFFF'">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>create</mat-icon>&nbsp;
+          <span class="aligned-with-icon">Signature Field</span>
+        </mat-card-title>
+      </mat-card-header>
+    </mat-card>
+
+    <mat-card class='casecard' (click)="addField('text')" [style.background]="textFieldSelected=='text' ? '#CDCDCD':'#FFFFFF'">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>dvr</mat-icon> &nbsp;
+          <span class="aligned-with-icon">Text Field</span>
+        </mat-card-title>
+      </mat-card-header>
+    </mat-card>
+
+    <mat-card class='casecard' (click)="addField('date')" [style.background]="dateFieldSelected=='date' ? '#CDCDCD':'#FFFFFF'">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>event</mat-icon> &nbsp;
+          <span class="aligned-with-icon">Date Field</span>
+        </mat-card-title>
+      </mat-card-header>
+    </mat-card>
+  </div>
+  <div class="middlepane">
+    <div *ngIf="pageCount > 1">
+      <mat-spinner *ngIf='isPreviousPageLoading' diameter='20'></mat-spinner>
+      <span *ngIf='isPreviousPageLoading'>Processing...</span>
+      <button *ngIf="pageSeqNo > 1 && !isPreviousPageLoading" mat-icon-button color="warn" (click)="showPreviousPage()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      &nbsp;
+      <label class="heading-label">Page {{pageSeqNo}} of {{pageCount}}</label>
+      &nbsp;
+      <mat-spinner *ngIf='isNextPageLoading' diameter='20'></mat-spinner>
+      <span *ngIf='isNextPageLoading'>Processing...</span>
+      <button *ngIf="pageSeqNo < pageCount && !isNextPageLoading" mat-icon-button color="warn" (click)="showNextPage()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <div [ngClass]="{ 'top-b': !edge?.top, 'bottom-b': !edge?.bottom, 'left-b': !edge?.left, 'right-b': !edge?.right }" #myBounds>
+      <mat-spinner *ngIf='!isImageDataUrlFetched' diameter='20'></mat-spinner>
+      <span *ngIf='!isImageDataUrlFetched'>Processing...</span>
+      <img *ngIf="isImageDataUrlFetched" [src]="sanitize(formImageBlobUrl)" style="border: 10px solid lightgray" />
+      <div *ngFor="let sigField of signatureFields">
+        <div class='signatureFieldTag' ngDraggable (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="true" (started)="onSigStart($event,sigField.fieldSeqNo)"
+          (stopped)="onSigStop($event,sigField.fieldSeqNo)" (movingOffset)="onSigMoving($event,sigField.fieldSeqNo)" (endOffset)="onSigMoveEnd($event,sigField.fieldSeqNo)"
+          [preventDefaultEvent]="true" *ngIf="sigField.showSignaturebox
+        && sigField.isSignatureTagExists" [style.bottom.px]="sigField.signaturePosY" [style.left.px]="sigField.signaturePosX"
+          [style.width.px]="sigField.signatureWidth" [style.height.px]="sigField.signatureHeight">
+          <label style="padding-bottom:5px">{{sigField.signatureFieldName}}</label>
+          &nbsp;&nbsp;
+          <!-- <button mat-icon-button color="warn" (click)="confirmSignatureField(sigField.fieldSeqNo)">
+          <mat-icon>check</mat-icon>
+        </button> -->
+          &nbsp;&nbsp;
+          <button mat-icon-button color="warn" (click)="removeSignatureField(sigField.fieldSeqNo)">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngFor="let textField of textFields">
+      <div class='textFieldTag' ngDraggable (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="true" (started)="onTextStart($event, textField.fieldSeqNo)"
+        (stopped)="onTextStop($event, textField.fieldSeqNo)" (movingOffset)="onTextMoving($event, textField.fieldSeqNo)" [preventDefaultEvent]="true"
+        (endOffset)="onTextMoveEnd($event , textField.fieldSeqNo)" *ngIf="textField.showTextbox && textField.isTextTagExists"
+        [style.bottom.px]="textField.textPosY" [style.left.px]="textField.textPosX" [style.width.px]="textField.textWidth"
+        [style.height.px]="textField.textHeight">
+        <label style="padding-bottom:5px">{{textField.textFieldName}}</label>
+        &nbsp;&nbsp;
+        <!-- <button mat-icon-button color="warn" (click)="confirmTextField(textField.fieldSeqNo)">
+          <mat-icon>check</mat-icon>
+        </button> -->
+        &nbsp;&nbsp;
+        <button mat-icon-button color="warn" (click)="removeTextField(textField.fieldSeqNo)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div *ngFor="let dateField of dateFields">
+      <div class='dateFieldTag' ngDraggable (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="true" (started)="onDateStart($event, dateField.fieldSeqNo)"
+        (stopped)="onDateStop($event, dateField.fieldSeqNo)" (movingOffset)="onDateMoving($event, dateField.fieldSeqNo)" [preventDefaultEvent]="true"
+        (endOffset)="onDateMoveEnd($event, dateField.fieldSeqNo)" *ngIf="dateField.showDatebox && dateField.isDateTagExists"
+        [style.bottom.px]="dateField.datePosY" [style.left.px]="dateField.datePosX" [style.width.px]="dateField.dateWidth"
+        [style.height.px]="dateField.dateHeight">
+        <label style="padding-bottom:5px"> {{dateField.dateFieldName}}</label>
+        &nbsp;&nbsp;
+        <!-- <button mat-icon-button color="warn" (click)="confirmDateField(dateField.fieldSeqNo)">
+          <mat-icon>check</mat-icon>
+        </button> -->
+        &nbsp;&nbsp;
+        <button mat-icon-button color="warn" (click)="removeDateField(dateField.fieldSeqNo)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rightpane" *ngIf="sigFieldSelected == 'signature'">
+    <div class="rightpaneheader">SIGNATURE</div>
+    <form [formGroup]="signatureFieldForm">
+      <div fxLayout="column">
+        <mat-form-field class="casefield">
+          <mat-select #focusSignatureField placeholder="Signer" formControlName="signerControl" required>
+            <mat-option *ngFor="let ezSigner of eZSigners" [value]="ezSigner.receiverId">
+              Signer {{ezSigner.receiverSeqNo}} - {{ ezSigner.receiverFirstName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="casefield">
+          <input matInput placeholder="Label Name" formControlName="signatureLabelControl" required>
+        </mat-form-field>
+      </div>
+    </form>
+    <br/>
+    <span *ngIf='!showSigProcess1Spinner'>
+      <button mat-raised-button color="accent" (click)="saveSignatureField()" type="submit" [disabled]="signatureFieldForm.invalid">
+        SAVE
+      </button>
+    </span>
+    <mat-spinner *ngIf='showSigProcess1Spinner' diameter='20'></mat-spinner>
+    <span *ngIf='showSigProcess1Spinner'>'>Processing...</span>
+    &nbsp;
+    <span *ngIf='!showSigProcess2Spinner'>
+      <button mat-raised-button color="warn" matTooltip="Delete signature field" (click)="deleteSignatureField()">
+        DELETE
+      </button>
+    </span>
+    <mat-spinner *ngIf='showSigProcess2Spinner' diameter='20'></mat-spinner>
+    <span *ngIf='showSigProcess2Spinner'>'>Processing...</span>
+  </div>
+  <div class='rightpane' *ngIf="textFieldSelected == 'text'">
+    <div class="rightpaneheader">TEXT</div>
+    <form [formGroup]="textFieldForm">
+      <div fxLayout="column">
+        <mat-form-field class="casefield">
+          <mat-select #focusTextField placeholder="Signer" formControlName="textControl" required>
+            <mat-option *ngFor="let ezSigner of eZSigners" [value]="ezSigner.receiverId">
+              Signer {{ezSigner.receiverSeqNo}} - {{ ezSigner.receiverFirstName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="casefield">
+          <input matInput placeholder="Label Name" formControlName="textLabelControl" required>
+        </mat-form-field>
+      </div>
+    </form>
+    <br/>
+    <span *ngIf='!showTextProcess1Spinner'>
+
+      <button mat-raised-button color="accent" (click)="saveTextField()" type="submit" [disabled]="textFieldForm.invalid">
+        SAVE
+      </button>
+    </span>
+    <mat-spinner *ngIf='showTextProcess1Spinner' diameter='20'></mat-spinner>
+    <span *ngIf='showTextProcess1Spinner'>'>Processing...</span>
+    &nbsp;
+    <span *ngIf='!showTextProcess2Spinner'>
+      <button mat-raised-button color="warn" matTooltip="Delete text field" (click)="deleteTextField()">
+        DELETE
+      </button>
+    </span>
+    <mat-spinner *ngIf='showTextProcess2Spinner' diameter='20'></mat-spinner>
+    <span *ngIf='showTextProcess2Spinner'>'>Processing...</span>
+  </div>
+
+  <div class='rightpane' *ngIf="dateFieldSelected == 'date'">
+    <div class="rightpaneheader">DATE</div>
+    <form [formGroup]="dateFieldForm">
+      <div fxLayout="column">
+        <mat-form-field class="casefield">
+          <input matInput placeholder="Label Name" formControlName="dateLabelControl" required>
+        </mat-form-field>
+      </div>
+    </form>
+    <br/>
+    <span *ngIf='!showDateProcess1Spinner'>
+      <button mat-raised-button color="accent" (click)="saveDateField()" type="submit" [disabled]="dateFieldForm.invalid">
+        SAVE
+      </button>
+    </span>
+    <mat-spinner *ngIf='showDateProcess1Spinner' diameter='20'></mat-spinner>
+    <span *ngIf='showDateProcess1Spinner'>'>Processing...</span>
+    &nbsp;
+    <span *ngIf='!showDateProcess2Spinner'>
+      <button mat-raised-button color="warn" matTooltip="Delete date field" (click)="deleteDateField()">
+        DELETE
+      </button>
+    </span>
+    <mat-spinner *ngIf='showDateProcess2Spinner' diameter='20'></mat-spinner>
+    <span *ngIf='showDateProcess2Spinner'>'>Processing...</span>
+
+  </div>
+
+
+
+  <!--
+<div>
+    <mat-spinner *ngIf='!isImageDataUrlFetched' diameter='40'></mat-spinner>
+    <span *ngIf='!isImageDataUrlFetched'>Processing...</span>
+    <img *ngIf="isImageDataUrlFetched" [src]="sanitize(formImageBlobUrl)" />
+
+   <div class='rectangle' ngDraggable (started)="onPriSigStart($event)" (stopped)="onPriSigStop($event)"
+      (movingOffset)="onPriSigMoving($event)" [preventDefaultEvent]="true" (endOffset)="onPriSigMoveEnd($event)"
+      *ngIf="showbox && isPriSignatureTagExists"
+      [style.bottom.px]="tpSignaturePosY" [style.left.px]="tpSignaturePosX" [style.width.px]="tpSignatureWidth"
+      [style.height.px]="tpSignatureHeight">{{priSigFieldName}}
+    </div>
+  </div> -->
+
+  <!--<div *ngIf="showbox && isPriSignatureTagExists" ngDraggable class="rectangle" [ngStyle]="style" mwlResizable [validateResize]="validate"
+      [enableGhostResize]="true" [resizeSnapGrid]="{ left: 1, right: 1 }" (resizeEnd)="onResizeEnd($event)">
+      Text Area
+      <div class="resize-handle-top" mwlResizeHandle [resizeEdges]="{ top: true }"></div>
+      <div class="resize-handle-left" mwlResizeHandle [resizeEdges]="{ left: true }"></div>
+      <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+      <div class="resize-handle-bottom" mwlResizeHandle [resizeEdges]="{ bottom: true }"></div>
+    </div> -->

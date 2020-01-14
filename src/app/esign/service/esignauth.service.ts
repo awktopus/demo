@@ -101,4 +101,13 @@ export class EsignAuthService {
     // console.log(header);
     return { 'headers': header };
   }
+
+  getEZSignOptions() {
+    const token: any = this.getESignToken();
+    let header = new HttpHeaders();
+    header = header.append('Authorization', 'Bearer ' + token);
+    header = header.append('ElToken', this.elstore.getAuth().accessToken);
+    return { 'headers': header };
+  }
+
 }

@@ -5,7 +5,7 @@ import { ModuleWithProviders } from '@angular/core';
 import { SenderdocumentsComponent } from './controls/senderdocuments/senderdocuments.component';
 import { ReceiverdocumentsComponent } from './controls/receiverdocuments/receiverdocuments.component';
 import { ESignGuard } from './../esign/service/esignauth';
-import { AddsignersComponent } from './controls/addsigners/addsigners.component';
+import { AddfieldsComponent } from './controls/addfields/addfields.component';
 export const EZSignRoutes: Routes = [
     {
         path: '',
@@ -27,9 +27,14 @@ export const EZSignRoutes: Routes = [
         component: ReceiverdocumentsComponent
     },
     {
-        path: 'addsigners',
+        path: 'addfields',
         canActivate: [AuthGuard, ESignGuard],
-        component: AddsignersComponent
+        component: AddfieldsComponent
+    },
+    {
+        path: 'addfields/:trackingId',
+        canActivate: [AuthGuard, ESignGuard],
+        component: AddfieldsComponent
     },
 ];
 

@@ -15,6 +15,8 @@ import { NewCaseRendererComponent } from './NewCaseRenderer.component';
 import { GridColConfigPopupComponent } from './gridcolpopup/grid-col-config-popup.component';
 import { AuditpopupComponent } from './auditpopup/auditpopup.component';
 import { CasetemplatesComponent } from './casetemplates/casetemplates.component';
+import { FilingStatusRendererComponent } from './FilingStatusRenderer.component';
+import { FilingstatuspopupComponent } from './filingstatuspopup/filingstatuspopup.component';
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
@@ -98,7 +100,8 @@ export class HistoryComponent implements OnInit, AfterViewInit {
       reminderRenderer: ReminderRendererComponent,
       notesRenderer: NotesRendererComponent,
       auditRender: AuditRendererComponent,
-      newCaseRenderer: NewCaseRendererComponent
+      newCaseRenderer: NewCaseRendererComponent,
+      filingStatusRenderer: FilingStatusRendererComponent
     };
     this.route.paramMap.subscribe(para => {
       this.filtertype = para.get('type');
@@ -292,6 +295,10 @@ export class HistoryComponent implements OnInit, AfterViewInit {
       { headerName: 'Notes', field: 'notes', cellRenderer: 'notesRenderer' },
       {
         headerName: 'Activity Log', field: 'caseId', cellRenderer: 'auditRender'
+      },
+      {
+        headerName: 'Filing Status', field: 'filingStatus', cellRenderer: 'filingStatusRenderer',
+        minwidth: 100
       }
     ];
     this.context = { componentParent: this, allcasefit: false, mycasefit: false, reviewcasefit: false };
@@ -421,4 +428,23 @@ export class HistoryComponent implements OnInit, AfterViewInit {
     const url = '/main/esign/case/' + caseId + '-' + 'copycase';
     this.router.navigateByUrl(url);
   }
+
+  changeCaseFilingStatus(caseId: string) {
+    // console.log(caseId);
+     const dialogRef = this.dialog.open(FilingstatuspopupComponent, {
+       width: '480px',
+     });
+     dialogRef.componentInstance.historyref = this;
+     dialogRef.componentInstance.setData(caseId);
+   }
+
+   updateGridCaseFilingStatus(caseId: string, status: string) {
+    // this.cases.forEach(cc => {
+    //   if (cc.caseId === caseId) {
+    //     cc.status = status;
+    //   }
+    // });
+    this.loadSearchData('allcases', '');
+  }
+
 }

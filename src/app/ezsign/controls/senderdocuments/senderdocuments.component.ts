@@ -10,8 +10,11 @@ import { UploadDocumentComponent } from '../upload-document/upload-document.comp
 import { EZSignDocResource } from '../../../esign/beans/ESignCase'
 import { ViewChild, AfterViewInit } from '@angular/core';
 import { EzsigndataService } from '../../service/ezsigndata.service';
-import { EzsignButtonRendererComponent } from '../Ezsignbutton-renderer.component';
+import { EzsignAddSignersButtonRendererComponent } from '../Ezsignaddsignersbutton-renderer.component';
 import { EzsignConfirmationDialogComponent } from '../shared/ezsign-confirmation-dialog/ezsign-confirmation-dialog.component';
+import { EzsignDeleteButtonRendererComponent } from '../Ezsigndeletebutton-renderer.component';
+import { EzsignHistoryButtonRendererComponent } from '../Ezsignhistorybutton-renderer.component';
+import { DocumenthistoryComponent } from './documenthistory/documenthistory.component';
 
 @Component({
   selector: 'app-senderdocuments',
@@ -20,7 +23,6 @@ import { EzsignConfirmationDialogComponent } from '../shared/ezsign-confirmation
 })
 export class SenderdocumentsComponent implements OnInit {
   isLinear = false;
-
   ezSignDocsgridData: any;
   gridColumnDefs: any;
   ezsignctrl: FormControl = new FormControl();
@@ -36,16 +38,20 @@ export class SenderdocumentsComponent implements OnInit {
   autoHeight: any;
   selectedIndex = 0;
   files: any = [];
+  ezSignDoc: File | FileList;
   uploadedFileName: string;
   private rowHeight;
+  private rowClass;
   constructor(public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
     private ezSignDataService: EzsigndataService) {
-      this.frameworkComponents = {
-        buttonRenderer: EzsignButtonRendererComponent,
-      }
-     }
+    this.frameworkComponents = {
+      addSignersButtonRenderer: EzsignAddSignersButtonRendererComponent,
+      historyButtonRenderer: EzsignHistoryButtonRendererComponent,
+      deleteButtonRender: EzsignDeleteButtonRendererComponent
+    }
+  }
 
   ngOnInit() {
     this.gridColumnDefs = this.configColDef();
@@ -93,15 +99,15 @@ export class SenderdocumentsComponent implements OnInit {
     const res = [
       {
         headerName: 'EZSign Tracking Id', field: 'ezSignTrackingId',
-        cellStyle: {textAlign: 'left'}
+        cellStyle: { textAlign: 'left' }
       },
-      { headerName: 'Document Name', field: 'documentName', cellStyle: {textAlign: 'left'} },
+      { headerName: 'Document Name', field: 'documentName', cellStyle: { textAlign: 'left' } },
       { headerName: 'Status', field: 'status', cellStyle: { color: 'blue', textAlign: 'left' } },
-      { headerName: 'Last Modified', field: 'lastModifiedDateTime', cellStyle: {textAlign: 'left'} },
+      { headerName: 'Last Modified', field: 'lastModifiedDateTime', cellStyle: { textAlign: 'left' } },
       // { headerName: 'Receiver Name', field: 'receiverName', cellStyle: {textAlign: 'left'} },
       {
         width: 120,
-        cellRenderer: 'buttonRenderer',
+        cellRenderer: 'addSignersButtonRenderer',
         cellRendererParams: {
           onClick: this.addSigners.bind(this),
           label: 'ADD SIGNERS'
@@ -110,16 +116,26 @@ export class SenderdocumentsComponent implements OnInit {
       },
       {
         width: 100,
-        cellRenderer: 'buttonRenderer',
+        cellRenderer: 'deleteButtonRender',
         cellRendererParams: {
           onClick: this.openConfirmationDialogforCompanyDeletion.bind(this),
           label: 'DELETE'
         },
         cellStyle: { 'justify-content': "center" }
+      },
+      {
+        width: 120,
+        cellRenderer: 'historyButtonRenderer',
+        cellRendererParams: {
+          onClick: this.openHistoryDialog.bind(this),
+          label: 'HISTORY'
+        },
+        cellStyle: { 'justify-content': "center" }
       }
     ];
     this.context = { componentParent: this, ezsignfit: false };
-    this.rowHeight = 50;
+    this.rowHeight = 40;
+    this.rowClass = 'ezsign-history-grid';
     return res;
   }
 
@@ -139,7 +155,7 @@ export class SenderdocumentsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Yes clicked');
-         this.deleteEZSignDocument(deletedRow);
+        this.deleteEZSignDocument(deletedRow);
       }
     });
   }
@@ -190,6 +206,7 @@ export class SenderdocumentsComponent implements OnInit {
     params.api.sizeColumnsToFit();
     if (gridname === 'ezsign') {
       this.ezsignapi.api = params.api;
+      // this.ezsignapi.rowClassRules = "ezsign-history-grid";
       this.ezsignapi.columnApi = params.columnApi;
       this.ezsignapi.cols = [];
       this.ezsignapi.columnApi.getAllColumns().forEach(cc => {
@@ -198,12 +215,14 @@ export class SenderdocumentsComponent implements OnInit {
     }
   }
 
-  addSigners() {
+  addSigners(ezSignDocRow: any) {
     console.log('addSigners');
+    console.log('tracking id:' + ezSignDocRow.rowData.ezSignTrackingId);
     const dialogRef = this.dialog.open(AddsignersComponent, {
-      width: '1260px'
+      width: '1260px', height: '500px'
     });
     dialogRef.componentInstance.senderDocumentsref = this;
+    dialogRef.componentInstance.setData(ezSignDocRow.rowData.ezSignTrackingId, 'senderdocuments');
   }
 
   launchNewEZSignDocument() {
@@ -215,33 +234,38 @@ export class SenderdocumentsComponent implements OnInit {
   }
 
   uploadFile(event) {
+    console.log('uploadFile');
+    console.log(event);
     for (let index = 0; index < event.length; index++) {
       const element = event[index];
-      this.files.push(element.name)
+      this.files.push(element)
+      this.ezSignDoc = element;
       this.uploadedFileName = element.name;
     }
   }
   deleteAttachment(index) {
-    this.files.splice(index, 1)
+    this.files.splice(index, 1);
+    this.ezSignDoc = null;
   }
 
   createNewEZSignDocument() {
-
-    //   let newDoc: EZSingDocHistory = {
-    //     ezSignTrackingId: 'EZS11151904',
-    //     documentName: this.uploadedFileName,
-    //     status: 'uploaded',
-    //     receiverName: '',
-    //     lastModified: "1 minute back",
-    //  };
-    //  console.log('newDoc');
-    //  console.log(newDoc);
-    // this.ezSignDataService.newEzSignDocHistory(newDoc);
-
-    this.ezSignDataService.createNewEZSignDocument().subscribe(resp => {
+    this.ezSignDataService.createNewEZSignDocument(this.ezSignDoc).subscribe(resp => {
       console.log(resp);
       this.loadEZSignDocuments();
     });
 
   }
+
+  openHistoryDialog(ezSignDocRow: any): void {
+    const dialogRef = this.dialog.open(DocumenthistoryComponent, {
+      width: '1200px',
+    });
+    dialogRef.componentInstance.setData(ezSignDocRow.rowData.ezSignTrackingId,
+      ezSignDocRow.rowData.documentName);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    });
+  }
+
 }

@@ -1,6 +1,6 @@
 
 export class ESignCase {
-  caseId?: string ;
+  caseId?: string;
   primarySigner?: ESignClient;
   secondarySigner?: ESignClient;
   recipientClients?: ESignClient[];
@@ -68,12 +68,12 @@ export class ESignDoc {
   type: string;
   pages: ClassifyPage[];
   getCPages() {
-    if ( this.pages ) {
+    if (this.pages) {
       return this.pages.filter(p => p.formCode !== '');
     }
   }
   getUPages() {
-    if ( this.pages ) {
+    if (this.pages) {
       return this.pages.filter(p => p.formCode === '');
     }
   }
@@ -142,7 +142,7 @@ export class IdentityQuestion {
   qtnId: string;
   question: string;
 }
-export class   EmailSettings {
+export class EmailSettings {
   orgUnitId: string;
   outAccountType: string;
   outMailServer: string;
@@ -155,7 +155,7 @@ export class   EmailSettings {
   enableSSL: string;
   settingsType: string;
 }
-export class   OrgSettings {
+export class OrgSettings {
   orgUnitId: string;
   websiteUrl: string;
 }
@@ -238,18 +238,18 @@ export class Receipts {
   accountNumber: number;
 }
 export class Company {
-companyId: string;
-companyTypeId: number;
-companyType: string;
-companyName: string;
-companyOwner: string;
-closingMonthName: string;
-lastUpdate: string;
-sharedUsers: string;
-sharedUsersList: CompanyStaff[];
-closeDate: number;
-includeAccountNumber: string;
-hasSettingsAccess: string;
+  companyId: string;
+  companyTypeId: number;
+  companyType: string;
+  companyName: string;
+  companyOwner: string;
+  closingMonthName: string;
+  lastUpdate: string;
+  sharedUsers: string;
+  sharedUsersList: CompanyStaff[];
+  closeDate: number;
+  includeAccountNumber: string;
+  hasSettingsAccess: string;
 }
 export class FormMirrorImageData {
   docId: string;
@@ -260,12 +260,12 @@ export class FormMirrorImageData {
   esignFields: EsignFormField[];
 }
 export class EsignFormField {
-name: string;
-type: string;
-posX: number;
-posY: number;
-length: number;
-width: number;
+  name: string;
+  type: string;
+  posX: number;
+  posY: number;
+  length: number;
+  width: number;
 }
 export class CaseTemplate {
   taxReturnIdNumber: string;
@@ -276,10 +276,15 @@ export class CaseTemplate {
 }
 
 export class Signer {
-  id?: string;
-  name: string;
-  email: string;
-  signerSequence: string;
+  receiverId: string;
+  receiverSeqNo: number;
+  receiverFullName: string
+  receiverFirstName: string;
+  receiverLastName: string;
+  receiverEmailId: string;
+  isSenderSigner: string;
+  isSender: string;
+  signerSequenceNo: number;
 }
 
 export class MetaData {
@@ -310,7 +315,9 @@ export class EZSignDocPage {
   pageSeqNo: number;
   status: string;
   contentMergeFlag: string;
-  ezSignDocPageFields: EZSignDocPageField[];
+  signatureFields?: SignatureField[];
+  textFields?: TextField[];
+  dateFields?: DateField[];
 }
 
 export class EZSignDocPageField {
@@ -324,4 +331,70 @@ export class EZSignDocPageField {
   receiverId: string;
   status: string;
   createdDateTime: string;
+}
+
+export class EZSignPageImageData {
+  docId: string;
+  pageSeqNo: number;
+  dataUrl: string;
+  esignFields: EsignFormField[];
+  pageCount: number;
+  title: string;
+  signatureFields?: SignatureField[];
+  textFields?: TextField[];
+  dateFields?: DateField[];
+}
+
+export class SignatureField {
+  fieldSeqNo: number;
+  showSignaturebox: boolean;
+  isSignatureTagExists: boolean;
+  signaturePosX: number;
+  signaturePosY: number;
+  signatureWidth: number;
+  signatureHeight: number;
+  signatureFieldName: string;
+  receiverId: string;
+  status: string;
+  createdDateTime: string;
+  labelName: string;
+}
+
+export class TextField {
+  fieldSeqNo: number;
+  showTextbox: boolean;
+  isTextTagExists: boolean;
+  textPosX: number;
+  textPosY: number;
+  textWidth: number;
+  textHeight: number;
+  textFieldName: string;
+  receiverId: string;
+  status: string;
+  createdDateTime: string;
+  labelName: string;
+}
+
+export class DateField {
+  fieldSeqNo: number;
+  showDatebox: boolean;
+  isDateTagExists: boolean;
+  datePosX: number;
+  datePosY: number;
+  dateWidth: number;
+  dateHeight: number;
+  dateFieldName: string;
+  receiverId: string;
+  status: string;
+  createdDateTime: string;
+  labelName: string;
+}
+
+export class EzSignHistory {
+  seqNo: string;
+  activityDate: string;
+  typeofActivity: string;
+  updatedBy: string;
+  auditInfo: string;
+  ezsignDate: string;
 }

@@ -56,6 +56,8 @@ import { EditSigboxComponent } from './controls/casemain/editsigbox/editsigbox.c
 import { AngularDraggableModule } from 'angular2-draggable';
 import { CasetemplatesComponent } from './controls/history/casetemplates/casetemplates.component';
 import { ConfirmationDialogComponent } from './controls/shared/confirmation-dialog/confirmation-dialog.component';
+import { FilingStatusRendererComponent } from './controls/history/FilingStatusRenderer.component';
+import { FilingstatuspopupComponent } from './controls/history/filingstatuspopup/filingstatuspopup.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -78,7 +80,8 @@ import { ConfirmationDialogComponent } from './controls/shared/confirmation-dial
     MatProgressSpinnerModule,
     AngularDraggableModule,
     AgGridModule.withComponents([AuditRendererComponent, RouterLinkRendererComponent,
-      ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent]),
+      ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent,
+    FilingStatusRendererComponent]),
   ],
   declarations: [
     GridColConfigPopupComponent,
@@ -121,14 +124,17 @@ import { ConfirmationDialogComponent } from './controls/shared/confirmation-dial
     SignerselectionComponent,
     EditSigboxComponent,
     NewCaseRendererComponent,
-    CasetemplatesComponent
+    CasetemplatesComponent,
+    FilingStatusRendererComponent,
+    FilingstatuspopupComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
      RejectreasonpopupComponent, EmailpopupComponent, UploadscanpopupComponent,
      ClientreminderComponent, ClientAnswerComponent, IdentityQuestionsComponent,
      SetClientAnswerComponent, NewidentityQuestionComponent, HistoryComponent,
      SignerselectionComponent,
-    GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent, CasetemplatesComponent],
+    GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent,
+    CasetemplatesComponent, FilingstatuspopupComponent],
   providers: [
     ESignGuard,
     // AuthGuard,

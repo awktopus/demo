@@ -1,0 +1,81 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <div *ngIf="1 > 0; then none else none2"></div>
+    <ng-template #none>
+      Send EZSign Invite
+    </ng-template>
+    <span class="fill-remaining"></span>
+  </mat-toolbar>
+  <table width=100%>
+    <tr>
+      <td>
+        <label class="heading-label">Document Title: </label>
+        <label class="heading-label2">{{title}}</label>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label class="heading-label">Recipients:</label>
+        <div *ngFor="let signer of eZSigners">
+          <mat-checkbox class="casefield" disabled='true' checked='true' [(ngModel)]='signer.receiverId'>
+            <label class="heading-label2">
+              {{signer.receiverFirstName}} {{signer.receiverLastName}}
+            </label>
+          </mat-checkbox>
+        </div>
+      </td>
+      <!-- <td width=40%>
+             <span>
+                <b>Document Title: </b>{{title}}
+                <br>
+               <b>Tracking Id: </b>{{ezSignTrackingId}}
+               <br> 
+             </span>
+           </td>   -->
+    </tr>
+    <tr>
+      <td>
+        <mat-form-field class='inputfield'>
+          <input matInput placeholder='Subject' [(ngModel)]="subject">
+        </mat-form-field>
+      </td>
+    </tr>
+  </table>
+  <div class='coverlettercontainer'>
+    <div *ngIf='viewControl.view'>
+      <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" [(ngModel)]="body" height='200px'></app-ngx-editor>
+      <br/>
+    </div>
+    <ng-container *ngIf='viewControl.edit'>
+      <label *ngIf="errorMessage">
+        <font color='red'>{{errorMessage}}</font>
+      </label>
+      <mat-form-field class='inputfield' *ngFor="let inp of myInputs">
+        <input matInput [placeholder]='inp.name' disabled [(ngModel)]="inp.value">
+      </mat-form-field>
+      <span></span>
+    </ng-container>
+    <div class="controls" *ngIf='viewControl.edit'>
+    </div>
+
+    <table width=100%>
+      <tr>
+        <td width=25%></td>
+        <td width=75%>
+          <span>
+            &nbsp;&nbsp;
+            <button mat-raised-button color="accent" class="text-upper" (click)='closeMe()'>Cancel</button>
+            &nbsp; &nbsp;
+            <button mat-raised-button color="accent" class="text-upper" (click)='editDocument()'>Edit Document</button>
+            <!-- &nbsp; &nbsp; <button mat-raised-button color="accent" class="text-upper" (click)='preview()'>Preview </button> -->
+            &nbsp; &nbsp;
+            <span *ngIf='!showProcessSpinner'>
+              <button mat-raised-button color="accent" class="text-upper" (click)='sendInvite()'>Send Invite</button>
+            </span>
+            <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
+            <span *ngIf='showProcessSpinner'>Processing...</span>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>

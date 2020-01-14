@@ -5,9 +5,9 @@ import { ESignCase, ESignDoc, ClassifyPage, ESignCPA, ClientReminder, ESignClien
 import { LocalStorageService } from '../../core/localStorage/local-storage.service';
 import { environment } from '../../../environments/environment';
 import { EsignAuthService } from './esignauth.service';
-
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 @Injectable()
-export class EsignserviceService {
+export class EsignserviceService  {
   // public baseurl = environment.apiEsignLink;
   // this is pass along the case information between components
   private _case: BehaviorSubject<ESignCase> = new BehaviorSubject((new ESignCase()));
@@ -275,6 +275,11 @@ export class EsignserviceService {
     return this.http.get(url, opps);
   }
 
+  changeCaseStatus(caseID: string, status: string) {
+    return this.http.put(this.auth.baseurl + '/Cases/' + caseID + '/status',
+      { 'status': status }, this.auth.getESignOptions());
+  }
+
   updateCaseStatus(caseID: string, status: string) {
     this.http.put(this.auth.baseurl + '/Cases/' + caseID + '/status',
       { 'status': status }, this.auth.getESignOptions()).subscribe(resp => {
@@ -426,6 +431,7 @@ export class EsignserviceService {
   }
 
   uploadscanFile(caseID: string, dtype: string, fileToUpload: File | FileList) {
+    console.log('uploadscanFile');
     let ff: File;
     if (fileToUpload instanceof (FileList)) {
       ff = fileToUpload.item(0);
@@ -439,6 +445,9 @@ export class EsignserviceService {
     formData.append('ff', ff, ff.name);
     formData.append('overrideflag', 'N');
     formData.append('cpaid', this.auth.getUserID());
+    console.log('ff');
+    console.log(ff);
+    console.log(formData);
     const url = this.auth.baseurl + '/Contents/upload/autoclassify';
     return this.http.post(url, formData, this.auth.getESignOptionswithoutElToken());
   }
@@ -857,6 +866,13 @@ export class EsignserviceService {
       link.download = caseId + '_Tax paper forms to be signed.pdf';
       link.click();
     });
+  }
+
+  getCompanyStaffBySearchToken(searchToken: string) {
+    console.log('calling getCompanyStaffBySearchToken server api');
+    const url: string = this.auth.baseurl + '/iet/Lookups/OrgUnitId/' + this.auth.getOrgUnitID()
+    + '/staff/' + this.auth.getUserID() + '/searchtoken/' + searchToken;
+    return this.http.get(url, this.auth.getESignOptions());
   }
 }
 
