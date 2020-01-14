@@ -30,6 +30,7 @@ import { InvitesignersComponent } from './controls/invitesigners/invitesigners.c
 import { EzsignAddSignersButtonRendererComponent } from './controls/Ezsignaddsignersbutton-renderer.component';
 import { EzsignDeleteButtonRendererComponent } from './controls/Ezsigndeletebutton-renderer.component';
 import { DocumenthistoryComponent } from './controls/senderdocuments/documenthistory/documenthistory.component';
+import { RouterLinkRendererComponent } from '../esign/controls/history/RouterLinkRenderer.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -70,7 +71,7 @@ import { DocumenthistoryComponent } from './controls/senderdocuments/documenthis
     EzsignHistoryButtonRendererComponent,
     AddfieldsComponent,
     InvitesignersComponent,
-    DocumenthistoryComponent,
+    DocumenthistoryComponent
     ],
   entryComponents: [AddsignersComponent, UploadDocumentComponent,
     EzsignConfirmationDialogComponent, InvitesignersComponent, DocumenthistoryComponent],

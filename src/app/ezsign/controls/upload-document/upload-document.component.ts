@@ -17,6 +17,7 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
   uploadedFileName: string;
   senderDocumentCompomentRef: SenderdocumentsComponent;
   showProcessSpinner = false;
+  isLinear: any;
   constructor(private dialogRef: MatDialogRef<UploadDocumentComponent> , private ezSignDataService: EzsigndataService) { }
 
   ngOnInit() {

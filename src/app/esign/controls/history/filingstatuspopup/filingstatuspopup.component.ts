@@ -13,7 +13,7 @@ export class FilingstatuspopupComponent implements OnInit {
   mycaseId: string;
   status: string;
   historyref: HistoryComponent;
-
+  showActionSpinner =  false;
   filingStatusForm: FormGroup = new FormGroup({
     statusFormControl: new FormControl('', Validators.required)
   });
@@ -30,6 +30,7 @@ export class FilingstatuspopupComponent implements OnInit {
   }
 
   updateCaseFilingStatus() {
+    this.showActionSpinner = true;
     console.log('save filing status');
     this.service.changeCaseStatus(this.mycaseId,
       this.filingStatusForm.controls['statusFormControl'].value).subscribe(resp => {
@@ -38,11 +39,14 @@ export class FilingstatuspopupComponent implements OnInit {
             this.historyref.updateGridCaseFilingStatus(this.mycaseId,
               this.filingStatusForm.controls['statusFormControl'].value);
               this.dialogRef.close();
+              this.showActionSpinner = false;
           } else {
             this.dialogRef.close();
+            this.showActionSpinner = false;
           }
         } else {
           this.dialogRef.close();
+          this.showActionSpinner = false;
         }
       });
   }
