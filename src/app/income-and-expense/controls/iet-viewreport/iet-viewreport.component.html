@@ -1,15 +1,64 @@
-<table class="trackertable">
+<table>
   <tr>
-    <td colspan="6" align="center">
-      <h6> Fiscal Year: {{ fiscalYear }} </h6>
+    <th>
+      <label class="heading-label">Income & Expense Report</label>
+    </th>
+  </tr>
+</table>
+<div>
+  <mat-spinner *ngIf='!isIETDataFetched' diameter='20'></mat-spinner>
+  <span *ngIf='!isIETDataFetched'>Processing...</span>
+</div>
+<table class="trackertable4" *ngIf='isIETDataFetched'>
+  <tr align="left">
+    <td colspan="12">
+      <button mat-stroked-button (click)="navigateIETracker()">
+        Back
+        <mat-icon>
+          reply</mat-icon>
+      </button>
     </td>
-    <td colspan="6" align="center">
-      <h6> Company Name: {{ companyName }} </h6>
+  </tr>
+</table>
+
+
+<table class="trackertable" *ngIf='isIETDataFetched'>
+  <tr>
+    <td align="left">
+      <h6> {{ companyName }} </h6>
     </td>
-    <td colspan="6" align="center">
-      <h6>Grand Total ($): {{ yearlySummaryAmount }} </h6>
+    <td align="left">
+      <mat-form-field class="casefield" appearance="outline">
+        <mat-label>Select Fiscal Year</mat-label>
+        <mat-select [(ngModel)]="fiscalYear" 
+        (selectionChange)="getCompanyYearlyReceipts()">
+          <mat-option *ngFor="let fiscalYr of fiscalYears" [value]="fiscalYr">
+             {{ [fiscalClosingMonth] }}/{{ fiscalYr }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </td>
-    <td colspan="6" align="center">
+    <td align="left">
+      <h6>Grand Total: {{ yearlySummaryAmount }} </h6>
+    </td>
+
+    <td align="left">
+      <mat-form-field class="appfield2" appearance="outline">
+        <mat-label>Download as</mat-label>
+        <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
+          <mat-option value="PDF">
+            PDF
+          </mat-option>
+          <mat-option value="CSV">
+            CSV
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+       <button mat-icon-button  matTooltip="Download" (click)="downloadReport()">
+          <mat-icon style="font-size: 40px;">get_app</mat-icon>
+        </button>
+     </td>
+    <!-- <td colspan="6" align="left">
       <span *ngIf='!showDownloadSpinner'>
         <button mat-icon-button matTooltip="Yearly Receipts PDF Export ">
           <mat-icon class="iconcss" (click)="downloadYearlyReceipts()">cloud_download</mat-icon>
@@ -18,15 +67,17 @@
       <mat-spinner *ngIf='showDownloadSpinner' diameter='40'></mat-spinner>
       <span *ngIf='showDownloadSpinner'>Processing...</span>
    </td>
-    <td colspan="6" align="center">
+    <td colspan="6" align="left">
       <button mat-icon-button matTooltip="Yearly Receipts CSV Export ">
         <mat-icon class="iconcss" (click)="downloadYearlyReceiptsCSV()">archive
         </mat-icon>
       </button>
-    </td>
+    </td> -->
+
   </tr>
 </table>
-<table>
+
+<!-- <table>
   <tr align="center">
     <td>
       <mat-form-field class="casefield">
@@ -48,8 +99,9 @@
       </button>
     </td>
   </tr>
-</table>
-<table>
+</table> -->
+
+<!-- <table>
   <tr>
     <td>
       <div class="loading-screen-wrapper" *ngIf="gridActionInprogress">
@@ -59,10 +111,24 @@
     </td>
   </tr>
   <tr>
-    <ag-grid-angular #agGridIncomeReceipts style="width: 1150px; height: 500px; font-size:12pt; " class="ag-theme-balham" [rowData]="allReceiptsgridData"
-      [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
-      [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="50" (gridReady)="onGridReady($event)"
-      [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef" [defaultColDef]="defaultColDef" [domLayout]="autoHeight"></ag-grid-angular>
+    <ag-grid-angular #agGridIncomeReceipts style="width: 98%; height: 500px; font-size:11pt; " 
+    class="ag-theme-balham" [rowData]="allReceiptsgridData"
+      [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" 
+      [columnDefs]="gridColumnDefs" [enableColResize]="true"
+      [frameworkComponents]="frameworkComponents" [context]="context" 
+      [pagination]="true" [paginationPageSize]="50" (gridReady)="onGridReady($event)"
+      [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef" 
+      [defaultColDef]="defaultColDef" [domLayout]="autoHeight"></ag-grid-angular>
   </tr>
 
-</table>
+</table> -->
+<div style="margin-left: 1px;margin-right: 1px">
+    <ag-grid-angular #agGridIncomeReceipts style="width: 75%; height: 500px; font-size:11pt; " 
+    class="ag-theme-balham" [rowData]="allReceiptsgridData"
+      [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" 
+      [columnDefs]="gridColumnDefs" [enableColResize]="true"
+      [frameworkComponents]="frameworkComponents" [context]="context" 
+      [pagination]="true" [paginationPageSize]="50" (gridReady)="onGridReady($event)"
+      [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef"
+      [defaultColDef]="defaultColDef" [domLayout]="autoHeight"></ag-grid-angular>
+</div>

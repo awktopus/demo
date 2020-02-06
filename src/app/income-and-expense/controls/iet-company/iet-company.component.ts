@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { IncomeExpenseSettingsComponent } from '../settings/iet-settings.component';
 import { CompanyType, ESignCPA, CompanyStaff, Company } from './../../../esign/beans/ESignCase';
 import { EsignserviceService } from './../../../esign/service/esignservice.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { EsignuiserviceService } from '../../../esign/service/esignuiservice.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatOptionSelectionChange } from '@angular/material';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-iet-company',
   templateUrl: './iet-company.component.html',
@@ -19,23 +19,34 @@ export class IetCompanyComponent implements OnInit {
   scpas: CompanyStaff[];
   cpas: CompanyStaff[];
   sharedUsersList: CompanyStaff[];
-  closeDate: any;
+  closeDate: number;
   searchCPA = '';
   companyName: any;
   companyType: any;
   companyTypeId: number;
   operation: string; // create new companby or edit existing company
   includeAccountNumber: any;
-  cpactrl: FormControl = new FormControl();
+ // cpactrl: FormControl = new FormControl();
   companyId: string;
   removable = true;
   showNewCompanyspinner = false;
   showEditCompanyspinner = false;
-  // selectable = true;
+
+  companyForm: FormGroup = new FormGroup({
+    companyNameFormControl: new FormControl('', Validators.required),
+    companyTypeFormControl: new FormControl('', Validators.required),
+    closingDateFormControl: new FormControl('', Validators.required),
+    sharedUserFormControl: new FormControl(''),
+    includeAccountNumberFormControl: new FormControl(''),
+  });
+  @ViewChild('focusField') focusField: ElementRef;
+
   constructor(private service: EsignserviceService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router,
     private uiservice: EsignuiserviceService, public dialogRef: MatDialogRef<IetCompanyComponent>
-  ) { this.scpas = []; }
+  ) { this.scpas = [];
+    dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
     console.log('company details');
@@ -51,7 +62,6 @@ export class IetCompanyComponent implements OnInit {
       console.log('company types');
       console.log(this.companyTypes);
       this.companyType = this.companyTypeId;
-    });
 
     this.service.getCompanyStaff().subscribe(results => {
       this.cpas = <CompanyStaff[]>results;
@@ -60,7 +70,8 @@ export class IetCompanyComponent implements OnInit {
     });
 
     if (this.operation === 'newcompany') {
-      this.title = 'Setup New Company';
+      this.title = 'Add Company';
+      this.focusField.nativeElement.focus();
       this.closeDate = 12;
     } else {
       console.log('edit company');
@@ -70,7 +81,17 @@ export class IetCompanyComponent implements OnInit {
       } else {
         this.scpas = [];
       }
+      this.companyForm.controls['companyNameFormControl'].setValue(this.companyName);
+      this.companyForm.controls['companyTypeFormControl'].setValue(this.companyType);
+      this.companyForm.controls['closingDateFormControl'].setValue(this.closeDate);
+      this.companyForm.controls['includeAccountNumberFormControl'].setValue(this.includeAccountNumber);
+      this.focusField.nativeElement.focus();
     }
+  });
+    // this.companyForm.controls['sharedUserFormControl'].valueChanges.subscribe(val => {
+    //   console.log('sharedUserFormControl search called');
+
+    // });
   }
 
   setMode(operation: string) {
@@ -91,9 +112,15 @@ export class IetCompanyComponent implements OnInit {
     }
     this.companyId = clientCompany.companyId;
     this.sharedUsersList = clientCompany.sharedUsersList;
-  }
+    }
 
   addcpa(event: MatOptionSelectionChange): void {
+    console.log('add shared users');
+    console.log(event);
+    console.log('event source value');
+    console.log(event.source.value);
+    console.log(this.cpas);
+    console.log(this.scpas);
     const value = event.source.value;
     if ((value && event.isUserInput)) {
       let c: CompanyStaff = null;
@@ -156,6 +183,7 @@ export class IetCompanyComponent implements OnInit {
     console.log('companyType:' + this.companyType);
     console.log('closingDate:' + this.closeDate)
     console.log('includeAccountNumber:' + this.includeAccountNumber);
+    console.log('companyId:' + this.companyId);
     console.log(this.scpas);
     //   let localCpas: CompanyStaff[];
     //   if (this.scpas) {
@@ -170,6 +198,7 @@ export class IetCompanyComponent implements OnInit {
       acctNumber = 'N';
     }
     const updateCompanyjson = {
+      companyId: this.companyId,
       companyName: this.companyName,
       companyTypeId: this.companyType,
       closingMonth: this.closeDate,

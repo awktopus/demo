@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IncomeExpenseSettingsComponent } from '../settings/iet-settings.component';
 import { EsignserviceService } from '../../../esign/service/esignservice.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatOptionSelectionChange } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatOptionSelectionChange, MatSelect, MatInput } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { disableDebugTools } from '@angular/platform-browser';
 import { IetViewreportComponent } from '../../controls/iet-viewreport/iet-viewreport.component';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NumberFormatStyle } from '@angular/common';
+import { CurrencyMaskModule } from "ng2-currency-mask";
 @Component({
   selector: 'app-iet-addreceipt',
   templateUrl: './iet-addreceipt.component.html',
@@ -18,10 +20,10 @@ export class IetAddreceiptComponent implements OnInit {
   companyTypeId: string;
   vendorName: string;
   accountType: string;
-  amount: string;
+  amount: number;
   notes: any = '';
   accountTypes: any;
-  uploadedReceiptFile: string;
+  // uploadedReceiptFile: string;
   receiptUploaded = false;
   receiptFile: File;
   dataUrl: any;
@@ -45,12 +47,28 @@ export class IetAddreceiptComponent implements OnInit {
   vendorNameInput: any;
   accounttypeInput: any;
   accIdentifier: any;
+  files: any = [];
+  uploadedFileName: string;
+  uploadedReceiptFile: File;
+  attachment: string;
+
+  receiptForm: FormGroup = new FormGroup({
+    vendorNameFormControl: new FormControl('', Validators.required),
+    accountTypeFormControl: new FormControl('', Validators.required),
+    amountFormControl: new FormControl('', [Validators.required, Validators.min(1)]),
+    receiptDateFormControl: new FormControl((new Date()).toISOString(), Validators.required),
+    notesFormControl: new FormControl('')
+});
+
+@ViewChild('focusField') focusField: ElementRef;
+
   constructor(private service: EsignserviceService,
-    public dialogRef: MatDialogRef<IetAddreceiptComponent>) { }
+    public dialogRef: MatDialogRef<IetAddreceiptComponent>) {
+      dialogRef.disableClose = true;
+     }
 
   ngOnInit() {
-    console.log('iet-addreceipt initialization...');
-    console.log('account Type seq No:' + this.accountTypeSeqNo);
+    console.log('iet receipt initialization...');
     this.service.getAccountTypes(this.companyTypeId).subscribe(resp => {
       this.accountTypes = resp;
       console.log('account types');
@@ -65,7 +83,6 @@ export class IetAddreceiptComponent implements OnInit {
     } else {
       this.title = 'Edit Receipt';
         console.log('Edit Receiptttttt');
-        console.log(this.accountTypeSeqNo);
          this.accountTypes.forEach(element => {
            console.log(element.acctId);
             if (Number(element.acctId) === Number(this.accountTypeSeqNo)) {
@@ -74,9 +91,30 @@ export class IetAddreceiptComponent implements OnInit {
               console.log('elementttt:' + this.accountType);
             }
          });
+         this.receiptForm.controls['vendorNameFormControl'].setValue(this.vendorName);
+         this.receiptForm.controls['accountTypeFormControl'].setValue(this.accountType);
+         this.receiptForm.controls['amountFormControl'].setValue(this.amount);
+         this.receiptForm.controls['notesFormControl'].setValue(this.notes);
+         console.log('files');
+         var rFile = new File([""], this.attachment);
+         this.files.push(rFile);
+         this.uploadedFileName = this.attachment;
+         console.log(this.files);
+         let rDate: Date = new Date(this.receiptDate);
+         console.log('date:' + rDate.getDate());
+         console.log('month:' + rDate.getMonth());
+         console.log('year:' + rDate.getFullYear());
+         this.receiptDate = rDate.getMonth() + 1 + '/' + rDate.getDate() + '/' + rDate.getFullYear();
+         this.receiptForm.controls['receiptDateFormControl'].setValue(new Date(rDate.getFullYear(),
+                                                                      rDate.getMonth(), rDate.getDate()));
+         console.log('receipt date:');
+         console.log(this.receiptForm.controls['receiptDateFormControl'].value);
+         this.vendorName = "";
+         this.accountType = "";
     }
+   this.focusField.nativeElement.focus();
   });
-  this.clientctrl.valueChanges.subscribe(val => {
+  this.receiptForm.controls['vendorNameFormControl'].valueChanges.subscribe(val => {
     console.log('client control auto typing...' + val);
     console.log('vendor name:' + this.vendorName);
     if (this.vendorName === '') {
@@ -97,12 +135,9 @@ export class IetAddreceiptComponent implements OnInit {
     }
   });
 
-  this.accounttypeclientctrl.valueChanges.subscribe(val => {
+  this.receiptForm.controls['accountTypeFormControl'].valueChanges.subscribe(val => {
     console.log('account type client control auto typing...' + val);
     console.log('account type name:' + this.accountType);
-    // if (this.accountType === '' || this.accountType === null) {
-    //   return;
-    // }
      if (val === '' || val === null) {
        return;
      }
@@ -130,6 +165,20 @@ export class IetAddreceiptComponent implements OnInit {
     }
   }
   });
+
+  }
+
+  uploadFile(event) {
+    for (let index = 0; index < event.length; index++) {
+      const element = event[index];
+      this.files.push(element);
+      this.receiptFile = element;
+      this.uploadedFileName = element.name;
+    }
+  }
+  deleteAttachment(index) {
+    this.files.splice(index, 1);
+    this.uploadedFileName = null;
   }
 
   setOperation(operation: string) {
@@ -140,9 +189,35 @@ export class IetAddreceiptComponent implements OnInit {
     this.companyTypeId = companyTypeId;
   }
 
+  add(event: any): void {
+  console.log('add event');
+  console.log(event);
+    let input = event.input;
+    let value = event.value;
+  }
+
+  onKey(event) {
+    console.log('on Key tab event');
+    console.log(event);
+    console.log(this.accounttypeInput);
+    console.log(this.accountType);
+    if (!this.accountType || this.accountType === 'undefined') {
+      this.accounttypeInput = null;
+    }
+  }
+
+  accountTypefocusOut() {
+    console.log('accountTypefocusOut event');
+    console.log(this.accounttypeInput);
+    console.log(this.accountType);
+    if (!this.accountType || this.accountType === 'undefined') {
+      this.accounttypeInput = null;
+    }
+  }
+
   setEditReceiptInfo(companyTypeId: string, companyId: string, fiscalYear: string,
     accountType: string, accountTypeSeqNo: string, receiptDate: string,
-    vendorName: string, amount: string, notes: string, docId: string) {
+    vendorName: string, amount: NumberFormatStyle, notes: string, docId: string, attachment: string) {
     this.companyId = companyId;
     this.companyTypeId = companyTypeId;
     this.accountType = accountType;
@@ -154,6 +229,7 @@ export class IetAddreceiptComponent implements OnInit {
     this.notes = notes;
     this.docId = docId;
     this.fiscalYear = fiscalYear;
+    this.attachment = attachment;
     console.log('set edit receipt info');
     console.log('companyId:');
     console.log(this.companyId);
@@ -191,13 +267,14 @@ export class IetAddreceiptComponent implements OnInit {
       let c: any = null;
       this.vendors.forEach(cc => { if (cc === value) { c = cc; } });
       this.vendorName = c;
-      this.clientctrl.setValue('');
+      this.receiptForm.controls['vendorNameFormControl'].setValue('');
     }
     console.log('vendorName:' + this.vendorName);
   }
 
   removeVendor(): void {
     console.log('remove vendor');
+    this.receiptForm.controls['vendorNameFormControl'].setValue('');
       this.vendorName = null;
       this.service.getVendors(this.service.auth.getOrgUnitID(), '').subscribe(vResp => {
         this.vendors = vResp;
@@ -217,7 +294,7 @@ export class IetAddreceiptComponent implements OnInit {
       console.log(c);
       this.accountType = c.acctDescription;
       this.accIdentifier = c.acctId;
-     this.accounttypeclientctrl.setValue('');
+      this.receiptForm.controls['accountTypeFormControl'].setValue('');
     }
     console.log('account Type:');
     console.log(this.accountType);
@@ -225,6 +302,7 @@ export class IetAddreceiptComponent implements OnInit {
 
   removeAccountType(): void {
     console.log('remove account type');
+    this.receiptForm.controls['accountTypeFormControl'].setValue('');
       this.accountType = null;
       this.service.getAccountTypes(this.companyTypeId).subscribe(resp => {
         this.accountTypes = resp;
@@ -234,33 +312,34 @@ export class IetAddreceiptComponent implements OnInit {
   }
 
 
-  uploadReceiptFile(recFiles: File | FileList) {
-    console.log('uploadReceiptFile...')
+  // uploadReceiptFile(recFiles: File | FileList) {
+  //   console.log('uploadReceiptFile...')
 
-    if (recFiles instanceof (FileList)) {
-      this.receiptFile = recFiles.item(0);
-       } else {
-      console.log('else part');
-      this.receiptFile = recFiles;
-      let extn = this.receiptFile.name.substring(this.receiptFile.name.lastIndexOf('.') + 1 ,
-      this.receiptFile.name.length) || this.receiptFile.name;
-      console.log('extn:' + extn);
-      if (extn.toLowerCase() === 'pdf') {
-        this.uploadedReceiptFile = this.receiptFile.name;
-        this.receiptUploaded = true;
-        this.isPdfFile = true;
-      } else {
-        this.receiptUploaded = false;
-        this.isPdfFile = false;
-      }
-    }
-  }
+  //   if (recFiles instanceof (FileList)) {
+  //     this.receiptFile = recFiles.item(0);
+  //      } else {
+  //     console.log('else part');
+  //     this.receiptFile = recFiles;
+  //     let extn = this.receiptFile.name.substring(this.receiptFile.name.lastIndexOf('.') + 1 ,
+  //     this.receiptFile.name.length) || this.receiptFile.name;
+  //     console.log('extn:' + extn);
+  //     if (extn.toLowerCase() === 'pdf') {
+  //       this.uploadedReceiptFile = this.receiptFile.name;
+  //       this.receiptUploaded = true;
+  //       this.isPdfFile = true;
+  //     } else {
+  //       this.receiptUploaded = false;
+  //       this.isPdfFile = false;
+  //     }
+  //   }
+  // }
 
-  finalizeAddReceipt() {
+  addReceipt() {
     this.showAddspinner = true;
-    console.log('finalizeAddReceipt');
+    console.log('addReceipt');
     console.log('operation: ' + this.operation);
-    let currentDate: Date = new Date(this.planModel.start_time)
+   // let currentDate: Date = new Date(this.planModel.start_time)
+   let currentDate: Date = new Date(this.receiptForm.controls['receiptDateFormControl'].value);
     console.log('date:' + currentDate.getDate());
     console.log('month:' + currentDate.getMonth());
     console.log('year:' + currentDate.getFullYear());
@@ -289,11 +368,11 @@ export class IetAddreceiptComponent implements OnInit {
       }
    }
 
-  finalizeUpdateReceipt() {
+   updateReceipt() {
     this.showEditspinner = true;
     console.log('finalizeUpdateReceipt');
     console.log('operation: ' + this.operation);
-    let currentDate: Date = new Date(this.planModel.start_time)
+    let currentDate: Date = new Date(this.receiptForm.controls['receiptDateFormControl'].value);
     console.log('date:' + currentDate.getDate());
     console.log('month:' + currentDate.getMonth());
     console.log('year:' + currentDate.getFullYear());
@@ -308,7 +387,7 @@ export class IetAddreceiptComponent implements OnInit {
     console.log(this.vendorName);
     this.receiptDate = currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear();
     console.log('receipt date:' + this.receiptDate);
-    if (this.notes === 'undefined' && this.notes !== null) {
+    if (this.notes === 'undefined' || this.notes === null) {
       this.notes = "";
     }
     const newReceiptJson = {
@@ -329,8 +408,9 @@ export class IetAddreceiptComponent implements OnInit {
           console.log(resp);
           this.ietViewReportRef.loadReceiptsGrid();
           this.dialogRef.close();
-          });
           this.showEditspinner = false;
+          });
+
         }
   }
 }

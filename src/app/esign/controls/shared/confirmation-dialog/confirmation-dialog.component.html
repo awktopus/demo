@@ -4,7 +4,13 @@
 </div>
 <br/>
 <div mat-dialog-actions>
-  <button mat-raised-button color="accent" class="text-upper" (click)="onNoClick()" cdkFocusInitial>No</button>
-  <button mat-raised-button color="accent" class="text-upper" [mat-dialog-close]="true">Yes</button>
+  <button mat-raised-button color="accent" class="text-upper" (click)="onNoClick()" cdkFocusInitial>
+    No
+    <mat-icon>clear</mat-icon>
+  </button>
+  <button mat-raised-button color="accent" class="text-upper" [mat-dialog-close]="true">
+    Yes
+    <mat-icon>done</mat-icon>
+  </button>
 </div>
 </div>

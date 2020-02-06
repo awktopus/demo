@@ -7,7 +7,6 @@ import { CompanyType, ESignCPA, CompanyStaff, Company } from './../../../esign/b
 import { EsignserviceService } from './../../../esign/service/esignservice.service';
 import { resolveRendererType2 } from '@angular/core/src/view/util';
 import { IetAddreceiptComponent } from '../iet-addreceipt/iet-addreceipt.component';
-import { IetViewreportComponent } from '../iet-viewreport/iet-viewreport.component';
 import { EsignuiserviceService } from '../../../esign/service/esignuiservice.service';
 import { IetCompanyComponent } from '../iet-company/iet-company.component';
 import { ConfirmationDialogComponent } from '../../../esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
@@ -25,6 +24,10 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
   hasCompanies = false;
   setupNewCmpny = false;
   companies: Company[] = [];
+  isIETDataFetched = false;
+  displayedColumns: string[] = ['companyName', 'companyOwner', 'lastUpdate', 'sharedUsers', 'addReceipt',
+                                 'viewReport', 'settings', 'delete'];
+
   constructor(private service: EsignserviceService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router,
     private uiservice: EsignuiserviceService
@@ -40,6 +43,7 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
       console.log('getClientCompanies');
       console.log(this.clientCompanies);
       this.loadCompanies();
+      this.isIETDataFetched = true;
     });
   }
 
@@ -70,7 +74,7 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
               if (resCmpny.sharedUsers.length === 1) {
               sharedUsrs = sharedUsrs + sUser.firstName + ' ' + sUser.lastName;
             } else {
-              sharedUsrs = sharedUsrs + sUser.firstName + ' ' + sUser.lastName + '; ';
+            sharedUsrs = sharedUsrs + sUser.firstName + ' ' + sUser.lastName + '\n';
             }
             });
           }
@@ -84,7 +88,7 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
     // this.setupNewCmpny = true;
     console.log('setupNewCompany:');
     const dialogRef = this.dialog.open(IetCompanyComponent, {
-      width: '700px', height: '500px'
+      width: '800px', height: '675px'
     });
     dialogRef.componentInstance.ietSettingsRef = this;
     dialogRef.componentInstance.setMode('newcompany');
@@ -93,7 +97,7 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
   editCompany(clientCompany: Company) {
     console.log('editCompany:');
     const dialogRef = this.dialog.open(IetCompanyComponent, {
-      width: '700px', height: '500px'
+      width: '700px', height: '650px'
     });
     dialogRef.componentInstance.ietSettingsRef = this;
     dialogRef.componentInstance.setMode('editcompany');
@@ -114,7 +118,7 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
     console.log(companyTypeId);
     console.log(companyId);
     const dialogRef = this.dialog.open(IetAddreceiptComponent, {
-      width: '700px', height: '600px'
+      width: '700px', height: '900px'
     });
     dialogRef.componentInstance.ietSettingsRef = this;
     dialogRef.componentInstance.setOperation('addreceipt');
@@ -127,11 +131,13 @@ export class IncomeExpenseSettingsComponent implements OnInit, AfterViewInit {
     console.log(companyId);
     console.log(companyName);
     console.log(includeAccountNumber);
-    const dialogRef = this.dialog.open(IetViewreportComponent, {
-      width: '1200px'
-    });
-    dialogRef.componentInstance.ietSettingsRef = this;
-    dialogRef.componentInstance.setViewReportInfo(companyTypeId, companyId, companyName, includeAccountNumber);
+    // const dialogRef = this.dialog.open(IetViewreportComponent, {
+    //   width: '1200px'
+    // });
+    // dialogRef.componentInstance.ietSettingsRef = this;
+    // dialogRef.componentInstance.setViewReportInfo(companyTypeId, companyId, companyName, includeAccountNumber);
+   const url = 'main/incomeexpense/viewreport/' + companyId ;
+    this.router.navigateByUrl(url);
   }
 
   openConfirmationDialogforCompanyDeletion(cmpnyId: string): void {

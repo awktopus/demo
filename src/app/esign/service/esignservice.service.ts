@@ -751,7 +751,7 @@ export class EsignserviceService  {
       orgUnitId + '/clientid/' + clientId + '/clientcompany/' + companyId + '/update', updateCompanyJson, this.auth.getESignOptions());
   }
 
-  downloadReceipt(orgUnitId: string, companyId: string, docId: string): any {
+  downloadReceipt(orgUnitId: string, companyId: string, docId: string, attachment: any): any {
 
     console.log('download Receipt..');
     const url: string = this.auth.baseurl + '/iet/ClientCompanies/orgunitid/' +
@@ -765,7 +765,8 @@ export class EsignserviceService  {
       const link = document.createElement('a');
       document.body.appendChild(link);
       link.href = fileURL;
-      link.download = 'IncomeExpenseReceipt_' + docId + '.pdf';
+      // link.download = 'IncomeExpenseReceipt_' + docId + '.pdf';
+      link.download = attachment;
       link.click();
     });
   }
@@ -783,7 +784,7 @@ export class EsignserviceService  {
       this.auth.getESignOptions());
   }
 
-  addNewReceiptPDF(orgUnitId: string, clientId: string, companyId: string, amount: string,
+  addNewReceiptPDF(orgUnitId: string, clientId: string, companyId: string, amount: any,
     notes: string, uploadCustomerId: string,
     receiptDate: string, vendorName: string, accountTypeSeqNo: string, fileToUpload: File) {
     console.log('addNewReceiptPDF...')
@@ -874,5 +875,14 @@ export class EsignserviceService  {
     + '/staff/' + this.auth.getUserID() + '/searchtoken/' + searchToken;
     return this.http.get(url, this.auth.getESignOptions());
   }
+
+  getClientCompanyInfo(companyId: any) {
+    console.log('calling getClientCompanyInfo server api');
+    const url: string = this.auth.baseurl + '/iet/ClientCompanies/orgunitid/' +
+    this.auth.getOrgUnitID() + '/clientid/' + this.auth.getUserID() + '/clientcompany/' + companyId;
+    return this.http.get(url, this.auth.getESignOptions());
+  }
+
+
 }
 

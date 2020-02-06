@@ -250,6 +250,7 @@ export class Company {
   closeDate: number;
   includeAccountNumber: string;
   hasSettingsAccess: string;
+  closingMonth: number;
 }
 export class FormMirrorImageData {
   docId: string;

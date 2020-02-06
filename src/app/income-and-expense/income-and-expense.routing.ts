@@ -4,6 +4,7 @@ import {ModuleWithProviders} from '@angular/core';
 import { ESignGuard } from '../esign/service/esignauth';
 import { IncomeExpenseComponent } from './income-and-expense.component';
 import { IncomeExpenseSettingsComponent } from './controls/settings/iet-settings.component';
+import { IetViewreportComponent } from './controls/iet-viewreport/iet-viewreport.component';
 
 
 export const IETRoutes: Routes = [
@@ -15,6 +16,11 @@ export const IETRoutes: Routes = [
             pageTitle: 'Income and Expense',
             canActivate: [AuthGuard]
         }
+    },
+    {
+        path: 'viewreport/:companyId',
+        canActivate: [AuthGuard, ESignGuard],
+        component: IetViewreportComponent
     },
     {
         path: 'settings',

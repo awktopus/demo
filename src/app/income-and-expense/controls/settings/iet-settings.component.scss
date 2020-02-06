@@ -46,7 +46,6 @@
     font-size: 45px;
   }
   .heading-label {
-    margin-left:10px;
     color: #03a9f4;
     margin-bottom: 1rem;
     margin-top: 1rem;
@@ -76,9 +75,8 @@
   border: 1px solid #ddd;
   }
   .trackertable4 {
-    padding-top: 5px;
+    margin-top: 20px;
     padding-bottom: 15px;
-    padding-left:15px;
     padding-right:15px;
     max-width: 1200px;
     width: 100%;
@@ -91,3 +89,10 @@
   .casefield > * {
     width: 90%
   }
+  .mat-row:nth-child(even){
+    background-color:	#ccccff;
+    }
+
+.mat-row:nth-child(odd){
+    background-color:#ebfaeb;
+    }

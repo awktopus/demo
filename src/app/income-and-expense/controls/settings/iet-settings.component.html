@@ -5,11 +5,15 @@
         </th>
     </tr>
 </table>
-<table class="trackertable4">
-    <tr align="right">
+<div>
+        <mat-spinner *ngIf='!isIETDataFetched' diameter='20'></mat-spinner>
+        <span *ngIf='!isIETDataFetched'>Processing...</span> 
+</div>
+<table class="trackertable4" *ngIf='isIETDataFetched'>
+    <tr align="left">
         <td colspan="12">
             <button mat-raised-button color="accent" matTooltip="Create new company" (click)="setupNewCompany()">
-                + SETUP NEW COMPANY
+                <mat-icon>control_point</mat-icon>&nbsp;ADD COMPANY
             </button>
             <!-- &nbsp;
             <button mat-raised-button color="accent" matTooltip="Create new account type" (click)="setupNewAccountType()">
@@ -18,7 +22,7 @@
         </td>
     </tr>
 </table>
-<div *ngIf='!hasCompanies && !setupNewCmpny'>
+<div *ngIf='!hasCompanies && !setupNewCmpny && isIETDataFetched'>
     <table class="trackertable">
         <tr>
             <td>
@@ -43,77 +47,111 @@
         </tr>
     </table>
 </div>
-<div *ngFor="let clientCompany of companies">
+
+<mat-table *ngIf='hasCompanies && !setupNewCmpny && isIETDataFetched' [dataSource]="companies" class="mat-elevation-z8">
+    <ng-container matColumnDef="companyName">
+        <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Company </mat-header-cell>
+        <mat-cell *matCellDef="let element" style="font-weight: bold;color:black"> {{element.companyName}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="companyOwner">
+        <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Holder </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.companyOwner}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="lastUpdate">
+        <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Last Login </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.lastUpdate}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="sharedUsers">
+        <mat-header-cell *matHeaderCellDef 
+        style="font-size: 20px;font-weight: bold;color:#999;"> Shared With </mat-header-cell>
+        <mat-cell *matCellDef="let element"> 
+                    <div style="white-space: pre-line">
+                      <label style="color:#004d00;;font-weight: bold">  {{element.sharedUsers}} </label>
+                    </div>    
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="addReceipt">
+        <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Receipt </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+            <button mat-icon-button matTooltip="Add Receipt" (click)="addReceipt(row.companyTypeId,row.companyId)">
+                <mat-icon style="color:#004d00;font-weight: bold">attach_file</mat-icon>
+                <label style="color:#004d00;;font-weight: bold">Add</label></button>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="viewReport">
+        <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Report </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+            <button mat-icon-button matTooltip="View Report" (click)="viewReport(row.companyTypeId,
+                                row.companyId,row.companyName, row.includeAccountNumber)">
+                <mat-icon style="color:#004d00;font-weight: bold">insert_chart_outlined</mat-icon>
+                <label style="color:#004d00;;font-weight: bold">View</label></button>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="settings">
+        <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Settings </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+            <button mat-icon-button matTooltip="Edit Company" *ngIf='row.hasSettingsAccess !="N"' (click)="editCompany(row)">
+                <mat-icon>settings</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+        <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999">Delete </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+            <button mat-icon-button matTooltip="Delete Company" *ngIf='row.hasSettingsAccess !="N"' (click)="openConfirmationDialogforCompanyDeletion(row.companyId)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns" style="background-color: white"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+
+<!-- <div *ngFor="let clientCompany of companies">
     <br/>
     <table class="trackertable3">
         <tr align="center">
-            <td colspan="8">
-                <h6>
-                    <b> {{ clientCompany.companyName }} </b> ({{ clientCompany.companyType }}) ({{ clientCompany.closingMonthName
-                    }})
-                </h6>
+            <td>
+               <b>
+                    {{ clientCompany.companyName }}
+               </b>
             </td>
-        </tr>
-        <br/>
-        <tr>
-            <td colspan="2" style="width:150px">
-                Account Holder:
-                <b>{{ clientCompany.companyOwner}}</b>
+            <td>
+                {{ clientCompany.companyOwner}}
             </td>
-            <td colspan="2" style="width:150px">
-                Shared with:
-                <b>{{ clientCompany.sharedUsers }} </b>
+            <td>
+
+                {{ clientCompany.sharedUsers }}
             </td>
-            <td colspan="2" style="width:150px">
-                Last login:
-                <b>{{ clientCompany.lastUpdate }}</b>
+            <td>
+                {{ clientCompany.lastUpdate }}
             </td>
-            <td colspan="2" style="width:150px">
+      
+            <td>
+                <button mat-raised-button matTooltip="Add Receipt" (click)="addReceipt(clientCompany.companyTypeId,clientCompany.companyId)">
+                    <mat-icon>attach_file</mat-icon>&nbsp;Add</button>
             </td>
-        </tr>
-        <br/>
-        <br/>
-        <tr>
-            <td colspan="2">
-                <button mat-raised-button color="warn" matTooltip="Add Receipt" (click)="addReceipt(clientCompany.companyTypeId,clientCompany.companyId)">
-                    <mat-icon>attach_file</mat-icon>&nbsp;Add Receipt</button>
-            </td>
-            <td colspan="2">
-                <button mat-raised-button color="warn" matTooltip="View Report" (click)="viewReport(clientCompany.companyTypeId,
+            <td>
+                <button mat-raised-button matTooltip="View Report" (click)="viewReport(clientCompany.companyTypeId,
                     clientCompany.companyId,clientCompany.companyName, clientCompany.includeAccountNumber)">
-                    <mat-icon>insert_chart_outlined</mat-icon>&nbsp;View Report</button>
+                    <mat-icon>insert_chart_outlined</mat-icon>&nbsp;View</button>
             </td>
-            <td colspan="2">
-                <button mat-raised-button color="warn" matTooltip="Edit Company" *ngIf='clientCompany.hasSettingsAccess !="N"' (click)="editCompany(clientCompany)">
-                    <mat-icon>settings</mat-icon>&nbsp;Settings</button>
-            </td>
-            <td colspan="2">
-                <button mat-raised-button color="warn" matTooltip="Add Receipt" *ngIf='clientCompany.hasSettingsAccess !="N"' (click)="openConfirmationDialogforCompanyDeletion(clientCompany.companyId)">
-                    <mat-icon>delete</mat-icon>&nbsp;Delete Company</button>
-            </td>
-            <!-- <td colspan="2">
-                <button mat-icon-button matTooltip="Add Receipt">
-                    <mat-icon class='iconcss' (click)="addReceipt(clientCompany.companyTypeId,clientCompany.companyId)">attach_file</mat-icon>Add Receipt
+            <td>
+                <button mat-icon-button matTooltip="Edit Company" *ngIf='clientCompany.hasSettingsAccess !="N"' (click)="editCompany(clientCompany)">
+                    <mat-icon>settings</mat-icon>
                 </button>
             </td>
-            <td colspan="2">
-                <button mat-icon-button matTooltip="View Report">
-                    <mat-icon class="iconcss" (click)="viewReport(clientCompany.companyTypeId,
-                        clientCompany.companyId,clientCompany.companyName, clientCompany.includeAccountNumber)">insert_chart_outlined</mat-icon>View Report
+            <td>
+                <button mat-icon-button matTooltip="Delete Company" *ngIf='clientCompany.hasSettingsAccess !="N"' (click)="openConfirmationDialogforCompanyDeletion(clientCompany.companyId)">
+                    <mat-icon>delete</mat-icon>
                 </button>
             </td>
-            <td colspan="2">
-                <button mat-icon-button matTooltip="Edit Company" 
-                *ngIf ='clientCompany.hasSettingsAccess !="N"'>
-                    <mat-icon class="iconcss" (click)="editCompany(clientCompany)">settings</mat-icon>Settings
-                </button>
-            </td>
-            <td colspan="2">
-                <button mat-icon-button matTooltip="Delete Company" 
-                *ngIf ='clientCompany.hasSettingsAccess !="N"'>
-                    <mat-icon class="iconcss" (click)="openConfirmationDialogforCompanyDeletion(clientCompany.companyId)">delete</mat-icon>Delete Company
-                </button>
-            </td> -->
         </tr>
     </table>
-</div>
+</div> -->

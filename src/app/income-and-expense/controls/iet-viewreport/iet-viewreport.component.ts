@@ -3,10 +3,11 @@ import { EsignserviceService } from '../../../esign/service/esignservice.service
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { IncomeExpenseSettingsComponent } from '../settings/iet-settings.component';
 import { GridColConfigPopupComponent } from '../../../esign/controls/history/gridcolpopup/grid-col-config-popup.component'
-import { TaxYearReceipts, Receipts, CoAReceipts, ChartOfAccounts } from '../../../esign/beans/ESignCase';
+import { TaxYearReceipts, Receipts, CoAReceipts, ChartOfAccounts, Company } from '../../../esign/beans/ESignCase';
 import { ButtonRendererComponent } from '../../button-renderer.component';
 import { IetAddreceiptComponent } from '../../controls/iet-addreceipt/iet-addreceipt.component';
 import { ConfirmationDialogComponent } from '../../../esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-iet-viewreport',
   templateUrl: './iet-viewreport.component.html',
@@ -14,7 +15,7 @@ import { ConfirmationDialogComponent } from '../../../esign/controls/shared/conf
 })
 export class IetViewreportComponent implements OnInit {
   companyId: string;
-  companyTypeId: string;
+  companyTypeId: any;
   companyName: string;
   companyAccountLevelReceipts: any;
   allReceiptsgridData: Receipts[];
@@ -38,8 +39,13 @@ export class IetViewreportComponent implements OnInit {
   gridActionInprogress = false;
   includeAccountNumber: any;
   showDownloadSpinner = false;
+  isIETDataFetched = false;
+  downloadAs: any;
+  selectedCompany: Company;
+  rowClassRules: any;
+  fiscalClosingMonth: number;
   constructor(private service: EsignserviceService, public dialog: MatDialog,
-    public dialogRef: MatDialogRef<IetViewreportComponent>) {
+    private route: ActivatedRoute, private router: Router) {
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
     }
@@ -47,20 +53,37 @@ export class IetViewreportComponent implements OnInit {
 
   ngOnInit() {
     console.log('iet-viewreport initialization...');
-    this.gridColumnDefs = this.configColDef();
-    this.service.getFiscalYearlist(this.service.auth.getOrgUnitID(), this.companyId).subscribe(resp2 => {
-      this.fiscalYears = resp2;
-      console.log(this.fiscalYears);
-      if (resp2 && this.fiscalYears.length > 0) {
-        this.fiscalYear = this.fiscalYears[0];
-        console.log('default fiscal year:' + this.fiscalYear);
-      } else {
-        const fisDate = new Date();
-        this.fiscalYear = fisDate.getFullYear();
+    this.route.paramMap.subscribe(para => {
+      this.companyId = para.get('companyId');
+    });
+    console.log('companyId: ' + this.companyId);
+    this.service.getClientCompanyInfo(this.companyId).subscribe(cInfo => {
+      if (cInfo) {
+        console.log('client company info' + this.companyId);
+        console.log(cInfo);
+        this.selectedCompany = <Company>cInfo;
+        this.companyTypeId = this.selectedCompany.companyTypeId;
+        this.includeAccountNumber = this.selectedCompany.includeAccountNumber;
+        this.companyName = this.selectedCompany.companyName;
+        this.fiscalClosingMonth = this.selectedCompany.closingMonth;
       }
-      console.log('fiscal year list');
-      console.log(this.fiscalYears);
-      this.loadReceiptsGrid();
+      this.gridColumnDefs = this.configColDef();
+
+      this.service.getFiscalYearlist(this.service.auth.getOrgUnitID(), this.companyId).subscribe(resp2 => {
+        this.fiscalYears = resp2;
+        console.log(this.fiscalYears);
+        if (resp2 && this.fiscalYears.length > 0) {
+          this.fiscalYear = this.fiscalYears[0];
+          console.log('default fiscal year:' + this.fiscalYear);
+        } else {
+          const fisDate = new Date();
+          this.fiscalYear = fisDate.getFullYear();
+        }
+        console.log('fiscal year list');
+        console.log(this.fiscalYears);
+        this.loadReceiptsGrid();
+        this.isIETDataFetched = true;
+      });
     });
   }
 
@@ -118,70 +141,90 @@ export class IetViewreportComponent implements OnInit {
     this.allReceiptsGridColumnApi = params.columnApi;
     params.api.sizeColumnsToFit();
   }
+
+
   configColDef() {
     const res = [
       {
-        headerName: 'Account Type', field: 'accountType', width: 150, suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "flex-end" }
+        headerName: 'Account', field: 'accountType', cellStyle: this.changeRowColor,
+            },
+      {
+        headerName: 'Account Number', field: 'accountNumber',
+        cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Account Number', field: 'accountNumber', width: 100, suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "flex-end" }
+        headerName: 'Name', field: 'vendorName',
+        cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Receipt Date', field: 'receiptDate', width: 125, suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "flex-end" }
+        headerName: 'Receipt', field: 'receiptDate', width: 100,
+        cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Name', field: 'vendorName', width: 150, suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "flex-end" }
+        headerName: 'Amount', field: 'amount', width: 100,
+        cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Amount', field: 'amount', width: 100, suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "flex-end" }
+        headerName: 'Note', field: 'notes',
+        cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Notes', field: 'notes', width: 150, suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "center" }
-      },
-      {
-        headerName: 'Content Type', hide: 'true', field: 'contentType', width: 250, suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "center" }
-      },
-      {
-        width: 100,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.editReceipt.bind(this),
-          label: 'EDIT',
-        },
-        suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "center" }
-      },
-      {
-        width: 120,
+        headerName: 'Download', width: 125,
         cellRenderer: 'buttonRenderer',
         cellRendererParams: {
           onClick: this.downloadReceipt.bind(this),
-          label: 'DOWNLOAD'
+          label: 'get_app'
         },
-        suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "center" }
+        cellStyle: this.changeRowColor
       },
       {
-        width: 100,
+        headerName: 'Edit', width: 100,
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: {
+          onClick: this.editReceipt.bind(this),
+          label: 'edit',
+        },
+        suppressSizeToFit: true,
+        cellStyle: this.changeRowColor
+      },
+      {
+        headerName: 'Delete', width: 100,
         cellRenderer: 'buttonRenderer',
         cellRendererParams: {
           onClick: this.openConfirmationDialogforCompanyDeletion.bind(this),
-          label: 'DELETE'
+          label: 'delete_forever'
         },
-        suppressSizeToFit: true,
-        cellStyle: { 'justify-content': "center" }
+        cellStyle: this.changeRowColor
+      },
+      {
+        headerName: 'Content Type', hide: 'true', field: 'contentType',
+        cellStyle: this.changeRowColor
+      },
+      {
+        headerName: 'File Name', hide: 'true', field: 'attachment',
+        cellStyle: this.changeRowColor
       }
     ]
+
+    // this.rowClassRules = {
+    //   "sick-days-warning": function(params) {
+    //     console.log('inside row class rules sick days warning');
+    //     console.log(params);
+    //         return 10 > 5;
+    //   }
+    // };
     //  this.context = { componentParent: this, allreceipts: false };
     return res;
   }
+
+  changeRowColor(params) {
+    if (params.node.rowIndex % 2 === 0) {
+       return {'background-color': '#ccccff' };
+    }
+    if (params.node.rowIndex % 2 === 1) {
+      return {'background-color': '#ebfaeb'};
+   }
+ }
 
   downloadYearlyReceiptsCSV() {
     let params = {
@@ -196,8 +239,9 @@ export class IetViewreportComponent implements OnInit {
     this.companyName = companyName;
     this.includeAccountNumber = includeAccountNumber;
   }
+
   cancelViewReport() {
-    this.dialogRef.close();
+    //   this.dialogRef.close();
   }
 
   getCompanyYearlyReceipts() {
@@ -230,28 +274,48 @@ export class IetViewreportComponent implements OnInit {
       if (result) {
         console.log('Yes clicked');
         this.gridActionInprogress = true;
-         this.deleteReceipt(deletedRow);
+        this.deleteReceipt(deletedRow);
       }
     });
   }
 
   downloadReceipt(downloadRow: any) {
     console.log('downloadReceipt...');
+    console.log(downloadRow);
     this.service.downloadReceipt(this.service.auth.getOrgUnitID(),
-      this.companyId, downloadRow.rowData.docId);
+      this.companyId, downloadRow.rowData.docId, downloadRow.rowData.attachment);
   }
 
   editReceipt(editRow: any) {
     console.log('edit Receipt...');
 
     const dialogRef = this.dialog.open(IetAddreceiptComponent, {
-      width: '700px', height: '600px'
+      width: '700px', height: '900px'
     });
     dialogRef.componentInstance.ietViewReportRef = this;
     dialogRef.componentInstance.setOperation('editreceipt');
     dialogRef.componentInstance.setEditReceiptInfo(this.companyTypeId, this.companyId,
       this.fiscalYear, editRow.rowData.accountType, editRow.rowData.accountTypeSeqNo,
       editRow.rowData.receiptDate, editRow.rowData.vendorName, editRow.rowData.amount,
-      editRow.rowData.notes, editRow.rowData.docId);
+      editRow.rowData.notes, editRow.rowData.docId, editRow.rowData.attachment);
   }
+  navigateIETracker() {
+    const url = 'main/incomeexpense/settings';
+    this.router.navigateByUrl(url);
+  }
+  onDownloadAsSelection() {
+    console.log('onDownloadAsSelection');
+    console.log(this.downloadAs);
+  }
+
+  downloadReport() {
+    console.log('download report');
+    if (this.downloadAs === 'PDF') {
+      this.downloadYearlyReceipts();
+    }
+    if (this.downloadAs === 'CSV') {
+      this.downloadYearlyReceiptsCSV();
+    }
+  }
+
 }

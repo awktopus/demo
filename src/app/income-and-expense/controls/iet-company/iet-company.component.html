@@ -1,18 +1,130 @@
-<table class="trackertable2">
+<span>
+  <label class="heading-label">{{ title }}</label>
+  <button mat-icon-button color="warn" style="margin-left:30%" (click)="cancelNewCompany()">
+    <mat-icon style="font-size: 40px;">clear</mat-icon>
+  </button>
+</span>
+<div fxLayout="column">
+  <div class="invgridColumn">
+    <form [formGroup]="companyForm">
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Company Name</mat-label>
+        <input required #focusField matInput [(ngModel)]="companyName" formControlName="companyNameFormControl">
+        <mat-error *ngIf="companyForm.get('companyNameFormControl').hasError('required')">
+          Company name is required
+        </mat-error>
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Company Type</mat-label>
+        <mat-select required [(ngModel)]="companyType" formControlName="companyTypeFormControl">
+          <mat-option *ngFor="let cmpnyType of companyTypes" value="{{ cmpnyType.companyTypeId }}">
+            {{ cmpnyType.companyType }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="companyForm.get('companyTypeFormControl').hasError('required')">
+          Company type is required
+        </mat-error>
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Closing Date</mat-label>
+        <mat-select required [(ngModel)]="closeDate" formControlName="closingDateFormControl">
+          <mat-option [value]="1">End of January</mat-option>
+          <mat-option [value]="2">End of Frebruary</mat-option>
+          <mat-option [value]="3">End of March</mat-option>
+          <mat-option [value]="4">End of April</mat-option>
+          <mat-option [value]="5">End of May</mat-option>
+          <mat-option [value]="6">End of June</mat-option>
+          <mat-option [value]="7">End of July</mat-option>
+          <mat-option [value]="8">End of August</mat-option>
+          <mat-option [value]="9">End of September</mat-option>
+          <mat-option [value]="10">End of October</mat-option>
+          <mat-option [value]="11">End of November</mat-option>
+          <mat-option [value]="12">End of December</mat-option>
+        </mat-select>
+        <mat-error *ngIf="companyForm.get('closingDateFormControl').hasError('required')">
+          Closing date is required
+        </mat-error>
+
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Share With</mat-label>
+        <mat-chip-list #cpachips placeholder="cpas">
+          <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" [removable]="removable" (removed)="removeCPA(scpa)">
+            {{scpa.firstName}} {{scpa.lastName}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input type="text" [value]="searchCPA" [matChipInputFor]="cpachips" matInput [matAutocomplete]="cpaauto" 
+          formControlName="sharedUserFormControl">
+          <mat-icon matSuffix>supervisor_account</mat-icon>
+          
+          <mat-autocomplete #cpaauto="matAutocomplete">
+            <mat-option *ngFor="let cpa of cpas" [value]="cpa.clientId" (onSelectionChange)="addcpa($event)">
+              {{cpa.firstName}} {{ cpa.lastName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-chip-list>
+      </mat-form-field>
+      <br/>
+      <mat-checkbox *ngIf='operation =="editcompany"' class="casefield" formControlName="includeAccountNumberFormControl" [(ngModel)]='includeAccountNumber'>
+        Include account number in receipts report</mat-checkbox>
+    </form>
+    <div>
+      <br/>
+      <br/>
+    </div>
+    <div class="button-row">
+      <div fxLayout="row">
+        <button mat-raised-button class="text-upper" (click)="cancelNewCompany()">
+          Cancel
+        </button>
+        &nbsp; &nbsp;
+
+        <span *ngIf='!showEditCompanyspinner'>
+          <button *ngIf='operation =="editcompany"' [disabled]="companyForm.invalid" mat-raised-button color="accent" class="text-upper"
+            (click)="updateCompanySettings()">
+            Update
+            <mat-icon>loop</mat-icon>
+          </button>
+        </span>
+        <mat-spinner *ngIf='showEditCompanyspinner' diameter='20'></mat-spinner>
+        <span *ngIf='showEditCompanyspinner'>Processing...</span>
+
+        &nbsp; &nbsp;
+
+        <span *ngIf='!showNewCompanyspinner'>
+          <button *ngIf='operation !="editcompany"' [disabled]="companyForm.invalid" mat-raised-button color="accent" class="text-upper"
+            (click)="createCompany()">
+            Begin
+            <mat-icon>play_circle_outline</mat-icon>
+          </button>
+        </span>
+        <mat-spinner *ngIf='showNewCompanyspinner' diameter='20'></mat-spinner>
+        <span *ngIf='showNewCompanyspinner'>Processing...</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- <table class="trackertable2">
   <tr align="center">
     <td colspan="8">
       <h6> {{ title }} </h6>
     </td>
   </tr>
   <tr>
-    <td>
+    <td colspan="8">
       <mat-form-field class="casefield">
         <input matInput placeholder="Company Name" [(ngModel)]="companyName">
       </mat-form-field>
     </td>
   </tr>
   <tr>
-    <td>
+    <td colspan="4">
       <mat-form-field class="casefield">
         <mat-select placeholder="Company Type" [(ngModel)]="companyType">
           <mat-option *ngFor="let cmpnyType of companyTypes" value="{{ cmpnyType.companyTypeId }}">
@@ -21,29 +133,27 @@
         </mat-select>
       </mat-form-field>
     </td>
-  </tr>
-  <tr>
-    <td>
+    <td colspan="4">
       <mat-form-field class="casefield">
-        <mat-select value="{{ closeDate }}">
-          <mat-option value="1">Closing Date:End of January</mat-option>
-          <mat-option value="2">Closing Date:End of Frebruary</mat-option>
-          <mat-option value="3">Closing Date:End of March</mat-option>
-          <mat-option value="4">Closing Date:End of April</mat-option>
-          <mat-option value="5">Closing Date:End of May</mat-option>
-          <mat-option value="6">Closing Date:End of June</mat-option>
-          <mat-option value="7">Closing Date:End of July</mat-option>
-          <mat-option value="8">Closing Date:End of August</mat-option>
-          <mat-option value="9">Closing Date:End of September</mat-option>
-          <mat-option value="10">Closing Date:End of October</mat-option>
-          <mat-option value="11">Closing Date:End of November</mat-option>
-          <mat-option value="12">Closing Date:End of December</mat-option>
+        <mat-select placeholder="Closing Date" value="{{ closeDate }}">
+          <mat-option value="1">End of January</mat-option>
+          <mat-option value="2">End of Frebruary</mat-option>
+          <mat-option value="3">End of March</mat-option>
+          <mat-option value="4">End of April</mat-option>
+          <mat-option value="5">End of May</mat-option>
+          <mat-option value="6">End of June</mat-option>
+          <mat-option value="7">End of July</mat-option>
+          <mat-option value="8">End of August</mat-option>
+          <mat-option value="9">End of September</mat-option>
+          <mat-option value="10">End of October</mat-option>
+          <mat-option value="11">End of November</mat-option>
+          <mat-option value="12">End of December</mat-option>
         </mat-select>
       </mat-form-field>
     </td>
   </tr>
   <tr>
-    <td>
+    <td colspan="8">
       <mat-form-field class="casefield">
         <mat-chip-list #cpachips placeholder="cpas">
           <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" [removable]="removable" (removed)="removeCPA(scpa)">
@@ -62,7 +172,7 @@
     </td>
   </tr>
   <tr>
-    <td>
+    <td colspan="8">
       <mat-checkbox *ngIf='operation =="editcompany"' class="casefield" [(ngModel)]='includeAccountNumber'>
         Include account number in receipts report</mat-checkbox>
     </td>
@@ -73,13 +183,9 @@
 <table class="trackertable">
   <tr>
     <td>
-      <span *ngIf='!showNewCompanyspinner'>
-        <button *ngIf='operation !="editcompany"' mat-raised-button color="accent" class="text-upper" (click)="createCompany()">
-          Begin
-        </button>
-      </span>
-      <mat-spinner *ngIf='showNewCompanyspinner' diameter='40'></mat-spinner>
-      <span *ngIf='showNewCompanyspinner'>Processing...</span>
+      <button mat-raised-button class="text-upper" (click)="cancelNewCompany()">
+        Cancel
+      </button>
     </td>
     <td>
       <span *ngIf='!showEditCompanyspinner'>
@@ -91,9 +197,13 @@
       <span *ngIf='showEditCompanyspinner'>Processing...</span>
     </td>
     <td>
-      <button mat-raised-button color="accent" class="text-upper" (click)="cancelNewCompany()">
-        Cancel
-      </button>
+      <span *ngIf='!showNewCompanyspinner'>
+        <button *ngIf='operation !="editcompany"' mat-raised-button color="accent" class="text-upper" (click)="createCompany()">
+          Begin
+        </button>
+      </span>
+      <mat-spinner *ngIf='showNewCompanyspinner' diameter='40'></mat-spinner>
+      <span *ngIf='showNewCompanyspinner'>Processing...</span>
     </td>
   </tr>
-</table>
+</table> -->

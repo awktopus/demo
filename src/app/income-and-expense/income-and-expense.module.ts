@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {
-  MatDividerModule, MatTableModule,
+  MatDividerModule, MatTableModule, MatDialogModule,
   MatStepperModule, MatFormFieldModule, MatSortModule, MatDatepickerModule, MatNativeDateModule
 } from '@angular/material';
 import { CovalentLayoutModule } from '@covalent/core/layout';
@@ -17,6 +17,7 @@ import { IetCompanyComponent } from './controls/iet-company/iet-company.componen
 import { AgGridModule } from 'ag-grid-angular';
 import { GridColConfigPopupComponent } from './../esign/controls/history/gridcolpopup/grid-col-config-popup.component';
 import { ButtonRendererComponent } from '../income-and-expense/button-renderer.component';
+import { CurrencyMaskModule } from "ng2-currency-mask";
 @NgModule({
   imports: [
     CommonModule,
@@ -32,7 +33,7 @@ import { ButtonRendererComponent } from '../income-and-expense/button-renderer.c
     SharedBaseModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatProgressSpinnerModule,
+    MatProgressSpinnerModule, MatDialogModule, CurrencyMaskModule,
     AgGridModule.withComponents([ButtonRendererComponent])
    ],
   declarations: [
@@ -46,7 +47,7 @@ import { ButtonRendererComponent } from '../income-and-expense/button-renderer.c
     IetCompanyComponent
     ],
   providers: [
-  ESignGuard
+  ESignGuard,
   ],
   exports: [ MatDatepickerModule]
 })
