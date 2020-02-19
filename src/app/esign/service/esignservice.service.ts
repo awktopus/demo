@@ -730,7 +730,7 @@ export class EsignserviceService  {
     this.auth.getESignOptionswithoutElToken());
   }
 
-  downloadYearlyReceipts(orgUnitId: string, companyId: string, fiscalYear: string): any {
+  downloadYearlyReceipts(orgUnitId: string, companyId: string, companyName: string,  fiscalYear: string): any {
     const url: string = this.auth.baseurl + '/iet/ClientCompanies/orgunitid/' + orgUnitId + '/clientcompany/' + companyId + '/year/' +
                         fiscalYear + '/mergedreceipts';
     console.log(url);
@@ -741,7 +741,7 @@ export class EsignserviceService  {
       const link = document.createElement('a');
       document.body.appendChild(link);
       link.href = fileURL;
-      link.download = fiscalYear + '_IncomeExpenseReceipts.pdf';
+      link.download = companyName + '_' + fiscalYear + '_Annual Receipts.pdf';
       link.click();
     });
   }

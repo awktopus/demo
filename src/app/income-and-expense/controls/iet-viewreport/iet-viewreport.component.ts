@@ -228,7 +228,7 @@ export class IetViewreportComponent implements OnInit {
 
   downloadYearlyReceiptsCSV() {
     let params = {
-      fileName: this.fiscalYear + '_YearlyReceipts'
+      fileName: this.companyName + '_' + this.fiscalYear + '_Income&Expenses'
     };
     this.allReceiptsGridApi.exportDataAsCsv(params);
   }
@@ -252,7 +252,7 @@ export class IetViewreportComponent implements OnInit {
     console.log('download Yearly Receipts...');
     this.showDownloadSpinner = true;
     this.service.downloadYearlyReceipts(this.service.auth.getOrgUnitID(),
-      this.companyId, this.fiscalYear);
+      this.companyId, this.companyName, this.fiscalYear);
     this.showDownloadSpinner = false;
   }
 
