@@ -149,7 +149,7 @@ export class IetViewreportComponent implements OnInit {
         headerName: 'Account', field: 'accountType', cellStyle: this.changeRowColor,
             },
       {
-        headerName: 'Account Number', field: 'accountNumber',
+        headerName: 'Account Number', field: 'accountNumber', width: 100,
         cellStyle: this.changeRowColor
       },
       {

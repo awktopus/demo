@@ -25,7 +25,7 @@ export class IetCompanyComponent implements OnInit {
   companyType: any;
   companyTypeId: number;
   operation: string; // create new companby or edit existing company
-  includeAccountNumber: any;
+  includeAccountNumber = true;
  // cpactrl: FormControl = new FormControl();
   companyId: string;
   removable = true;
@@ -37,7 +37,7 @@ export class IetCompanyComponent implements OnInit {
     companyTypeFormControl: new FormControl('', Validators.required),
     closingDateFormControl: new FormControl('', Validators.required),
     sharedUserFormControl: new FormControl(''),
-    includeAccountNumberFormControl: new FormControl(''),
+   // includeAccountNumberFormControl: new FormControl(''),
   });
   @ViewChild('focusField') focusField: ElementRef;
 
@@ -84,7 +84,7 @@ export class IetCompanyComponent implements OnInit {
       this.companyForm.controls['companyNameFormControl'].setValue(this.companyName);
       this.companyForm.controls['companyTypeFormControl'].setValue(this.companyType);
       this.companyForm.controls['closingDateFormControl'].setValue(this.closeDate);
-      this.companyForm.controls['includeAccountNumberFormControl'].setValue(this.includeAccountNumber);
+     // this.companyForm.controls['includeAccountNumberFormControl'].setValue(this.includeAccountNumber);
       this.focusField.nativeElement.focus();
     }
   });
@@ -105,11 +105,12 @@ export class IetCompanyComponent implements OnInit {
     this.companyType = clientCompany.companyType;
     this.companyTypeId = clientCompany.companyTypeId;
     this.closeDate = clientCompany.closeDate;
-    if (clientCompany.includeAccountNumber === 'Y') {
-      this.includeAccountNumber = true;
-    } else {
-      this.includeAccountNumber = false;
-    }
+    this.includeAccountNumber = true
+    // if (clientCompany.includeAccountNumber === 'Y') {
+    //   this.includeAccountNumber = true;
+    // } else {
+    //   this.includeAccountNumber = true;
+    // }
     this.companyId = clientCompany.companyId;
     this.sharedUsersList = clientCompany.sharedUsersList;
     }
