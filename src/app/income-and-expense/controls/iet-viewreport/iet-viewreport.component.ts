@@ -219,10 +219,11 @@ export class IetViewreportComponent implements OnInit {
 
   changeRowColor(params) {
     if (params.node.rowIndex % 2 === 0) {
-       return {'background-color': '#ccccff' };
+      // return {'background-color': '#ccccff' };
+       return {'background-color': '#ebfaeb' };
     }
     if (params.node.rowIndex % 2 === 1) {
-      return {'background-color': '#ebfaeb'};
+      return {'background-color': '#ffffff'};
    }
  }
 
