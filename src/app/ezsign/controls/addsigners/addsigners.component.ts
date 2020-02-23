@@ -65,7 +65,9 @@ export class AddsignersComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private router: Router, public dialog: MatDialog,
     private service: EsignserviceService,
     private ezSignDataService: EzsigndataService,
-    public dialogRef: MatDialogRef<AddsignersComponent>) { }
+    public dialogRef: MatDialogRef<AddsignersComponent>) {
+      dialogRef.disableClose = true;
+     }
 
   ngOnInit(): void {
     console.log('Add signers ngOnInit');

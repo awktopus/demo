@@ -17,7 +17,8 @@ export class AuditpopupComponent implements OnInit {
   gridColumnDefs: any;
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<AuditpopupComponent>,
-  ) { }
+  ) { dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
     this.gridColumnDefs = this.configColDef();

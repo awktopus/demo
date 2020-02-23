@@ -23,7 +23,9 @@ export class UploadscanpopupComponent implements OnInit {
   showSubmitSpinner = false;
   constructor( private service: EsignserviceService,
     private uiservice: EsignuiserviceService,
-    public dialogRef: MatDialogRef<UploadscanpopupComponent>) { }
+    public dialogRef: MatDialogRef<UploadscanpopupComponent>) {
+      dialogRef.disableClose = true;
+     }
 
   ngOnInit() {
     this.fcctrl.valueChanges.subscribe(val => {

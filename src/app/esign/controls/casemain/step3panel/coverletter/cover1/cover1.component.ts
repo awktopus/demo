@@ -19,6 +19,7 @@ export class Cover1Component implements OnInit {
     private service: EsignserviceService,
     public dialogRef: MatDialogRef<Cover1Component>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
+      dialogRef.disableClose = true;
      }
 
   ngOnInit() {

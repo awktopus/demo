@@ -21,7 +21,9 @@ export class ClientAnswerComponent implements OnInit {
 
 
   constructor(private service: EsignserviceService,
-    public dialogRef: MatDialogRef<ClientAnswerComponent>) { }
+    public dialogRef: MatDialogRef<ClientAnswerComponent>) {
+      dialogRef.disableClose = true;
+     }
 
   ngOnInit() {
   }

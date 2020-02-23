@@ -32,7 +32,9 @@ export class CasetemplatesComponent implements OnInit {
   casetemplatefiles: any;
   constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService,
     private router: Router,
-    public dialogRef: MatDialogRef<CasetemplatesComponent>) { }
+    public dialogRef: MatDialogRef<CasetemplatesComponent>) {
+      dialogRef.disableClose = true;
+     }
 
 
   ngOnInit() {

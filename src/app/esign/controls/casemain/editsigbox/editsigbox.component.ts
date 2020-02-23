@@ -73,7 +73,8 @@ export class EditSigboxComponent implements OnInit {
   showspinner = false;
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<EditSigboxComponent>, private sanitizer: DomSanitizer) {
-    this.viewControl = {
+      dialogRef.disableClose = true;
+      this.viewControl = {
       view: true,
       edit: false,
       createNew: false

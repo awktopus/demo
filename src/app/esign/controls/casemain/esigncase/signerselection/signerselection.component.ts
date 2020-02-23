@@ -16,7 +16,9 @@ export class SignerselectionComponent implements OnInit {
   eSignCaseComponent: EsigncaseComponent;
   signatureBoxCount: number;
   constructor(private service: EsignserviceService,
-    public dialogRef: MatDialogRef<SignerselectionComponent>) { }
+    public dialogRef: MatDialogRef<SignerselectionComponent>) { 
+      dialogRef.disableClose = true;
+    }
 
   ngOnInit() {
   }

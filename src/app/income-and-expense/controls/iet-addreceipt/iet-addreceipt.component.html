@@ -65,8 +65,8 @@
         <!--ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" type="number" -->
         <input matInput currencyMask formControlName="amountFormControl" 
         [(ngModel)]="amount" [options]="{ prefix: '$', 
-                                          thousands: '.', 
-                                          decimal: ',', 
+                                          thousands: ',', 
+                                          decimal: '.', 
                                           align: 'left',
                                           precision: 2,
                                           allowNegative: false }" 

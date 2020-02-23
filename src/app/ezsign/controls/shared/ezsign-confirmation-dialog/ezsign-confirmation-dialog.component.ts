@@ -9,7 +9,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 export class EzsignConfirmationDialogComponent implements OnInit {
 
   constructor( public dialogRef: MatDialogRef<EzsignConfirmationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public message: string) { }
+    @Inject(MAT_DIALOG_DATA) public message: string) {
+      dialogRef.disableClose = true;
+    }
 
   ngOnInit() {
   }

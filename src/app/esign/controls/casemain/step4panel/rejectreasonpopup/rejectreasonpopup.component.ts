@@ -17,7 +17,9 @@ export class RejectreasonpopupComponent implements OnInit {
   step4panelComp: Step4panelComponent;
 
   constructor( private service: EsignserviceService,
-    public dialogRef: MatDialogRef<RejectreasonpopupComponent>) { }
+    public dialogRef: MatDialogRef<RejectreasonpopupComponent>) { 
+      dialogRef.disableClose = true;
+    }
 
   ngOnInit() {
     }

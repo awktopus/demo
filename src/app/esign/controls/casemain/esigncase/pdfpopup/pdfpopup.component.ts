@@ -20,7 +20,9 @@ export class PdfpopupComponent implements OnInit {
   selectedForm: string;
   constructor( private uiservice: EsignuiserviceService, private service: EsignserviceService,
      public dialogRef: MatDialogRef<PdfpopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+      dialogRef.disableClose = true;
+     }
 
   ngOnInit() {
     this.fcctrl.valueChanges.subscribe(val => {

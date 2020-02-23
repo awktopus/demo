@@ -28,6 +28,7 @@ export class ClientreminderComponent implements OnInit {
   secSigCheck: any = true;
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<ClientreminderComponent>) {
+    dialogRef.disableClose = true;
     this.viewControl = {
       view: true,
       edit: false,

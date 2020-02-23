@@ -17,7 +17,9 @@ export class AddnotepopupComponent implements OnInit {
   historyref: HistoryComponent;
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<AddnotepopupComponent>,
-  ) { }
+  ) {
+    dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
   }

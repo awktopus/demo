@@ -16,7 +16,9 @@ export class IdentityQuestionsComponent implements OnInit {
   idQstnId: number;
 
   constructor(private service: EsignserviceService,
-    public dialogRef: MatDialogRef<IdentityQuestionsComponent>) { }
+    public dialogRef: MatDialogRef<IdentityQuestionsComponent>) { 
+      dialogRef.disableClose = true;
+    }
 
   ngOnInit() {
     this.service.getIdentityQuestions(this.orgUnitId).subscribe(resp => {

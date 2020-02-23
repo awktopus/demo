@@ -23,7 +23,9 @@ export class EmailpopupComponent implements OnInit {
   @ViewChild(CoverletterComponent) cover: CoverletterComponent;
   constructor( private service: EsignserviceService,
      public dialogRef: MatDialogRef<EmailpopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+      dialogRef.disableClose = true;
+     }
 
   ngOnInit() {
   }

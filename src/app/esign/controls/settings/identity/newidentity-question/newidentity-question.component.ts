@@ -12,7 +12,10 @@ export class NewidentityQuestionComponent implements OnInit {
   esignSettingsRef: EsignSettingsComponent;
   orgUnitId: string;
   identityQuestion: string;
-  constructor(private service: EsignserviceService, public dialogRef: MatDialogRef<NewidentityQuestionComponent>) { }
+  constructor(private service: EsignserviceService,
+    public dialogRef: MatDialogRef<NewidentityQuestionComponent>) {
+      dialogRef.disableClose = true;
+    }
 
   ngOnInit() {
   }

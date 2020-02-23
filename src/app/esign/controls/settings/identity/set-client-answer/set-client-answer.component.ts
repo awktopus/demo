@@ -36,6 +36,7 @@ export class SetClientAnswerComponent implements OnInit {
   frameworkComponents: string;
   constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService,
     public dialogRef: MatDialogRef<SetClientAnswerComponent>) {
+      dialogRef.disableClose = true;
   }
 
   setSource(source: string, clientId: string, clientType: string) {

@@ -20,7 +20,8 @@ export class FilingstatuspopupComponent implements OnInit {
 
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<FilingstatuspopupComponent>,
-  ) { }
+  ) { dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
   }

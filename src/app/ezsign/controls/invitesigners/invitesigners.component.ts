@@ -24,6 +24,7 @@ export class InvitesignersComponent implements OnInit, AfterViewInit {
   showProcessSpinner = false;
   constructor(private service: EzsigndataService, private router: Router,
     public dialogRef: MatDialogRef<InvitesignersComponent>) {
+      dialogRef.disableClose = true;
       this.viewControl = {
         view: true,
         edit: false,

@@ -18,7 +18,9 @@ export class DocumenthistoryComponent implements OnInit {
   title: string;
   constructor(private service: EzsigndataService,
     public dialogRef: MatDialogRef<DocumenthistoryComponent>,
-  ) { }
+  ) {
+    dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
     this.gridColumnDefs = this.configColDef();

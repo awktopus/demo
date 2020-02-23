@@ -13,6 +13,7 @@ export class GridColConfigPopupComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<GridColConfigPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
+      dialogRef.disableClose = true;
       console.log(data);
         this.api = data;
         this.cols = data.cols;
