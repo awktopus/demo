@@ -10,13 +10,17 @@ import { ClientreminderComponent } from '../casemain/esigncase/clientreminder/cl
 import { RouterLinkRendererComponent } from './RouterLinkRenderer.component';
 import { ReminderRendererComponent } from './ReminderRenderer.component';
 import { NotesRendererComponent } from './NotesRenderer.component';
-import { AuditRendererComponent} from './AuditRenderer.component';
+import { AuditRendererComponent } from './AuditRenderer.component';
 import { NewCaseRendererComponent } from './NewCaseRenderer.component';
 import { GridColConfigPopupComponent } from './gridcolpopup/grid-col-config-popup.component';
 import { AuditpopupComponent } from './auditpopup/auditpopup.component';
 import { CasetemplatesComponent } from './casetemplates/casetemplates.component';
 import { FilingStatusRendererComponent } from './FilingStatusRenderer.component';
 import { FilingstatuspopupComponent } from './filingstatuspopup/filingstatuspopup.component';
+import { BulkarchiveComponent } from '../archive/bulkarchive/bulkarchive.component';
+import { MoreOptionsRendererComponent } from './MoreOptionsRenderer.component';
+import { ConfirmationDialogComponent } from '../shared/confirmation-dialog/confirmation-dialog.component';
+import { SinglecasearchiveComponent } from '../archive/singlecasearchive/singlecasearchive.component';
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
@@ -101,7 +105,8 @@ export class HistoryComponent implements OnInit, AfterViewInit {
       notesRenderer: NotesRendererComponent,
       auditRender: AuditRendererComponent,
       newCaseRenderer: NewCaseRendererComponent,
-      filingStatusRenderer: FilingStatusRendererComponent
+      filingStatusRenderer: FilingStatusRendererComponent,
+      moreOptionsRenderer: MoreOptionsRendererComponent
     };
     this.route.paramMap.subscribe(para => {
       this.filtertype = para.get('type');
@@ -114,7 +119,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
         this.pageHeading = 'All Cases';
         this.service.getAllCases().subscribe(resp => {
           const ccc: ESignCase[] = <ESignCase[]>resp;
-         // console.log(ccc);
+          // console.log(ccc);
           this.setCaseData(ccc);
           this.isSearch = false;
           this.allcasegridData = this.cases;
@@ -142,7 +147,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
     });
 
     this.casectrl.valueChanges.subscribe(val => {
-   //  console.log('search case');
+      //  console.log('search case');
       if (val && typeof val !== 'object') {
         if (this.search_val === val.trim()) {
           return;
@@ -170,7 +175,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
 
 
   addNotes(caseId: string, notes: string) {
-   // console.log(caseId);
+    // console.log(caseId);
     const dialogRef = this.dialog.open(AddnotepopupComponent, {
       width: '480px',
     });
@@ -201,14 +206,14 @@ export class HistoryComponent implements OnInit, AfterViewInit {
 
 
   createClientReminder(caseId: string): void {
-   // console.log('create client remider:' + caseId);
+    // console.log('create client remider:' + caseId);
     const dialogRef = this.dialog.open(ClientreminderComponent, {
       width: '980px',
     });
     dialogRef.componentInstance.historyref = this;
     this.service.getClientScheduleReminder(caseId).subscribe(resp => {
       const res_c = <any>resp;
-   //   console.log(res_c);
+      //   console.log(res_c);
       dialogRef.componentInstance.setClientReminderInfo(res_c);
     });
   }
@@ -242,11 +247,15 @@ export class HistoryComponent implements OnInit, AfterViewInit {
     const res = [
       {
         headerName: 'Case #', field: 'caseId',
-        cellRenderer: 'linkRenderer', width: 120,
+        cellRenderer: 'linkRenderer', width: 150,
+        suppressSizeToFit: true,
+        // checkboxSelection: true
+        // headerCheckboxSelection: true
+      },
+      {
+        headerName: '+', field: 'newCase', cellRenderer: 'newCaseRenderer', width: 50,
         suppressSizeToFit: true
       },
-      { headerName: '+', field: 'newCase', cellRenderer: 'newCaseRenderer', width: 50,
-      suppressSizeToFit: true },
       { headerName: 'Status', field: 'status', cellStyle: { color: 'blue' } },
       { headerName: 'Category', field: 'type' },
       { headerName: 'Return Name', field: 'returnName' },
@@ -299,6 +308,10 @@ export class HistoryComponent implements OnInit, AfterViewInit {
       {
         headerName: 'Filing Status', field: 'filingStatus', cellRenderer: 'filingStatusRenderer',
         minwidth: 100
+      },
+      {
+        headerName: '', field: 'moreOptions', cellRenderer: 'moreOptionsRenderer',
+        minwidth: 100
       }
     ];
     this.context = { componentParent: this, allcasefit: false, mycasefit: false, reviewcasefit: false };
@@ -306,7 +319,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
   }
 
   nameRenderer(params) {
-   if (!params.value.firstName) {
+    if (!params.value.firstName) {
       params.value.firstName = '';
     }
     if (!params.value.lastName) {
@@ -314,6 +327,36 @@ export class HistoryComponent implements OnInit, AfterViewInit {
     }
     return params.value.firstName + ' ' + params.value.lastName;
   }
+
+  onGridReady(params, gridname) {
+    console.log(params);
+    params.api.sizeColumnsToFit();
+    if (gridname === 'mycase') {
+      this.mycaseapi.api = params.api;
+      this.mycaseapi.columnApi = params.columnApi;
+      this.mycaseapi.cols = [];
+      this.mycaseapi.columnApi.getAllColumns().forEach(cc => {
+        this.mycaseapi.cols.push({ colId: cc.colId, checked: true, headerName: cc.colDef.headerName });
+      });
+    }
+    if (gridname === 'allcase') {
+      this.allcaseapi.api = params.api;
+      this.allcaseapi.columnApi = params.columnApi;
+      this.allcaseapi.cols = [];
+      this.allcaseapi.columnApi.getAllColumns().forEach(cc => {
+        this.allcaseapi.cols.push({ colId: cc.colId, checked: true, headerName: cc.colDef.headerName });
+      });
+    }
+    if (gridname === 'reviewcases') {
+      this.reviewcaseapi.api = params.api;
+      this.reviewcaseapi.columnApi = params.columnApi;
+      this.reviewcaseapi.cols = [];
+      this.reviewcaseapi.columnApi.getAllColumns().forEach(cc => {
+        this.reviewcaseapi.cols.push({ colId: cc.colId, checked: true, headerName: cc.colDef.headerName });
+      });
+    }
+  }
+
   onFirstDataRendered(params, gridname) {
     console.log(params);
     params.api.sizeColumnsToFit();
@@ -431,14 +474,14 @@ export class HistoryComponent implements OnInit, AfterViewInit {
 
   changeCaseFilingStatus(caseId: string) {
     // console.log(caseId);
-     const dialogRef = this.dialog.open(FilingstatuspopupComponent, {
-       width: '480px',
-     });
-     dialogRef.componentInstance.historyref = this;
-     dialogRef.componentInstance.setData(caseId);
-   }
+    const dialogRef = this.dialog.open(FilingstatuspopupComponent, {
+      width: '480px',
+    });
+    dialogRef.componentInstance.historyref = this;
+    dialogRef.componentInstance.setData(caseId);
+  }
 
-   updateGridCaseFilingStatus(caseId: string, status: string) {
+  updateGridCaseFilingStatus(caseId: string, status: string) {
     // this.cases.forEach(cc => {
     //   if (cc.caseId === caseId) {
     //     cc.status = status;
@@ -447,4 +490,38 @@ export class HistoryComponent implements OnInit, AfterViewInit {
     this.loadSearchData('allcases', '');
   }
 
+  performMoreOperationAction(actionName: string, caseRecord: any) {
+    console.log('singleCaseArchive');
+    console.log(actionName);
+    console.log(caseRecord);
+    if (actionName === 'archive') {
+      this.singleCaseArchive(caseRecord);
+    }
+  }
+
+  singleCaseArchive(caseRecord: any) {
+    const dialogRef = this.dialog.open(SinglecasearchiveComponent, {
+      width: '700px', height: '350px'
+    });
+
+    dialogRef.componentInstance.historyComponentRef = this;
+    dialogRef.componentInstance.setData(caseRecord.caseId);
+  }
+
+  bulkCaseArchive() {
+    const dialogRef = this.dialog.open(BulkarchiveComponent, {
+      width: '700px', height: '600px'
+    });
+    dialogRef.componentInstance.historyComponentRef = this;
+  }
+
+  // onRowSelected(event) {
+  //   console.log('onRowSelected:');
+  //   console.log(event);
+  // }
+
+  // onSelectionChanged(event) {
+  //   console.log('onSelectionChanged:');
+  //   console.log(event);
+  // }
 }

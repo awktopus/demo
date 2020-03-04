@@ -28,9 +28,13 @@
             *ngIf='isAccountingFirm && !isClient'>
             <mat-icon>note_add</mat-icon>
           </px-gdn-sideitem>
+          <px-gdn-sideitem title="Archive" [routerLinkUrl]="['esign/archive', 'archivedcases']" *ngIf='isAccountingFirm && !isClient'>
+            <mat-icon>folder</mat-icon>
+          </px-gdn-sideitem>
           <px-gdn-sideitem title="Settings" [routerLinkUrl]="'esign/settings'" *ngIf='isAccountingFirm && !isClient'>
             <mat-icon>settings_applications</mat-icon>
-          </px-gdn-sideitem>
+          </px-gdn-sideitem>      
+
           <px-gdn-sideitem title="My Tax Cases" [routerLinkUrl]="'esign/mycases'"
             *ngIf='isAccountingFirm && isClient'>
             <mat-icon>assignment</mat-icon>

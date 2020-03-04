@@ -1,0 +1,131 @@
+.container{
+    margin-left: 1200px;
+    float: left;
+    width: 98%; 
+  } 
+
+  .casefield {
+    padding-left:15px;
+    width: 90%
+  }
+  
+  .casefield > * {
+    width: 90%
+  }
+
+  .type-icon {
+    color: #999;
+    margin-right: 5px;
+  }
+  .txtColor:hover{
+    color: #03a9f4;
+    cursor: pointer;
+  }
+  
+  .background-highlight{
+    background: lightblue;
+  }
+  .trackertable {
+    margin-top: 10px;
+    margin-left: 10px;
+    padding-left:10px;
+    padding-right:10px;
+    max-width: 700px;
+    width: 100%;
+  //border: 1px solid #ddd;
+  }
+  .trackertable2 {
+    margin-left: 20px;
+    padding-left:15px;    
+  }
+  .casefield {
+    padding-left:15px;
+    padding-bottom: 5px;
+    width: 90%
+  }
+  
+  .casefield > * {
+    width: 90%
+  }
+  
+  .trackertable2 {
+    margin-top: 10px;
+    margin-left: 10px;
+    padding-left:10px;
+    padding-right:10px;
+    max-width: 700px;
+    width: 100%;
+     }
+  
+    .trackertable {
+      margin-left: 20px;
+      padding-left:15px;    
+    }
+  
+    .heading-label {
+      margin-left:40%;
+      color: #03a9f4;
+      font-size: 20px;
+      line-height: 28px;
+    }
+  
+    .fill-remaining-space {
+      /* This fills the remaining space, by using flexbox. 
+         Every toolbar row uses a flexbox row layout. */
+      flex: 1 1 auto;
+      background: white;
+    }
+    
+    form.normal-form{
+      margin: 10px;
+  }
+  
+  .invgridColumn{
+      //display:inline-block;
+      margin: 1%;    
+    //  border-radius: 25px;
+    //  border: 1px solid #D3D3D3;
+      padding: 5%;
+  }
+  
+          div.container{
+              margin: 0px 40px;
+          }
+  
+    .appfield {
+    width: 95%;
+  }
+  
+    .appfield > * {
+      width: 100%;
+      }
+
+      .appdivfield {
+        width: 95%;
+        border: 2px solid lightgrey;
+        border-radius: 5px;
+      }
+      
+        .appdivfield > * {
+          width: 100%;
+          }
+  
+  
+      .button-row{
+        margin-left:30%;
+      }
+
+      .appfield2 {
+        width: 40%;
+      }
+      
+        .appfield2 > * {
+          width: 40%;
+          }
+          
+          .heading-label2 {
+            margin-left:5px;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+            width: 18%;           
+          }

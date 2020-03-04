@@ -1,15 +1,13 @@
 <table class="trackertable4">
   <tr align="left">
-      <td colspan="12">
-          <button mat-raised-button color="accent" 
-          matTooltip="Create new tax case" (click)="showCaseTemplatesPopup()">
-              + NEW TAX CASE
-          </button>
-      </td>
+    <td colspan="12">
+      <button mat-raised-button color="accent" matTooltip="Create new tax case" (click)="showCaseTemplatesPopup()">
+        + NEW TAX CASE
+      </button>
+    </td>
   </tr>
 </table>
-<mat-tab-group style='padding-left:20pt;padding-top:10pt' 
-(focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
+<mat-tab-group style='padding-left:20pt;padding-top:10pt' (focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
   <mat-tab label="My Worklist">
     <br>
     <table width=99%>
@@ -24,43 +22,22 @@
         </td>
       </tr>
     </table>
-    <ag-grid-angular #agGridReviewCase style="width: 98%; height: 740px; font-size:11pt" class="ag-theme-balham" [rowData]="reviewcasegridData"
-      [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
-      [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'reviewcase')"
-      [domLayout]="autoHeight">
-    </ag-grid-angular>
+    <div style="margin-top: 1px">
+      <ag-grid-angular #agGridReviewCase style="width: 98%; height: 740px; font-size:11pt" class="ag-theme-balham" [rowData]="reviewcasegridData"
+        [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+        [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'reviewcase')"
+        [domLayout]="autoHeight" (gridReady)="onGridReady($event,'reviewcase')">
+      </ag-grid-angular>
+    </div>
   </mat-tab>
-  <!-- <mat-tab label="My Cases">
-    <br>
-    <table width=99%>
-      <tr>
-        <td align=right width='30'>
-        </td>
-        <td align=right>
-          <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(mycaseapi)'>list_alt</mat-icon>
-          <mat-icon class='docicon' mdbRippleRadius (click)="gridExport('mycase')" matTooltip="Export CSV">insert_link</mat-icon>
-          <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('mycase')" matTooltip="Expand All">swap_horiz</mat-icon>
-          <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('mycase')" matTooltip="Refit">tune</mat-icon>
-        </td>
-       </tr>
-    </table>
-    <ag-grid-angular #agGridMyCase style="width: 98%; height: 540px;font-size:10pt" class="ag-theme-balham" [rowData]="mycasegridData"
-      [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
-      [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'mycase')"
-      [domLayout]="autoHeight">
-    </ag-grid-angular>
-  </mat-tab> -->
   <mat-tab label="All Cases">
     <br>
     <table width=99%>
       <tr>
-        <!-- <td>
-                <h6 style='padding-left:20pt'>{{pageHeading}}</h6>
-              </td> -->
         <td align=left>
-
         </td>
         <td align=right>
+          <mat-icon class='docicon' mdbRippleRadius matTooltip="Bulk Archive" (click)='bulkCaseArchive()'>folder_open</mat-icon>
           <mat-icon class='docicon' matTooltip="Config Columns" mdbRippleRadius (click)='openColumnConfig(allcaseapi)'>list_alt</mat-icon>
           <mat-icon class='docicon' matTooltip="Export CSV" mdbRippleRadius (click)="gridExport('allcase')">insert_link</mat-icon>
           <mat-icon class='docicon' matTooltip="Expand All" mdbRippleRadius (click)="resizeAll('allcase')">swap_horiz</mat-icon>
@@ -68,13 +45,12 @@
         </td>
       </tr>
     </table>
-    <ag-grid-angular #agGridAllCase style="width: 98%; height: 740px; font-size:11pt" class="ag-theme-balham" [rowData]="allcasegridData"
-      [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
-      [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="50" 
-      (firstDataRendered)="onFirstDataRendered($event,'allcase')"
-      [domLayout]="autoHeight"></ag-grid-angular>
-  </mat-tab>  
-  <!-- <mat-tab label="+ New Tax Case">
-  </mat-tab> -->
+    <div style="margin-top: 1px">
+      <ag-grid-angular #agGridAllCase style="width: 98%; height: 740px; font-size:11pt" class="ag-theme-balham" [rowData]="allcasegridData"
+        [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+        [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="50" (firstDataRendered)="onFirstDataRendered($event,'allcase')"
+        [domLayout]="autoHeight" (gridReady)="onGridReady($event,'allcase')"></ag-grid-angular>
+    </div>
+  </mat-tab>
 </mat-tab-group>
 <router-outlet></router-outlet>

@@ -5,6 +5,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Step4panelComponent } from '../../step4panel/step4panel.component';
 import { ESignCase, ESignDoc, ESignCPA, ESignClient, ClientReminder } from '../../../../beans/ESignCase';
 import { FormGroup } from '@angular/forms';
+import { ArchiveComponent } from '../../../archive/archive.component';
 @Component({
   selector: 'app-clientreminder',
   templateUrl: './clientreminder.component.html',
@@ -22,6 +23,7 @@ export class ClientreminderComponent implements OnInit {
   lastReminderDateTime: string;
   sendReminderNow: any;
   historyref: HistoryComponent;
+  archiveComponentRef: ArchiveComponent;
   step4panelComp: Step4panelComponent;
   clientReminder: ClientReminder;
   priSigCheck: any = true;

@@ -8,7 +8,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {
   MatDividerModule, MatTableModule,
   MatStepperModule, MatFormFieldModule, MatSortModule, MatDatepickerModule,
-   MatNativeDateModule
+   MatNativeDateModule,
+   MatTreeModule,
+   MatIconModule,
+   MatButtonModule
 } from '@angular/material';
 import { CovalentLayoutModule } from '@covalent/core/layout';
 import { CasemainComponent } from './controls/casemain/casemain.component';
@@ -58,6 +61,12 @@ import { CasetemplatesComponent } from './controls/history/casetemplates/casetem
 import { ConfirmationDialogComponent } from './controls/shared/confirmation-dialog/confirmation-dialog.component';
 import { FilingStatusRendererComponent } from './controls/history/FilingStatusRenderer.component';
 import { FilingstatuspopupComponent } from './controls/history/filingstatuspopup/filingstatuspopup.component';
+import { ArchiveComponent } from './controls/archive/archive.component';
+import { BulkarchiveComponent } from './controls/archive/bulkarchive/bulkarchive.component';
+import { MoreOptionsRendererComponent } from './controls/history/MoreOptionsRenderer.component';
+import { MoreOptionsRenderer2Component } from './controls/archive/MoreOptionsRenderer2.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { SinglecasearchiveComponent } from './controls/archive/singlecasearchive/singlecasearchive.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -78,10 +87,10 @@ import { FilingstatuspopupComponent } from './controls/history/filingstatuspopup
     MatNativeDateModule,
     NgxEditorModule,
     MatProgressSpinnerModule,
-    AngularDraggableModule,
+    AngularDraggableModule, MatTreeModule, MatIconModule, MatButtonModule,
     AgGridModule.withComponents([AuditRendererComponent, RouterLinkRendererComponent,
       ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent,
-    FilingStatusRendererComponent]),
+    FilingStatusRendererComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component]),
   ],
   declarations: [
     GridColConfigPopupComponent,
@@ -126,7 +135,9 @@ import { FilingstatuspopupComponent } from './controls/history/filingstatuspopup
     NewCaseRendererComponent,
     CasetemplatesComponent,
     FilingStatusRendererComponent,
-    FilingstatuspopupComponent
+    FilingstatuspopupComponent,
+    ArchiveComponent,
+    BulkarchiveComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component, SinglecasearchiveComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
      RejectreasonpopupComponent, EmailpopupComponent, UploadscanpopupComponent,
@@ -134,7 +145,8 @@ import { FilingstatuspopupComponent } from './controls/history/filingstatuspopup
      SetClientAnswerComponent, NewidentityQuestionComponent, HistoryComponent,
      SignerselectionComponent,
     GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent,
-    CasetemplatesComponent, FilingstatuspopupComponent],
+    CasetemplatesComponent, FilingstatuspopupComponent, ArchiveComponent,
+    BulkarchiveComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component, SinglecasearchiveComponent],
   providers: [
     ESignGuard,
     // AuthGuard,

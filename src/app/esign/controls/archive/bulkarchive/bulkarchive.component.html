@@ -1,0 +1,90 @@
+<span>
+  <label class="heading-label">Bulk Archive</label>
+  <button mat-icon-button color="warn" style="margin-left:30%" (click)="cancelBulkArchive()">
+    <mat-icon style="font-size: 40px;">clear</mat-icon>
+  </button>
+</span>
+
+<div fxLayout="column">
+  <div class="invgridColumn">
+
+    <form [formGroup]="bulkArchiveForm">
+
+      <mat-form-field class="appfield" appearance="outline">
+          <mat-label>Tax case status</mat-label>
+        <mat-select formControlName="taxCaseStatusFormControl" #focusField required>
+          <mat-option *ngFor="let status of taxCaseStatuses" [value]="status">
+                  {{ status }}
+          </mat-option>
+          <!-- <mat-option value="none"></mat-option>
+          <mat-option value="Signed">Signed</mat-option>
+          <mat-option value="e-File-Pending">e-File-Pending</mat-option>
+          <mat-option value="Upload">Upload</mat-option> -->
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Start date</mat-label>
+        <input matInput [matDatepicker]="startDate" date="true" formControlName="startDateFormControl">
+        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+        <mat-datepicker #startDate></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>End date</mat-label>
+        <input matInput [matDatepicker]="endDate" date="true" formControlName="endDateFormControl">
+        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+        <mat-datepicker #endDate></mat-datepicker>
+      </mat-form-field>
+
+      <div class="appdivfield">
+        <mat-label style="margin-left: 5px;">Select folder</mat-label>
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding (click)="activeNode = node" [ngClass]="{ 'background-highlight': activeNode === node }">
+            <button mat-icon-button disabled></button>
+            <mat-icon class="type-icon" [attr.aria-label]="node.type + 'icon'">
+              {{ node.type ==='file' ? 'description' : 'folder' }}
+            </mat-icon>
+            <span class="txtColor">{{node.name}}</span>
+          </mat-tree-node>
+
+          <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+            <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+              </mat-icon>
+            </button>
+            <mat-icon class="type-icon" [attr.aria-label]="node.type + 'icon'">
+              {{ node.type ==='file' ? 'description' : 'folder' }}
+            </mat-icon>
+            {{node.name}}
+          </mat-tree-node>
+        </mat-tree>
+      </div>
+
+    </form>
+
+    <div>
+      <br/>
+    </div>
+
+    <div class="button-row">
+      <div fxLayout="row">
+        <button mat-raised-button class="text-upper" (click)="cancelBulkArchive()">
+          Cancel
+        </button>
+        &nbsp; &nbsp;
+
+        <span *ngIf='!showAddspinner'>
+          <button [disabled]="bulkArchiveForm.invalid" mat-raised-button color="accent" 
+                  class="text-upper" (click)="archiveBulkCases()">
+            Archive Cases
+            <mat-icon>check_circle_outline</mat-icon>
+          </button>
+        </span>
+        <mat-spinner *ngIf='showAddspinner' diameter='20'></mat-spinner>
+        <span *ngIf='showAddspinner'>Processing...</span>
+        &nbsp; &nbsp;
+      </div>
+    </div>
+  </div>

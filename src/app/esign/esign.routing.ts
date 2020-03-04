@@ -14,6 +14,7 @@ import { CasesigcapComponent } from './controls/mycases/casesigcap/casesigcap.co
 import { EsignSettingsComponent } from './controls/settings/esign-settings.component';
 import { IdentityComponent } from './controls/settings/identity/identity.component';
 import { EmailsettingsComponent } from './controls/settings/emailsettings/emailsettings.component';
+import { ArchiveComponent } from './controls/archive/archive.component';
 export const esignRoutes: Routes = [
     {
         path: '',
@@ -93,6 +94,16 @@ export const esignRoutes: Routes = [
         path: 'history/:type',
         canActivate: [AuthGuard, ESignGuard],
         component: HistoryComponent
+    },
+    {
+        path: 'archive',
+        canActivate: [AuthGuard, ESignGuard],
+        component: ArchiveComponent
+    },
+    {
+        path: 'archive/:type',
+        canActivate: [AuthGuard, ESignGuard],
+        component: ArchiveComponent
     }
 ];
 

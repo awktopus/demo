@@ -25,8 +25,8 @@ export class FilingStatusRendererComponent implements ICellRendererAngularComp {
             this.colorstr = 'primary';
             this.iconName = 'check_box';
         } else {
-            this.colorstr = 'warn';
-            this.iconName = 'pause_circle_filled';
+           // this.colorstr = 'warn';
+            this.iconName = 'pause_circle_outline';
         }
     }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EsignserviceService } from '../../../service/esignservice.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { HistoryComponent } from '../history.component';
+import { ArchiveComponent } from '../../archive/archive.component';
 
 @Component({
   selector: 'app-addnotepopup',
@@ -15,6 +16,7 @@ export class AddnotepopupComponent implements OnInit {
   newnotes: string;
   splitLines: string[];
   historyref: HistoryComponent;
+  archiveComponentRef: ArchiveComponent;
   constructor(private service: EsignserviceService,
     public dialogRef: MatDialogRef<AddnotepopupComponent>,
   ) {

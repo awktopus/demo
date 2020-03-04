@@ -660,6 +660,48 @@ export class EsignserviceService  {
     this.auth.getESignOptionswithoutElToken());
   }
 
+  archiveSingleCase(caseId) {
+    console.log('calling archivesinglecase service api');
+    return this.http.put(this.auth.baseurl + '/Cases/orgUnitId/' + this.auth.getOrgUnitID() +
+          '/staff/'  + this.auth.getUserID() + '/case/' + caseId + '/archive',
+      null, this.auth.getESignOptions());
+  }
+
+  unarchiveSingleCase(caseId) {
+    console.log('calling unarchiveSingleCase service api');
+    return this.http.put(this.auth.baseurl + '/Cases/orgUnitId/' + this.auth.getOrgUnitID() +
+          '/staff/'  + this.auth.getUserID() + '/case/' + caseId + '/unarchive',
+      null, this.auth.getESignOptions());
+  }
+
+  deleteSingleCase(caseId) {
+    console.log('calling archivesinglecase service api');
+    return this.http.delete(this.auth.baseurl + '/Cases/orgUnitId/' + this.auth.getOrgUnitID() +
+          '/staff/'  + this.auth.getUserID() + '/case/' + caseId + '/delete', this.auth.getESignOptions());
+  }
+
+  getArchivedTaxCases() {
+   console.log('getArchivedTaxCases');
+    const urlstr: string = this.auth.baseurl + '/Cases/orgUnitId/' + this.auth.getOrgUnitID() +
+    '/staff/'  + this.auth.getUserID() + '/archivedTaxCases';
+    return this.http.get(urlstr, this.auth.getESignOptions())
+  }
+
+getDistinctTaxCaseStatuses() {
+  console.log('calling getDistinctTaxCaseStatuses');
+    const url: string = this.auth.baseurl + '/Cases/distinct/taxstatuses';
+    return this.http.get(url, this.auth.getESignOptions());
+}
+
+bulkTaxCaseArchive(bulkCaseArchivejson) {
+  console.log('calling bulkTaxCaseArchive service api');
+  return this.http.put(this.auth.baseurl + '/Cases/orgUnitId/' + this.auth.getOrgUnitID() +
+        '/staff/'  + this.auth.getUserID() + '/bulk/archive',
+        bulkCaseArchivejson, this.auth.getESignOptions());
+}
+
+
+
   // IET related server api - start
 
   getCompanyTypes() {
