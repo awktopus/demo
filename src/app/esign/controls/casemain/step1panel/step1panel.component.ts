@@ -79,27 +79,52 @@ export class Step1panelComponent implements OnInit {
   ngOnInit() {
     this.caseDataloading = true;
     this.focusField.focused = true;
-    forkJoin([
-      this.service.getEsignConfig(),
-      this.service.getCPAs()
-    ]).subscribe(results => {
-      this.config = <ESignConfig>results[0];
-      console.log('esign config');
-      console.log(results);
-      this.casecates = this.config.eSignCates;
-      this.cpas = <ESignCPA[]>results[1];
-      this.cachecpas = <ESignCPA[]>results[1];
-      this.CPAID = this.service.auth.getUserID();
-      this.cpas.forEach(ele => {
-          if (ele.cpaClients) {
-          this.clients = ele.cpaClients;
-          this.secclients = ele.cpaClients;
-          this.recclients = ele.cpaClients;
-          console.log('cpa clients');
-          console.log(this.clients);
-        }
+    // forkJoin([
+    //   this.service.getEsignConfig(),
+    //   this.service.getCPAs()
+    // ]).subscribe(results => {
+    //   this.config = <ESignConfig>results[0];
+    //   console.log('esign config');
+    //   console.log(results);
+    //   this.casecates = this.config.eSignCates;
+    //   this.cpas = <ESignCPA[]>results[1];
+    //   this.cachecpas = <ESignCPA[]>results[1];
+    //   this.CPAID = this.service.auth.getUserID();
+    //   this.cpas.forEach(ele => {
+    //       if (ele.cpaClients) {
+    //       this.clients = ele.cpaClients;
+    //       this.secclients = ele.cpaClients;
+    //       this.recclients = ele.cpaClients;
+    //       console.log('cpa clients');
+    //       console.log(this.clients);
+    //     }
+    //     this.caseDataloading = false;
+    //   });
+
+
+        this.service.getEsignConfig().subscribe(results => {
+        this.config = <ESignConfig>results;
+        console.log('esign config');
+        console.log(results);
+        this.casecates = this.config.eSignCates;
         this.caseDataloading = false;
-      });
+        });
+
+        this.service.getCPAs().subscribe(clientsResp => {
+        this.cpas = <ESignCPA[]>clientsResp;
+        this.cachecpas = <ESignCPA[]>clientsResp;
+        this.CPAID = this.service.auth.getUserID();
+        this.cpas.forEach(ele => {
+            if (ele.cpaClients) {
+            this.clients = ele.cpaClients;
+            this.secclients = ele.cpaClients;
+            this.recclients = ele.cpaClients;
+            console.log('cpa clients');
+            console.log(this.clients);
+          }
+        });
+
+
       if (this.initcaseheader) {
         console.log('step1 panel: init case header inside if');
         console.log(this.initcaseheader);
@@ -117,6 +142,8 @@ export class Step1panelComponent implements OnInit {
       });
     }
     });
+
+
     this.caseStep1Form.controls['clientctrl'].valueChanges.subscribe(val => {
       console.log('clientctrl search clients called');
 
@@ -147,6 +174,7 @@ export class Step1panelComponent implements OnInit {
         });
       }
     });
+
     this.caseStep1Form.controls['secclientctrl'].valueChanges.subscribe(val => {
       console.log('secclientctrl search clients called');
       console.log(val.trim());
@@ -171,6 +199,8 @@ export class Step1panelComponent implements OnInit {
         });
       }
     });
+
+
     this.caseStep1Form.controls['recclientctrl'].valueChanges.subscribe(val => {
       console.log('recclientctrl search clients called')
       console.log(val.trim());
@@ -191,6 +221,8 @@ export class Step1panelComponent implements OnInit {
         }
       }
     });
+
+
     this.caseStep1Form.controls['cpactrl'].valueChanges.subscribe(val => {
       if (val && typeof val !== 'object') {
         // console.log(val);
@@ -207,6 +239,8 @@ export class Step1panelComponent implements OnInit {
         }
       }
     });
+
+
     this.uiservice.getDistinctTaxYears().subscribe(resp => {
       this.taxYears = <TaxYears[]>resp;
     });
