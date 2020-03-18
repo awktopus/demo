@@ -146,18 +146,18 @@ export class IetViewreportComponent implements OnInit {
   configColDef() {
     const res = [
       {
-        headerName: 'Account', field: 'accountType', cellStyle: this.changeRowColor,
-            },
+        headerName: 'Date', field: 'receiptDate', width: 100,
+        cellStyle: this.changeRowColor
+      },
       {
         headerName: 'Account Number', field: 'accountNumber', width: 100,
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Name', field: 'vendorName',
-        cellStyle: this.changeRowColor
-      },
+        headerName: 'Account Name', field: 'accountType', cellStyle: this.changeRowColor,
+            },
       {
-        headerName: 'Receipt', field: 'receiptDate', width: 100,
+        headerName: 'Name', field: 'vendorName',
         cellStyle: this.changeRowColor
       },
       {
@@ -229,9 +229,11 @@ export class IetViewreportComponent implements OnInit {
 
   downloadYearlyReceiptsCSV() {
     let params = {
-      fileName: this.companyName + '_' + this.fiscalYear + '_Income&Expenses'
+      fileName: this.companyName + '_' + this.fiscalYear + '_Income&Expenses',
+      columnKeys: ['receiptDate', 'accountNumber', 'accountType', 'vendorName', 'amount', 'notes']
     };
     this.allReceiptsGridApi.exportDataAsCsv(params);
+  // this.allReceiptsGridApi.exportDataAsExcel(params);
   }
 
   setViewReportInfo(companyTypeId: string, companyId: string, companyName: string, includeAccountNumber: any) {

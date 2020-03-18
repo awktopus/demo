@@ -31,7 +31,7 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   industryName: string;
   industryId: string;
   isIETfunctionAccessible = false;
-
+isAdmin = false;
   // tslint:disable-next-line:max-line-length
   constructor(public resizeService: ResizeService, private router: Router,
     private auth: AuthService, private localStorage: LocalStorageService,
@@ -71,6 +71,13 @@ export class MainPageComponent implements OnInit, AfterViewInit {
           this.isClient = true;
         } else {
           this.isClient = false;
+        }
+
+        if (org.userRole.normalizedName.toUpperCase() === 'ADMIN' ||
+              org.userRole.normalizedName.toUpperCase() === 'OWNER') {
+          this.isAdmin = true;
+        } else {
+          this.isAdmin = false;
         }
       }
     });

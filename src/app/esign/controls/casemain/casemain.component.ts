@@ -82,6 +82,8 @@ export class CasemainComponent implements OnInit, AfterViewInit {
   }
 
   getStepByStatus(s: string) {
+    console.log('getstepbystatus');
+    console.log(s);
     if (s === 'Preparation' || s === '') {
       return 0;
     }
@@ -95,7 +97,7 @@ export class CasemainComponent implements OnInit, AfterViewInit {
       return 3;
     }
     if (s === 'Signed' || s === 'ESign' || s === 'Emailed') {
-      return 4;
+      return 3;
     }
   }
   navigateCaseManagement() {

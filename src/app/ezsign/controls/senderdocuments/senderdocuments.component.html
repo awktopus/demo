@@ -113,11 +113,13 @@
                 </td>
             </tr>
         </table>
+        <div style="margin-top: 1px">
         <ag-grid-angular #agGrid id="ezSignDocsGrid" style="width: 98%; height: 700px; font-size:11pt" class="ag-theme-balham" [rowData]="ezSignDocsgridData"
             [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
             [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'ezsign')"
             [rowHeight]="rowHeight" [rowClass]="rowClass">
         </ag-grid-angular>
+    </div>
         <!-- </mat-tab>
         </mat-tab-group> -->
         <!-- <router-outlet></router-outlet> -->

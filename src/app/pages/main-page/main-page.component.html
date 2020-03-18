@@ -31,7 +31,7 @@
           <px-gdn-sideitem title="Archive" [routerLinkUrl]="['esign/archive', 'archivedcases']" *ngIf='isAccountingFirm && !isClient'>
             <mat-icon>folder</mat-icon>
           </px-gdn-sideitem>
-          <px-gdn-sideitem title="Settings" [routerLinkUrl]="'esign/settings'" *ngIf='isAccountingFirm && !isClient'>
+          <px-gdn-sideitem title="Settings" [routerLinkUrl]="'esign/settings'" *ngIf='isAccountingFirm && isAdmin'>
             <mat-icon>settings_applications</mat-icon>
           </px-gdn-sideitem>      
 
