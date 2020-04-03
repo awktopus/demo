@@ -162,7 +162,8 @@ export class IetViewreportComponent implements OnInit {
       },
       {
         headerName: 'Amount', field: 'amount', width: 100,
-        cellStyle: this.changeRowColor
+        cellStyle: this.changeRowColor,
+        cellRenderer: this.CurrencyCellRendererUSD
       },
       {
         headerName: 'Note', field: 'notes',
@@ -205,26 +206,37 @@ export class IetViewreportComponent implements OnInit {
         cellStyle: this.changeRowColor
       }
     ]
-
-    // this.rowClassRules = {
-    //   "sick-days-warning": function(params) {
-    //     console.log('inside row class rules sick days warning');
-    //     console.log(params);
-    //         return 10 > 5;
-    //   }
-    // };
-    //  this.context = { componentParent: this, allreceipts: false };
     return res;
   }
 
+  CurrencyCellRendererUSD(params: any) {
+    var inrFormat = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2
+    });
+    return inrFormat.format(params.value);
+  }
+
   changeRowColor(params) {
+    console.log('change row color');
+    console.log(params);
+    console.log(params.column.colId);
+    if (params.column.colId === 'amount') {
+      if (params.node.rowIndex % 2 === 0) {
+        return {'background-color': '#ebfaeb', 'text-align': "right"  };
+     }
+     if (params.node.rowIndex % 2 === 1) {
+       return {'background-color': '#ffffff' , 'text-align': "right" };
+    }
+    } else {
     if (params.node.rowIndex % 2 === 0) {
-      // return {'background-color': '#ccccff' };
        return {'background-color': '#ebfaeb' };
     }
     if (params.node.rowIndex % 2 === 1) {
       return {'background-color': '#ffffff'};
    }
+  }
  }
 
   downloadYearlyReceiptsCSV() {
