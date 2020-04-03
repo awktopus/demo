@@ -109,7 +109,7 @@ export class Step2panelComponent implements OnInit {
       console.log(resp);
      const scandoc = (<any>resp).classification[0];  // first document of the scanupload
      const dialogRef = this.dialog.open(UploadscanpopupComponent, {
-      width: '900px' });
+      width: '1000px', height: '900px' });
      // dialogRef.componentInstance.setPDF(res.classification[0].docId);
      dialogRef.componentInstance.setScanDoc(scandoc, this.mycase.caseId);
      this.showspinner = false;
