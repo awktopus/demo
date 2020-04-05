@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api/api.service';
-import { LocalStorageService } from '../localStorage/local-storage.service';
+// import { LocalStorageService } from '../localStorage/local-storage.service';
 import { RegistrationDto } from './registration.dto';
 import { EsignAuthService } from '../../esign/service/esignauth.service';
+import { EsignStateSelector} from '../../esign/service/esign.state.selector'
 import { environment } from '../../../environments/environment';
 import { pocolog } from 'pocolog';
 
@@ -17,10 +18,10 @@ export class AuthService {
   EL_EMV = 'https://www.everleagues.com/jwt/claims/emv'; // email verifiedmm
   // store the URL so we can redirect after logging in
   redirectUrl: string;
-  constructor(private api: ApiService, private localStorage: LocalStorageService, private esignauth: EsignAuthService) { }
+  constructor(private api: ApiService, private stateselector: EsignStateSelector, private esignauth: EsignAuthService) { }
 
   isAuthenticated(): boolean {
-    const auth = this.localStorage.getAuth();
+    const auth = this.stateselector.getAuthData();
     // check for token type
     if (auth) {
       let tokenDecode = this.parseJwt(auth.accessToken);
@@ -38,7 +39,7 @@ export class AuthService {
   }
 
   isVerified(): boolean {
-    const auth = this.localStorage.getAuth();
+    const auth = this.stateselector.getAuthData();
     if (auth) {
       let tokenDecode = this.parseJwt(auth.accessToken);
       if (tokenDecode && tokenDecode[this.EL_EMV]) {
@@ -86,8 +87,8 @@ export class AuthService {
           } else {
 
             if (token[this.EL_2FA]) {
-              this.localStorage.clear();
-              this.localStorage.setAuth(data);
+              // this.localStorage.clear();
+              this.stateselector.setAuthData(data);
               this.esignauth.clearEsignCache();
               // call 2fa settings to check for 2fa channel type
               return this.get2FASettings().then(res => {
@@ -115,7 +116,7 @@ export class AuthService {
   }
 
   logout(): void {
-    this.localStorage.clear();
+   // this.localStorage.clear();
   }
 
   passcodeCheck(email: string, code: string) {
@@ -140,7 +141,7 @@ export class AuthService {
 
 
   get2FASettings() {
-    return this.api.getAysnc<any>('v2/auth/2fa/settings', null, this.localStorage.getUserId())
+    return this.api.getAysnc<any>('v2/auth/2fa/settings', null, this.stateselector.getCurrentUser().userId)
       .then(res => {
         return Promise.resolve(res);
       }).catch((res: any) => {
@@ -151,7 +152,7 @@ export class AuthService {
   }
 
   get2FASms() {
-    return this.api.getAysnc<any>('v2/auth/2fa/sms', null, this.localStorage.getUserId())
+    return this.api.getAysnc<any>('v2/auth/2fa/sms', null, this.stateselector.getCurrentUser().userId)
       .then(res => {
         return Promise.resolve(res);
       }).catch((res: any) => {
@@ -162,7 +163,7 @@ export class AuthService {
   }
 
   send2FASms(phone: string) {
-    return this.api.postAsync<any>('v2/auth/2fa/sms', JSON.stringify(phone), this.localStorage.getUserId())
+    return this.api.postAsync<any>('v2/auth/2fa/sms', JSON.stringify(phone), this.stateselector.getCurrentUser().userId)
       .then(res => {
         return this.successLogin(res);
       }).catch((res: any) => {
@@ -173,7 +174,7 @@ export class AuthService {
   }
 
   get2FAEmail() {
-    return this.api.getAysnc<any>('v2/auth/2fa/email', null, this.localStorage.getUserId())
+    return this.api.getAysnc<any>('v2/auth/2fa/email', null, this.stateselector.getCurrentUser().userId)
       .then(res => {
         return Promise.resolve(res);
       }).catch((res: any) => {
@@ -184,7 +185,7 @@ export class AuthService {
   }
 
   verify2FAEmail(code: string) {
-    return this.api.postAsync<any>('v2/auth/2fa/email/verify', JSON.stringify(code), this.localStorage.getUserId())
+    return this.api.postAsync<any>('v2/auth/2fa/email/verify', JSON.stringify(code), this.stateselector.getCurrentUser().userId)
       .then(res => {
         return this.successLogin(res);
       }).catch((res: any) => {
@@ -194,7 +195,7 @@ export class AuthService {
   }
 
   verify2FAPhone(code: string) {
-    return this.api.postAsync<any>('v2/auth/2fa/sms/verify', JSON.stringify(code), this.localStorage.getUserId())
+    return this.api.postAsync<any>('v2/auth/2fa/sms/verify', JSON.stringify(code), this.stateselector.getCurrentUser().userId)
       .then(res => {
         return this.successLogin(res);
       }).catch((res: any) => {
@@ -204,7 +205,7 @@ export class AuthService {
   }
 
   sendAccountVerificationEmail(email) {
-    return this.api.postAsync<any>('v2/auth/2fa/signup/email', JSON.stringify(email), this.localStorage.getUserId())
+    return this.api.postAsync<any>('v2/auth/2fa/signup/email', JSON.stringify(email), this.stateselector.getCurrentUser().userId)
       .then(res => {
         return Promise.resolve(res);
       }).catch((res: any) => {
@@ -214,7 +215,8 @@ export class AuthService {
   }
 
   send2FASmsWithJWTToken(phone: string, jwtToken) {
-    return this.api.postAsyncWithJwtToken<any>('v2/auth/2fa/sms', jwtToken, JSON.stringify(phone), this.localStorage.getUserId())
+    return this.api.postAsyncWithJwtToken<any>('v2/auth/2fa/sms', jwtToken, JSON.stringify(phone),
+     this.stateselector.getCurrentUser().userId)
       .then(res => {
         return this.successLogin(res);
       }).catch((res: any) => {
@@ -224,7 +226,8 @@ export class AuthService {
   }
 
   verify2FAPhoneWithJWTToken(code: string, jwtToken: string) {
-    return this.api.postAsyncWithJwtToken<any>('v2/auth/2fa/sms/verify', jwtToken, JSON.stringify(code), this.localStorage.getUserId())
+    return this.api.postAsyncWithJwtToken<any>('v2/auth/2fa/sms/verify', jwtToken, JSON.stringify(code), 
+    this.stateselector.getCurrentUser().userId)
       .then(res => {
         return this.successLogin(res, false);
       }).catch((res: any) => {
@@ -234,7 +237,8 @@ export class AuthService {
   }
 
   verify2FAEmailWithJWTToken(code: string, jwtToken: string) {
-    return this.api.postAsyncWithJwtToken<any>('v2/auth/2fa/email/verify', jwtToken, JSON.stringify(code), this.localStorage.getUserId())
+    return this.api.postAsyncWithJwtToken<any>('v2/auth/2fa/email/verify', jwtToken, JSON.stringify(code),
+    this.stateselector.getCurrentUser().userId)
       .then(res => {
         return this.successLogin(res, false);
       }).catch((res: any) => {
@@ -245,7 +249,7 @@ export class AuthService {
 
 
   exchangeTo2FAJWT() {
-    return this.api.postAsync<any>('v2/auth/2fa/exchange', null, this.localStorage.getUserId())
+    return this.api.postAsync<any>('v2/auth/2fa/exchange', null, this.stateselector.getCurrentUser().userId)
       .then(res => {
         console.log(res);
         return Promise.resolve({ success: true, error: null, errorCode: null, auth: res });
@@ -258,8 +262,8 @@ export class AuthService {
   register(data: RegistrationDto) {
     return this.api.postAsync<any>('account', data)
       .then(res => {
-        this.localStorage.setAuth(res);
-
+        //this.localStorage.setAuth(res);
+        this.stateselector.setAuthData(res);
         return Promise.resolve(res);
       }).catch((res: any) => {
         this.api.handleError(res);
@@ -270,10 +274,13 @@ export class AuthService {
 
   successLogin(authData, clearCache = true): Promise<any> {
     if (clearCache) {
-      this.localStorage.clear();
+      // this.localStorage.clear();
       this.esignauth.clearEsignCache();
     }
-    this.localStorage.setAuth(authData);
+    console.log("auth data:");
+    console.log(authData);
+   // this.localStorage.setAuth(authData);
+    this.stateselector.setAuthData(authData);
     console.log(this.parseJwt(authData.accessToken));
     return Promise.resolve({
       success: true, error: null, errorCode: null, twoFactorEnabled: false,

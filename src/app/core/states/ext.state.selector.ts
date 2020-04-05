@@ -1,23 +1,23 @@
 import { AbstractStateSelector } from "./abstract.state.selector";
 import { Injectable } from "@angular/core";
-import { AuthStateSelector } from "./auth.state.selector";
-import { EnterpriseSelector } from "./enterprise.state.selector";
-import { UserDataSelector } from "./user-data.state.selector";
-import { OrgType } from "../enum/org-type";
+//import { AuthStateSelector } from "./auth.state.selector";
+//import { EnterpriseSelector } from "./enterprise.state.selector";
+//import { UserDataSelector } from "./user-data.state.selector";
+//import { OrgType } from "../enum/org-type";
 
 @Injectable({
   providedIn: "root"
 })
 export class ExtStateSelector implements AbstractStateSelector {
   constructor(
-    private authSelector: AuthStateSelector,
-    private enterpriseSelector: EnterpriseSelector,
-    private userDataSelector: UserDataSelector
+  //  private authSelector: AuthStateSelector,
+  //  private enterpriseSelector: EnterpriseSelector,
+  //  private userDataSelector: UserDataSelector
   ) {}
 
   getAuthData(): { accessToken: string; expiredIn: number; userName: string } {
-    const data = { ...this.authSelector.data };
-
+    //const data = { ...this.authSelector.data };
+    let data: any = {};
     return {
       accessToken: data.accessToken,
       expiredIn: data.expiredIn,
@@ -32,7 +32,8 @@ export class ExtStateSelector implements AbstractStateSelector {
     lastName: string;
     email: string;
   } {
-    const user = { ...this.userDataSelector.userProfile };
+    //const user = { ...this.userDataSelector.userProfile };
+    let user: any = {}
     return {
       userId: user.userId,
       userName: user.userName,
@@ -47,7 +48,9 @@ export class ExtStateSelector implements AbstractStateSelector {
     isPersonal: boolean;
     industryId: string;
   } {
-    const org = { ...this.enterpriseSelector.getCurrentOrg() };
+    let OrgType: any = {};
+    //const org = { ...this.enterpriseSelector.getCurrentOrg() };
+    let org: any = {};
     return {
       id: org.id,
       name: org.name,
@@ -62,8 +65,8 @@ export class ExtStateSelector implements AbstractStateSelector {
     lastName: string;
     role: string;
   }[] {
-    const users = [...this.enterpriseSelector.getCurrentOrgUsers()];
-
+    //const users = [...this.enterpriseSelector.getCurrentOrgUsers()];
+    const users: any = [];
     return users.map(u => {
       return {
         orgId: u.orgId,
