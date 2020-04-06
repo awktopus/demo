@@ -3,10 +3,11 @@ import { ApiService } from './../api/api.service';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { EsignStateSelector } from '../../esign/service/esign.state.selector';
+import { AbstractStateSelector } from '../states/abstract.state.selector';
 
 @Injectable()
 export class OUService {
-    constructor(private api: ApiService, private esignstate: EsignStateSelector, private authService: AuthService) {
+    constructor(private api: ApiService, private esignstate: AbstractStateSelector, private authService: AuthService) {
     }
 
     getUserOU(): Promise<any> {
@@ -37,7 +38,7 @@ export class OUService {
         if (existing !== ouId) {
             // this.localDb.setCurrentOU(ouId);
             // this.OnOuSwitched.next(ouId);
-            this.esignstate.setCurOrgById(ouId);
+            (<EsignStateSelector>this.esignstate).setCurOrgById(ouId);
             /*
             let permission = this.localDb.getPermissions();
 

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { pocolog } from 'pocolog';
 import { EsignStateSelector } from '../../esign/service/esign.state.selector';
+import { AbstractStateSelector } from '../states/abstract.state.selector';
 
 @Injectable()
 export class ApiService {
@@ -11,7 +12,7 @@ export class ApiService {
   private readonly HEADER_DOMAIN_IDENTITY: string = 'EL-Domain-Identity';
   private readonly HEADER_RESOUCE_IDENTITY: string = 'EL-Resource-Identity';
 
-  constructor(private http: HttpClient, private esignstate: EsignStateSelector) { }
+  constructor(private http: HttpClient, private esignstate: AbstractStateSelector) { }
 
   private _getJwtAccessToken() {
     let auth: any = this.esignstate.getAuthData();

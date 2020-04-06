@@ -6,6 +6,7 @@ import { EsignAuthService } from '../../esign/service/esignauth.service';
 import { EsignStateSelector} from '../../esign/service/esign.state.selector';
 import { environment } from '../../../environments/environment';
 import { pocolog } from 'pocolog';
+import { AbstractStateSelector } from '../states/abstract.state.selector';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,8 @@ export class AuthService {
   EL_EMV = 'https://www.everleagues.com/jwt/claims/emv'; // email verifiedmm
   // store the URL so we can redirect after logging in
   redirectUrl: string;
-  constructor(private api: ApiService, private stateselector: EsignStateSelector, private esignauth: EsignAuthService) { }
+  constructor(private api: ApiService, private stateselector: AbstractStateSelector,
+     private esignauth: EsignAuthService) { }
 
   isAuthenticated(): boolean {
     const auth = this.stateselector.getAuthData();
@@ -90,7 +92,8 @@ export class AuthService {
 
             if (token[this.EL_2FA]) {
               // this.localStorage.clear();
-              this.stateselector.setAuthData(data);
+              let es: EsignStateSelector = <EsignStateSelector> this.stateselector;
+              es.setAuthData(data);
               this.esignauth.clearEsignCache();
               // call 2fa settings to check for 2fa channel type
               return this.get2FASettings().then(res => {
@@ -264,8 +267,8 @@ export class AuthService {
   register(data: RegistrationDto) {
     return this.api.postAsync<any>('account', data)
       .then(res => {
-        // this.localStorage.setAuth(res);
-        this.stateselector.setAuthData(res);
+        //this.localStorage.setAuth(res);
+        (<EsignStateSelector> this.stateselector).setAuthData(res);
         return Promise.resolve(res);
       }).catch((res: any) => {
         this.api.handleError(res);
@@ -282,7 +285,7 @@ export class AuthService {
     console.log("auth data:");
     console.log(authData);
    // this.localStorage.setAuth(authData);
-    this.stateselector.setAuthData(authData);
+   (<EsignStateSelector> this.stateselector).setAuthData(authData);
     console.log(this.parseJwt(authData.accessToken));
     return Promise.resolve({
       success: true, error: null, errorCode: null, twoFactorEnabled: false,
