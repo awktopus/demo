@@ -1,6 +1,5 @@
 import { Directive, Input, ElementRef, OnInit, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs'
-// import { LocalStorageService } from '../localStorage/local-storage.service';
 import { initDomAdapter } from '../../../../node_modules/@angular/platform-browser/src/browser';
 import { EsignStateSelector } from '../../esign/service/esign.state.selector';
 
