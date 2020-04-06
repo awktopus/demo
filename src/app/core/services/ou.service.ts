@@ -26,13 +26,16 @@ export class OUService {
     }
 
     getSelectedOU() {
+        if (this.esignstate.getCurrentOrg()) {
         return this.esignstate.getCurrentOrg().id;
+    } else { return null;
+    }
     }
 
     switchOU(ouId): Promise<boolean> {
         const existing = this.getSelectedOU();
         if (existing !== ouId) {
-            //this.localDb.setCurrentOU(ouId);
+            // this.localDb.setCurrentOU(ouId);
             // this.OnOuSwitched.next(ouId);
             this.esignstate.setCurOrgById(ouId);
             /*
@@ -51,6 +54,7 @@ export class OUService {
                     });
             }
             */
+           return Promise.resolve(true);
         } else {
             return Promise.reject(false);
         }

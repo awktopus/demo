@@ -76,6 +76,8 @@ export class LoginPageComponent implements OnInit {
     event.preventDefault();
     this.auth.login(this.email, this.password)
       .then(res => {
+        console.log('inside login');
+        console.log(res);
         if (res && res.success) {
           if (!res.emailVerified) {
             pocolog.trace('email not verified');
@@ -122,6 +124,7 @@ export class LoginPageComponent implements OnInit {
 
   initLoginDetails() {
     // init login details
+    console.log('init login details');
     return this.userService.initLoginDetails().then(loginRes => {
       this.showLoading = false;
       if (loginRes) {

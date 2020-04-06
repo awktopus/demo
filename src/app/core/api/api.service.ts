@@ -15,9 +15,9 @@ export class ApiService {
 
   private _getJwtAccessToken() {
     let auth: any = this.esignstate.getAuthData();
-
+    console.log('get jwt access token');
+    console.log(auth);
     if (auth) {
-      // console.log(token);
       return auth.accessToken;
     } else {
       pocolog.error("Failed to get access token from cache.");
@@ -28,9 +28,13 @@ export class ApiService {
   private _getRooOUId() {
     let curorg: any = this.esignstate.getCurrentOrg();
 
-    if (!curorg) { pocolog.error("Failed to retrieve root ou id from cache."); }
+    // if (!curorg) { pocolog.error("Failed to retrieve root ou id from cache."); }
 
-    return curorg.rootOrgUnitId;
+    if (curorg) {
+      return curorg.rootOrgUnitId;
+     } else {
+       return null;
+     }
   }
 
   private _buildJwtAuthHeader(accessToken: string, resourceId?: string): HttpHeaders {

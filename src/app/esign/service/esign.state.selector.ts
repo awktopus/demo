@@ -36,12 +36,14 @@ export class EsignStateSelector implements AbstractStateSelector {
   }
 
   setCurOrgById(newOrgID) {
+    if (this._userOrgs) {
     this._userOrgs.forEach(vv => {
       let org: any = vv;
       if (org.orgUnitId === newOrgID) {
         this.setOrgData(org);
       }
     });
+  }
   }
   setUserOrgs(orgs: []) {
     this._userOrgs = orgs;
@@ -78,7 +80,7 @@ recaptchaToken: null
     lastName: string;
     email: string;
   } {
-    //const user = { ...this.userDataSelector.userProfile };
+    // const user = { ...this.userDataSelector.userProfile };
     // let user: any = {}
     if (this._authdata) {
       return {
@@ -98,14 +100,16 @@ recaptchaToken: null
     isPersonal: boolean;
     industryId: string;
   } {
-    //const org = { ...this.enterpriseSelector.getCurrentOrg() };
-    //let org: any = {};
+    // const org = { ...this.enterpriseSelector.getCurrentOrg() };
+    // let org: any = {};
+    if (this._orgData) {
     return {
       id: this._orgData.orgUnitId,
       name: this._orgData.name,
       isPersonal: this._orgData.type === OrgType.Personal,
       industryId: this._orgData.industryId
     };
+  }
   }
   getCurrentOrgUsers(): {
     orgId: string;
@@ -114,7 +118,7 @@ recaptchaToken: null
     lastName: string;
     role: string;
   }[] {
-    //const users = [...this.enterpriseSelector.getCurrentOrgUsers()];
+    // const users = [...this.enterpriseSelector.getCurrentOrgUsers()];
     const users: any = [];
     /*return users.map(u => {
       return {

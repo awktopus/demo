@@ -264,7 +264,7 @@ export class AuthService {
   register(data: RegistrationDto) {
     return this.api.postAsync<any>('account', data)
       .then(res => {
-        //this.localStorage.setAuth(res);
+        // this.localStorage.setAuth(res);
         this.stateselector.setAuthData(res);
         return Promise.resolve(res);
       }).catch((res: any) => {

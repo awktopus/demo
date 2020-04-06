@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { EsignStateSelector } from '../../../esign/service/esign.state.selector';
 import { AuthService } from '../../auth/auth.service';
 import { pocolog } from 'pocolog';
+import { EsignAuthService } from '../../../esign/service/esignauth.service';
 
 @Component({
     selector: 'ui-current-ou',
@@ -25,7 +26,7 @@ export class CurrentOUComponent implements OnInit {
     constructor(private ou: OUService, private router: Router,
         public dialog: MatDialog, public snackBar: MatSnackBar,
         private esignstate: EsignStateSelector,
-        private authService: AuthService) {
+        private authService: AuthService, private esignauth: EsignAuthService) {
     }
 
     ngOnInit() {
@@ -88,7 +89,7 @@ export class CurrentOUComponent implements OnInit {
                 this.ou.switchOU(this.currentOUId)
                     .then(res => {
                        // this.localStorage.setRootOU(this.currentOU.rootOrgUnitId);
-                       // this.esignauth.updateOrg(this.currentOU);
+                        this.esignauth.updateOrg(this.currentOU);
                         window.location.reload();
                     });
             }
@@ -105,7 +106,7 @@ export class CurrentOUComponent implements OnInit {
             });
 
             // esign code
-          //  this.esignauth.updateOrg(this.currentOU);
+             this.esignauth.updateOrg(this.currentOU);
              this.esignstate.setOrgData(this.currentOU);
         } else {
             this.openSnackBar('There is no organization associated to this account', 'OK');
@@ -119,11 +120,13 @@ export class CurrentOUComponent implements OnInit {
             const newCurrentOUIndex = this.orgUnits.findIndex(ou => ou.orgUnitId === newValue);
             if (newCurrentOUIndex !== -1) {
                 this.currentOU = this.orgUnits[newCurrentOUIndex];
+                console.log('inside switch org');
+                console.log(this.currentOU);
                 this.ou.switchOU(this.currentOU.orgUnitId)
                     .then(res => {
                       //  this.localStorage.setRootOU(this.currentOU.rootOrgUnitId);
-                        window.location.href = '/';
-                      //  this.esignauth.updateOrg(this.currentOU);
+                      //  window.location.href = '/';
+                        this.esignauth.updateOrg(this.currentOU);
                         this.esignstate.setOrgData(this.currentOU);
                         return newValue;
                     });

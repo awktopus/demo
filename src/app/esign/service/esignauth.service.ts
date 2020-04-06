@@ -29,38 +29,43 @@ export class EsignAuthService {
   enabledMenus: string[];
   // 040420 - Menu PubSub refactoring - end
 
-  constructor(private http: HttpClient, private esignstate: AbstractStateSelector
-    // private pubSub: PubSub
+  constructor(private http: HttpClient, private esignstate: EsignStateSelector,
+     private pubSub: PubSub
   ) {
+    console.log('esign auth constructor');
+ //   this.pubSubForMenuSecurity();
+  }
 
-    // 040420 - Menu PubSub refactoring - start
-    //  this.onOrgSwitchedSub = this.pubSub.subscribe('ON_ORG_SWITCHED',
-    //   data => {
-    //     this.selected_org = data
-    //     console.log('inside esign auth constructor:');
-    //     console.log(this.selected_org);
+  pubSubForMenuSecurity() {
+   // 040420 - Menu PubSub refactoring - start
+   console.log('pubSubForMenuSecurity - start');
+     this.onOrgSwitchedSub = this.pubSub.subscribe('ON_ORG_SWITCHED',
+      data => {
+        this.selected_org = data
+        console.log('inside esign auth constructor:');
+        console.log(this.selected_org);
 
-    //     if (this.selected_org) {
+        if (this.selected_org) {
 
-    //       this.industryId = this.selected_org.industryId;
-    //       if (this.industryId.toUpperCase() === 'ACCOUNT') {
-    //         this.enabledMenus.push(this.TAX_MENU);
-    //         this.enabledMenus.push(this.TAX_CASE_MENU);
-    //       }
-    //       if (this.industryId.toUpperCase() !== 'PERSONAL') {
-    //         this.enabledMenus.push(this.IET_MENU);
-    //       }
-    //       if (this.selected_org.userRole.normalizedName.toUpperCase() === 'CLIENT') {
-    //         this.enabledMenus.push(this.TAX_MY_TAX_CASE);
-    //       }
-    //       if (this.selected_org.userRole.normalizedName.toUpperCase() === 'ADMIN' ||
-    //       this.selected_org.userRole.normalizedName.toUpperCase() === 'OWNER') {
-    //               this.enabledMenus.push(this.TAX_SETTINGS_MENU);
-    //       }
-    //       this.pubSub.next<string[]>(PubSub.MENU_ENABLED, this.enabledMenus);
-    //     }
-    //   });
-    // 040420 - Menu PubSub refactoring - end
+          this.industryId = this.selected_org.industryId;
+          if (this.industryId.toUpperCase() === 'ACCOUNT') {
+            this.enabledMenus.push(this.TAX_MENU);
+            this.enabledMenus.push(this.TAX_CASE_MENU);
+          }
+          if (this.industryId.toUpperCase() !== 'PERSONAL') {
+            this.enabledMenus.push(this.IET_MENU);
+          }
+          if (this.selected_org.userRole.normalizedName.toUpperCase() === 'CLIENT') {
+            this.enabledMenus.push(this.TAX_MY_TAX_CASE);
+          }
+          if (this.selected_org.userRole.normalizedName.toUpperCase() === 'ADMIN' ||
+          this.selected_org.userRole.normalizedName.toUpperCase() === 'OWNER') {
+                  this.enabledMenus.push(this.TAX_SETTINGS_MENU);
+          }
+          this.pubSub.next<string[]>(PubSub.MENU_ENABLED, this.enabledMenus);
+        }
+      });
+   // 040420 - Menu PubSub refactoring - end
   }
 
   clearEsignCache() {
@@ -70,17 +75,18 @@ export class EsignAuthService {
     // const auth = localStorage.getItem(this.esign_key);
     if (this.getESignToken()) { return true; } else { return false; }
   }
-  /*
+
   updateOrg(newOrg: any) {
     console.log('current Org');
     console.log(newOrg);
     console.log('<<<<');
-    localStorage.setItem(this.USER_OU_NAME, newOrg.name);
+    // localStorage.setItem(this.USER_OU_NAME, newOrg.name);
     console.log('get UserOUName:');
-    console.log(localStorage.getItem(this.USER_OU_NAME));
+    // console.log(localStorage.getItem(this.USER_OU_NAME));
     this._org.next(newOrg);
+  //  this.esignstate.setOrgData(newOrg);
   }
-  */
+
   getESignToken(): string {
     // return JSON.parse(localStorage.getItem(this.esign_key));
     const v = localStorage.getItem(this.KEY_ESign);
@@ -108,7 +114,9 @@ export class EsignAuthService {
   runESignAuth() {
     const url = this.baseurl + '/EsignAuth/';
     // console.log(this.getELOptions());
-    return this.http.post(url, { 'ElAccessToken': this.esignstate.getAuthData().accessToken }, this.getELOptions());
+    console.log('get auth data');
+    console.log(this.esignstate.getAuthData());
+     return this.http.post(url, { 'ElAccessToken': this.esignstate.getAuthData().accessToken }, this.getELOptions());
   }
   getELOptions() {
     const token = this.esignstate.getAuthData();

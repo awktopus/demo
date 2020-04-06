@@ -11,16 +11,24 @@ export class UserService {
     initLoginDetails(): Promise<any> {
         return this.ouService.getUserOU()
             .then(ouRes => {
+                console.log('inside init log in details');
+                console.log(ouRes);
                 // remove deleted ou
                 ouRes = ouRes.filter(x => x.userStatus !== 8);
-                console.log(ouRes);
-                this.stateselector.setOrgData(JSON.stringify(ouRes));
+                this.stateselector.setUserOrgs(ouRes);
                 // this.localDb.setOrgUnit(JSON.stringify(ouRes));
                 // init default org unit
                 let defaultOrg = ouRes[0];
+                console.log('default org');
+                console.log(defaultOrg);
+                this.stateselector.setOrgData(defaultOrg);
                 // get last login
                // let lastLoginOUId = this.localDb.getLastLogin(this.localDb.getUserId());
-               let lastLoginOUId = this.stateselector.getCurrentOrg().id;
+               let lastLoginOUId = null;
+              // if (this.stateselector.getCurrentOrg()) {
+              //  lastLoginOUId = this.stateselector.getCurrentOrg().id;
+              //  }
+
                if (lastLoginOUId) {
                     let lastLoginOrg = ouRes.filter(x => x.orgUnitId === lastLoginOUId)[0];
                     if (lastLoginOrg) {
@@ -46,7 +54,7 @@ export class UserService {
                             return Promise.resolve(true);
                         }).catch(res => {
                             console.log(res);
-                            return Promise.resolve(false);
+                            return Promise.resolve(true);
                         });
                 } else {
                     // no active org detected.
