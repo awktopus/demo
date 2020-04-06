@@ -1,7 +1,8 @@
 import { Directive, Input, ElementRef, OnInit, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs'
-import { LocalStorageService } from '../localStorage/local-storage.service';
+// import { LocalStorageService } from '../localStorage/local-storage.service';
 import { initDomAdapter } from '../../../../node_modules/@angular/platform-browser/src/browser';
+import { EsignStateSelector } from '../../esign/service/esign.state.selector';
 
 
 /**
@@ -23,7 +24,7 @@ export class PermissionDirective implements OnInit, OnChanges {
     private _allPermissions: any[];
 
     private defaultDisplay: string;
-    constructor(private localDb: LocalStorageService,
+    constructor( private esignstate: EsignStateSelector,
         private el: ElementRef) {
     }
 
@@ -38,7 +39,8 @@ export class PermissionDirective implements OnInit, OnChanges {
     }
 
     checkPermission(): Promise<boolean> {
-        let pObj = this.localDb.getPermissions();
+        //let pObj = this.localDb.getPermissions();
+        let pObj: any = {};
         this._allPermissions = pObj.permissions;
         if (this._allPermissions) {
             //  get list of permission types
@@ -79,7 +81,7 @@ export class PermissionDirective implements OnInit, OnChanges {
     isResourceOwner(): boolean {
         if (this.resourceOwnerId) {
             // check if current user is resource owner
-            if (this.resourceOwnerId === this.localDb.getUserId()) {
+            if (this.resourceOwnerId === this.esignstate.getCurrentUser().userId) {
                 return true
             }
         }
@@ -97,6 +99,7 @@ export class PermissionDirective implements OnInit, OnChanges {
         }
 
         // recheck permission when ou changed
+        /*
         this._subscriber = this.localDb.onOUChanged.subscribe(res => {
             this.runPermission();
         });
@@ -105,6 +108,7 @@ export class PermissionDirective implements OnInit, OnChanges {
         this._onPermissionChange = this.localDb.onPermissionChanged.subscribe(res => {
             this.runPermission();
         })
+        */
     }
 
     runPermission() {
