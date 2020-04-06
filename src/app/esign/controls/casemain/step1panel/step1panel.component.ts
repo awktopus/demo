@@ -16,10 +16,10 @@ export class Step1panelComponent implements OnInit {
   initcaseheader: ESignCase;
   searchCPA = '';
   CPAID = '';
-//  clientctrl: FormControl = new FormControl();
-//   secclientctrl: FormControl = new FormControl();
-//   recclientctrl: FormControl = new FormControl();
-//   cpactrl: FormControl = new FormControl();
+  //  clientctrl: FormControl = new FormControl();
+  //   secclientctrl: FormControl = new FormControl();
+  //   recclientctrl: FormControl = new FormControl();
+  //   cpactrl: FormControl = new FormControl();
   casecates: ESignCate[] = [];
   subcates: ESignCate[] = [];
   clients: ESignClient[];
@@ -101,36 +101,9 @@ export class Step1panelComponent implements OnInit {
     //     this.caseDataloading = false;
     //   });
 
-
-        this.service.getEsignConfig().subscribe(results => {
-        this.config = <ESignConfig>results;
-        console.log('esign config');
-        console.log(results);
-        this.casecates = this.config.eSignCates;
-        this.caseDataloading = false;
-        });
-
-        this.service.getCPAs().subscribe(clientsResp => {
-        this.cpas = <ESignCPA[]>clientsResp;
-        this.cachecpas = <ESignCPA[]>clientsResp;
-        this.CPAID = this.service.auth.getUserID();
-        this.cpas.forEach(ele => {
-            if (ele.cpaClients) {
-            this.clients = ele.cpaClients;
-            this.secclients = ele.cpaClients;
-            this.recclients = ele.cpaClients;
-            console.log('cpa clients');
-            console.log(this.clients);
-          }
-        });
-
-
-      if (this.initcaseheader) {
-        console.log('step1 panel: init case header inside if');
-        console.log(this.initcaseheader);
-        this.setcaseHeader(this.initcaseheader);
-      }
-      if (this.caseType === 'newcase') {
+    console.log('step1 panel ngOnInit');
+    console.log('case type:' + this.caseType);
+    if (this.caseType === 'newcase') {
       this.service.cur_case.subscribe(c => {
         this.mycase = c; // this is to sync caseID
         console.log('cur case:');
@@ -141,6 +114,53 @@ export class Step1panelComponent implements OnInit {
         }
       });
     }
+
+    this.service.getEsignConfig().subscribe(results => {
+      this.config = <ESignConfig>results;
+      console.log('esign config');
+      console.log(results);
+      this.casecates = this.config.eSignCates;
+      this.caseDataloading = false;
+    });
+
+    this.service.getCPAs().subscribe(clientsResp => {
+      this.cpas = <ESignCPA[]>clientsResp;
+      this.cachecpas = <ESignCPA[]>clientsResp;
+      this.CPAID = this.service.auth.getUserID();
+      this.cpas.forEach(ele => {
+        if (ele.cpaClients) {
+          this.clients = ele.cpaClients;
+          this.secclients = ele.cpaClients;
+          this.recclients = ele.cpaClients;
+          console.log('cpa clients');
+          console.log(this.clients);
+        }
+      });
+
+
+      //   console.log('step1 panel ngOnInit');
+      //   if (this.initcaseheader) {
+      //     console.log('step1 panel: init case header inside if');
+      //     console.log(this.initcaseheader);
+      //     this.setcaseHeader(this.initcaseheader);
+      //   }
+      //   if (this.caseType === 'newcase') {
+      //   this.service.cur_case.subscribe(c => {
+      //     this.mycase = c; // this is to sync caseID
+      //     console.log('cur case:');
+      //     console.log(this.mycase);
+      //     if (this.initcaseheader !== this.mycase) {
+      //       this.initcaseheader = this.mycase;
+      //       this.setcaseHeader(this.initcaseheader);
+      //     }
+      //   });
+      // }
+
+      if (this.initcaseheader) {
+        console.log('step1 panel: init case header inside if');
+        console.log(this.initcaseheader);
+        this.setcaseHeader(this.initcaseheader);
+      }
     });
 
 
@@ -200,7 +220,6 @@ export class Step1panelComponent implements OnInit {
       }
     });
 
-
     this.caseStep1Form.controls['recclientctrl'].valueChanges.subscribe(val => {
       console.log('recclientctrl search clients called')
       console.log(val.trim());
@@ -222,7 +241,6 @@ export class Step1panelComponent implements OnInit {
       }
     });
 
-
     this.caseStep1Form.controls['cpactrl'].valueChanges.subscribe(val => {
       if (val && typeof val !== 'object') {
         // console.log(val);
@@ -239,12 +257,9 @@ export class Step1panelComponent implements OnInit {
         }
       }
     });
-
-
     this.uiservice.getDistinctTaxYears().subscribe(resp => {
       this.taxYears = <TaxYears[]>resp;
     });
-  // this.isLoading = false;
   }
 
   categoryChange(event): void {
@@ -256,14 +271,14 @@ export class Step1panelComponent implements OnInit {
       this.disableTaxYear = false;
     }
     console.log('disable tax year:' + this.disableTaxYear);
-   // console.log(this.taxYears);
+    // console.log(this.taxYears);
     if (this.disableTaxYear === false && this.taxYears) {
       console.log('inside tax year setup if');
       this.caseStep1Form.controls['taxYear'].setValue(this.taxYears[0].id);
-     } else {
+    } else {
       console.log('inside tax year setup else');
       this.caseStep1Form.controls['taxYear'].setValue(0);
-     }
+    }
   }
   addcpa(event: MatOptionSelectionChange): void {
     const value = event.source.value;
@@ -360,8 +375,8 @@ export class Step1panelComponent implements OnInit {
     }
     this.secondarysigner = caseheader.secondarySigner;
     if (this.secondarysigner) {
-    this.caseStep1Form.controls['clientctrl'].setValue(this.secondarysigner.clientId);
-  }
+      this.caseStep1Form.controls['clientctrl'].setValue(this.secondarysigner.clientId);
+    }
     console.log('inside set case header..primary signer');
     console.log(this.primarysigner);
     if (caseheader.recipientClients) {
@@ -377,12 +392,14 @@ export class Step1panelComponent implements OnInit {
     if (caseheader.cate) {
       this.caseStep1Form.controls['category'].setValue(caseheader.cate.id)
       // here we need to populate the subcate first
-      this.casecates.forEach(ele => { if (ele.id === this.caseStep1Form.controls['category'].value) {
-         this.subcates = ele.subCates;
-         if (caseheader.subCate) {
-          this.caseStep1Form.controls['subcategory'].setValue(caseheader.subCate.id);
+      this.casecates.forEach(ele => {
+        if (ele.id === this.caseStep1Form.controls['category'].value) {
+          this.subcates = ele.subCates;
+          if (caseheader.subCate) {
+            this.caseStep1Form.controls['subcategory'].setValue(caseheader.subCate.id);
+          }
         }
-        } });
+      });
       // console.log(this.casecates);
     } else {
       this.caseStep1Form.controls['subcategory'].setValue(null);

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { LocalStorageService } from '../../core/localStorage/local-storage.service';
 import { environment } from '../../../environments/environment';
 import { EsignAuthService } from '../../esign/service/esignauth.service';
 import { EZSignDocResource } from '../../esign/beans/ESignCase';

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { routerAnimation } from '../../utils/page.animation';
 import { AuthService } from '../../core/auth/auth.service';
 import { OUService } from '../../core/services/ou.service';
-import { LocalStorageService } from '../../core/localStorage/local-storage.service';
+import { EsignStateSelector} from '../../esign/service/esign.state.selector'
 import { UserService } from '../../core/services/user.service';
 import { User2faSettingsDto } from '../../core/model/user2faSettings.dto';
 import { pocolog } from 'pocolog';
@@ -38,7 +38,7 @@ export class LoginPageComponent implements OnInit {
   show2faVerifyWindow = false;
   showEnter2faCode = false;
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private auth: AuthService, private ouService: OUService,
-    private localDb: LocalStorageService, private userService: UserService) { }
+    private stateselector: EsignStateSelector, private userService: UserService) { }
 
   ngOnInit() {
     this.email = '';
@@ -53,7 +53,7 @@ export class LoginPageComponent implements OnInit {
 
         this.show2faVerifyWindow = true;
         this.showEnter2faCode = true;
-        this.sentTo = this.localDb.getAuth().userName;
+        this.sentTo = this.stateselector.getAuthData().userName;
       } else if (status === 'timeout') {
         this.showError = true;
         this.errorMsg = 'You have been logged out due to inactivity. Please login again.';
