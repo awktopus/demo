@@ -3,9 +3,10 @@ import { ApiService } from '../api/api.service';
 import { Injectable } from '@angular/core';
 import { OUService } from './ou.service';
 import { EsignStateSelector} from '../../esign/service/esign.state.selector';
+import { AbstractStateSelector } from '../states/abstract.state.selector';
 @Injectable()
 export class UserService {
-    constructor(private stateselector: EsignStateSelector, private ouService: OUService) {
+    constructor(private stateselector: AbstractStateSelector, private ouService: OUService) {
     }
 
     initLoginDetails(): Promise<any> {
@@ -14,7 +15,7 @@ export class UserService {
                 // remove deleted ou
                 ouRes = ouRes.filter(x => x.userStatus !== 8);
                 console.log(ouRes);
-                this.stateselector.setOrgData(JSON.stringify(ouRes));
+               (<EsignStateSelector> this.stateselector).setOrgData(JSON.stringify(ouRes));
                 // this.localDb.setOrgUnit(JSON.stringify(ouRes));
                 // init default org unit
                 let defaultOrg = ouRes[0];
@@ -42,7 +43,7 @@ export class UserService {
                         .then(p => {
                             // set root ou
                            // this.localDb.setRootOU(defaultOrg.rootOrgUnitId);
-                           this.stateselector.setOrgData(defaultOrg);
+                           (<EsignStateSelector>this.stateselector).setOrgData(defaultOrg);
                             return Promise.resolve(true);
                         }).catch(res => {
                             console.log(res);

@@ -7,6 +7,7 @@ import { EsignStateSelector} from '../../esign/service/esign.state.selector'
 import { UserService } from '../../core/services/user.service';
 import { User2faSettingsDto } from '../../core/model/user2faSettings.dto';
 import { pocolog } from 'pocolog';
+import { AbstractStateSelector } from '../../core/states/abstract.state.selector';
 
 @Component({
   selector: 'app-login-page',
@@ -38,8 +39,7 @@ export class LoginPageComponent implements OnInit {
   show2faVerifyWindow = false;
   showEnter2faCode = false;
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private auth: AuthService, private ouService: OUService,
-    private stateselector: EsignStateSelector, private userService: UserService) { }
-
+    private stateselector: AbstractStateSelector, private userService: UserService) { }
   ngOnInit() {
     this.email = '';
     this.password = '';

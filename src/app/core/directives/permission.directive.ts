@@ -2,6 +2,7 @@ import { Directive, Input, ElementRef, OnInit, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs'
 import { initDomAdapter } from '../../../../node_modules/@angular/platform-browser/src/browser';
 import { EsignStateSelector } from '../../esign/service/esign.state.selector';
+import { AbstractStateSelector } from '../states/abstract.state.selector';
 
 
 /**
@@ -23,7 +24,7 @@ export class PermissionDirective implements OnInit, OnChanges {
     private _allPermissions: any[];
 
     private defaultDisplay: string;
-    constructor( private esignstate: EsignStateSelector,
+    constructor( private esignstate: AbstractStateSelector,
         private el: ElementRef) {
     }
 

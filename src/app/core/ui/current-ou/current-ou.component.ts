@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { EsignStateSelector } from '../../../esign/service/esign.state.selector';
 import { AuthService } from '../../auth/auth.service';
 import { pocolog } from 'pocolog';
+import { AbstractStateSelector } from '../../states/abstract.state.selector';
 
 @Component({
     selector: 'ui-current-ou',
@@ -24,7 +25,7 @@ export class CurrentOUComponent implements OnInit {
 
     constructor(private ou: OUService, private router: Router,
         public dialog: MatDialog, public snackBar: MatSnackBar,
-        private esignstate: EsignStateSelector,
+        private esignstate: AbstractStateSelector,
         private authService: AuthService) {
     }
 
@@ -34,7 +35,7 @@ export class CurrentOUComponent implements OnInit {
                 // remove deleted ou
                 data = data.filter(x => x.userStatus !== 8);
                 // this.localStorage.setOrgUnit(JSON.stringify(data));
-                this.esignstate.setUserOrgs(data);
+                (<EsignStateSelector>this.esignstate).setUserOrgs(data);
                 this.render(data);
             });
     }
@@ -69,7 +70,7 @@ export class CurrentOUComponent implements OnInit {
                 this.oldOUId = this.currentOUId;
                 // this.localStorage.setRootOU(this.currentOU.rootOrgUnitId);
                 console.log('currentOUId: ' + this.currentOUId);
-                this.esignstate.setOrgData(this.currentOU);
+                (<EsignStateSelector>this.esignstate).setOrgData(this.currentOU);
                 // update permissions
                 this.authService.getPermission(this.currentOUId)
                     .then(res => {
@@ -83,7 +84,7 @@ export class CurrentOUComponent implements OnInit {
                 this.currentOUId = this.currentOU.orgUnitId;
                 this.oldOUId = this.currentOUId;
               //  this.localStorage.setRootOU(this.currentOU.rootOrgUnitId);
-                this.esignstate.setOrgData(this.currentOU);
+              (<EsignStateSelector>this.esignstate).setOrgData(this.currentOU);
                 console.log('currentOUId: ' + this.currentOUId);
                 this.ou.switchOU(this.currentOUId)
                     .then(res => {
@@ -106,7 +107,7 @@ export class CurrentOUComponent implements OnInit {
 
             // esign code
           //  this.esignauth.updateOrg(this.currentOU);
-             this.esignstate.setOrgData(this.currentOU);
+          (<EsignStateSelector>this.esignstate).setOrgData(this.currentOU);
         } else {
             this.openSnackBar('There is no organization associated to this account', 'OK');
         }
@@ -124,7 +125,7 @@ export class CurrentOUComponent implements OnInit {
                       //  this.localStorage.setRootOU(this.currentOU.rootOrgUnitId);
                         window.location.href = '/';
                       //  this.esignauth.updateOrg(this.currentOU);
-                        this.esignstate.setOrgData(this.currentOU);
+                      (<EsignStateSelector>this.esignstate).setOrgData(this.currentOU);
                         return newValue;
                     });
             }
