@@ -3,10 +3,9 @@ import { AfterViewInit, Component, HostBinding, HostListener, OnInit } from '@an
 import { ResizeService } from '../../resize/resize.service';
 import { routerAnimation } from '../../utils/page.animation';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../../core/localStorage/local-storage.service';
 import { OUService } from '../../core/services/ou.service';
 import { EsignAuthService } from '../../esign/service/esignauth.service';
-
+import { EsignStateSelector} from '../../esign/service/esign.state.selector';
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
@@ -34,9 +33,11 @@ export class MainPageComponent implements OnInit, AfterViewInit {
 isAdmin = false;
   // tslint:disable-next-line:max-line-length
   constructor(public resizeService: ResizeService, private router: Router,
-    private auth: AuthService, private localStorage: LocalStorageService,
+    private auth: AuthService, private stateselector: EsignStateSelector,
     private ous: OUService, private esignauth: EsignAuthService) {
     this.onResize();
+
+ // 040420 - Menu PubSub refactoring - start
     this.esignauth.cur_org.subscribe(org => {
       if (org) {
         this.userRole = org.role;
@@ -81,6 +82,7 @@ isAdmin = false;
         }
       }
     });
+     // 040420 - Menu PubSub refactoring - end
   }
 
   ngOnInit() {
@@ -100,7 +102,7 @@ isAdmin = false;
   }
 
   getAuthData() {
-    this.currentAuthData = this.localStorage.getAuth();
+    this.currentAuthData = this.stateselector.getAuthData();
     if (this.currentAuthData) {
       console.log(this.currentAuthData);
       this.displayName = this.currentAuthData.givenName ? this.currentAuthData.givenName : this.currentAuthData.userName;

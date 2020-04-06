@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api/api.service';
-// import { LocalStorageService } from '../localStorage/local-storage.service';
 import { RegistrationDto } from './registration.dto';
 import { EsignAuthService } from '../../esign/service/esignauth.service';
-import { EsignStateSelector} from '../../esign/service/esign.state.selector'
+import { EsignStateSelector} from '../../esign/service/esign.state.selector';
 import { environment } from '../../../environments/environment';
 import { pocolog } from 'pocolog';
 
@@ -39,7 +38,10 @@ export class AuthService {
   }
 
   isVerified(): boolean {
+    console.log('inside auth service');
+    console.log(this.stateselector);
     const auth = this.stateselector.getAuthData();
+    console.log(auth);
     if (auth) {
       let tokenDecode = this.parseJwt(auth.accessToken);
       if (tokenDecode && tokenDecode[this.EL_EMV]) {

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject ,  Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ESignCase, ESignDoc, ClassifyPage, ESignCPA, ClientReminder, ESignClient } from '../beans/ESignCase';
-import { LocalStorageService } from '../../core/localStorage/local-storage.service';
 import { environment } from '../../../environments/environment';
 import { EsignAuthService } from './esignauth.service';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';

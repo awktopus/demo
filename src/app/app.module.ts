@@ -30,6 +30,8 @@ import { TreeTableModule } from 'primeng/treetable';
 import { NgIdleModule } from '@ng-idle/core'
 import { ConfirmationDialogComponent } from './esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EsignStateSelector } from './esign/service/esign.state.selector';
+import { AbstractStateSelector } from './core/states/abstract.state.selector';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {};
 
 // AoT requires an exported function for factories for translate module
@@ -78,7 +80,8 @@ export function createTranslateLoader(http: HttpClient) {
   }, AuthGuard,
     EsignserviceService,
     EsignuiserviceService,
-    EsignAuthService
+    EsignAuthService,
+      { provide: AbstractStateSelector, useClass: EsignStateSelector }
   ],
   bootstrap: [AppComponent]
 })
