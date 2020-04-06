@@ -1,11 +1,12 @@
-import { LocalStorageService } from './../localStorage/local-storage.service';
+// import { LocalStorageService } from './../localStorage/local-storage.service';
 import { ApiService } from './../api/api.service';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
+import { EsignStateSelector } from '../../esign/service/esign.state.selector';
 
 @Injectable()
 export class OUService {
-    constructor(private api: ApiService, private localDb: LocalStorageService, private authService: AuthService) {
+    constructor(private api: ApiService, private esignstate: EsignStateSelector, private authService: AuthService) {
     }
 
     getUserOU(): Promise<any> {
@@ -25,15 +26,16 @@ export class OUService {
     }
 
     getSelectedOU() {
-        return this.localDb.getCurrentOU();
+        return this.esignstate.getCurrentOrg().id;
     }
 
     switchOU(ouId): Promise<boolean> {
-        const existing = this.localDb.getCurrentOU();
+        const existing = this.getSelectedOU();
         if (existing !== ouId) {
-            this.localDb.setCurrentOU(ouId);
+            //this.localDb.setCurrentOU(ouId);
             // this.OnOuSwitched.next(ouId);
-
+            this.esignstate.setCurOrgById(ouId);
+            /*
             let permission = this.localDb.getPermissions();
 
             if (permission === null || permission.orgUnitId !== ouId) {
@@ -48,13 +50,14 @@ export class OUService {
                         return Promise.reject(false);
                     });
             }
+            */
         } else {
             return Promise.reject(false);
         }
     }
 
     getCurrentOU(): Promise<any> {
-        return this.getOU(this.localDb.getCurrentOU());
+        return this.getOU(this.esignstate.getCurrentOrg().id);
     }
 
     getOU(ouId: string): Promise<any> {

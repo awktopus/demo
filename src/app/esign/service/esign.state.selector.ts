@@ -35,6 +35,14 @@ export class EsignStateSelector implements AbstractStateSelector {
     this._orgData = orgData;
   }
 
+  setCurOrgById(newOrgID) {
+    this._userOrgs.forEach(vv => {
+      let org: any = vv;
+      if (org.orgUnitId === newOrgID) {
+        this.setOrgData(org);
+      }
+    });
+  }
   setUserOrgs(orgs: []) {
     this._userOrgs = orgs;
   }
@@ -52,8 +60,7 @@ emailVerified: true
 recaptchaToken: null
 */
   getAuthData(): { accessToken: string; expiredIn: number; userName: string } {
-    if (this._authdata)
-    {
+    if (this._authdata) {
       return {
         accessToken: this._authdata.accessToken,
         expiredIn: this._authdata.expiredIn,
