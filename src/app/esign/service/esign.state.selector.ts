@@ -52,11 +52,16 @@ emailVerified: true
 recaptchaToken: null
 */
   getAuthData(): { accessToken: string; expiredIn: number; userName: string } {
-    return {
-      accessToken: this._authdata.accessToken,
-      expiredIn: this._authdata.expiredIn,
-      userName: this._authdata.userName
-    };
+    if (this._authdata)
+    {
+      return {
+        accessToken: this._authdata.accessToken,
+        expiredIn: this._authdata.expiredIn,
+        userName: this._authdata.userName
+      };
+    } else {
+      return null;
+    }
   }
 
   getCurrentUser(): {
@@ -68,14 +73,17 @@ recaptchaToken: null
   } {
     //const user = { ...this.userDataSelector.userProfile };
     // let user: any = {}
-
-    return {
-      userId: this._authdata.Id,
-      userName: this._authdata.userName,
-      firstName: this._authdata.firstName,
-      lastName: this._authdata.lastName,
-      email: this._authdata.userName
-    };
+    if (this._authdata) {
+      return {
+        userId: this._authdata.Id,
+        userName: this._authdata.userName,
+        firstName: this._authdata.firstName,
+        lastName: this._authdata.lastName,
+        email: this._authdata.userName
+      };
+    } else {
+      return null;
+    }
   }
   getCurrentOrg(): {
     id: string;
