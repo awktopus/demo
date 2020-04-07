@@ -29,24 +29,20 @@ export class EsignAuthService {
   enabledMenus: string[];
   // 040420 - Menu PubSub refactoring - end
 
-  constructor(private http: HttpClient, private esignstate: EsignStateSelector,
-     private pubSub: PubSub
-  ) {
-    console.log('esign auth constructor');
- //   this.pubSubForMenuSecurity();
+  constructor(private http: HttpClient, private esignstate: EsignStateSelector, private pubSub: PubSub) {
+    console.log('esign auth service constructor');
+    this.pubSubForELToolsMenuSecurity();
   }
 
-  pubSubForMenuSecurity() {
-   // 040420 - Menu PubSub refactoring - start
-   console.log('pubSubForMenuSecurity - start');
-     this.onOrgSwitchedSub = this.pubSub.subscribe('ON_ORG_SWITCHED',
+  pubSubForELToolsMenuSecurity() {
+    // 040420 - Menu PubSub refactoring - start
+    console.log('pubSubForELToolsMenuSecurity - start');
+    this.onOrgSwitchedSub = this.pubSub.subscribe(PubSub.ON_ORG_SWITCHED,
       data => {
         this.selected_org = data
-        console.log('inside esign auth constructor:');
+        console.log('Inside pubSubForELToolsMenuSecurity selected org:');
         console.log(this.selected_org);
-
         if (this.selected_org) {
-
           this.industryId = this.selected_org.industryId;
           if (this.industryId.toUpperCase() === 'ACCOUNT') {
             this.enabledMenus.push(this.TAX_MENU);
@@ -59,17 +55,19 @@ export class EsignAuthService {
             this.enabledMenus.push(this.TAX_MY_TAX_CASE);
           }
           if (this.selected_org.userRole.normalizedName.toUpperCase() === 'ADMIN' ||
-          this.selected_org.userRole.normalizedName.toUpperCase() === 'OWNER') {
-                  this.enabledMenus.push(this.TAX_SETTINGS_MENU);
+            this.selected_org.userRole.normalizedName.toUpperCase() === 'OWNER') {
+            this.enabledMenus.push(this.TAX_SETTINGS_MENU);
           }
           this.pubSub.next<string[]>(PubSub.MENU_ENABLED, this.enabledMenus);
         }
+        console.log('pubSubForELToolsMenuSecurity - end');
       });
-   // 040420 - Menu PubSub refactoring - end
+    // 040420 - Menu PubSub refactoring - end
   }
 
   clearEsignCache() {
     // localStorage.removeItem(this.KEY_ESign);
+    this.esignstate.clearData();
   }
   isEsignAuth(): boolean {
     // const auth = localStorage.getItem(this.esign_key);
@@ -84,22 +82,25 @@ export class EsignAuthService {
     console.log('get UserOUName:');
     // console.log(localStorage.getItem(this.USER_OU_NAME));
     this._org.next(newOrg);
-  //  this.esignstate.setOrgData(newOrg);
+    this.esignstate.setOrgData(newOrg);
+    console.log('get auth data:' + this.esignstate.getAuthData());
   }
 
   getESignToken(): string {
     // return JSON.parse(localStorage.getItem(this.esign_key));
-    const v = localStorage.getItem(this.KEY_ESign);
+    // const v = localStorage.getItem(this.KEY_ESign);
+    const v = this.esignstate.getESignAccessToken();
     if (v) {
-      return v;
+      return v.accessToken;
     } else {
       return null;
     }
   }
   getOrgUnitName(): string {
-    const v = localStorage.getItem(this.USER_OU_NAME);
+   // const v = localStorage.getItem(this.USER_OU_NAME);
+   const v = this.esignstate.getCurrentOrg();
     if (v) {
-      return v;
+      return v.name;
     } else {
       return null;
     }
@@ -108,7 +109,8 @@ export class EsignAuthService {
     console.log('setting esign token:', token);
     // localStorage.setItem(this.esign_key, JSON.stringify(token));
     // this.esignauth = token;
-    localStorage.setItem(this.KEY_ESign, token);
+    // localStorage.setItem(this.KEY_ESign, token);
+    this.esignstate.setESignAccessToken(token);
   }
 
   runESignAuth() {
@@ -116,7 +118,7 @@ export class EsignAuthService {
     // console.log(this.getELOptions());
     console.log('get auth data');
     console.log(this.esignstate.getAuthData());
-     return this.http.post(url, { 'ElAccessToken': this.esignstate.getAuthData().accessToken }, this.getELOptions());
+    return this.http.post(url, { 'ElAccessToken': this.esignstate.getAuthData().accessToken }, this.getELOptions());
   }
   getELOptions() {
     const token = this.esignstate.getAuthData();
@@ -130,9 +132,13 @@ export class EsignAuthService {
   }
 
   getOrgUnitID(): string {
+    console.log('get org unit id');
+    console.log(this.esignstate.getCurrentOrg());
     return this.esignstate.getCurrentOrg().id;
   }
   getUserID(): string {
+    console.log('get user id');
+    console.log(this.esignstate.getCurrentUser());
     return this.esignstate.getCurrentUser().userId;
   }
 

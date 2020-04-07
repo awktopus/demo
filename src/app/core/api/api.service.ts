@@ -12,7 +12,7 @@ export class ApiService {
   private readonly HEADER_DOMAIN_IDENTITY: string = 'EL-Domain-Identity';
   private readonly HEADER_RESOUCE_IDENTITY: string = 'EL-Resource-Identity';
 
-  constructor(private http: HttpClient, private esignstate: AbstractStateSelector) { }
+  constructor(private http: HttpClient, private esignstate: EsignStateSelector) { }
 
   private _getJwtAccessToken() {
     let auth: any = this.esignstate.getAuthData();
@@ -21,7 +21,7 @@ export class ApiService {
     if (auth) {
       return auth.accessToken;
     } else {
-      pocolog.error("Failed to get access token from cache.");
+      // pocolog.error("Failed to get access token from cache.");
       return null;
     }
   }

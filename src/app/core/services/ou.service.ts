@@ -7,7 +7,7 @@ import { AbstractStateSelector } from '../states/abstract.state.selector';
 
 @Injectable()
 export class OUService {
-    constructor(private api: ApiService, private esignstate: AbstractStateSelector, private authService: AuthService) {
+    constructor(private api: ApiService, private esignstate: EsignStateSelector, private authService: AuthService) {
     }
 
     getUserOU(): Promise<any> {

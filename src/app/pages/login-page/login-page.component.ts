@@ -39,7 +39,7 @@ export class LoginPageComponent implements OnInit {
   show2faVerifyWindow = false;
   showEnter2faCode = false;
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private auth: AuthService, private ouService: OUService,
-    private stateselector: AbstractStateSelector, private userService: UserService) { }
+    private stateselector: EsignStateSelector, private userService: UserService) { }
   ngOnInit() {
     this.email = '';
     this.password = '';

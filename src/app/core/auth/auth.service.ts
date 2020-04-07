@@ -18,7 +18,7 @@ export class AuthService {
   EL_EMV = 'https://www.everleagues.com/jwt/claims/emv'; // email verifiedmm
   // store the URL so we can redirect after logging in
   redirectUrl: string;
-  constructor(private api: ApiService, private stateselector: AbstractStateSelector,
+  constructor(private api: ApiService, private stateselector: EsignStateSelector,
      private esignauth: EsignAuthService) { }
 
   isAuthenticated(): boolean {

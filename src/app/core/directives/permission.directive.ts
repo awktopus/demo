@@ -24,7 +24,7 @@ export class PermissionDirective implements OnInit, OnChanges {
     private _allPermissions: any[];
 
     private defaultDisplay: string;
-    constructor( private esignstate: AbstractStateSelector,
+    constructor( private esignstate: EsignStateSelector,
         private el: ElementRef) {
     }
 

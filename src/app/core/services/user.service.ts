@@ -6,7 +6,7 @@ import { EsignStateSelector} from '../../esign/service/esign.state.selector';
 import { AbstractStateSelector } from '../states/abstract.state.selector';
 @Injectable()
 export class UserService {
-    constructor(private stateselector: AbstractStateSelector, private ouService: OUService) {
+    constructor(private stateselector: EsignStateSelector, private ouService: OUService) {
     }
 
     initLoginDetails(): Promise<any> {
