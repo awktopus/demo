@@ -36,9 +36,18 @@ public baseurl = environment.apiEsignLink;
   }
 
   setStepper(istep: number) {
+    console.log('setting stepper' + istep);
+    if (istep === 0) {
+      const ui: ESignUI = new ESignUI();
+      console.log(ui);
+      ui.stepperIndex = istep;
+      this._esignui.next(ui);
+    } else {
     const ui: ESignUI = this._esignui.getValue();
+    console.log(ui);
     ui.stepperIndex = istep;
     this._esignui.next(ui);
+  }
   }
 
   searchCaseUsers(searchkey: string) {

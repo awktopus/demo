@@ -26,7 +26,7 @@ export class CurrentOUComponent implements OnInit {
 
     constructor(private ou: OUService, private router: Router,
         public dialog: MatDialog, public snackBar: MatSnackBar,
-        private esignstate: EsignStateSelector, private esignAuthService: EsignAuthService,
+        private esignstate: AbstractStateSelector, private esignAuthService: EsignAuthService,
         private authService: AuthService) {
     }
 

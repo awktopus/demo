@@ -6,6 +6,7 @@ import { AbstractStateSelector } from "../../core/states/abstract.state.selector
 import { environment } from '../../../environments/environment';
 import { EsignStateSelector } from './esign.state.selector';
 import { PubSub } from '../../core/services/pubsub.service';
+import { EsignLocalStateSelector } from './esign.localstate.selector';
 
 // import { EventEmitter } from '@angular/core';
 @Injectable()
@@ -29,7 +30,8 @@ export class EsignAuthService {
   enabledMenus: string[];
   // 040420 - Menu PubSub refactoring - end
 
-  constructor(private http: HttpClient, private esignstate: EsignStateSelector, private pubSub: PubSub) {
+  constructor(private http: HttpClient, private esignstate: AbstractStateSelector,
+    private pubSub: PubSub, private esignlocalstate: EsignLocalStateSelector) {
     console.log('esign auth service constructor');
     this.pubSubForELToolsMenuSecurity();
   }
@@ -67,7 +69,7 @@ export class EsignAuthService {
 
   clearEsignCache() {
     // localStorage.removeItem(this.KEY_ESign);
-    this.esignstate.clearData();
+    this.esignlocalstate.clearData();
   }
   isEsignAuth(): boolean {
     // const auth = localStorage.getItem(this.esign_key);
@@ -82,14 +84,17 @@ export class EsignAuthService {
     console.log('get UserOUName:');
     // console.log(localStorage.getItem(this.USER_OU_NAME));
     this._org.next(newOrg);
-    this.esignstate.setOrgData(newOrg);
+    if (this.esignstate instanceof EsignStateSelector) {
+      console.log()
+      this.esignstate.setOrgData(newOrg);
+    }
     console.log('get auth data:' + this.esignstate.getAuthData());
   }
 
   getESignToken(): string {
     // return JSON.parse(localStorage.getItem(this.esign_key));
     // const v = localStorage.getItem(this.KEY_ESign);
-    const v = this.esignstate.getESignAccessToken();
+    const v = this.esignlocalstate.getESignAccessToken();
     if (v) {
       return v.accessToken;
     } else {
@@ -110,7 +115,7 @@ export class EsignAuthService {
     // localStorage.setItem(this.esign_key, JSON.stringify(token));
     // this.esignauth = token;
     // localStorage.setItem(this.KEY_ESign, token);
-    this.esignstate.setESignAccessToken(token);
+    this.esignlocalstate.setESignAccessToken(token);
   }
 
   runESignAuth() {

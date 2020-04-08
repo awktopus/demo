@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { OUService } from '../../core/services/ou.service';
 import { EsignAuthService } from '../../esign/service/esignauth.service';
 import { EsignStateSelector} from '../../esign/service/esign.state.selector';
+import { AbstractStateSelector } from '../../core/states/abstract.state.selector';
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
@@ -33,7 +34,7 @@ export class MainPageComponent implements OnInit, AfterViewInit {
 isAdmin = false;
   // tslint:disable-next-line:max-line-length
   constructor(public resizeService: ResizeService, private router: Router,
-    private auth: AuthService, private stateselector: EsignStateSelector,
+    private auth: AuthService, private stateselector: AbstractStateSelector,
     private ous: OUService, private esignauth: EsignAuthService) {
     this.onResize();
 
