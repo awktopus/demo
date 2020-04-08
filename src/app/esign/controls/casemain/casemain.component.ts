@@ -29,7 +29,7 @@ export class CasemainComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.route.paramMap.subscribe(para => {
       this.mycaseID = para.get('caseId');
-      if (this.mycaseID === 'newcaseID') {
+      if (this.mycaseID === 'newcaseID' || this.mycaseID === 'newtaxcase') {
         const cc = new ESignCase();
         this.service.updateCase(cc);
         this.cstep1.setInitCase(cc, 'newcase');
@@ -38,14 +38,16 @@ export class CasemainComponent implements OnInit, AfterViewInit {
         var existingCaseId = this.mycaseID.split('-');
         if (existingCaseId[1] === 'copycase') {
           console.log('copycase scenario - start');
-          console.log('case id: ' + existingCaseId[0]);
+          console.log('copycase case id: ' + existingCaseId[0]);
           this.service.getESignCase(existingCaseId[0]).subscribe(resp => {
             const existingCopyCase: ESignCase = <ESignCase>resp;
             const newCopyCase2 = new ESignCase();
-            console.log('calling update case');
+            console.log('copycase calling update case');
             this.service.updateCase(newCopyCase2);
-            console.log('calling set init case');
+            console.log('copycase calling set init case');
             this.cstep1.setInitCase(existingCopyCase, 'copycase');
+            console.log('copycase set case header');
+            this.cstep1.setcaseHeader(existingCopyCase);
             console.log('set stepper');
             this.uiservice.setStepper(0);
             console.log('copycase scenario - end');
@@ -62,8 +64,7 @@ export class CasemainComponent implements OnInit, AfterViewInit {
             this.cstep1.setInitCase(existingCase, 'update-case');
             console.log('set stepper');
             this.uiservice.setStepper(0);
-            // this.cstep1.setcaseHeader(existingCase);
-          });
+         });
         }
       } else {
         console.log(this.mycaseID);

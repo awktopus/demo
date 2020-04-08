@@ -126,7 +126,7 @@
     <span>
       <span *ngIf='!showSavespinner'>
         <button mat-raised-button color="accent" class="text-upper" (click)="saveCase()" 
-        *ngIf="(mycase && !(mycase.caseId)) || caseType == 'copycase'" type="submit" 
+        *ngIf="(mycase && !(mycase.caseId)) || caseType == 'copycase' || caseType == 'newcase'" type="submit" 
         [disabled]="caseStep1Form.invalid">
           Save
         </button>

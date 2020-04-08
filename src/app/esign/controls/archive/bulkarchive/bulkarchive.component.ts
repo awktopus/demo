@@ -137,7 +137,6 @@ export class BulkarchiveComponent implements OnInit, AfterViewInit {
         this.cancelBulkArchive();
       }
     });
-    this.showAddspinner = false;
   }
 
   /** Transform the data to something the tree can read. */

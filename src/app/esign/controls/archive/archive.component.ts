@@ -364,8 +364,7 @@ export class ArchiveComponent implements  OnInit, AfterViewInit {
 
 
   createNewCaseFromPrevious(caseId: string) {
-    console.log('Create new case from previous:' + caseId);
-    // this.router.navigateByUrl('main/esign/case/newcaseID');
+    console.log('archive: Create new case from previous:' + caseId);
     const url = '/main/esign/case/' + caseId + '-' + 'copycase';
     this.router.navigateByUrl(url);
   }

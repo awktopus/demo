@@ -53,12 +53,17 @@ export class EsignAuthService {
           if (this.industryId.toUpperCase() !== 'PERSONAL') {
             this.enabledMenus.push(this.IET_MENU);
           }
-          if (this.selected_org.userRole.normalizedName.toUpperCase() === 'CLIENT') {
-            this.enabledMenus.push(this.TAX_MY_TAX_CASE);
-          }
-          if (this.selected_org.userRole.normalizedName.toUpperCase() === 'ADMIN' ||
-            this.selected_org.userRole.normalizedName.toUpperCase() === 'OWNER') {
-            this.enabledMenus.push(this.TAX_SETTINGS_MENU);
+          let currentOrgUser = this.esignstate.getCurrentOrgUser();
+          if (currentOrgUser) {
+            if (currentOrgUser.role.toUpperCase() === 'CLIENT') {
+              this.enabledMenus.push(this.TAX_MY_TAX_CASE);
+            }
+            if (currentOrgUser.role.toUpperCase() === 'ADMIN' ||
+              currentOrgUser.role.toUpperCase() === 'OWNER') {
+              this.enabledMenus.push(this.TAX_SETTINGS_MENU);
+            }
+          } else {
+            console.log('Current organization user object is null, hence not able enable few menus')
           }
           this.pubSub.next<string[]>(PubSub.MENU_ENABLED, this.enabledMenus);
         }
@@ -102,8 +107,8 @@ export class EsignAuthService {
     }
   }
   getOrgUnitName(): string {
-   // const v = localStorage.getItem(this.USER_OU_NAME);
-   const v = this.esignstate.getCurrentOrg();
+    // const v = localStorage.getItem(this.USER_OU_NAME);
+    const v = this.esignstate.getCurrentOrg();
     if (v) {
       return v.name;
     } else {

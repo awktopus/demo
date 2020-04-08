@@ -21,6 +21,7 @@ export class Step3panelComponent implements OnInit {
   caseValidated = false;
   reviewcpa: ESignCPA;
   showSavespinner = false;
+  showAnotherCasespinner = false;
   constructor( public dialog: MatDialog, private service: EsignserviceService, private router: Router) {
 
     this.cpas = []; // need service to pull this data
@@ -101,12 +102,14 @@ export class Step3panelComponent implements OnInit {
   }
 
   createAnotherCase() {
-   // this.router.navigateByUrl('main/esign/case/newcaseID');
-   // this.router.navigateByUrl('main/esign/case/newcase');
+    this.showAnotherCasespinner = true;
    console.log('showCaseTemplatesPopup');
+   this.router.navigateByUrl('main/esign/history/reviewcases');
     const dialogRef = this.dialog.open(CasetemplatesComponent, {
       width: '1260px'
     });
+    dialogRef.componentInstance.setData('casepanel');
+    this.showAnotherCasespinner = false;
   }
 }
 

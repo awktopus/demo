@@ -1,4 +1,5 @@
-<button mat-raised-button color="accent" class="text-upper" (click)="openCover(coverletter_type)" [disabled]="mycase.coverLetters">Config Cover Letter</button>
+<button mat-raised-button color="accent" class="text-upper" (click)="openCover(coverletter_type)" 
+[disabled]="mycase && mycase.coverLetters">Config Cover Letter</button>
 <br/>
 <br>
 <div class='casefield'>
@@ -22,4 +23,10 @@
 <span *ngIf='showSavespinner'>Processing...</span>
 <br>
 <br>
-<button mat-raised-button color="accent" class="text-upper" (click)='createAnotherCase()'>Create Another Case</button>
+<span *ngIf='!showAnotherCasespinner'>
+  <button mat-raised-button color="accent" class="text-upper" (click)='createAnotherCase()'>Create Another Case</button>
+</span>
+<mat-spinner *ngIf='showAnotherCasespinner' diameter='40'></mat-spinner>
+<span *ngIf='showAnotherCasespinner'>Processing...</span>
+<br>
+<br>

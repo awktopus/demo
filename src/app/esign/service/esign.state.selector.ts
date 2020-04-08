@@ -8,14 +8,38 @@ export class EsignStateSelector implements AbstractStateSelector {
   private _authdata: any = null;
   private _orgData: any = null;
   private _userOrgs: any[] = null;
-  private _eSignAccessToken: any = null;
+  private _curOrgData: any = null;
   constructor() {
+  }
+
+  getCurrentOrgUser(): {
+    orgId: string;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+  } {
+    if (this._curOrgData) {
+      return {
+        orgId: this._curOrgData.orgId,
+        userId: this._curOrgData.userId,
+        firstName: this._curOrgData.firstName,
+        lastName: this._curOrgData.lastName,
+        role: this._curOrgData.role
+      };
+    } else {
+      return null;
+    }
+  }
+
+  setCurrentOrgUser(curOrgUser: any) {
+    this._curOrgData = curOrgUser;
   }
 
   clearData() {
     this._authdata = null;
     this._orgData = null;
-    this._eSignAccessToken = null;
+    this._curOrgData = null;
   }
 
   setAuthData(authData: any) {
@@ -117,20 +141,6 @@ export class EsignStateSelector implements AbstractStateSelector {
       };
     });*/
     return users;
-  }
-
-  getESignAccessToken(): { accessToken: string; } {
-    if (this._eSignAccessToken) {
-      return {
-        accessToken: this._eSignAccessToken
-      };
-    } else {
-      return null;
-    }
-  }
-
-  setESignAccessToken(accessToken: any) {
-    this._eSignAccessToken = accessToken;
   }
 }
 export enum OrgType {

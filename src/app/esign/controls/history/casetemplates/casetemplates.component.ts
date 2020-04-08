@@ -30,11 +30,12 @@ export class CasetemplatesComponent implements OnInit {
   context: string;
   frameworkComponents: any;
   casetemplatefiles: any;
+  launchingSource: any = null;
   constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService,
     private router: Router,
     public dialogRef: MatDialogRef<CasetemplatesComponent>) {
-      dialogRef.disableClose = true;
-     }
+    dialogRef.disableClose = true;
+  }
 
 
   ngOnInit() {
@@ -47,7 +48,7 @@ export class CasetemplatesComponent implements OnInit {
       console.log('getCaseTemplatesData response');
       console.log(rr);
       this.caseTemplatesgridData = rr;
-     });
+    });
     this.defaultColDef = { editable: true };
     this.rowSelection = 'multiple';
   }
@@ -59,10 +60,16 @@ export class CasetemplatesComponent implements OnInit {
       { headerName: 'Signer', field: 'signer', width: 500 },
       { headerName: 'Co-Signer', field: 'coSigner', width: 500 },
       { headerName: 'Tax Year', field: 'taxYear', width: 300 },
-      { headerName: '+', field: 'newCase', cellRenderer: 'newCaseRenderer', width: 50,
-      suppressSizeToFit: true }
+      {
+        headerName: '+', field: 'newCase', cellRenderer: 'newCaseRenderer', width: 50,
+        suppressSizeToFit: true
+      }
     ];
     return res;
+  }
+
+  setData(launchingSource: any) {
+    this.launchingSource = launchingSource;
   }
 
   onGridReady(params) {
@@ -73,7 +80,7 @@ export class CasetemplatesComponent implements OnInit {
 
   closeme() {
     this.dialogRef.close();
- //   this.historyref.selectedIndex = 0;
+    //   this.historyref.selectedIndex = 0;
   }
 
   uploadCaseTemplates(ff: File | FileList) {
@@ -82,7 +89,7 @@ export class CasetemplatesComponent implements OnInit {
       console.log(resp);
       const rr = <CaseTemplate[]>resp;
       if (rr != null && rr.length > 0) {
-      this.caseTemplatesgridData = rr;
+        this.caseTemplatesgridData = rr;
       } else {
       }
     },
@@ -91,7 +98,11 @@ export class CasetemplatesComponent implements OnInit {
   }
 
   neweSignCaseFromScratch() {
-    this.router.navigateByUrl('main/esign/case/newcaseID');
+    if (this.launchingSource === 'casepanel') {
+      this.router.navigateByUrl('main/esign/case/newtaxcase');
+    } else {
+      this.router.navigateByUrl('main/esign/case/newcaseID');
+    }
     this.dialogRef.close();
   }
 }

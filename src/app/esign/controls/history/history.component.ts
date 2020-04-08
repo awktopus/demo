@@ -466,8 +466,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
     dialogRef.componentInstance.historyref = this;
   }
   createNewCaseFromPrevious(caseId: string) {
-    console.log('Create new case from previous:' + caseId);
-    // this.router.navigateByUrl('main/esign/case/newcaseID');
+    console.log('history: create new case from previous:' + caseId);
     const url = '/main/esign/case/' + caseId + '-' + 'copycase';
     this.router.navigateByUrl(url);
   }

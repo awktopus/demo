@@ -33,4 +33,12 @@ export abstract class AbstractStateSelector {
     lastName: string;
     role: string;
   }[];
+
+  abstract getCurrentOrgUser(): {
+    orgId: string;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+  };
 }
