@@ -27,7 +27,8 @@ export class EsignAuthService {
   TAX_SETTINGS_MENU = "tax_settings_menu";
   TAX_MY_TAX_CASE = "tax_my_tax_case";
   IET_MENU = "iet_menu";
-  enabledMenus: string[];
+  TAX_ARCHIVE_MENU = "tax_archive_menu";
+  enabledMenus: string[] = [];
   // 040420 - Menu PubSub refactoring - end
 
   constructor(private http: HttpClient, private esignstate: AbstractStateSelector,
@@ -41,21 +42,27 @@ export class EsignAuthService {
     console.log('pubSubForELToolsMenuSecurity - start');
     this.onOrgSwitchedSub = this.pubSub.subscribe(PubSub.ON_ORG_SWITCHED,
       data => {
+        this.enabledMenus = [];
         this.selected_org = data
         console.log('Inside pubSubForELToolsMenuSecurity selected org:');
         console.log(this.selected_org);
         if (this.selected_org) {
           this.industryId = this.selected_org.industryId;
-          if (this.industryId.toUpperCase() === 'ACCOUNT') {
-            this.enabledMenus.push(this.TAX_MENU);
-            this.enabledMenus.push(this.TAX_CASE_MENU);
-          }
-          if (this.industryId.toUpperCase() !== 'PERSONAL') {
-            this.enabledMenus.push(this.IET_MENU);
-          }
           let currentOrgUser = this.esignstate.getCurrentOrgUser();
           if (currentOrgUser) {
+            if (this.industryId.toUpperCase() === 'ACCOUNT'
+              && currentOrgUser.role.toUpperCase() !== 'PARTNER'
+              && this.industryId.toUpperCase() !== 'PERSONAL'
+              && currentOrgUser.role.toUpperCase() !== 'CLIENT') {
+              this.enabledMenus.push(this.TAX_MENU);
+              this.enabledMenus.push(this.TAX_CASE_MENU);
+              this.enabledMenus.push(this.TAX_ARCHIVE_MENU);
+            }
+            if (this.industryId.toUpperCase() !== 'PERSONAL') {
+              this.enabledMenus.push(this.IET_MENU);
+            }
             if (currentOrgUser.role.toUpperCase() === 'CLIENT') {
+              this.enabledMenus.push(this.TAX_MENU);
               this.enabledMenus.push(this.TAX_MY_TAX_CASE);
             }
             if (currentOrgUser.role.toUpperCase() === 'ADMIN' ||
@@ -63,7 +70,7 @@ export class EsignAuthService {
               this.enabledMenus.push(this.TAX_SETTINGS_MENU);
             }
           } else {
-            console.log('Current organization user object is null, hence not able enable few menus')
+            console.log('Current organization user object is null, hence not able enable menu items')
           }
           this.pubSub.next<string[]>(PubSub.MENU_ENABLED, this.enabledMenus);
         }
