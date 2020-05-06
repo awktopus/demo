@@ -8,6 +8,7 @@ import { ButtonRendererComponent } from '../../button-renderer.component';
 import { IetAddreceiptComponent } from '../../controls/iet-addreceipt/iet-addreceipt.component';
 import { ConfirmationDialogComponent } from '../../../esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { IetPdfPopupComponent } from '../iet-pdf-popup/iet-pdf-popup.component';
 @Component({
   selector: 'app-iet-viewreport',
   templateUrl: './iet-viewreport.component.html',
@@ -161,12 +162,21 @@ export class IetViewreportComponent implements OnInit {
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Amount', field: 'amount', width: 100,
+        headerName: 'Amount', field: 'amount', width: 150,
         cellStyle: this.changeRowColor,
         cellRenderer: this.CurrencyCellRendererUSD
       },
       {
         headerName: 'Note', field: 'notes',
+        cellStyle: this.changeRowColor
+      },
+      {
+        headerName: 'View', width: 125,
+        cellRenderer: 'buttonRenderer',
+        cellRendererParams: {
+          onClick: this.viewReceipt.bind(this),
+          label: 'visibility'
+        },
         cellStyle: this.changeRowColor
       },
       {
@@ -331,6 +341,20 @@ export class IetViewreportComponent implements OnInit {
     if (this.downloadAs === 'CSV') {
       this.downloadYearlyReceiptsCSV();
     }
+  }
+
+  viewReceipt(viewRecord: any) {
+    console.log(viewRecord);
+    console.log(viewRecord.rowData.docId);
+    const dialogRef = this.dialog.open(IetPdfPopupComponent, { width: '520pt'});
+
+    const url: string = this.service.auth.baseurl + '/iet/ClientCompanies/orgunitid/' +
+    this.service.auth.getOrgUnitID() + '/clientcompany/' + this.companyId + '/receipts/' +
+    viewRecord.rowData.docId + '/download';
+    dialogRef.componentInstance.setPDF(url);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }

@@ -84,13 +84,33 @@ export class IetCompanyComponent implements OnInit {
       this.companyForm.controls['companyNameFormControl'].setValue(this.companyName);
       this.companyForm.controls['companyTypeFormControl'].setValue(this.companyType);
       this.companyForm.controls['closingDateFormControl'].setValue(this.closeDate);
-     // this.companyForm.controls['includeAccountNumberFormControl'].setValue(this.includeAccountNumber);
       this.focusField.nativeElement.focus();
     }
   });
-    // this.companyForm.controls['sharedUserFormControl'].valueChanges.subscribe(val => {
-    //   console.log('sharedUserFormControl search called');
 
+    // this.companyForm.controls['sharedUserFormControl'].valueChanges.subscribe(val => {
+    //   console.log('sharedUserFormControl search clients called');
+    //   console.log(val.trim());
+    //   console.log(this.secclient_var);
+    //   if (this.CPAID === '') {
+    //     return;
+    //   }
+    //   if (this.secondarysigner) {
+    //     return;
+    //   }
+    //   if (val && typeof val !== 'object') {
+    //     if (this.secclient_var === val.trim()) {
+    //       return;
+    //     } else {
+    //       this.uiservice.searchClientContacts(this.CPAID, val).subscribe(resp => {
+    //         this.secclients = <ESignClient[]>resp;
+    //       });
+    //     }
+    //   } else {
+    //     this.uiservice.searchClientContacts(this.CPAID, val).subscribe(resp => {
+    //       this.secclients = <ESignClient[]>resp;
+    //     });
+    //   }
     // });
   }
 
@@ -106,11 +126,6 @@ export class IetCompanyComponent implements OnInit {
     this.companyTypeId = clientCompany.companyTypeId;
     this.closeDate = clientCompany.closeDate;
     this.includeAccountNumber = true
-    // if (clientCompany.includeAccountNumber === 'Y') {
-    //   this.includeAccountNumber = true;
-    // } else {
-    //   this.includeAccountNumber = true;
-    // }
     this.companyId = clientCompany.companyId;
     this.sharedUsersList = clientCompany.sharedUsersList;
     }
@@ -129,7 +144,6 @@ export class IetCompanyComponent implements OnInit {
       this.cpas.forEach(cc => { if (cc.clientId === value) { c = cc; } });
       this.scpas.forEach(cc => { if (cc.clientId === c.clientId) { ec = cc; } });
       if (!ec) {
-        // console.log(c);
         this.scpas.push(c);
       }
     }
