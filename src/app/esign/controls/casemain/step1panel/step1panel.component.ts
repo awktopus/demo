@@ -86,7 +86,7 @@ export class Step1panelComponent implements OnInit {
   }
   ngOnInit() {
     console.log('Case step1 panel ngOnInit');
-    this.alertService.startLoadingMessage('', 'Attempting login...');
+   //  this.alertService.startLoadingMessage('', 'Attempting login...');
     this.caseDataloading = true;
     this.focusField.focused = true;
     this.mycase = null;
