@@ -42,9 +42,9 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
     this.showProcessSpinner = true;
     this.ezSignDataService.createNewEZSignDocument(this.ezSignDoc).subscribe(resp => {
       console.log(resp);
-      this.senderDocumentCompomentRef.loadEZSignDocuments();
-      this.dialogRef.close();
       this.showProcessSpinner = false;
+      this.senderDocumentCompomentRef.loadEZSignDocuments();
+      this.closeMe();
     });
   }
 

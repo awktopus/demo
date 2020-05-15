@@ -31,6 +31,9 @@ import { EzsignAddSignersButtonRendererComponent } from './controls/Ezsignaddsig
 import { EzsignDeleteButtonRendererComponent } from './controls/Ezsigndeletebutton-renderer.component';
 import { DocumenthistoryComponent } from './controls/senderdocuments/documenthistory/documenthistory.component';
 import { RouterLinkRendererComponent } from '../esign/controls/history/RouterLinkRenderer.component';
+import { EzsignLinkRendererComponent } from './controls/EzsignLinkRenderer.component';
+import { EzsignViewButtonRendererComponent } from './controls/Ezsignviewbutton-renderer.component';
+import { EzsignPdfPopupComponent } from './controls/shared/ezsign-pdf-popup/ezsign-pdf-popup.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -53,7 +56,9 @@ import { RouterLinkRendererComponent } from '../esign/controls/history/RouterLin
     MatProgressSpinnerModule,
     AngularDraggableModule,
     AgGridModule.withComponents([EzsignHistoryButtonRendererComponent,
-      EzsignAddSignersButtonRendererComponent, EzsignDeleteButtonRendererComponent]),
+      EzsignAddSignersButtonRendererComponent, EzsignDeleteButtonRendererComponent,
+      EzsignViewButtonRendererComponent,
+    EzsignLinkRendererComponent]),
     ResizableModule
   ],
   declarations: [
@@ -69,11 +74,14 @@ import { RouterLinkRendererComponent } from '../esign/controls/history/RouterLin
     EzsignAddSignersButtonRendererComponent,
     EzsignDeleteButtonRendererComponent,
     EzsignHistoryButtonRendererComponent,
+    EzsignViewButtonRendererComponent,
     AddfieldsComponent,
     InvitesignersComponent,
-    DocumenthistoryComponent
+    DocumenthistoryComponent,
+    EzsignLinkRendererComponent,
+    EzsignPdfPopupComponent
     ],
-  entryComponents: [AddsignersComponent, UploadDocumentComponent,
+  entryComponents: [AddsignersComponent, UploadDocumentComponent, EzsignPdfPopupComponent,
     EzsignConfirmationDialogComponent, InvitesignersComponent, DocumenthistoryComponent],
   providers: [
     ESignGuard,

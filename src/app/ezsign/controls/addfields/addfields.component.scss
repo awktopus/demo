@@ -203,8 +203,8 @@
 
 .signatureFieldTag {
   float: left;
-  position: relative;
-  z-index: 1000;
+  position: absolute;
+ // z-index: 9;
   background-color: #FFFFFF;
   padding: 5px;
   color: black;
@@ -218,7 +218,7 @@
 
 .textFieldTag {
   float: left;
-  position: relative;
+  position: absolute;
   z-index: 1000;
   background-color: #FFFFFF;
   padding: 5px;
@@ -233,7 +233,7 @@
 
 .dateFieldTag {
   float: left;
-  position: relative;
+  position: absolute;
   z-index: 1000;
   background-color: #FFFFFF;
   padding: 5px;

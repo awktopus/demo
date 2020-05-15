@@ -4,9 +4,9 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 @Component({
   selector: 'app-deletebutton-renderer',
   template: `
-    <button mat-raised-button style="border: none" [disabled]='ezSignDocResource.status !="Uploaded"'
-     (click)="onClick($event)">
-     <img src="../../../../assets/imgs/Recycle_Bin_Full.png" width="25" height="25">
+    <button mat-icon-button style="border: none"
+     (click)="onClick($event)" color="accent" matTooltip="Delete ezsign tracker">
+     <mat-icon>delete</mat-icon>
     </button>
    `
   })
@@ -18,6 +18,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 // (click)="onClick($event)">
 // <img src="../../../../assets/imgs/Recycle_Bin_Full.png">
 // </button>
+// <img src="../../../../assets/imgs/Recycle_Bin_Full.png" width="25" height="25">
 
 
 export class EzsignDeleteButtonRendererComponent implements ICellRendererAngularComp {

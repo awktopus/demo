@@ -15,6 +15,9 @@ import { EzsignConfirmationDialogComponent } from '../shared/ezsign-confirmation
 import { EzsignDeleteButtonRendererComponent } from '../Ezsigndeletebutton-renderer.component';
 import { EzsignHistoryButtonRendererComponent } from '../Ezsignhistorybutton-renderer.component';
 import { DocumenthistoryComponent } from './documenthistory/documenthistory.component';
+import { EzsignLinkRendererComponent } from '../EzsignLinkRenderer.component';
+import { EzsignViewButtonRendererComponent } from '../Ezsignviewbutton-renderer.component';
+import { EzsignPdfPopupComponent } from '../shared/ezsign-pdf-popup/ezsign-pdf-popup.component';
 
 @Component({
   selector: 'app-senderdocuments',
@@ -40,6 +43,7 @@ export class SenderdocumentsComponent implements OnInit {
   files: any = [];
   ezSignDoc: File | FileList;
   uploadedFileName: string;
+  isEZsignDataFetched = false;
   private rowHeight;
   private rowClass;
   constructor(public dialog: MatDialog,
@@ -47,6 +51,8 @@ export class SenderdocumentsComponent implements OnInit {
     private router: Router,
     private ezSignDataService: EzsigndataService) {
     this.frameworkComponents = {
+      ezsignLinkRenderer: EzsignLinkRendererComponent,
+      viewButtonRender: EzsignViewButtonRendererComponent,
       addSignersButtonRenderer: EzsignAddSignersButtonRendererComponent,
       historyButtonRenderer: EzsignHistoryButtonRendererComponent,
       deleteButtonRender: EzsignDeleteButtonRendererComponent
@@ -57,19 +63,6 @@ export class SenderdocumentsComponent implements OnInit {
     this.gridColumnDefs = this.configColDef();
 
     this.loadEZSignDocuments();
-
-    //  this.ezSignDataService.cur_ezsignDocHistory.subscribe(ezSignDocHis => {
-    //    console.log('subscribe');
-    //    if (ezSignDocHis) {
-    //    console.log(ezSignDocHis);
-    //    this.ezSignDocsgridData = [];
-    //    this.ezSignDocsgridData.push(ezSignDocHis);
-    //   }
-    //   console.log('after subscribe push');
-    //   console.log(this.ezSignDocsgridData);
-    //   console.log(this.ezSignDocsgridData.length);
-    //   });
-    // this.loadEZSignDocuments();
   }
 
   loadEZSignDocuments() {
@@ -77,36 +70,22 @@ export class SenderdocumentsComponent implements OnInit {
       const ezSignDocs: EZSignDocResource[] = <EZSignDocResource[]>resp;
       console.log(ezSignDocs);
       this.ezSignDocsgridData = ezSignDocs;
+      this.isEZsignDataFetched = true;
     });
-
-    // this.ezSignDocsgridData = [
-    //   { ezSignTrackingId: "EZS11151901", documentName: "E-File Authorization Sample1",
-    //   status: "Uploaded", receiverName : "",
-    //   lastModified: "12 hours ago"},
-    //   { ezSignTrackingId: "EZS11151902", documentName: "E-File Authorization Sample2",
-    //   status: "Sent to recipient", receiverName : "Ranga Rachapudi",
-    //   lastModified: "2 days back"},
-    //   { ezSignTrackingId: "EZS11151903", documentName: "E-File Authorization Sample3",
-    //   status: "Recipient signed", receiverName : "Ying Guo",
-    //   lastModified: "7 days back"},
-    //   { ezSignTrackingId: "EZS11151904", documentName: "E-File Authorization Sample3",
-    //   status: "Completed", receiverName : "Charles Ysl",
-    //   lastModified: "10 days back"}
-    // ];
   }
 
   configColDef() {
     const res = [
       {
         headerName: 'EZSign Tracking Id', field: 'ezSignTrackingId',
-        cellStyle: { textAlign: 'left' }
+        cellStyle: { color: 'blue', textAlign: 'left'},
+        cellRenderer: 'ezsignLinkRenderer'
       },
       { headerName: 'Document Name', field: 'documentName', cellStyle: { textAlign: 'left' } },
-      { headerName: 'Status', field: 'status', cellStyle: { color: 'blue', textAlign: 'left' } },
+      { headerName: 'Status', field: 'status', cellStyle: { textAlign: 'left' } },
       { headerName: 'Last Modified', field: 'lastModifiedDateTime', cellStyle: { textAlign: 'left' } },
-      // { headerName: 'Receiver Name', field: 'receiverName', cellStyle: {textAlign: 'left'} },
       {
-        width: 120,
+        headerName: 'Signer Status',
         cellRenderer: 'addSignersButtonRenderer',
         cellRendererParams: {
           onClick: this.addSigners.bind(this),
@@ -115,7 +94,15 @@ export class SenderdocumentsComponent implements OnInit {
         cellStyle: { 'justify-content': "center" }
       },
       {
-        width: 100,
+        headerName: 'View',
+        cellRenderer: 'viewButtonRender',
+        cellRendererParams: {
+          onClick: this.viewEZSignDocument.bind(this),
+        },
+        cellStyle: { 'justify-content': "center" }
+      },
+      {
+        headerName: 'Delete',
         cellRenderer: 'deleteButtonRender',
         cellRendererParams: {
           onClick: this.openConfirmationDialogforCompanyDeletion.bind(this),
@@ -124,7 +111,7 @@ export class SenderdocumentsComponent implements OnInit {
         cellStyle: { 'justify-content': "center" }
       },
       {
-        width: 120,
+        headerName: 'History',
         cellRenderer: 'historyButtonRenderer',
         cellRendererParams: {
           onClick: this.openHistoryDialog.bind(this),
@@ -137,6 +124,21 @@ export class SenderdocumentsComponent implements OnInit {
     this.rowHeight = 40;
     this.rowClass = 'ezsign-history-grid';
     return res;
+  }
+
+  showEzSignDocument(selectedRow: any) {
+    console.log('show ezsign document');
+    console.log(selectedRow);
+    const url = '/main/ezsign/addfields/' + selectedRow;
+    this.router.navigateByUrl(url);
+  }
+
+  viewEZSignDocument(selectedRow: any) {
+    console.log('view ezsign document');
+    console.log(selectedRow);
+   const dialogRef = this.dialog.open(EzsignPdfPopupComponent, { width: '520pt'});
+    dialogRef.componentInstance.setPDF(this.ezSignDataService.auth.baseurl +
+      '/Ezsign/tracking/' + selectedRow.rowData.ezSignTrackingId + '/signedform');
   }
 
   deleteEZSignDocument(deletedRow: any) {
@@ -222,7 +224,8 @@ export class SenderdocumentsComponent implements OnInit {
       width: '1260px', height: '500px'
     });
     dialogRef.componentInstance.senderDocumentsref = this;
-    dialogRef.componentInstance.setData(ezSignDocRow.rowData.ezSignTrackingId, 'senderdocuments');
+    dialogRef.componentInstance.setData(ezSignDocRow.rowData.ezSignTrackingId,
+      'senderdocuments', ezSignDocRow.rowData.status);
   }
 
   launchNewEZSignDocument() {

@@ -286,6 +286,7 @@ export class Signer {
   isSenderSigner: string;
   isSender: string;
   signerSequenceNo: number;
+  status: string
 }
 
 export class MetaData {
@@ -336,6 +337,7 @@ export class EZSignDocPageField {
 
 export class EZSignPageImageData {
   docId: string;
+  status: string;
   pageSeqNo: number;
   dataUrl: string;
   esignFields: EsignFormField[];
@@ -344,6 +346,8 @@ export class EZSignPageImageData {
   signatureFields?: SignatureField[];
   textFields?: TextField[];
   dateFields?: DateField[];
+  pageWidth: number;
+  pageHeight: number;
 }
 
 export class SignatureField {

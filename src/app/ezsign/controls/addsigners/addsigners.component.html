@@ -35,11 +35,13 @@
 
         <!-- ADD BUTTON -->
         <span *ngIf='!showProcessSpinner'>
-          <button [disabled]="!primarysigner" mat-raised-button color="accent" class="text-upper" (click)="addNewSigner()">
+          <button [disabled]="!primarysigner && 
+          (status == 'Sent to recipient' || status == 'Signed' || status == 'Inprogress') " mat-raised-button color="accent" 
+          class="text-upper" (click)="addNewSigner()">
             <span> ADD SIGNER </span>
           </button>
         </span>
-        <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
+        <mat-spinner *ngIf='showProcessSpinner' diameter='40'></mat-spinner>
         <span *ngIf='showProcessSpinner'>Processing...</span>
         <!-- / ADD BUTTON -->
       </mat-toolbar>
@@ -70,6 +72,10 @@
             <mat-cell *matCellDef="let element"> {{element.receiverEmailId}}</mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef> eZSign Status</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.status}}</mat-cell>
+          </ng-container>
 
 
           <ng-container matColumnDef="select">
@@ -89,7 +95,8 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu xPosition="before" #posXMenu="matMenu">
-                <button mat-menu-item [disabled]="false" (click)="deleteSigner(element)">
+                <button [disabled]="(status == 'Sent to recipient' || status == 'Signed' 
+                || status == 'Inprogress')" mat-menu-item [disabled]="false" (click)="deleteSigner(element)">
                   <mat-icon>delete</mat-icon>
                   remove
                 </button>
@@ -107,8 +114,8 @@
         <label class="heading-label">No signers added, please search using name of all the signers that need to sign this document.</label>
       </div>
       <div>
-          <button mat-raised-button color="accent" class="text-upper" (click)="startAddingFields()">
-            START ADDING FIELDS
+          <button mat-raised-button color="accent" class="text-upper" (click)="proceed()">
+            OK
           </button>
           &nbsp;
           <button mat-raised-button color="accent" class="text-upper" (click)="closeMe()">
@@ -117,5 +124,5 @@
         </div>
     </div>   
   </div>
-<mat-spinner *ngIf='isImageDataUrlFetched'>' diameter='10'></mat-spinner>
+<mat-spinner *ngIf='isImageDataUrlFetched' diameter='40'></mat-spinner>
 <span *ngIf='isImageDataUrlFetched'>Processing...</span>

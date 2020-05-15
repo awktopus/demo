@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, Input,  EventEmitter} from '@angular/core';
 import { MatDialog, MatOptionSelectionChange, MatSelect } from '@angular/material';
 import { ESignCase, ESignCate, ESignClient, ESignCPA, ESignConfig, ClientAnswer, TaxYears } from '../../../beans/ESignCase';
 import { forkJoin } from 'rxjs';
@@ -7,6 +7,7 @@ import { EsignserviceService } from '../../../service/esignservice.service';
 import { EsignuiserviceService } from '../../../service/esignuiservice.service';
 import { ClientAnswerComponent } from '../../settings/identity/client-answer/client-answer.component';
 import { SetClientAnswerComponent } from '../../settings/identity/set-client-answer/set-client-answer.component';
+import { AlertService, MessageSeverity, DialogType } from '../../../service/alert.service';
 @Component({
   selector: 'app-step1panel',
   templateUrl: './step1panel.component.html',
@@ -72,12 +73,20 @@ export class Step1panelComponent implements OnInit {
 
   @ViewChild('focusField') focusField: MatSelect;
 
-  constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService, public dialog: MatDialog) {
+  @Input()
+  isModal = false;
+
+  @Output()
+  enterKeyPress = new EventEmitter();
+
+  constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService,
+    public dialog: MatDialog,  private alertService: AlertService) {
     this.recSelclients = [];
     this.scpas = [];
   }
   ngOnInit() {
     console.log('Case step1 panel ngOnInit');
+    this.alertService.startLoadingMessage('', 'Attempting login...');
     this.caseDataloading = true;
     this.focusField.focused = true;
     this.mycase = null;
@@ -263,6 +272,7 @@ export class Step1panelComponent implements OnInit {
       this.caseStep1Form.controls['taxYear'].setValue(0);
     }
   }
+
   addcpa(event: MatOptionSelectionChange): void {
     const value = event.source.value;
     if ((value && event.isUserInput)) {
@@ -278,6 +288,7 @@ export class Step1panelComponent implements OnInit {
     console.log(this.searchCPA);
     this.searchCPA = '';
   }
+
   add(event: MatOptionSelectionChange): void {
     const value = event.source.value;
     // Add our fruit
@@ -298,6 +309,7 @@ export class Step1panelComponent implements OnInit {
     console.log(this.searchRecClient);
     this.searchRecClient = '';
   }
+
   addPrimary(event: MatOptionSelectionChange): void {
     const value = event.source.value;
     console.log('add primary client' + value);
@@ -308,6 +320,7 @@ export class Step1panelComponent implements OnInit {
       this.caseStep1Form.controls['clientctrl'].setValue('');
     }
   }
+
   addSecondary(event: MatOptionSelectionChange): void {
     const value = event.source.value;
     console.log('add secondary client' + value);
@@ -318,6 +331,7 @@ export class Step1panelComponent implements OnInit {
       this.caseStep1Form.controls['secclientctrl'].setValue('');
     }
   }
+
   removeClient(c: ESignClient): void {
     console.log('remove client recipient');
     const index = this.recSelclients.indexOf(c);
@@ -325,6 +339,7 @@ export class Step1panelComponent implements OnInit {
       this.recSelclients.splice(index, 1);
     }
   }
+
   removeSinger(s: string): void {
     console.log(s + 'remove singer');
     if (s === 'primary') {
@@ -339,18 +354,21 @@ export class Step1panelComponent implements OnInit {
       });
     }
   }
+
   removeCPA(c: ESignCPA): void {
     const index = this.scpas.indexOf(c);
     if (index >= 0) {
       this.scpas.splice(index, 1);
     }
   }
+
   setInitCase(caseheader: ESignCase, caseType: string) {
     console.log('set init case', caseheader);
     console.log('case type:', caseType);
     this.initcaseheader = caseheader;
     this.caseType = caseType;
   }
+
   setcaseHeader(caseheader: ESignCase) {
     this.caseStep1Form.controls['category'].setValue(null);
     this.primarysigner = caseheader.primarySigner;
@@ -402,17 +420,6 @@ export class Step1panelComponent implements OnInit {
     } else {
       this.caseStep1Form.controls['taxYear'].setValue(null);
     }
-    // this.caseStep1Form.reset();
-    // this.caseStep1Form.get['category'].updateValueAndValidity();
-    // this.caseStep1Form.get['subcategory'].updateValueAndValidity();
-    // this.caseStep1Form.get['taxReturnIdNo'].updateValueAndValidity();
-    // this.caseStep1Form.get['returnName'].updateValueAndValidity();
-    // this.caseStep1Form.get['taxYear'].updateValueAndValidity();
-    // this.caseStep1Form.get['clientctrl'].updateValueAndValidity();
-    // this.caseStep1Form.get['secclientctrl'].updateValueAndValidity();
-    // this.caseStep1Form.get['recclientctrl'].updateValueAndValidity();
-    // this.caseStep1Form.get['cpactrl'].updateValueAndValidity();
-    // this.caseStep1Form.updateValueAndValidity();
   }
 
   captureCaseJson(): any {
@@ -438,6 +445,7 @@ export class Step1panelComponent implements OnInit {
     console.log(casejson);
     return casejson;
   }
+
   saveCase(): void {
     this.showSavespinner = true;
     const casejson = this.captureCaseJson();
@@ -465,6 +473,7 @@ export class Step1panelComponent implements OnInit {
       this.showUpdatespinner = false;
     });
   }
+
   setClientIdentityAnswer(clientId: string, clientType: string, ansId: string) {
     console.log('set client Identity' + clientId + ' ansId:' + ansId);
     const dialogRef = this.dialog.open(SetClientAnswerComponent, {
@@ -472,6 +481,10 @@ export class Step1panelComponent implements OnInit {
     });
     dialogRef.componentInstance.setSource('newCase', clientId, clientType);
     dialogRef.componentInstance.step1panelref = this;
+  }
+
+  enterKeyDown() {
+    this.enterKeyPress.emit();
   }
 }
 

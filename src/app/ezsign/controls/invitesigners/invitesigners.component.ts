@@ -22,6 +22,7 @@ export class InvitesignersComponent implements OnInit, AfterViewInit {
   title: string;
   eZSigners: Signer[];
   showProcessSpinner = false;
+  status: string;
   constructor(private service: EzsigndataService, private router: Router,
     public dialogRef: MatDialogRef<InvitesignersComponent>) {
       dialogRef.disableClose = true;
@@ -44,9 +45,10 @@ ngOnInit() {
     });
 
   }
-  setData(ezSignTrackingId: string, title: string) {
+  setData(ezSignTrackingId: string, title: string, status: string) {
     this.ezSignTrackingId = ezSignTrackingId;
     this.title = title;
+    this.status = status;
   }
   editDocument() {
     const url = '/main/ezsign/addfields/' + this.ezSignTrackingId;

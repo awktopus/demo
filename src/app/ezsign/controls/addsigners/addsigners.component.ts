@@ -31,6 +31,7 @@ export class AddsignersComponent implements OnInit, OnDestroy, OnChanges {
   launchComponent: string;
   showProcessSpinner = false;
   isImageDataUrlFetched = false;
+  status: string;
   signerSearchForm: FormGroup = new FormGroup({
     clientctrl: new FormControl('', Validators.required),
   });
@@ -57,7 +58,7 @@ export class AddsignersComponent implements OnInit, OnDestroy, OnChanges {
   onAddingNewContactCanceled: EventEmitter<void> = new EventEmitter<void>();
 
    contactsDataSource: MatTableDataSource<Signer>;
-  contactsDisplayedColumns = ['receiverSeqNo', 'receiverFullName', 'receiverEmailId'];
+  contactsDisplayedColumns = ['receiverSeqNo', 'receiverFullName', 'receiverEmailId', 'status'];
   selection = new SelectionModel<Signer>(true, []);
 
   dialogAfterCloseSubscription: any;
@@ -139,9 +140,10 @@ export class AddsignersComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  setData(ezSignTrackingId: string, launchComponent: string) {
+  setData(ezSignTrackingId: string, launchComponent: string, status: string) {
     this.ezSignTrackingId = ezSignTrackingId;
     this.launchComponent = launchComponent;
+    this.status = status;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -222,9 +224,9 @@ export class AddsignersComponent implements OnInit, OnDestroy, OnChanges {
     this.contactsDataSource.filter = filterValue;
   }
 
-  startAddingFields() {
-    const url = '/main/ezsign/addfields/' + this.ezSignTrackingId;
-    this.router.navigateByUrl(url);
+  proceed() {
+    // const url = '/main/ezsign/addfields/' + this.ezSignTrackingId;
+    // this.router.navigateByUrl(url);
     this.closeMe();
   }
 

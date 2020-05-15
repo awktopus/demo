@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
-  selector: 'app-addsignersbutton-renderer',
+  selector: 'app-viewbutton-renderer',
   template: `
-    <button mat-icon-button (click)="onClick($event)" matTooltip="Add or view signer status">
-    <mat-icon>person_add</mat-icon>
+    <button mat-icon-button style="border: none" (click)="onClick($event)"
+    matTooltip="View ezsign document">
+     <mat-icon>visibility</mat-icon>
     </button>
    `
   })
 
-export class EzsignAddSignersButtonRendererComponent implements ICellRendererAngularComp {
-// *ngIf='ezSignDocResource.status =="Uploaded"'
+ export class EzsignViewButtonRendererComponent implements ICellRendererAngularComp {
   params;
   label: string;
   ezSignDocResource: any;

@@ -4,13 +4,13 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 @Component({
   selector: 'app-historybutton-renderer',
   template: `
-    <button mat-raised-button color="accent"
-     (click)="onClick($event)">
-    {{label}}
+    <button mat-icon-button
+     (click)="onClick($event)" matTooltip="View ezsign tracker history">
+      <mat-icon>history</mat-icon>
     </button>
    `
   })
-
+// {{label}}
 export class EzsignHistoryButtonRendererComponent implements ICellRendererAngularComp {
 // *ngIf='ezSignDocResource.status =="Uploaded"'
   params;

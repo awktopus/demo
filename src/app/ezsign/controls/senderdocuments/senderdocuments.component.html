@@ -5,24 +5,22 @@
         </th>
     </tr>
 </table>
+<div>
+        <mat-spinner *ngIf='!isEZsignDataFetched' diameter='40'></mat-spinner>
+        <span *ngIf='!isEZsignDataFetched'>Processing...</span> 
+</div>
 <br>
-<table class="trackertable4">
+<table class="trackertable4" *ngIf='isEZsignDataFetched'>
         <tr align="left">
             <td colspan="12">
                 <button *ngIf="ezSignDocsgridData" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="launchNewEZSignDocument()">
                     + CREATE NEW EZSIGN DOCUMENT
                 </button>
-            </td>
-            <!-- <td>
-                <button mat-raised-button color="accent" 
-                 matTooltip="Add Signers" (click)="addSigners()">
-                  + ADD SIGNERS
-              </button>
-            </td> -->
+            </td>            
         </tr>
     </table>
     
-    <div *ngIf="!ezSignDocsgridData">
+    <div *ngIf="!ezSignDocsgridData && isEZsignDataFetched">
         <table class="trackertable">
             <tr align="center">
                 <td colspan="12">
@@ -97,13 +95,11 @@
         </table>
     </div>
     
-    <div *ngIf="ezSignDocsgridData">
-        <!-- <mat-tab-group style='padding-left:20pt;padding-top:10pt' (focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
-            <mat-tab label="EZSign Documents"> -->
+    <div style="margin-left: 1px;margin-right: 1px" *ngIf="ezSignDocsgridData && isEZsignDataFetched">
         <br>
-        <table>
-            <tr>
-                <td align=right width='30'>
+        <table width=99%>
+            <tr >
+                <td align=left>
                 </td>
                 <td align=right>
                     <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(ezsignapi)'>list_alt</mat-icon>
@@ -113,14 +109,9 @@
                 </td>
             </tr>
         </table>
-        <div style="margin-top: 1px">
         <ag-grid-angular #agGrid id="ezSignDocsGrid" style="width: 98%; height: 700px; font-size:11pt" class="ag-theme-balham" [rowData]="ezSignDocsgridData"
             [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
             [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'ezsign')"
             [rowHeight]="rowHeight" [rowClass]="rowClass">
         </ag-grid-angular>
-    </div>
-        <!-- </mat-tab>
-        </mat-tab-group> -->
-        <!-- <router-outlet></router-outlet> -->
-    </div>
+     </div>

@@ -187,4 +187,10 @@ export class EzsigndataService implements Resolve<any> {
     console.log(url);
      return this.http.get(url, this.auth.getESignOptions());
   }
+  getPDFBlob(url: string) {
+    const opps = this.auth.getESignOptionswithoutElToken();
+    opps['responseType'] = 'arraybuffer';
+    console.log('get content url:' + url);
+    return this.http.get(url, opps);
+  }
 }
