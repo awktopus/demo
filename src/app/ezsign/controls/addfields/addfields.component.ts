@@ -149,6 +149,12 @@ export class AddfieldsComponent implements OnInit {
         this.status = this.ezSignPageImageData.status;
         this.loadEzSignSigners();
         this.isImageDataUrlFetched = true;
+
+        if ((this.signatureFields !== null && this.signatureFields.length > 0)
+          || (this.textFields !== null && this.textFields.length > 0) ||
+          (this.dateFields !== null && this.dateFields.length > 0)) {
+          this.readyToSendInvite = true;
+        }
       });
     });
   }
@@ -478,9 +484,15 @@ export class AddfieldsComponent implements OnInit {
           this.textFields = null;
           this.textFieldSelected = '';
         }
-        if (this.signatureFields === null && this.textFields === null
-          && this.textFields === null) {
-          this.readyToSendInvite = false;
+        if (this.signatureFields === null ||
+          (this.signatureFields !== null && this.signatureFields.length === 0)) {
+          if (this.textFields === null ||
+            (this.textFields !== null && this.textFields.length === 0)) {
+            if (this.dateFields === null ||
+              (this.dateFields !== null && this.dateFields.length === 0)) {
+              this.readyToSendInvite = false;
+            }
+          }
         }
         this.showTextProcess2Spinner = false;
       });
@@ -600,9 +612,15 @@ export class AddfieldsComponent implements OnInit {
           this.dateFields = null;
           this.dateFieldSelected = '';
         }
-        if (this.signatureFields === null && this.textFields === null
-          && this.textFields === null) {
-          this.readyToSendInvite = false;
+        if (this.signatureFields === null ||
+          (this.signatureFields !== null && this.signatureFields.length === 0)) {
+          if (this.textFields === null ||
+            (this.textFields !== null && this.textFields.length === 0)) {
+            if (this.dateFields === null ||
+              (this.dateFields !== null && this.dateFields.length === 0)) {
+              this.readyToSendInvite = false;
+            }
+          }
         }
         this.showDateProcess2Spinner = false;
       });
@@ -622,6 +640,7 @@ export class AddfieldsComponent implements OnInit {
       this.dateFields.forEach(df => {
         if (df.fieldSeqNo === fieldSeqNo) {
           this.dateFieldForm.controls['dateLabelControl'].setValue(df.labelName);
+          this.dateFieldForm.controls['dateControl'].setValue(df.receiverId);
         }
       })
     }

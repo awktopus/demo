@@ -48,7 +48,7 @@ export class DocumenthistoryComponent implements OnInit {
       { headerName: 'Type of Activity', field: 'typeofActivity', cellStyle: { color: 'blue' } },
       { headerName: 'Updated By', field: 'updatedBy' },
       { headerName: 'Audit Info', field: 'auditInfo' },
-      { headerName: 'EZSign Date', field: 'esignDate' }
+      { headerName: 'EZSign Date', field: 'ezsignDate' }
     ];
     return res;
   }
