@@ -15,6 +15,7 @@
         <td align=right width='30'>
         </td>
         <td align=right>
+          <mat-icon class='docicon' mdbRippleRadius matTooltip="Bulk Archive" (click)='bulkCaseArchive()'>folder_open</mat-icon>
           <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(reviewcaseapi)'>list_alt</mat-icon>
           <mat-icon class='docicon' mdbRippleRadius (click)="gridExport('reviewcase')" matTooltip="Export CSV">insert_link</mat-icon>
           <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('reviewcase')" matTooltip="Expand All">swap_horiz</mat-icon>

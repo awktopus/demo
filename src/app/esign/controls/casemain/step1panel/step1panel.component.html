@@ -1,105 +1,125 @@
 <div class="loading-screen-wrapper" *ngIf="caseDataloading">
-    <mat-progress-spinner [diameter]="50" [mode]="'indeterminate'">
-    </mat-progress-spinner>
-  </div>
-  <form [formGroup]="caseStep1Form" >
+  <mat-progress-spinner [diameter]="50" [mode]="'indeterminate'">
+  </mat-progress-spinner>
+</div>
 
+<form [formGroup]="caseStep1Form">
   <div fxLayout="column">
+
     <mat-form-field class="casefield">
-      <mat-select placeholder="Case Category"  formControlName="category" 
-      (selectionChange)="categoryChange($event)" #focusField required>
+      <mat-select placeholder="Case Category" formControlName="category" (selectionChange)="categoryChange($event)" #focusField
+        required>
         <mat-option *ngFor="let cate of casecates" [value]="cate.id">
           {{ cate.name }}
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="caseStep1Form.get('category').hasError('required')">
+        Case category is required
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="casefield">
-      <mat-select placeholder="Sub Category"  formControlName="subcategory" required>
+      <mat-select placeholder="Sub Category" formControlName="subcategory" required>
         <mat-option *ngFor="let subcate of subcates" [value]="subcate.id">
           {{ subcate.name }}
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="caseStep1Form.get('subcategory').hasError('required')">
+        Case sub category is required
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="casefield">
-      <mat-select placeholder="Tax Year"  formControlName="taxYear" [disabled]="disableTaxYear" required>
+      <mat-select placeholder="Tax Year" formControlName="taxYear" [disabled]="disableTaxYear" required>
         <mat-option *ngFor="let tYear of taxYears" value="{{ tYear.id }}">{{ tYear.name }}</mat-option>
       </mat-select>
-    </mat-form-field>
-
-    <mat-form-field class="casefield" >
-      <input matInput placeholder="Return Name"  formControlName="returnName" required>
+      <mat-error *ngIf="caseStep1Form.get('taxYear').hasError('required')">
+        Tax year is required
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="casefield">
-      <input matInput placeholder="Tax Return ID Number"  formControlName="taxReturnIdNo" required>
+      <input matInput placeholder="Return Name" formControlName="returnName" required>
+      <mat-error *ngIf="caseStep1Form.get('returnName').hasError('required')">
+        Return name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="casefield">
+      <input matInput placeholder="Tax Return ID Number" formControlName="taxReturnIdNo" required>
+      <mat-error *ngIf="caseStep1Form.get('taxReturnIdNo').hasError('required')">
+        Tax return id number is required
+      </mat-error>
     </mat-form-field>
 
     <div fxLayout="row">
+      <mat-form-field class="casefield">
+        <mat-chip-list #primarychips placeholder="Primary Signer">
+          <mat-chip *ngIf="primarysigner" [selectable]="selectable" [removable]="removable" (removed)="removeSinger('primary')">
+            {{primarysigner.firstName}} {{primarysigner.lastName}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input #primarySignerInput *ngIf="!primarysigner" placeholder="Primary Signer" [matChipInputFor]="primarychips" matInput [matAutocomplete]="autoprimary"
+            formControlName="primarySignerControl" (focusout)="primarySignerfocusOut()" autofocus (keydown.Tab)="primarySignerOnKey($event)">
+          <mat-autocomplete #autoprimary="matAutocomplete">
+            <mat-option *ngFor="let cc of primaryClients" [value]="cc.clientId" (onSelectionChange)="addPrimarySigner($event)">
+              {{ cc.firstName }} {{ cc.lastName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-chip-list>
+      </mat-form-field>
+      <button mat-icon-button matTooltip="Set client idenity answer" color="accent" class="text-upper" (click)="setClientIdentityAnswer(primarysigner.clientId,'primary',primarysigner.ansId)"
+        *ngIf='primarysigner && primarysigner.isIdentityAnswerSet =="N"'>
+        <mat-icon class='remindericon' mdbRippleRadius>warningicon</mat-icon>
+      </button>
+
+      <button mat-icon-button matTooltip="Client idenity answer is set" color="primary" class="text-upper" (click)="setClientIdentityAnswer(primarysigner.clientId,'primary',primarysigner.ansId)"
+        *ngIf='primarysigner && primarysigner.isIdentityAnswerSet =="Y"'>
+        <mat-icon class='remindericon' mdbRippleRadius>check_circle</mat-icon>
+      </button>
+    </div>
+
+    <div fxLayout="row">
+      <mat-form-field class="casefield">
+        <mat-chip-list #secondarychips placeholder="Secondary Signer">
+          <mat-chip *ngIf="secondarysigner" [selectable]="selectable" [removable]="removable" (removed)="removeSinger('secondary')">
+            {{secondarysigner.firstName}} {{secondarysigner.lastName}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input #secondarySignerInput *ngIf="!secondarysigner" placeholder="Secondary Signer (optional)" [matChipInputFor]="secondarychips"
+            matInput [matAutocomplete]="autosecondary" formControlName="secondarySignerControl" (focusout)="secondarySignerfocusOut()"
+            autofocus (keydown.Tab)="secondarySignerOnKey($event)">
+          <mat-autocomplete #autosecondary="matAutocomplete">
+            <mat-option *ngFor="let cc of secondaryClients" [value]="cc.clientId" (onSelectionChange)="addSecondarySigner($event)">
+              {{ cc.firstName }} {{ cc.lastName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-chip-list>
+      </mat-form-field>
+      <button mat-icon-button matTooltip="Set client idenity answer" color="accent" class="text-upper" (click)="setClientIdentityAnswer(secondarysigner.clientId,'secondary',secondarysigner.ansId)"
+        *ngIf='secondarysigner && secondarysigner.isIdentityAnswerSet =="N"'>
+        <mat-icon class='remindericon' mdbRippleRadius>warningicon</mat-icon>
+      </button>
+
+      <button mat-icon-button matTooltip="Client idenity answer is set" color="primary" class="text-upper" (click)="setClientIdentityAnswer(secondarysigner.clientId,'secondary',secondarysigner.ansId)"
+        *ngIf='secondarysigner && secondarysigner.isIdentityAnswerSet =="Y"'>
+        <mat-icon class='remindericon' mdbRippleRadius>check_circle</mat-icon>
+      </button>
+    </div>
+
     <mat-form-field class="casefield">
-      <mat-chip-list #primarychips placeholder="Primary Signer">
-        <mat-chip *ngIf="primarysigner" [selectable]="selectable" [removable]="removable" (removed)="removeSinger('primary')">
-          {{primarysigner.firstName}} {{primarysigner.lastName}}
-          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-        </mat-chip>
-        <input type="text" placeholder="Primary Signer" [matChipInputFor]="primarychips" matInput [matAutocomplete]="autoprimary"
-        formControlName="clientctrl">
-        <mat-autocomplete #autoprimary="matAutocomplete">
-          <mat-option *ngFor="let cc of clients" [value]="cc.clientId" (onSelectionChange)="addPrimary($event)">
-            {{ cc.firstName }} {{ cc.lastName }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-chip-list>
-    </mat-form-field>
-    <button mat-icon-button matTooltip="Set client idenity answer" color="accent" class="text-upper" (click)="setClientIdentityAnswer(primarysigner.clientId,'primary',primarysigner.ansId)"
-      *ngIf='primarysigner && primarysigner.isIdentityAnswerSet =="N"'>
-      <mat-icon class='remindericon' mdbRippleRadius>warningicon</mat-icon>
-    </button>
-
-    <button mat-icon-button matTooltip="Client idenity answer is set" color="primary" class="text-upper" (click)="setClientIdentityAnswer(primarysigner.clientId,'primary',primarysigner.ansId)"
-      *ngIf='primarysigner && primarysigner.isIdentityAnswerSet =="Y"'>
-      <mat-icon class='remindericon' mdbRippleRadius>check_circle</mat-icon>
-    </button>
-  </div>
-
-  <div fxLayout="row">
-    <mat-form-field class="casefield">
-      <mat-chip-list #secondarychips placeholder="Secondary Signer">
-        <mat-chip *ngIf="secondarysigner" [selectable]="selectable" [removable]="removable" (removed)="removeSinger('secondary')">
-          {{secondarysigner.firstName}} {{secondarysigner.lastName}}
-          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-        </mat-chip>
-        <input type="text" placeholder="Secondary Signer (optional)" [matChipInputFor]="secondarychips" matInput [matAutocomplete]="autosecondary"
-        formControlName="secclientctrl">
-        <mat-autocomplete #autosecondary="matAutocomplete">
-          <mat-option *ngFor="let cc of secclients" [value]="cc.clientId" (onSelectionChange)="addSecondary($event)">
-            {{ cc.firstName }} {{ cc.lastName }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-chip-list>
-    </mat-form-field>
-    <button mat-icon-button matTooltip="Set client idenity answer" color="accent" class="text-upper" (click)="setClientIdentityAnswer(secondarysigner.clientId,'secondary',secondarysigner.ansId)"
-      *ngIf='secondarysigner && secondarysigner.isIdentityAnswerSet =="N"'>
-      <mat-icon class='remindericon' mdbRippleRadius>warningicon</mat-icon>
-    </button>
-
-    <button mat-icon-button matTooltip="Client idenity answer is set" color="primary" class="text-upper" (click)="setClientIdentityAnswer(secondarysigner.clientId,'secondary',secondarysigner.ansId)"
-      *ngIf='secondarysigner && secondarysigner.isIdentityAnswerSet =="Y"'>
-      <mat-icon class='remindericon' mdbRippleRadius>check_circle</mat-icon>
-    </button>
-  </div>
-
-    <mat-form-field class="casefield">
-      <mat-chip-list #clientchips placeholder="clients">
-        <mat-chip *ngFor="let sclient of recSelclients" [selectable]="selectable" [removable]="removable" (removed)="removeClient(sclient)">
+      <mat-chip-list #clientchips>
+        <mat-chip *ngFor="let sclient of selectedRecipientClients" [selectable]="selectable" [removable]="removable" (removed)="removeClientRecipient(sclient)">
           {{sclient.firstName}} {{sclient.lastName}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
-        <input type="text" placeholder="Client Recipient" [value]="searchRecClient" [matChipInputFor]="clientchips" matInput [matAutocomplete]="auto"
-        formControlName="recclientctrl">
+
+        <input #selectedRecipientInput placeholder="Client Recipient" [matChipInputFor]="clientchips" matInput [matAutocomplete]="auto"
+          formControlName="recipientClientControl" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+          (focusout)="recipientClientsfocusOut()" autofocus (keydown.Tab)="clientRecipientOnKey($event)">
+
         <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let cc of recclients" [value]="cc.clientId" (onSelectionChange)="add($event)">
+          <mat-option *ngFor="let cc of recipientClients" [value]="cc.clientId" (onSelectionChange)="addClientRecipient($event)">
             {{ cc.firstName }} {{ cc.lastName }}
           </mat-option>
         </mat-autocomplete>
@@ -108,26 +128,26 @@
 
     <mat-form-field class="casefield">
       <mat-chip-list #cpachips placeholder="cpas">
-        <mat-chip *ngFor="let scpa of scpas" [selectable]="selectable" [removable]="removable" (removed)="removeCPA(scpa)">
+        <mat-chip *ngFor="let scpa of selectedCopyCpas" [selectable]="selectable" [removable]="removable" (removed)="removeCopyCpa(scpa)">
           {{scpa.firstName}} {{scpa.lastName}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
-        <input type="text" placeholder="CC" [value]="searchCPA" [matChipInputFor]="cpachips" matInput [matAutocomplete]="cpaauto"
-        formControlName="cpactrl">
+        <input #selectedCopyCpasInput placeholder="Copy CPA" [value]="searchCPA" [matChipInputFor]="cpachips" matInput [matAutocomplete]="cpaauto"
+          formControlName="copyCpaControl" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+          (focusout)="copyCpasfocusOut()" autofocus (keydown.Tab)="copyCpasOnKey($event)">
         <mat-autocomplete #cpaauto="matAutocomplete">
-          <mat-option *ngFor="let cpa of cpas" [value]="cpa.cpaId" (onSelectionChange)="addcpa($event)">
+          <mat-option *ngFor="let cpa of copyCpas" [value]="cpa.cpaId" (onSelectionChange)="addCopyCpa($event)">
             {{cpa.firstName}} {{ cpa.lastName }}
           </mat-option>
         </mat-autocomplete>
       </mat-chip-list>
     </mat-form-field>
   </div>
-<div>
+  <div>
     <span>
       <span *ngIf='!showSavespinner'>
-        <button mat-raised-button color="accent" class="text-upper" (click)="saveCase()" 
-        *ngIf="(mycase && !(mycase.caseId)) || caseType == 'copycase' || caseType == 'newcase'" type="submit" 
-        [disabled]="caseStep1Form.invalid">
+        <button mat-raised-button color="accent" class="text-upper" (click)="saveCase()" *ngIf="(mycase && !(mycase.caseId)) && 
+        (caseType == 'copycase' || caseType == 'newcase') && (caseType != 'updatecase')" type="submit" [disabled]="caseStep1Form.invalid">
           Save
         </button>
       </span>
@@ -135,9 +155,8 @@
       <span *ngIf='showSavespinner'>Processing...</span>
 
       <span *ngIf='!showUpdatespinner'>
-        <button mat-raised-button color="accent" class="text-upper" (click)="updateCase()" 
-        *ngIf="(mycase && mycase.caseId) || caseType == 'updatecase'" type="submit"
-        [disabled]="caseStep1Form.invalid">
+        <button mat-raised-button color="accent" class="text-upper" (click)="updateCase()" *ngIf="(mycase && mycase.caseId) && (caseType == 'updatecase')"
+          type="submit" [disabled]="caseStep1Form.invalid">
           Update
         </button>
       </span>

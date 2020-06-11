@@ -22,7 +22,7 @@ import { ConfirmationDialogComponent } from '../shared/confirmation-dialog/confi
   templateUrl: './archive.component.html',
   styleUrls: ['./archive.component.scss']
 })
-export class ArchiveComponent implements  OnInit, AfterViewInit {
+export class ArchiveComponent implements OnInit, AfterViewInit {
 
   archivedcasesgridData: any;
   archivedcasesapi: any = {};
@@ -45,6 +45,7 @@ export class ArchiveComponent implements  OnInit, AfterViewInit {
   autoHeight: any;
   selectedIndex = 0;
   overlayNoRowsTemplate: any;
+  isArchiveCasesLoaded = false;
   constructor(private service: EsignserviceService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -79,11 +80,18 @@ export class ArchiveComponent implements  OnInit, AfterViewInit {
           console.log(resp);
           const ccc: ESignCase[] = <ESignCase[]>resp;
           if (ccc.length !== 0) {
-          this.setCaseData(ccc);
-          this.isSearch = false;
-          this.archivedcasesgridData = this.cases;
-          } else  {
-          //  this.onBtShowNoRows();
+            this.setCaseData(ccc);
+            this.isSearch = false;
+            this.archivedcasesgridData = this.cases;
+            this.isArchiveCasesLoaded = true;
+          } else {
+            this.isArchiveCasesLoaded = true;
+            this.overlayNoRowsTemplate =
+              "<span style=\"padding: 10px;font-size: 15px;\">" +
+              "There are currently no documents in this archive folder. <br> <br>" +
+              "To archive a document, click on the More button on cases history and select Archive option." +
+              "</span>";
+            //  this.onBtShowNoRows();
           }
         });
       }
@@ -124,6 +132,14 @@ export class ArchiveComponent implements  OnInit, AfterViewInit {
         console.log('load search data');
         console.log(this.cases);
         this.archivedcasesgridData = this.cases;
+        if (ccc.length !== 0) {
+        } else {
+          this.overlayNoRowsTemplate =
+            "<span style=\"padding: 10px;font-size: 15px;\">" +
+            "There are currently no documents in this archive folder. <br><br> " +
+            "To archive a document, click on the More button on cases history and select Archive option." +
+            "</span>";
+        }
       });
     }
   }
@@ -256,11 +272,6 @@ export class ArchiveComponent implements  OnInit, AfterViewInit {
         minwidth: 100
       }
     ];
-    this.overlayNoRowsTemplate =
-    "<span style=\"padding: 10px;font-size: 20px;\">" +
-    "There are currently no documents in this archive folder. <br> " +
-    "To archive a document, click on the More button on cases history and select Archive option." +
-    "</span>";
 
     this.context = { componentParent: this, allcasefit: false };
     return res;
@@ -304,7 +315,7 @@ export class ArchiveComponent implements  OnInit, AfterViewInit {
       this.archivedcasesapi.columnApi.getAllColumns().forEach(cc => {
         this.archivedcasesapi.cols.push({ colId: cc.colId, checked: true, headerName: cc.colDef.headerName });
       });
-   }
+    }
   }
 
   goToCase(caseId) {
@@ -385,7 +396,7 @@ export class ArchiveComponent implements  OnInit, AfterViewInit {
     if (actionName === "delete") {
       this.singleCaseDelete(caseRecord);
     }
-}
+  }
 
   singleCaseUnArchive(caseRecord: any) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {

@@ -125,7 +125,7 @@ export class EsignAuthService {
     }
   }
   setESignToken(token: string) {
-    console.log('setting esign token:', token);
+    // console.log('setting esign token:', token);
     // localStorage.setItem(this.esign_key, JSON.stringify(token));
     // this.esignauth = token;
     // localStorage.setItem(this.KEY_ESign, token);
@@ -141,7 +141,6 @@ export class EsignAuthService {
   }
   getELOptions() {
     const token = this.esignstate.getAuthData();
-    console.log('the token is:', token.accessToken);
     let header = new HttpHeaders();
     header = header.append('Content-Type', 'application/json');
     header = header.append('Accept', 'application/json');
@@ -151,13 +150,9 @@ export class EsignAuthService {
   }
 
   getOrgUnitID(): string {
-    console.log('get org unit id');
-    console.log(this.esignstate.getCurrentOrg());
     return this.esignstate.getCurrentOrg().id;
   }
   getUserID(): string {
-    console.log('get user id');
-    console.log(this.esignstate.getCurrentUser());
     return this.esignstate.getCurrentUser().userId;
   }
 

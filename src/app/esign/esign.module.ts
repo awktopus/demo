@@ -67,7 +67,6 @@ import { MoreOptionsRendererComponent } from './controls/history/MoreOptionsRend
 import { MoreOptionsRenderer2Component } from './controls/archive/MoreOptionsRenderer2.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { SinglecasearchiveComponent } from './controls/archive/singlecasearchive/singlecasearchive.component';
-import { AlertService } from './service/alert.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -149,7 +148,7 @@ import { AlertService } from './service/alert.service';
     CasetemplatesComponent, FilingstatuspopupComponent, ArchiveComponent,
     BulkarchiveComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component, SinglecasearchiveComponent],
   providers: [
-    ESignGuard, AlertService,
+    ESignGuard,
     // AuthGuard,
     // EsignserviceService,
     // EsignuiserviceService

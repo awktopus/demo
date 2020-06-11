@@ -224,7 +224,6 @@ export class EsignserviceService  {
     // console.log('get Current OU:' + this.auth.getOrgUnitID() );
     // return this.http.get(this.auth.baseurl + '/Cases', this.auth.getESignOptions());
     const urlstr: string = this.auth.baseurl + '/Cases/OrgUnitId/' + this.auth.getOrgUnitID();
-    console.log('step 2.1');
     return this.http.get(urlstr, this.auth.getESignOptions())
   }
   getESignCase(caseId: string) {
@@ -689,6 +688,13 @@ export class EsignserviceService  {
 getDistinctTaxCaseStatuses() {
   console.log('calling getDistinctTaxCaseStatuses');
     const url: string = this.auth.baseurl + '/Cases/distinct/taxstatuses';
+    return this.http.get(url, this.auth.getESignOptions());
+}
+
+getDistinctMyWorklistTaxCaseStatuses() {
+  console.log('calling getDistinctTaxCaseStatuses');
+    const url: string = this.auth.baseurl + '/Cases/orgUnitId/' + this.auth.getOrgUnitID() +
+    '/staff/'  + this.auth.getUserID() + '/distinct/myworklisttaxstatuses';
     return this.http.get(url, this.auth.getESignOptions());
 }
 

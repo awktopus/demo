@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewChild, Output, Input,  EventEmitter} from '@angular/core';
-import { MatDialog, MatOptionSelectionChange, MatSelect } from '@angular/material';
+import { Component, OnInit, ViewChild, Output, Input, EventEmitter, ElementRef } from '@angular/core';
+import { MatDialog, MatOptionSelectionChange, MatSelect, MatSnackBar } from '@angular/material';
 import { ESignCase, ESignCate, ESignClient, ESignCPA, ESignConfig, ClientAnswer, TaxYears } from '../../../beans/ESignCase';
 import { forkJoin } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { EsignserviceService } from '../../../service/esignservice.service';
 import { EsignuiserviceService } from '../../../service/esignuiservice.service';
 import { ClientAnswerComponent } from '../../settings/identity/client-answer/client-answer.component';
 import { SetClientAnswerComponent } from '../../settings/identity/set-client-answer/set-client-answer.component';
-import { AlertService, MessageSeverity, DialogType } from '../../../service/alert.service';
+import { truncateSync } from 'fs';
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
 @Component({
   selector: 'app-step1panel',
   templateUrl: './step1panel.component.html',
@@ -17,25 +18,19 @@ export class Step1panelComponent implements OnInit {
   initcaseheader: ESignCase;
   searchCPA = '';
   CPAID = '';
-  //  clientctrl: FormControl = new FormControl();
-  //   secclientctrl: FormControl = new FormControl();
-  //   recclientctrl: FormControl = new FormControl();
-  //   cpactrl: FormControl = new FormControl();
   casecates: ESignCate[] = [];
   subcates: ESignCate[] = [];
-  clients: ESignClient[];
-  cpas: ESignCPA[] = [];
+  cacheClients: ESignClient[];
+  primaryClients: ESignClient[];
+  copyCpas: ESignCPA[] = [];
   ntypes: String[];
-  scpas: ESignCPA[];
-  recclients: ESignClient[];
-  recSelclients: ESignClient[];
+  selectedCopyCpas: ESignCPA[];
+  recipientClients: ESignClient[];
+  selectedRecipientClients: ESignClient[];
   searchRecClient = '';
-  secclients: ESignClient[];
+  secondaryClients: ESignClient[];
   primarysigner: ESignClient = null;
   secondarysigner: ESignClient = null;
-  // binding values
-  // category: number;
-  // subcategory: number;
   ccCPA: string;
   removable = true;
   config: ESignConfig;
@@ -44,35 +39,25 @@ export class Step1panelComponent implements OnInit {
   recclient_var = '';
   cap_var = '';
   mycase: ESignCase;
-  cachecpas: ESignCPA[];
-  // returnName: string;
-  // taxReturnIdNo: string;
+  cacheCpas: ESignCPA[];
   identityQuestion: string;
   identityAnswer: string;
   answerId: string;
   orgQtnId: string;
-  // taxYear: any;
   taxYears: TaxYears[];
-  // isLoading = true;
   disableTaxYear = false;
   showSavespinner = false;
   showUpdatespinner = false;
   caseDataloading = false;
   caseType: string;
-  caseStep1Form: FormGroup = new FormGroup({
-    category: new FormControl('', Validators.required),
-    subcategory: new FormControl('', Validators.required),
-    taxYear: new FormControl('', Validators.required),
-    returnName: new FormControl('', Validators.required),
-    taxReturnIdNo: new FormControl('', Validators.required),
-    clientctrl: new FormControl('', Validators.required),
-    secclientctrl: new FormControl(''),
-    recclientctrl: new FormControl(''),
-    cpactrl: new FormControl('')
-  });
-
+  caseStep1Form: FormGroup;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  addOnBlur = false;
+  @ViewChild("selectedRecipientInput") selectedRecipientInput: ElementRef;
   @ViewChild('focusField') focusField: MatSelect;
-
+  @ViewChild('selectedCopyCpasInput') selectedCopyCpasInput: ElementRef;
+  @ViewChild('primarySignerInput') primarySignerInput: ElementRef;
+  @ViewChild('secondarySignerInput') secondarySignerInput: ElementRef;
   @Input()
   isModal = false;
 
@@ -80,40 +65,28 @@ export class Step1panelComponent implements OnInit {
   enterKeyPress = new EventEmitter();
 
   constructor(private service: EsignserviceService, private uiservice: EsignuiserviceService,
-    public dialog: MatDialog,  private alertService: AlertService) {
-    this.recSelclients = [];
-    this.scpas = [];
+    public dialog: MatDialog, private snackBar: MatSnackBar) {
+    this.selectedRecipientClients = [];
+    this.selectedCopyCpas = [];
+    this.caseStep1Form = new FormGroup({
+      category: new FormControl('', Validators.required),
+      subcategory: new FormControl('', Validators.required),
+      taxYear: new FormControl('', Validators.required),
+      returnName: new FormControl('', Validators.required),
+      taxReturnIdNo: new FormControl('', Validators.required),
+      primarySignerControl: new FormControl('', [this.priSignerValidator()]),
+      secondarySignerControl: new FormControl(''),
+      recipientClientControl: new FormControl(''),
+      copyCpaControl: new FormControl('')
+    });
   }
   ngOnInit() {
-    console.log('Case step1 panel ngOnInit');
-   //  this.alertService.startLoadingMessage('', 'Attempting login...');
+    console.log('Case step1 ngOnInit');
     this.caseDataloading = true;
     this.focusField.focused = true;
     this.mycase = null;
     this.caseType = null;
     this.caseStep1Form.reset();
-    // forkJoin([
-    //   this.service.getEsignConfig(),
-    //   this.service.getCPAs()
-    // ]).subscribe(results => {
-    //   this.config = <ESignConfig>results[0];
-    //   console.log('case category config');
-    //   console.log(results);
-    //   this.casecates = this.config.eSignCates;
-    //   this.cpas = <ESignCPA[]>results[1];
-    //   this.cachecpas = <ESignCPA[]>results[1];
-    //   this.CPAID = this.service.auth.getUserID();
-    //   this.cpas.forEach(ele => {
-    //       if (ele.cpaClients) {
-    //       this.clients = ele.cpaClients;
-    //       this.secclients = ele.cpaClients;
-    //       this.recclients = ele.cpaClients;
-    //       console.log('cpa clients');
-    //       console.log(this.clients);
-    //     }
-    //   this.caseDataloading = false;
-    //   });
-
     this.service.getEsignConfig().subscribe(results => {
       this.config = <ESignConfig>results;
       console.log('case category config');
@@ -123,57 +96,60 @@ export class Step1panelComponent implements OnInit {
     });
 
     console.log('case type:' + this.caseType);
-     this.service.cur_case.subscribe(c => {
-        this.mycase = c;
-        console.log('cur case:');
-        console.log(this.mycase);
-        if (this.initcaseheader !== this.mycase) {
-          this.initcaseheader = this.mycase;
-          this.setcaseHeader(this.initcaseheader);
-        }
-      });
+    this.service.cur_case.subscribe(c => {
+      this.mycase = c;
+      console.log('cur case:');
+      console.log(this.mycase);
+      if (this.initcaseheader !== this.mycase) {
+        this.initcaseheader = this.mycase;
+        this.setcaseHeader(this.initcaseheader);
+      }
+    });
 
-   if (this.initcaseheader) {
+    if (this.initcaseheader) {
       console.log('Init case header inside if');
       console.log(this.initcaseheader);
       this.setcaseHeader(this.initcaseheader);
     }
 
 
-    this.caseStep1Form.controls['clientctrl'].valueChanges.subscribe(val => {
-      console.log('clientctrl search clients called');
-
-      console.log(val.trim());
+    this.caseStep1Form.controls['primarySignerControl'].valueChanges.subscribe(searchToken => {
+      console.log('primarySignerControl search clients called');
+      console.log("searchToken:" + searchToken.trim());
       console.log(this.client_var);
-      console.log(typeof val);
+      console.log(typeof searchToken);
       console.log(this.primarysigner);
+
       if (this.CPAID === '') {
         return;
       }
       if (this.primarysigner) {
         return;
       }
-      if (val && typeof val !== 'object') {
-        if (this.client_var === val.trim()) {
+      if (searchToken && typeof searchToken !== 'object') {
+        if (this.client_var === searchToken.trim()) {
           return;
         } else {
-          this.uiservice.searchClientContacts(this.CPAID, val).subscribe(resp => {
-            this.clients = <ESignClient[]>resp;
+          console.log('primary signer searching...');
+          this.primaryClients = [];
+          console.log('cache clients');
+          console.log(this.cacheClients);
+          this.cacheClients.forEach(cc => {
+            if ((cc.firstName && cc.firstName.toLowerCase().search(searchToken.toLowerCase()) !== -1) ||
+              (cc.lastName && cc.lastName.toLowerCase().search(searchToken.toLowerCase()) !== -1)) {
+              this.primaryClients.push(cc);
+            }
           });
+          console.log(this.primaryClients);
         }
       } else {
-        console.log('else');
-        console.log(this.CPAID);
-        console.log(val);
-        this.uiservice.searchClientContacts(this.CPAID, val).subscribe(resp => {
-          this.clients = <ESignClient[]>resp;
-        });
+        this.primaryClients = <ESignClient[]>this.cacheClients;
       }
     });
 
-    this.caseStep1Form.controls['secclientctrl'].valueChanges.subscribe(val => {
-      console.log('secclientctrl search clients called');
-      console.log(val.trim());
+    this.caseStep1Form.controls['secondarySignerControl'].valueChanges.subscribe(searchToken => {
+      console.log('secondarySignerControl search clients called');
+      console.log('search Token:' + searchToken.trim())
       console.log(this.secclient_var);
       if (this.CPAID === '') {
         return;
@@ -181,77 +157,155 @@ export class Step1panelComponent implements OnInit {
       if (this.secondarysigner) {
         return;
       }
-      if (val && typeof val !== 'object') {
-        if (this.secclient_var === val.trim()) {
+      if (searchToken && typeof searchToken !== 'object') {
+        if (this.secclient_var === searchToken.trim()) {
           return;
         } else {
-          this.uiservice.searchClientContacts(this.CPAID, val).subscribe(resp => {
-            this.secclients = <ESignClient[]>resp;
+          console.log('secondary signer searching...');
+          this.secondaryClients = [];
+          this.cacheClients.forEach(cc => {
+            if ((cc.firstName && cc.firstName.toLowerCase().search(searchToken.toLowerCase()) !== -1) ||
+              (cc.lastName && cc.lastName.toLowerCase().search(searchToken.toLowerCase()) !== -1)) {
+              this.secondaryClients.push(cc);
+            }
           });
+          console.log(this.secondaryClients);
         }
       } else {
-        this.uiservice.searchClientContacts(this.CPAID, val).subscribe(resp => {
-          this.secclients = <ESignClient[]>resp;
-        });
+        this.secondaryClients = <ESignClient[]>this.cacheClients;
       }
     });
 
-    this.caseStep1Form.controls['recclientctrl'].valueChanges.subscribe(val => {
-      console.log('recclientctrl search clients called')
-      console.log(val.trim());
+    this.caseStep1Form.controls['recipientClientControl'].valueChanges.subscribe(searchToken => {
+      console.log('recipientClientControl search clients called')
+      console.log('search Token:' + searchToken.trim())
+      console.log('recclient_var');
       console.log(this.recclient_var);
-      if (val && typeof val !== 'object') {
-        console.log('val:' + val);
-        console.log('recclient_var' + this.recclient_var);
-        if (this.recclient_var === val.trim()) {
+      if (this.CPAID === '') {
+        return;
+      }
+      if (searchToken && typeof searchToken !== 'object') {
+        if (this.recclient_var === searchToken.trim()) {
           return;
         } else {
-          if (this.CPAID === '') {
-            return;
-          }
-          this.uiservice.searchClientContacts(this.CPAID, val).subscribe(resp => {
-            console.log(resp);
-            this.recclients = <ESignClient[]>resp;
+          console.log('recipient client searching...');
+          this.recipientClients = [];
+          this.cacheClients.forEach(cc => {
+            if ((cc.firstName && cc.firstName.toLowerCase().search(searchToken.toLowerCase()) !== -1) ||
+              (cc.lastName && cc.lastName.toLowerCase().search(searchToken.toLowerCase()) !== -1)) {
+              this.recipientClients.push(cc);
+            }
           });
+          console.log(this.recipientClients);
         }
+       //  this.caseStep1Form.controls['recipientClientControl'].setValue('');
+      } else {
+        this.recipientClients = <ESignClient[]>this.cacheClients;
       }
     });
 
-    this.caseStep1Form.controls['cpactrl'].valueChanges.subscribe(val => {
-      if (val && typeof val !== 'object') {
-        // console.log(val);
-        if (this.cap_var === val.trim()) {
+    this.caseStep1Form.controls['copyCpaControl'].valueChanges.subscribe(searchToken => {
+      console.log('copyCpaControl search cpa called')
+      console.log('search Token value, type:');
+      console.log(searchToken.trim());
+      console.log(typeof searchToken);
+      console.log('cap_var');
+      console.log(this.cap_var);
+      if (this.CPAID === '') {
+        return;
+      }
+      if (searchToken && typeof searchToken !== 'object') {
+        if (this.cap_var === searchToken.trim()) {
           return;
         } else {
-          if (this.CPAID === '') {
-            return;
-          }
-          this.uiservice.searchCPAContacts(this.CPAID, val).subscribe(resp => {
-            //   console.log(resp);
-            this.cpas = <ESignCPA[]>resp;
+          console.log('copy cpas searching...');
+          this.copyCpas = [];
+          this.cacheCpas.forEach(cc => {
+            if ((cc.firstName && cc.firstName.toLowerCase().search(searchToken.toLowerCase()) !== -1) ||
+              (cc.lastName && cc.lastName.toLowerCase().search(searchToken.toLowerCase()) !== -1)) {
+              this.copyCpas.push(cc);
+            }
           });
+          console.log(this.copyCpas);
         }
+      } else {
+        this.copyCpas = <ESignCPA[]>this.cacheCpas;
       }
     });
+
 
     this.uiservice.getDistinctTaxYears().subscribe(resp => {
       this.taxYears = <TaxYears[]>resp;
     });
 
     this.service.getCPAs().subscribe(clientsResp => {
-      this.cpas = <ESignCPA[]>clientsResp;
-      this.cachecpas = <ESignCPA[]>clientsResp;
+      this.copyCpas = <ESignCPA[]>clientsResp;
+      this.cacheCpas = <ESignCPA[]>clientsResp;
       this.CPAID = this.service.auth.getUserID();
-      this.cpas.forEach(ele => {
+      this.copyCpas.forEach(ele => {
         if (ele.cpaClients) {
-          this.clients = ele.cpaClients;
-          this.secclients = ele.cpaClients;
-          this.recclients = ele.cpaClients;
-          console.log('cpa clients');
-          console.log(this.clients);
+          this.cacheClients = ele.cpaClients;
+          this.primaryClients = ele.cpaClients;
+          this.secondaryClients = ele.cpaClients;
+          this.recipientClients = ele.cpaClients;
         }
       });
     });
+  }
+
+
+  priSignerValidator(): ValidatorFn {
+    console.log("primary signer validator");
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      const priSig = control.value;
+      console.log('priSig:' + priSig);
+      if (priSig === null || priSig === '') {
+        return { 'priSigner': false };
+      } else {
+        return null;
+      }
+    };
+  }
+
+  primarySignerfocusOut() {
+    console.log('primarySignerfocusOut event');
+    this.priSignerValidator();
+    this.primarySignerInput.nativeElement.value = "";
+   // console.log(typeof this.primarysigner);
+   // console.log(this.primarysigner);
+   // if (!this.primarysigner || typeof this.primarysigner === "undefined") {
+   //   console.log('inside if');
+      //    this.caseStep1Form.controls['primarySignerControl'].setValue('');
+   // }
+  }
+
+  primarySignerOnKey(event) {
+  console.log('primarySignerOnKey event');
+  //  console.log(this.primarysigner);
+  //  if (!this.primarysigner || typeof this.primarysigner === "undefined") {
+  //    this.caseStep1Form.controls['primarySignerControl'].setValue('');
+  //  }
+  this.primarySignerInput.nativeElement.value = "";
+  this.caseStep1Form.controls['primarySignerControl'].setValue('');
+  this.priSignerValidator();
+  }
+
+  secondarySignerfocusOut() {
+    console.log('secondarySignerfocusOut event');
+    this.secondarySignerInput.nativeElement.value = "";
+   // console.log(typeof this.secondarysigner);
+   // if (!this.secondarysigner || typeof this.secondarysigner === "undefined") {
+   //   console.log('inside if');
+   // this.caseStep1Form.controls['secondarySignerControl'].setValue('');
+   // }
+  }
+  secondarySignerOnKey(event) {
+    console.log('secondarySignerOnKey event');
+    this.secondarySignerInput.nativeElement.value = "";
+    // console.log(this.secondarysigner);
+    // if (!this.secondarysigner || typeof this.secondarysigner === "undefined") {
+    //   this.caseStep1Form.controls['secondarySignerControl'].setValue('');
+    // }
   }
 
   categoryChange(event): void {
@@ -262,81 +316,35 @@ export class Step1panelComponent implements OnInit {
     } else {
       this.disableTaxYear = false;
     }
-    console.log('disable tax year:' + this.disableTaxYear);
-    // console.log(this.taxYears);
     if (this.disableTaxYear === false && this.taxYears) {
-      console.log('inside tax year setup if');
       this.caseStep1Form.controls['taxYear'].setValue(this.taxYears[0].id);
     } else {
-      console.log('inside tax year setup else');
       this.caseStep1Form.controls['taxYear'].setValue(0);
     }
   }
 
-  addcpa(event: MatOptionSelectionChange): void {
+  addPrimarySigner(event: MatOptionSelectionChange): void {
     const value = event.source.value;
-    if ((value && event.isUserInput)) {
-      let c: ESignCPA = null;
-      let ec: ESignCPA = null;
-      this.cpas.forEach(cc => { if (cc.cpaId === value) { c = cc; } });
-      this.scpas.forEach(cc => { if (cc.cpaId === c.cpaId) { ec = cc; } });
-      if (!ec) {
-        // console.log(c);
-        this.scpas.push(c);
-      }
-    }
-    console.log(this.searchCPA);
-    this.searchCPA = '';
-  }
-
-  add(event: MatOptionSelectionChange): void {
-    const value = event.source.value;
-    // Add our fruit
-    console.log('value:' + value);
-    console.log(event);
-    console.log('add recipient clients:' + this.recclients);
-    if ((value && event.isUserInput)) {
+    console.log('add primary signer:' + value);
+    if ((value && event.isUserInput && this.primaryClients)) {
       let c: ESignClient = null;
-      let ec: ESignClient = null;
-      this.recclients.forEach(cc => { if (cc.clientId === value) { c = cc; } });
-      this.recSelclients.forEach(cc => { if (cc.clientId === c.clientId) { ec = cc; } });
-      if (!ec) {
-        // console.log(c);
-        this.recSelclients.push(c);
-      }
-      this.caseStep1Form.controls['recclientctrl'].setValue('');
-    }
-    console.log(this.searchRecClient);
-    this.searchRecClient = '';
-  }
-
-  addPrimary(event: MatOptionSelectionChange): void {
-    const value = event.source.value;
-    console.log('add primary client' + value);
-    if ((value && event.isUserInput && this.clients)) {
-      let c: ESignClient = null;
-      this.clients.forEach(cc => { if (cc.clientId === value) { c = cc; } });
+      this.primaryClients.forEach(cc => { if (cc.clientId === value) { c = cc; } });
       this.primarysigner = c;
-      this.caseStep1Form.controls['clientctrl'].setValue('');
+      console.log('added primary signer:');
+      console.log(this.primarysigner);
+      this.caseStep1Form.controls['primarySignerControl'].setValue('');
     }
   }
 
-  addSecondary(event: MatOptionSelectionChange): void {
+  addSecondarySigner(event: MatOptionSelectionChange): void {
     const value = event.source.value;
-    console.log('add secondary client' + value);
-    if ((value && event.isUserInput && this.secclients)) {
+    console.log('add secondary signer:' + value);
+    if ((value && event.isUserInput && this.secondaryClients)) {
       let c: ESignClient = null;
-      this.secclients.forEach(cc => { if (cc.clientId === value) { c = cc; } });
+      this.secondaryClients.forEach(cc => { if (cc.clientId === value) { c = cc; } });
       this.secondarysigner = c;
-      this.caseStep1Form.controls['secclientctrl'].setValue('');
-    }
-  }
-
-  removeClient(c: ESignClient): void {
-    console.log('remove client recipient');
-    const index = this.recSelclients.indexOf(c);
-    if (index >= 0) {
-      this.recSelclients.splice(index, 1);
+      console.log('added secondary signer:');
+      console.log(this.secondarysigner);
     }
   }
 
@@ -344,22 +352,86 @@ export class Step1panelComponent implements OnInit {
     console.log(s + 'remove singer');
     if (s === 'primary') {
       this.primarysigner = null;
-      this.uiservice.searchClientContacts(this.CPAID, '').subscribe(resp => {
-        this.clients = <ESignClient[]>resp
-      });
+      this.caseStep1Form.controls['primarySignerControl'].setValue('');
+      this.primaryClients = <ESignClient[]>this.cacheClients;
+      this.priSignerValidator();
     } else {
       this.secondarysigner = null;
-      this.uiservice.searchClientContacts(this.CPAID, '').subscribe(resp => {
-        this.secclients = <ESignClient[]>resp
-      });
+      this.caseStep1Form.controls['secondarySignerControl'].setValue('');
+      this.secondaryClients = <ESignClient[]>this.cacheClients;
     }
   }
 
-  removeCPA(c: ESignCPA): void {
-    const index = this.scpas.indexOf(c);
-    if (index >= 0) {
-      this.scpas.splice(index, 1);
+  addClientRecipient(event: MatOptionSelectionChange): void {
+    const value = event.source.value;
+    console.log('Add client recipient value:');
+    console.log(value);
+    console.log(event);
+    console.log('add recipient clients:');
+    console.log(this.recipientClients);
+    if ((value && event.isUserInput)) {
+      let c: ESignClient = null;
+      let ec: ESignClient = null;
+      this.recipientClients.forEach(cc => { if (cc.clientId === value) { c = cc; } });
+      this.selectedRecipientClients.forEach(cc => { if (cc.clientId === c.clientId) { ec = cc; } });
+      if (!ec) {
+        this.selectedRecipientClients.push(c);
+      }
+      this.caseStep1Form.controls['recipientClientControl'].setValue('');
+      this.selectedRecipientInput.nativeElement.value = "";
     }
+  }
+
+  clientRecipientOnKey(event) {
+    console.log('clientRecipientOnKey event');
+      this.selectedRecipientInput.nativeElement.value = "";
+  }
+
+  recipientClientsfocusOut() {
+    console.log('recipientClientsfocusOut event');
+    this.selectedRecipientInput.nativeElement.value = "";
+  }
+
+  removeClientRecipient(c: ESignClient): void {
+    console.log('remove client recipient');
+    const index = this.selectedRecipientClients.indexOf(c);
+    if (index >= 0) {
+      this.selectedRecipientClients.splice(index, 1);
+    }
+    this.recipientClients = <ESignClient[]>this.cacheClients;
+  }
+
+  addCopyCpa(event: MatOptionSelectionChange): void {
+    const value = event.source.value;
+    if ((value && event.isUserInput)) {
+      let c: ESignCPA = null;
+      let ec: ESignCPA = null;
+      this.copyCpas.forEach(cc => { if (cc.cpaId === value) { c = cc; } });
+      this.selectedCopyCpas.forEach(cc => { if (cc.cpaId === c.cpaId) { ec = cc; } });
+      if (!ec) {
+        this.selectedCopyCpas.push(c);
+      }
+    }
+    console.log(this.searchCPA);
+    this.searchCPA = '';
+  }
+
+  removeCopyCpa(c: ESignCPA): void {
+    const index = this.selectedCopyCpas.indexOf(c);
+    if (index >= 0) {
+      this.selectedCopyCpas.splice(index, 1);
+    }
+    this.copyCpas = <ESignCPA[]>this.cacheCpas;
+  }
+
+  copyCpasfocusOut() {
+    console.log('copyCpasfocusOut event');
+    this.selectedCopyCpasInput.nativeElement.value = "";
+  }
+
+  copyCpasOnKey($event) {
+    console.log('copyCpasOnKey event');
+    this.selectedCopyCpasInput.nativeElement.value = "";
   }
 
   setInitCase(caseheader: ESignCase, caseType: string) {
@@ -373,21 +445,21 @@ export class Step1panelComponent implements OnInit {
     this.caseStep1Form.controls['category'].setValue(null);
     this.primarysigner = caseheader.primarySigner;
     if (this.primarysigner) {
-      this.caseStep1Form.controls['clientctrl'].setValue(this.primarysigner.clientId);
+      this.caseStep1Form.controls['primarySignerControl'].setValue(this.primarysigner.clientId);
     }
     this.secondarysigner = caseheader.secondarySigner;
     if (this.secondarysigner) {
-      this.caseStep1Form.controls['clientctrl'].setValue(this.secondarysigner.clientId);
+      this.caseStep1Form.controls['primarySignerControl'].setValue(this.secondarysigner.clientId);
     }
     if (caseheader.recipientClients) {
-      this.recSelclients = caseheader.recipientClients;
+      this.selectedRecipientClients = caseheader.recipientClients;
     } else {
-      this.recSelclients = [];
+      this.selectedRecipientClients = [];
     }
     if (caseheader.copyCpas) {
-      this.scpas = caseheader.copyCpas;
+      this.selectedCopyCpas = caseheader.copyCpas;
     } else {
-      this.scpas = [];
+      this.selectedCopyCpas = [];
     }
     if (caseheader.cate) {
       this.caseStep1Form.controls['category'].setValue(caseheader.cate.id)
@@ -424,11 +496,11 @@ export class Step1panelComponent implements OnInit {
 
   captureCaseJson(): any {
     const clients: ESignClient[] = [];
-    this.recSelclients.forEach(ele => { clients.push(ele); });
+    this.selectedRecipientClients.forEach(ele => { clients.push(ele); });
     const cpas: ESignCPA[] = [];
-    this.scpas.forEach(ele => { cpas.push(ele); });
+    this.selectedCopyCpas.forEach(ele => { cpas.push(ele); });
     let cpa: ESignCPA = null;
-    this.cachecpas.forEach(ele => { if (ele.cpaId === this.service.auth.getUserID()) { cpa = ele; } });
+    this.cacheCpas.forEach(ele => { if (ele.cpaId === this.service.auth.getUserID()) { cpa = ele; } });
     const casejson = {
       Cpa: cpa,
       OrgUnitId: this.service.auth.getOrgUnitID(),
@@ -447,6 +519,21 @@ export class Step1panelComponent implements OnInit {
   }
 
   saveCase(): void {
+
+    if (!this.primarysigner || typeof this.primarysigner === "undefined") {
+      this.snackBar.open("Please select valid primary signer", '', { duration: 3000 });
+      return;
+    }
+
+    if (this.primarysigner && this.primarysigner.isIdentityAnswerSet === 'N') {
+      this.snackBar.open("Please set answers to primary signer's identity verification questions", '', { duration: 3000 });
+      return;
+    }
+
+    if (this.secondarysigner && this.secondarysigner.isIdentityAnswerSet === 'N') {
+      this.snackBar.open("Please set answers to secondary signer's identity verification questions", '', { duration: 3000 });
+      return;
+    }
     this.showSavespinner = true;
     const casejson = this.captureCaseJson();
     console.log(casejson);
@@ -455,6 +542,7 @@ export class Step1panelComponent implements OnInit {
       const rr = <ESignCase>resp;
       console.log('save case');
       console.log(rr);
+      this.caseType = "updatecase";
       this.service.mergeCaseHeader(rr);
       this.uiservice.setStepper(1);
       this.showSavespinner = false;
@@ -462,16 +550,20 @@ export class Step1panelComponent implements OnInit {
   }
 
   updateCase() {
-    this.showUpdatespinner = true;
-    const casejson = this.captureCaseJson();
-    this.service.updateCaseHeader(casejson).subscribe(resp => {
-      //  console.log(resp);
-      const rr = <ESignCase>resp;
-      console.log(rr);
-      this.service.mergeCaseHeader(rr);
-      this.uiservice.setStepper(1);
-      this.showUpdatespinner = false;
-    });
+    if (!this.primarysigner || typeof this.primarysigner === "undefined") {
+      this.snackBar.open("Please select valid primary signer", '', { duration: 3000 });
+    } else {
+      this.showUpdatespinner = true;
+      const casejson = this.captureCaseJson();
+      this.service.updateCaseHeader(casejson).subscribe(resp => {
+        //  console.log(resp);
+        const rr = <ESignCase>resp;
+        console.log(rr);
+        this.service.mergeCaseHeader(rr);
+        this.uiservice.setStepper(1);
+        this.showUpdatespinner = false;
+      });
+    }
   }
 
   setClientIdentityAnswer(clientId: string, clientType: string, ansId: string) {

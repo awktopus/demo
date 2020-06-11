@@ -54,6 +54,7 @@ export class BulkarchiveComponent implements OnInit, AfterViewInit {
   historyComponentRef: HistoryComponent;
   showAddspinner: any;
   taxCaseStatuses: any;
+  source: string;
   bulkArchiveForm: FormGroup = new FormGroup({
     taxCaseStatusFormControl: new FormControl('', Validators.required),
     startDateFormControl: new FormControl(),
@@ -79,10 +80,20 @@ export class BulkarchiveComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.service.getDistinctTaxCaseStatuses().subscribe(resp => {
-      this.taxCaseStatuses = resp;
-    });
+    if (this.source === "allcases") {
+      this.service.getDistinctTaxCaseStatuses().subscribe(resp => {
+        this.taxCaseStatuses = resp;
+      });
+    } else if (this.source === "reviewcases") {
+      this.service.getDistinctMyWorklistTaxCaseStatuses().subscribe(resp => {
+        this.taxCaseStatuses = resp;
+      });
+    }
     this.focusField.focused = true;
+  }
+
+  setData(source: string) {
+    this.source = source;
   }
 
   ngAfterViewInit() {
@@ -129,9 +140,15 @@ export class BulkarchiveComponent implements OnInit, AfterViewInit {
       const res_c = <any>resp;
       console.log(res_c);
       if (res_c.statusCode === "200") {
+        if (this.source === "allcases") {
         this.historyComponentRef.loadSearchData('allcases', '');
         this.showAddspinner = false;
         this.cancelBulkArchive();
+      } else if (this.source === "reviewcases") {
+        this.historyComponentRef.loadSearchData('reviewcases', '');
+        this.showAddspinner = false;
+        this.cancelBulkArchive();
+      }
       } else  {
         this.showAddspinner = false;
         this.cancelBulkArchive();

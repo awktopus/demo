@@ -103,7 +103,9 @@ export class CoverletterComponent implements OnInit {
         } else {
           this.noedit = false;
         }
-        // console.log(this.noedit);
+        console.log('set cover letter template');
+         console.log(this.myInputs);
+         console.log(this.editcontent);
       }
     });
   }
@@ -202,7 +204,7 @@ export class CoverletterComponent implements OnInit {
        res = res.split(tk2).join(input.value + 1);
       }
     });
-    res = res.replace('[@CPAFirmName]', 'CPA Firm');
+    res = res.replace('[@CPAFirmName]', this.service.auth.getOrgUnitName());
     res = res.replace('[@OrgWebsiteUrl]', this.service.auth.getOrgUnitName());
     // console.log('resssss:' + res);
     return res;

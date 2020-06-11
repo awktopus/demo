@@ -5,13 +5,11 @@
     </th>
   </tr>
 </table>
-<!-- 
-<mat-tab-group style='padding-left:20pt;padding-top:10pt' 
-(focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
-
-  <mat-tab label="">
-    <br> -->
-<div style="margin-left: 1px;margin-right: 1px">
+<div>
+    <mat-spinner *ngIf='!isArchiveCasesLoaded' diameter='40'></mat-spinner>
+    <span *ngIf='!isArchiveCasesLoaded'>Processing...</span> 
+</div>
+<div style="margin-left: 1px;margin-right: 1px" *ngIf='isArchiveCasesLoaded'>
 <table width=99%>
   <tr>
     <td align=left>
@@ -29,7 +27,5 @@
   [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="50" (firstDataRendered)="onFirstDataRendered($event,'archivedcases')"
   [domLayout]="autoHeight"  [overlayNoRowsTemplate]="overlayNoRowsTemplate" 
   (gridReady)="onGridReady($event)"></ag-grid-angular>
-<!-- </mat-tab>  
-</mat-tab-group> -->
 </div>
 <router-outlet></router-outlet>

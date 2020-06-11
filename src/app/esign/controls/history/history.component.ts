@@ -499,28 +499,23 @@ export class HistoryComponent implements OnInit, AfterViewInit {
   }
 
   singleCaseArchive(caseRecord: any) {
+    console.log('source');
+    console.log(this.filtertype);
     const dialogRef = this.dialog.open(SinglecasearchiveComponent, {
       width: '700px', height: '350px'
     });
 
     dialogRef.componentInstance.historyComponentRef = this;
-    dialogRef.componentInstance.setData(caseRecord.caseId);
+    dialogRef.componentInstance.setData(caseRecord.caseId, this.filtertype);
   }
 
   bulkCaseArchive() {
+    console.log('source');
+    console.log(this.filtertype);
     const dialogRef = this.dialog.open(BulkarchiveComponent, {
       width: '700px', height: '600px'
     });
     dialogRef.componentInstance.historyComponentRef = this;
+    dialogRef.componentInstance.setData(this.filtertype);
   }
-
-  // onRowSelected(event) {
-  //   console.log('onRowSelected:');
-  //   console.log(event);
-  // }
-
-  // onSelectionChanged(event) {
-  //   console.log('onSelectionChanged:');
-  //   console.log(event);
-  // }
 }

@@ -52,6 +52,7 @@ export class SinglecasearchiveComponent implements OnInit, AfterViewChecked {
   historyComponentRef: HistoryComponent;
   showAddspinner: any;
 caseId: string;
+source: string;
   taxCaseArchiveForm: FormGroup = new FormGroup({
     // taxCaseStatusFormControl: new FormControl(Validators.required),
     // startDateFormControl: new FormControl(),
@@ -86,8 +87,9 @@ caseId: string;
   //  this.focusField.nativeElement.focus();
   }
 
-  setData(caseId: string) {
+  setData(caseId: string, source: string) {
     this.caseId = caseId;
+    this.source = source;
   }
 
   cancelSingleCaseArchive() {
@@ -100,7 +102,11 @@ caseId: string;
         this.service.archiveSingleCase(this.caseId).subscribe(resp => {
           const res_c = <any>resp;
           console.log(res_c);
+          if (this.source === 'allcases') {
           this.historyComponentRef.loadSearchData('allcases', '');
+          } else if (this.source === 'reviewcases') {
+            this.historyComponentRef.loadSearchData('reviewcases', '');
+          }
           this.showAddspinner = false;
           this.cancelSingleCaseArchive();
         });
