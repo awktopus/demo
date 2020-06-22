@@ -33,6 +33,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EsignStateSelector } from './esign/service/esign.state.selector';
 import { AbstractStateSelector } from './core/states/abstract.state.selector';
 import { PubSub } from './core/services/pubsub.service';
+import { InfotrackerComponent } from './infotracker/infotracker.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {};
 
 // AoT requires an exported function for factories for translate module

@@ -29,6 +29,7 @@ export class EsignAuthService {
   IET_MENU = "iet_menu";
   TAX_ARCHIVE_MENU = "tax_archive_menu";
   MENU_ITEM_EZSIGN = "ezsign_menu";
+  HEALTH_CHECK_MENU = "health_check_menu";
   enabledMenus: string[] = [];
   // 040420 - Menu PubSub refactoring - end
 
@@ -62,6 +63,7 @@ export class EsignAuthService {
             if (this.industryId.toUpperCase() !== 'PERSONAL') {
               this.enabledMenus.push(this.IET_MENU);
               this.enabledMenus.push(this.MENU_ITEM_EZSIGN);
+              this.enabledMenus.push(this.HEALTH_CHECK_MENU);
             }
             if (currentOrgUser.role.toUpperCase() === 'CLIENT') {
               this.enabledMenus.push(this.TAX_MENU);

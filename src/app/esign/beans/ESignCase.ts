@@ -418,3 +418,21 @@ export interface TreeNode {
   level: number;
   expandable: boolean;
 }
+
+/** Info tracker related */
+export class InfoTrackForm {
+  templateId: number;
+  formName: string;
+  description: string;
+  isOrgActiveForm: boolean;
+}
+
+export class ELCompanyStaff {
+  orgUnitId: string;
+  employeeId: string;
+  empFirstName: string;
+  empLastName: string;
+  emailId: string;
+  phone: string;
+  role: string;
+}

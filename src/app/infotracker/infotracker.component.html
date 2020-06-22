@@ -1,0 +1,101 @@
+<table>
+  <tr>
+      <th>
+          <label class="heading-label">COVID-19 Information Tracker</label>
+      </th>
+  </tr>
+</table>
+<br/>
+<div>
+    <mat-spinner *ngIf='!isITDataFetched' diameter='40'></mat-spinner>
+    <span *ngIf='!isITDataFetched'>Processing...</span> 
+</div>
+<table class="trackertable4">
+<tr align="left">
+    <td colspan="4" *ngIf='!hasForms && isITDataFetched'>
+        <button mat-raised-button color="accent" matTooltip="Activate" (click)="activateInfoTrackFunction()">
+            <mat-icon>check_circle</mat-icon>&nbsp;ACTIVATE
+        </button>
+    </td>
+      <td colspan="4" *ngIf='hasForms && isITDataFetched'>
+        <button mat-raised-button color="accent" matTooltip="Activate" (click)="addRemoveForms()">
+            <mat-icon>description</mat-icon>&nbsp;FORMS
+        </button>
+    </td>
+    <!-- <td colspan="4" *ngIf='hasForms && isITDataFetched'>
+            <button mat-raised-button color="accent" matTooltip="Location" (click)="activateInfoTrackFunction()">
+                    <mat-icon>location_city</mat-icon>&nbsp;LOCATION
+            </button>
+    </td>
+    <td colspan="4" *ngIf='hasForms && isITDataFetched'>
+            <button mat-raised-button color="accent" matTooltip="Location" (click)="activateInfoTrackFunction()">
+                    <mat-icon>person_add</mat-icon>&nbsp;DESIGNATED USERS
+            </button>
+    </td> -->
+</tr>
+</table>
+
+<div *ngIf='!hasForms && isITDataFetched'>
+<table class="trackertable">
+    <tr>
+        <td>
+            <mat-label>
+                Your organization currently not activated to use Information Tracking Business function.
+                Please click <b>ACTIVATE</b> button to activate it.
+            </mat-label>
+        <!-- </td>
+        <td>
+            <button mat-raised-button color="accent" matTooltip="Activate" (click)="activateInfoTrackFunction()">
+                <mat-icon>library_add_check</mat-icon>&nbsp;&nbsp;ADD FORMS
+            </button> -->
+        </td>       
+    </tr>
+</table>
+</div>
+<br/>
+<mat-table *ngIf='hasForms && isITDataFetched' [dataSource]="orgInfoTrackForms" class="mat-elevation-z8">
+    
+<ng-container matColumnDef="formName">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Form </mat-header-cell>
+    <mat-cell *matCellDef="let element" style="font-weight: bold;color:black"> {{element.formName}} </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="submitForm">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> New </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+        <button mat-icon-button matTooltip="Submit form" (click)="submitForm(row.templateId)">
+            <mat-icon style="color:#004d00;font-weight: bold">attach_file</mat-icon>
+            <label style="color:#004d00;;font-weight: bold">Add</label></button>
+    </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="viewReport">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> View </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+        <button mat-icon-button matTooltip="View Report" (click)="viewReport(row.templateId)">
+            <mat-icon style="color:#004d00;font-weight: bold">insert_chart_outlined</mat-icon>
+            <label style="color:#004d00;;font-weight: bold">View</label></button>
+    </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="options">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Options </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+        <button mat-icon-button matTooltip="Options" (click)="EditFormOptions(row)">
+            <mat-icon>settings</mat-icon>
+        </button>
+    </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="delete">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999">Delete </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+        <button mat-icon-button matTooltip="Delete Company" (click)="openConfirmationDialogforCompanyDeletion(row.templateId)">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </mat-cell>
+</ng-container>
+
+<mat-header-row *matHeaderRowDef="displayedColumns" style="background-color: white"></mat-header-row>
+<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
