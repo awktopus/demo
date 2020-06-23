@@ -6,6 +6,7 @@ import { InfoTrackerService } from '../service/infotracker.service';
 import { InfotrackerComponent } from '../infotracker.component';
 import { InfoTrackForm, ELCompanyStaff } from '../../esign/beans/ESignCase';
 import { SelectionModel } from '@angular/cdk/collections';
+import { InfotrackerPdfPopupComponent } from '../shared/infotracker-pdf-popup/infotracker-pdf-popup.component';
 
 @Component({
   selector: 'app-formassignment',
@@ -24,7 +25,6 @@ export class FormassignmentComponent implements OnInit {
   infoTrackForms: InfoTrackForm[];
   cacheInfoTrackForms: InfoTrackForm[];
   selectedInfoTrackForms: InfoTrackForm[];
-  selectedNewInfoTrackForms: InfoTrackForm[];
   removable = true;
   showAssignFormspinner = false;
   showEditFormsspinner = false;
@@ -34,14 +34,13 @@ export class FormassignmentComponent implements OnInit {
   cacheDesigUsers: ELCompanyStaff[];
   title: string;
   displayedColumns: string[] = ['select', 'formName',
-                                 'viewForm'];
-  // selectedForms = new SelectionModel<InfoTrackForm>(true, []);
+    'viewForm'];
   newInfoTrackForms: InfoTrackForm[];
   assignmentForm: FormGroup = new FormGroup({
-     orgNameFormControl: new FormControl(''),
-     itFormControl: new FormControl(''),
-     desigUserFormControl: new FormControl('')
-   });
+    orgNameFormControl: new FormControl(''),
+    itFormControl: new FormControl(''),
+    desigUserFormControl: new FormControl('')
+  });
   @ViewChild('focusField') focusField: ElementRef;
   @ViewChild('itFormInput') itFormInput: ElementRef;
   constructor(private service: InfoTrackerService, public dialog: MatDialog, private route: ActivatedRoute,
@@ -49,7 +48,6 @@ export class FormassignmentComponent implements OnInit {
   ) {
     this.selectedInfoTrackForms = [];
     this.newInfoTrackForms = [];
-    this.selectedNewInfoTrackForms = [];
     this.selDesigUsers = [];
     dialogRef.disableClose = true;
   }
@@ -59,51 +57,32 @@ export class FormassignmentComponent implements OnInit {
     console.log(this.operation);
     console.log(this.orgUnitName);
     console.log(this.orgUnitId);
-     this.assignmentForm.controls['orgNameFormControl'].setValue(this.orgUnitName);
+    this.assignmentForm.controls['orgNameFormControl'].setValue(this.orgUnitName);
 
-    // this.assignmentForm.controls['itFormControl'].valueChanges.subscribe(searchToken => {
-    //   console.log('itFormControl search called');
-    //   console.log('search Token:' + searchToken);
-    //   console.log(this.itForm_var);
-    //   if (this.ITID === '') {
-    //     return;
-    //   }
-    //   if (this.itform) {
-    //     return;
-    //   }
-    //   if (searchToken && typeof searchToken !== 'object') {
-    //     if (this.itForm_var === searchToken.trim()) {
-    //       return;
-    //     } else {
-    //       console.log('itFormControl searching...');
-    //       this.infoTrackForms = [];
-    //       this.cacheInfoTrackForms.forEach(cc => {
-    //         if ((cc.formName.toLowerCase().search(searchToken.toLowerCase()) !== -1)) {
-    //           this.infoTrackForms.push(cc);
-    //         }
-    //       });
-    //       console.log(this.infoTrackForms);
-    //     }
-    //   } else {
-    //     this.infoTrackForms = <InfoTrackForm[]>this.cacheInfoTrackForms;
-    //   }
-    // });
+    this.service.GetOrgAllInfoTrackForms(this.service.auth.getOrgUnitID(),
+      this.service.auth.getUserID()).subscribe(resp => {
+        this.newInfoTrackForms = <InfoTrackForm[]>resp;
+       console.log('selected newInfoTrackForms');
+        console.log(this.newInfoTrackForms);
+        if (this.operation !== 'editform') {
+          if (this.newInfoTrackForms) {
+            this.newInfoTrackForms.forEach(cc => {
+              if (cc.isDefaultCheckedForm === true) {
+                cc.isOrgActiveForm = true;
+              }
+            });
+          }
+        }
+         this.isFormsLoaded = true;
+      });
 
     this.service.GetOrgInfoTrackForms(this.service.auth.getOrgUnitID(),
-                                      this.service.auth.getUserID()).subscribe(resp => {
-      this.selectedInfoTrackForms = <InfoTrackForm[]>resp;
-      console.log('selected info track forms');
-      console.log(this.selectedInfoTrackForms);
-     });
+      this.service.auth.getUserID()).subscribe(resp => {
+        this.selectedInfoTrackForms = <InfoTrackForm[]>resp;
+        console.log('selected info track forms');
+        console.log(this.selectedInfoTrackForms);
+      });
 
-     this.service.GetOrgAllInfoTrackForms(this.service.auth.getOrgUnitID(),
-                                      this.service.auth.getUserID()).subscribe(resp => {
-      this.newInfoTrackForms = <InfoTrackForm[]>resp;
-      this.selectedNewInfoTrackForms = <InfoTrackForm[]>resp;
-      console.log('selected newInfoTrackForms');
-      console.log(this.newInfoTrackForms);
-      this.isFormsLoaded = true;
-     });
 
     this.service.GetInfoTrackFormTemplates(this.service.auth.getUserID()).subscribe(resp => {
       this.infoTrackForms = <InfoTrackForm[]>resp;
@@ -112,17 +91,17 @@ export class FormassignmentComponent implements OnInit {
       console.log(this.infoTrackForms);
       console.log('cache info track forms');
       console.log(this.cacheInfoTrackForms);
-     });
-
-    this.service.GetOrgStaff(this.service.auth.getOrgUnitID(),
-                            this.service.auth.getUserID()).subscribe(results => {
-      this.desigUsers = <ELCompanyStaff[]>results;
-      this.cacheDesigUsers = <ELCompanyStaff[]>results;
-      console.log('company staff');
-      console.log(this.desigUsers);
     });
 
-}
+    this.service.GetOrgStaff(this.service.auth.getOrgUnitID(),
+      this.service.auth.getUserID()).subscribe(results => {
+        this.desigUsers = <ELCompanyStaff[]>results;
+        this.cacheDesigUsers = <ELCompanyStaff[]>results;
+        console.log('company staff');
+        console.log(this.desigUsers);
+      });
+
+  }
 
   setData(operation: string, title: string, orgUnitName: string, orgUnitId: string) {
     this.operation = operation;
@@ -150,7 +129,7 @@ export class FormassignmentComponent implements OnInit {
 
   itFormOnKey(event) {
     console.log('secondarySignerOnKey event');
-   }
+  }
 
   addInfoTrackForm(event: MatOptionSelectionChange): void {
     const value = event.source.value;
@@ -164,11 +143,11 @@ export class FormassignmentComponent implements OnInit {
       let ec: InfoTrackForm = null;
       this.infoTrackForms.forEach(cc => { if (cc.templateId === value) { c = cc; } });
       if (this.selectedInfoTrackForms) {
-      this.selectedInfoTrackForms.forEach(cc => { if (cc.templateId === c.templateId) { ec = cc; } });
-       } else {
+        this.selectedInfoTrackForms.forEach(cc => { if (cc.templateId === c.templateId) { ec = cc; } });
+      } else {
         this.selectedInfoTrackForms = [];
-       }
-        if (!ec) {
+      }
+      if (!ec) {
         this.selectedInfoTrackForms.push(c);
       }
     }
@@ -183,77 +162,35 @@ export class FormassignmentComponent implements OnInit {
     this.infoTrackForms = <InfoTrackForm[]>this.cacheInfoTrackForms;
   }
 
-  addDesigUser(event: MatOptionSelectionChange): void {
-    const value = event.source.value;
-    console.log('add desig user value:');
-    console.log(value);
-    console.log(event);
-    console.log('add desig users:');
-    console.log(this.desigUsers);
-    if ((value && event.isUserInput)) {
-      let c: ELCompanyStaff = null;
-      let ec: ELCompanyStaff = null;
-      this.desigUsers.forEach(cc => { if (cc.employeeId === value) { c = cc; } });
-      if (this.selDesigUsers) {
-      this.selDesigUsers.forEach(cc => { if (cc.employeeId === c.employeeId) { ec = cc; } });
-       } else {
-        this.selDesigUsers = [];
-       }
-        if (!ec) {
-        this.selDesigUsers.push(c);
-      }
-    }
-  }
-
-  removeDesigUser(c: ELCompanyStaff): void {
-    console.log('remove company staff');
-    const index = this.selDesigUsers.indexOf(c);
-    if (index >= 0) {
-      this.selDesigUsers.splice(index, 1);
-    }
-    this.desigUsers = <ELCompanyStaff[]>this.cacheDesigUsers;
-  }
-
-  desigUserfocusOut() {
-    console.log('desigUserfocusOut event');
-  }
-
-  desigUserOnKey(event) {
-    console.log('desigUserOnKey event');
-    }
-
-
-
-
-    assignInfoTrackForm() {
+  assignInfoTrackForm() {
     this.showAssignFormspinner = true;
     console.log('assignInfoTrackForm');
     console.log('orgUnitId:' + this.orgUnitId);
     console.log('orgUnitName:' + this.orgUnitName);
     console.log(this.infoTrackForms);
     console.log()
-       let templateIds: number[] = [];
-       if (this.newInfoTrackForms) {
-        this.newInfoTrackForms.forEach(cc => {
-          if (cc.isOrgActiveForm) {
+    let templateIds: number[] = [];
+    if (this.newInfoTrackForms) {
+      this.newInfoTrackForms.forEach(cc => {
+        if (cc.isOrgActiveForm) {
           templateIds.push(cc.templateId);
         }
-         });
-       }
+      });
+    }
     const assignFormjson = {
       templateIds: templateIds
     };
     console.log(assignFormjson);
     this.service.ActivateInfoTrack(this.service.auth.getOrgUnitID(),
-                                  this.service.auth.getUserID(),
-                                  assignFormjson).subscribe(resp => {
-      console.log(resp);
-      this.infoTrackerRef.addForm = false;
-      this.infoTrackerRef.hasForms = true;
-      this.infoTrackerRef.loadForms();
-      this.dialogRef.close();
-      this.showAssignFormspinner = false;
-    });
+      this.service.auth.getUserID(),
+      assignFormjson).subscribe(resp => {
+        console.log(resp);
+        this.infoTrackerRef.addForm = false;
+        this.infoTrackerRef.hasForms = true;
+        this.infoTrackerRef.loadForms();
+        this.dialogRef.close();
+        this.showAssignFormspinner = false;
+      });
   }
 
   selectForm(event, selFormRow: any) {
@@ -262,20 +199,33 @@ export class FormassignmentComponent implements OnInit {
     console.log('selected form row');
     console.log(selFormRow);
     if (selFormRow) {
-       this.newInfoTrackForms.forEach(cc => {
-         if (cc.templateId === selFormRow.templateId) {
-         cc.isOrgActiveForm = event.checked;
+      this.newInfoTrackForms.forEach(cc => {
+        if (cc.templateId === selFormRow.templateId) {
+          cc.isOrgActiveForm = event.checked;
         } else {
           if (event.checked === true) {
             cc.isOrgActiveForm = false;
           }
         }
       });
-     }
+    }
     console.log('changed form list');
     console.log(this.newInfoTrackForms);
   }
   cancelActivatePopup() {
     this.dialogRef.close();
   }
+
+  viewForm(templateId: number) {
+    console.log('viewForm');
+    console.log(templateId);
+    let tTemplateId: number;
+    tTemplateId = Number(templateId);
+    const dialogRef = this.dialog.open(InfotrackerPdfPopupComponent, { width: '520pt' });
+    dialogRef.componentInstance.setPDF(this.service.auth.baseurl +
+      '/infotracker/orgunit/' + this.service.auth.getOrgUnitID() +
+      '/employee/' + this.service.auth.getUserID() +
+      '/formtemplate/' + tTemplateId + '/helpcontent');
+  }
 }
+

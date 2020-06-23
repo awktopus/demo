@@ -1,0 +1,72 @@
+<span>
+    <label class="heading-label">{{ title }}</label>
+    <button mat-icon-button color="warn" style="margin-left:30%" (click)="cancelPopup()">
+      <mat-icon style="font-size: 40px;">clear</mat-icon>
+    </button>
+  </span>
+  <div fxLayout="column">
+    <div class="invgridColumn">
+      <form [formGroup]="locationForm">
+        <mat-form-field class="appfield" appearance="outline">
+          <mat-label>Location Name</mat-label>
+          <input required #focusField matInput [(ngModel)]="locationName" formControlName="locationNameFormControl">
+          <mat-error *ngIf="locationForm.get('locationNameFormControl').hasError('required')">
+            Location name is required
+          </mat-error>
+        </mat-form-field>
+        <br/>
+        <mat-form-field class="appfield" appearance="outline">
+            <mat-label>Address</mat-label>
+            <input required #focusField matInput [(ngModel)]="address" formControlName="addressFormControl">
+            <mat-error *ngIf="locationForm.get('addressFormControl').hasError('required')">
+              Address is required
+            </mat-error>
+          </mat-form-field>
+        <br/>
+        <mat-form-field class="appfield" appearance="outline">
+            <mat-label>Zip Code</mat-label>
+            <input required #focusField matInput [(ngModel)]="zipCode" formControlName="zipCodeFormControl">
+            <mat-error *ngIf="locationForm.get('zipCodeFormControl').hasError('required')">
+              Zip code is required
+            </mat-error>
+          </mat-form-field>
+      </form>
+      <div>
+        <br/>
+      </div>
+      <div class="button-row">
+        <div fxLayout="row">
+          <button mat-raised-button class="text-upper" (click)="cancelPopup()">
+            Cancel
+          </button>
+          &nbsp; &nbsp;
+  
+          <span *ngIf='!showEditLocationspinner'>
+            <button *ngIf='operation =="editlocation"' 
+              [disabled]="locationForm.invalid" mat-raised-button color="accent" class="text-upper"
+              (click)="addUpdateLocation()">
+              Update
+              <mat-icon>loop</mat-icon>
+            </button>
+          </span>
+          <mat-spinner *ngIf='showEditLocationspinner' diameter='40'></mat-spinner>
+          <span *ngIf='showEditLocationspinner'>Processing...</span>
+  
+          &nbsp; &nbsp;
+  
+          <span *ngIf='!showAddLocationspinner'>
+            <button *ngIf='operation !="editlocation"' 
+              [disabled]="locationForm.invalid" mat-raised-button color="accent" class="text-upper"
+              (click)="addUpdateLocation()">
+              SAVE
+              <mat-icon>play_circle_outline</mat-icon>
+            </button>
+          </span>
+          <mat-spinner *ngIf='showAddLocationspinner' diameter='40'></mat-spinner>
+          <span *ngIf='showAddLocationspinner'>Processing...</span>
+        </div>
+      </div>  
+    </div>
+  </div>
+  
+  

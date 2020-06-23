@@ -425,14 +425,25 @@ export class InfoTrackForm {
   formName: string;
   description: string;
   isOrgActiveForm: boolean;
+  isDefaultCheckedForm: boolean;
 }
 
 export class ELCompanyStaff {
   orgUnitId: string;
   employeeId: string;
-  empFirstName: string;
-  empLastName: string;
+  firstName: string;
+  lastName: string;
   emailId: string;
   phone: string;
   role: string;
+}
+
+export class InfoTrackLocation {
+orgUnitId: string;
+locSeqNo: number;
+geoLocation: string;
+address: string;
+zipCode: string;
+phone: string;
+isActive: string;
 }

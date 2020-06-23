@@ -11,11 +11,16 @@ import { ESignGuard } from '../esign/service/esignauth';
 import { AgGridModule } from 'ag-grid-angular';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { InfoTrackerRouting } from './infotracker.routing';
-import { InfotrackerComponent } from './infotracker.component';
-import { SafePipe } from '../ezsign/ezsign.component';
+import { InfotrackerComponent, InfoTrackSafePipe } from './infotracker.component';
 import { FormassignmentComponent } from './formassignment/formassignment.component';
 import { InfoTrackerService } from './service/infotracker.service';
 import { InfotrackeroptionsComponent } from './infotrackeroptions/infotrackeroptions.component';
+import { InfotrackerPdfPopupComponent } from './shared/infotracker-pdf-popup/infotracker-pdf-popup.component';
+import { DesignatedusersComponent } from './designatedusers/designatedusers.component';
+import { InfotrackerlocationsComponent } from './infotrackerlocations/infotrackerlocations.component';
+import { AddupdatelocationComponent } from './infotrackerlocations/addupdatelocation/addupdatelocation.component';
+import { ConfirmationDialogComponent } from '../esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
+import { InfotrackerConfirmDialogComponent } from './shared/infotracker-confirm-dialog/infotracker-confirm-dialog.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -33,14 +38,21 @@ import { InfotrackeroptionsComponent } from './infotrackeroptions/infotrackeropt
     MatNativeDateModule,
     MatProgressSpinnerModule, MatDialogModule, CurrencyMaskModule
    ],
-  declarations: [InfotrackerComponent, FormassignmentComponent, InfotrackeroptionsComponent
+  declarations: [InfotrackerComponent, InfoTrackSafePipe,
+     FormassignmentComponent, InfotrackeroptionsComponent,
+     InfotrackerPdfPopupComponent, DesignatedusersComponent,
+     InfotrackerlocationsComponent,
+     AddupdatelocationComponent,
+     InfotrackerConfirmDialogComponent
   ],
-  entryComponents: [FormassignmentComponent
+  entryComponents: [FormassignmentComponent, InfotrackerPdfPopupComponent,
+    DesignatedusersComponent, InfotrackerlocationsComponent,
+    AddupdatelocationComponent, InfotrackerConfirmDialogComponent
     ],
   providers: [
   ESignGuard,
   InfoTrackerService
   ],
-  exports: [ MatDatepickerModule]
+  exports: [MatDatepickerModule]
 })
 export class InfoTrackerModule { }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, PipeTransform, Pipe } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatOptionSelectionChange } from '@angular/material';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,9 @@ import { EsignuiserviceService } from '../esign/service/esignuiservice.service';
 import { InfoTrackerService } from './service/infotracker.service';
 import { FormassignmentComponent } from './formassignment/formassignment.component';
 import { InfoTrackForm } from '../esign/beans/ESignCase';
+import { DesignatedusersComponent } from './designatedusers/designatedusers.component';
+import { DomSanitizer } from '@angular/platform-browser';
+import { InfotrackerlocationsComponent } from './infotrackerlocations/infotrackerlocations.component';
 
 @Component({
   selector: 'app-infotracker',
@@ -140,4 +143,31 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
   //     }
   //   });
    }
+
+   manageDesignatedUsers() {
+    console.log('manageDesignatedUsers:');
+     const dialogRef = this.dialog.open(DesignatedusersComponent, {
+       width: '900px', height: '600px'
+     });
+     dialogRef.componentInstance.infoTrackerRef = this;
+     dialogRef.componentInstance.setData(this.service.auth.getOrgUnitName(), "Add/Update Designated Users");
+   }
+
+   manageLocations() {
+    console.log('manageLocations:');
+    const dialogRef = this.dialog.open(InfotrackerlocationsComponent, {
+      width: '900px', height: '600px'
+    });
+    dialogRef.componentInstance.infoTrackerRef = this;
+    dialogRef.componentInstance.setData("Add/Update Organization Location",
+    this.service.auth.getOrgUnitName());
+   }
 }
+
+ @Pipe({ name: 'safe' })
+ export class InfoTrackSafePipe implements PipeTransform {
+   constructor(private sanitizer: DomSanitizer) { }
+   transform(url) {
+     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+   }
+ }

@@ -54,4 +54,47 @@ export class InfoTrackerService  {
       + this.auth.getUserID() + '/allformtemplates';
     return this.http.get(url, this.auth.getESignOptions());
   }
+
+  GetPDFBlob(url: string) {
+    const opps = this.auth.getESignOptionswithoutElToken();
+    opps['responseType'] = 'arraybuffer';
+    console.log('get content url:' + url);
+    return this.http.get(url, opps);
+  }
+
+  AddDesignatedStaff(orgUnitId: string, employeeId: string, designatedStaff: any): Observable<any> {
+    console.log('AddDesignatedStaff:');
+    return this.http.post(this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+    '/employee/' + this.auth.getUserID() + '/adddesignatedstaff',
+    designatedStaff, this.auth.getESignOptions());
+  }
+
+  GetDesignatedOrgStaff(orgUnitId: string, employeeId: string): Observable<any> {
+    const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() + '/employee/'
+      + this.auth.getUserID() + '/orgdesignatedstaff';
+    return this.http.get(url, this.auth.getESignOptions());
+  }
+
+  GetOrgLocations(orgUnitId: string, employeeId: string): Observable<any> {
+    const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() + '/user/'
+      + this.auth.getUserID() + '/locations';
+    return this.http.get(url, this.auth.getESignOptions());
+  }
+
+  AddUpdateLocation(orgUnitId: string, employeeId: string, location: any): Observable<any> {
+    console.log('Add update location:');
+    return this.http.post(this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+    '/employee/' + this.auth.getUserID() + '/addupdatelocation',
+    location, this.auth.getESignOptions());
+  }
+
+  DeleteLocation(orgUnitId: string, employeeId: string, locationSeqNo: number): Observable<any> {
+    console.log('Delete location:');
+    const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+    '/employee/' + this.auth.getUserID() + '/location/' + locationSeqNo + '/deletelocation'
+    console.log('url:' + url);
+    return this.http.delete(url, this.auth.getESignOptions());
+  }
+
+
 }
