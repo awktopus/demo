@@ -1,0 +1,77 @@
+<table>
+    <tr>
+      <th>
+        <label class="heading-label">Info Tracker Admin Report</label>
+      </th>
+    </tr>
+  </table>
+  <div>
+    <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='40'></mat-spinner>
+    <span *ngIf='!isInfoTrackerDataFetched'>Processing...</span>
+  </div>
+  <table class="trackertable4" *ngIf='isInfoTrackerDataFetched'>
+    <tr align="left">
+      <td colspan="12">
+        <button mat-stroked-button (click)="navigateInfoTracker()">
+          Back
+          <mat-icon>
+            reply</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </table>
+  
+  
+  <table class="trackertable" *ngIf='isInfoTrackerDataFetched'>
+    <tr>
+      <td align="left">
+        <h6> {{ templateName }} </h6>
+      </td>
+      <td align="left">
+        <mat-form-field class="casefield" appearance="outline">
+          <mat-label>Select Reported Date</mat-label>
+          <mat-select [(ngModel)]="reportedDate" 
+          (selectionChange)="getReportedDateInfo()">
+            <mat-option *ngFor="let reptDate of reportedDates" [value]="reptDate">
+               {{ reptDate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td> 
+  
+      <td align="left">
+        <mat-form-field class="appfield2" appearance="outline">
+         <mat-label>Download as</mat-label> 
+          <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
+            <mat-option value="CSV">
+              EXCEL/CSV
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+         <button mat-icon-button  matTooltip="Download" (click)="downloadReport()">
+            <mat-icon style="font-size: 40px;">get_app</mat-icon>
+          </button>
+       </td>     
+    </tr>
+  </table>
+  <table width=99%>
+      <tr>
+        <td align=right width='30'>
+        </td>
+        <td align=right>
+          <!-- <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(infoTrackerGridApi)'>list_alt</mat-icon> -->
+          <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll()" matTooltip="Expand All">swap_horiz</mat-icon>
+          <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll()" matTooltip="Refit">tune</mat-icon>
+        </td>
+      </tr>
+    </table>
+  <div style="margin-left: 1px;margin-right: 1px">
+      <ag-grid-angular #agGridInfoTracker style="width: 100%; height: 650px; font-size:11pt; " 
+      class="ag-theme-balham" [rowData]="infoTrackerGridData"
+        [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" 
+        [columnDefs]="gridColumnDefs" [enableColResize]="true"
+        [frameworkComponents]="frameworkComponents" [context]="context" 
+        [pagination]="true" [paginationPageSize]="50" (gridReady)="onGridReady($event)"
+        [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef" (firstDataRendered)="onFirstDataRendered($event)"
+        [defaultColDef]="defaultColDef" [domLayout]="autoHeight"></ag-grid-angular>
+  </div>

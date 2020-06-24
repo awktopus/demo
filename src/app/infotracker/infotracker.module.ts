@@ -21,6 +21,8 @@ import { InfotrackerlocationsComponent } from './infotrackerlocations/infotracke
 import { AddupdatelocationComponent } from './infotrackerlocations/addupdatelocation/addupdatelocation.component';
 import { ConfirmationDialogComponent } from '../esign/controls/shared/confirmation-dialog/confirmation-dialog.component';
 import { InfotrackerConfirmDialogComponent } from './shared/infotracker-confirm-dialog/infotracker-confirm-dialog.component';
+import { InfotrackerViewreportComponent } from './infotracker-viewreport/infotracker-viewreport.component';
+import { InfotrackerGridcolpopupComponent } from './shared/infotracker-gridcolpopup/infotracker-gridcolpopup.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,18 +38,21 @@ import { InfotrackerConfirmDialogComponent } from './shared/infotracker-confirm-
     SharedBaseModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatProgressSpinnerModule, MatDialogModule, CurrencyMaskModule
+    MatProgressSpinnerModule, MatDialogModule, CurrencyMaskModule,
+    AgGridModule.withComponents([])
    ],
   declarations: [InfotrackerComponent, InfoTrackSafePipe,
      FormassignmentComponent, InfotrackeroptionsComponent,
      InfotrackerPdfPopupComponent, DesignatedusersComponent,
      InfotrackerlocationsComponent,
      AddupdatelocationComponent,
-     InfotrackerConfirmDialogComponent
+     InfotrackerConfirmDialogComponent,
+     InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent, InfotrackerGridcolpopupComponent
   ],
   entryComponents: [FormassignmentComponent, InfotrackerPdfPopupComponent,
     DesignatedusersComponent, InfotrackerlocationsComponent,
-    AddupdatelocationComponent, InfotrackerConfirmDialogComponent
+    AddupdatelocationComponent, InfotrackerConfirmDialogComponent,
+    InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent
     ],
   providers: [
   ESignGuard,

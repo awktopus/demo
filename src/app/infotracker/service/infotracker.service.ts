@@ -96,5 +96,19 @@ export class InfoTrackerService  {
     return this.http.delete(url, this.auth.getESignOptions());
   }
 
+  GetAllUserStatus(orgUnitId: string, employeeId: string,
+    userType: string,  templateId: number, reportedDate: string): Observable<any> {
+    const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+    '/employee/' + this.auth.getUserID() + '/usertype/' + userType + '/formtemplate/' +
+    templateId + '/reporteddate/' + reportedDate + '/userstatus';
+    return this.http.get(url, this.auth.getESignOptions());
+  }
 
+  GetReportedDates(orgUnitId: string, employeeId: string,
+     templateId: number): Observable<any> {
+    const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+    '/employee/' + this.auth.getUserID() +  '/formtemplate/' +
+    templateId + '/reporteddates';
+    return this.http.get(url, this.auth.getESignOptions());
+  }
 }

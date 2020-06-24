@@ -60,17 +60,17 @@
     <mat-cell *matCellDef="let element" style="font-weight: bold;color:black"> {{element.formName}} </mat-cell>
 </ng-container>
 
-<ng-container matColumnDef="submitForm">
+<!-- <ng-container matColumnDef="submitForm">
     <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> New </mat-header-cell>
     <mat-cell *matCellDef="let row">
         <button mat-icon-button matTooltip="Submit form" (click)="submitForm(row.templateId)">
             <mat-icon style="color:#004d00;font-weight: bold">attach_file</mat-icon>
             <label style="color:#004d00;;font-weight: bold">Add</label></button>
     </mat-cell>
-</ng-container>
+</ng-container> -->
 
 <ng-container matColumnDef="viewReport">
-    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> View </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Admin View </mat-header-cell>
     <mat-cell *matCellDef="let row">
         <button mat-icon-button matTooltip="View Report" (click)="viewReport(row.templateId)">
             <mat-icon style="color:#004d00;font-weight: bold">insert_chart_outlined</mat-icon>
@@ -78,7 +78,7 @@
     </mat-cell>
 </ng-container>
 
-<ng-container matColumnDef="options">
+<!-- <ng-container matColumnDef="options">
     <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Options </mat-header-cell>
     <mat-cell *matCellDef="let row">
         <button mat-icon-button matTooltip="Options" (click)="EditFormOptions(row)">
@@ -94,7 +94,7 @@
             <mat-icon>delete</mat-icon>
         </button>
     </mat-cell>
-</ng-container>
+</ng-container> -->
 
 <mat-header-row *matHeaderRowDef="displayedColumns" style="background-color: white"></mat-header-row>
 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

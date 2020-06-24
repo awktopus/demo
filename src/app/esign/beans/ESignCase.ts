@@ -447,3 +447,17 @@ zipCode: string;
 phone: string;
 isActive: string;
 }
+export class InfoTrackUserStatusReport {
+  reportedDate: string;
+  orgUnitId: string;
+  trackerId: string;
+  formName: string;
+  userId: string;
+  userName: string;
+  userType: string;
+  location: string;
+  recordStatus: string;
+  finalResult: string;
+  lastCriticalReportedDate: string;
+  displayPriority: number;
+}
