@@ -10,25 +10,25 @@
     <mat-spinner *ngIf='!isITDataFetched' diameter='40'></mat-spinner>
     <span *ngIf='!isITDataFetched'>Processing...</span> 
 </div>
-<table class="trackertable4">
+<table class="trackertable5">
 <tr align="left">
-    <td colspan="4" *ngIf='!hasForms && isITDataFetched'>
+    <td colspan="2" *ngIf='!hasForms && isITDataFetched'>
         <button mat-raised-button color="accent" matTooltip="Activate" (click)="activateInfoTrackFunction()">
             <mat-icon>check_circle</mat-icon>&nbsp;ACTIVATE
         </button>
     </td>
-      <td colspan="4" *ngIf='hasForms && isITDataFetched'>
+      <td colspan="2" *ngIf='hasForms && isITDataFetched'>
         <button mat-raised-button color="accent" matTooltip="Activate" (click)="addRemoveForms()">
             <mat-icon>description</mat-icon>&nbsp;FORMS
         </button>
     </td>
-    <td colspan="4" *ngIf='hasForms && isITDataFetched'>
+    <!-- <td colspan="4" *ngIf='hasForms && isITDataFetched'>
             <button mat-raised-button color="accent" matTooltip="Location" (click)="manageLocations()">
                     <mat-icon>location_city</mat-icon>&nbsp;LOCATIONS
             </button>
-    </td>
-    <td colspan="4" *ngIf='hasForms && isITDataFetched'>
-            <button mat-raised-button color="accent" matTooltip="Location" (click)="manageDesignatedUsers()">
+    </td> -->
+    <td colspan="2" *ngIf='hasForms && isITDataFetched'>
+            <button mat-raised-button color="accent" matTooltip="Designated Users" (click)="manageDesignatedUsers()">
                     <mat-icon>person_add</mat-icon>&nbsp;DESIGNATED USERS
             </button>
     </td>

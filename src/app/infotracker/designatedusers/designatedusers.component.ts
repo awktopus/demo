@@ -26,7 +26,7 @@ export class DesignatedusersComponent implements OnInit {
     desigUserFormControl: new FormControl('')
   });
   @ViewChild("designatedUserInput") designatedUserInput: ElementRef;
-  @ViewChild('focusField') focusField: MatSelect;
+  @ViewChild('focusField') focusField: ElementRef;
   constructor(private service: InfoTrackerService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router, public dialogRef: MatDialogRef<DesignatedusersComponent>
   ) {
@@ -53,6 +53,7 @@ export class DesignatedusersComponent implements OnInit {
             }
           });
         this.isUsersLoaded = true;
+        this.focusField.nativeElement.focus();
       });
 
       this.designatedUserForm.controls['desigUserFormControl'].valueChanges.subscribe(searchToken => {

@@ -24,8 +24,8 @@
         {{ selUser.firstName }} {{selUser.lastName }}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
-      <input #designatedUserInput #focusField placeholder="Designated Users" [matChipInputFor]="desiguserschips" matInput [matAutocomplete]="desiguser"
-        formControlName="desigUserFormControl" (focusout)="desigUserfocusOut()" autofocus (keydown.Tab)="desigUserOnKey($event)">
+      <input #focusField placeholder="Designated Users" [matChipInputFor]="desiguserschips" matInput [matAutocomplete]="desiguser"
+        formControlName="desigUserFormControl">
       <mat-autocomplete #desiguser="matAutocomplete">
         <mat-option *ngFor="let user of desigUsers" [value]="user.employeeId" (onSelectionChange)="addDesigUser($event)">
           {{ user.firstName }} {{user.lastName }}

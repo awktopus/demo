@@ -5,6 +5,7 @@ import { InfoTrackerService } from '../service/infotracker.service';
 import { InfoTrackUserStatusReport } from '../../esign/beans/ESignCase';
 import { InfotrackerComponent } from '../infotracker.component';
 import { InfotrackerConfirmDialogComponent } from '../shared/infotracker-confirm-dialog/infotracker-confirm-dialog.component';
+import { InfotrackerGridcolpopupComponent } from '../shared/infotracker-gridcolpopup/infotracker-gridcolpopup.component';
 @Component({
   selector: 'app-infotracker-viewreport',
   templateUrl: './infotracker-viewreport.component.html',
@@ -30,6 +31,7 @@ export class InfotrackerViewreportComponent implements OnInit {
   templateId: any;
   reportedDate: any;
   reportedDates: string[];
+  tooltipShowDelay;
   constructor(private service: InfoTrackerService, public dialog: MatDialog,
     private route: ActivatedRoute, private router: Router) {
   }
@@ -89,16 +91,6 @@ export class InfotrackerViewreportComponent implements OnInit {
         }
       });
   }
-
-  onGridReady(params) {
-    this.infoTrackerGridApi = params.api;
-    this.infoTrackerGridApi.columnApi = params.columnApi;
-    params.api.sizeColumnsToFit();
-    this.infoTrackerGridApi.cols = [];
-    this.infoTrackerGridApi.columnApi.getAllColumns().forEach(cc => {
-      this.infoTrackerGridApi.cols.push({ colId: cc.colId, checked: true, headerName: cc.colDef.headerName });
-    });
-}
 
 
   configColDef() {
@@ -194,9 +186,19 @@ export class InfotrackerViewreportComponent implements OnInit {
   }
 
   openColumnConfig(api) {
-    this.dialog.open(InfotrackerConfirmDialogComponent, { width: '200', data: api });
+    console.log('open column config');
+    this.dialog.open(InfotrackerGridcolpopupComponent, { width: '200', data: api });
   }
 
+  onGridReady(params) {
+    this.infoTrackerGridApi = params.api;
+    this.infoTrackerGridApi.columnApi = params.columnApi;
+    params.api.sizeColumnsToFit();
+    this.infoTrackerGridApi.cols = [];
+    this.infoTrackerGridApi.columnApi.getAllColumns().forEach(cc => {
+      this.infoTrackerGridApi.cols.push({ colId: cc.colId, checked: true, headerName: cc.colDef.headerName });
+    });
+}
   onFirstDataRendered(params) {
     params.api.sizeColumnsToFit();
       this.infoTrackerGridApi.api = params.api;
