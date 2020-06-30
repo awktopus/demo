@@ -21,7 +21,7 @@ export const InfoTrackerRoutes: Routes = [
         component: InfotrackerComponent
     },
     {
-        path: 'report/:templateId',
+        path: 'report',
         canActivate: [AuthGuard, ESignGuard],
         component: InfotrackerViewreportComponent
     }

@@ -449,15 +449,18 @@ isActive: string;
 }
 export class InfoTrackUserStatusReport {
   reportedDate: string;
-  orgUnitId: string;
   trackerId: string;
   formName: string;
-  userId: string;
   userName: string;
-  userType: string;
-  location: string;
   recordStatus: string;
   finalResult: string;
   lastCriticalReportedDate: string;
-  displayPriority: number;
+  question1: string;
+  answer1: string;
+  question2: string;
+  answer2: string;
+  question3: string;
+  answer3: string;
+  question4: string;
+  answer4: string;
 }

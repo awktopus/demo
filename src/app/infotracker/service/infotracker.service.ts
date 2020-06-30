@@ -7,7 +7,7 @@ import { EZSignDocResource } from '../../esign/beans/ESignCase';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 @Injectable()
-export class InfoTrackerService  {
+export class InfoTrackerService {
 
   onCategoriesChanged: BehaviorSubject<any>;
   // public baseurl = environment.apiEsignLink;
@@ -65,8 +65,8 @@ export class InfoTrackerService  {
   AddDesignatedStaff(orgUnitId: string, employeeId: string, designatedStaff: any): Observable<any> {
     console.log('AddDesignatedStaff:');
     return this.http.post(this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
-    '/employee/' + this.auth.getUserID() + '/adddesignatedstaff',
-    designatedStaff, this.auth.getESignOptions());
+      '/employee/' + this.auth.getUserID() + '/adddesignatedstaff',
+      designatedStaff, this.auth.getESignOptions());
   }
 
   GetDesignatedOrgStaff(orgUnitId: string, employeeId: string): Observable<any> {
@@ -84,31 +84,34 @@ export class InfoTrackerService  {
   AddUpdateLocation(orgUnitId: string, employeeId: string, location: any): Observable<any> {
     console.log('Add update location:');
     return this.http.post(this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
-    '/employee/' + this.auth.getUserID() + '/addupdatelocation',
-    location, this.auth.getESignOptions());
+      '/employee/' + this.auth.getUserID() + '/addupdatelocation',
+      location, this.auth.getESignOptions());
   }
 
   DeleteLocation(orgUnitId: string, employeeId: string, locationSeqNo: number): Observable<any> {
     console.log('Delete location:');
     const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
-    '/employee/' + this.auth.getUserID() + '/location/' + locationSeqNo + '/deletelocation'
+      '/employee/' + this.auth.getUserID() + '/location/' + locationSeqNo + '/deletelocation'
     console.log('url:' + url);
     return this.http.delete(url, this.auth.getESignOptions());
   }
 
-  GetAllUserStatus(orgUnitId: string, employeeId: string,
-    userType: string,  templateId: number, reportedDate: string): Observable<any> {
+  GetAllUserStatus(orgUnitId: string, employeeId: string, reportedStartDate: string,
+    userType: string,  reportedEndDate: string): Observable<any> {
+
     const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
-    '/employee/' + this.auth.getUserID() + '/usertype/' + userType + '/formtemplate/' +
-    templateId + '/reporteddate/' + reportedDate + '/userstatus';
+      '/employee/' + this.auth.getUserID() + '/usertype/' + userType + '/reportedstartdate/' +
+      reportedStartDate + '/reportedenddate/' + reportedEndDate + '/userstatus';
+    console.log('url:');
+    console.log(url);
     return this.http.get(url, this.auth.getESignOptions());
   }
 
   GetReportedDates(orgUnitId: string, employeeId: string,
-     templateId: number): Observable<any> {
+    templateId: number): Observable<any> {
     const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
-    '/employee/' + this.auth.getUserID() +  '/formtemplate/' +
-    templateId + '/reporteddates';
+      '/employee/' + this.auth.getUserID() + '/formtemplate/' +
+      templateId + '/reporteddates';
     return this.http.get(url, this.auth.getESignOptions());
   }
 }

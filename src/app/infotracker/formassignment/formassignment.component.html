@@ -34,8 +34,11 @@
     <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Form </mat-header-cell>
     <mat-cell *matCellDef="let element">
       {{element.formName}}
-     &nbsp; <mat-icon [matTooltip]="element.description" 
-     matTooltipClass="help-tooltip">help</mat-icon>
+     &nbsp;
+     <a mat-button color="primary" 
+     href="https://www1.nyc.gov/assets/doh/downloads/pdf/imm/covid-19-symptom-screening-businesses.pdf" 
+     target="_blank"><mat-icon [matTooltip]="element.description" 
+     matTooltipClass="help-tooltip">help</mat-icon><u>(Source)</u></a>
     </mat-cell>
   </ng-container>
 

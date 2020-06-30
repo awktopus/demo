@@ -24,7 +24,7 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
   addForm = false;
   isITDataFetched = false;
   orgInfoTrackForms: InfoTrackForm[]
-  displayedColumns: string[] = ['formName', 'viewReport'];
+  displayedColumns: string[] = ['formName'];
     // displayedColumns: string[] = ['formName', 'submitForm',
     // 'viewReport', 'options', 'delete'];
 
@@ -106,7 +106,7 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     //   });
   }
 
-  submitForm(templateId: string) {
+  submitNewForm(templateId: string) {
     // console.log('add Receipt:');
     // console.log(companyTypeId);
     // console.log(companyId);
@@ -118,7 +118,7 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     // dialogRef.componentInstance.setAddReceiptInfo(companyTypeId, companyId);
   }
 
-  viewReport(templateId: string) {
+  adminView(templateId: string) {
     console.log('viewReport');
     console.log(templateId);
     // const dialogRef = this.dialog.open(InfotrackerViewreportComponent, {
@@ -126,7 +126,7 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     // });
     // dialogRef.componentInstance.infoTrackerRef = this;
     // dialogRef.componentInstance.setData(templateId);
-    const url = 'main/infotracker/report/' + templateId;
+    const url = 'main/infotracker/report';
     this.router.navigateByUrl(url);
   }
 
