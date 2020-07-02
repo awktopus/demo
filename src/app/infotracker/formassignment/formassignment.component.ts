@@ -178,7 +178,8 @@ export class FormassignmentComponent implements OnInit {
       });
     }
     const assignFormjson = {
-      templateIds: templateIds
+      templateIds: templateIds,
+      OrgUnitName: this.orgUnitName
     };
     console.log(assignFormjson);
     this.service.ActivateInfoTrack(this.service.auth.getOrgUnitID(),
