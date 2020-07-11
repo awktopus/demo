@@ -464,3 +464,97 @@ export class InfoTrackUserStatusReport {
   question4: string;
   answer4: string;
 }
+
+export class PageQuestionResource {
+  questionId: number;
+  question: string;
+  questionDisplayIndex: number;
+  description: string;
+  isRequired: string;
+  questionFieldType: string;
+  questionItemsJson: string;
+  yesSelected: boolean;
+  noSelected: boolean;
+  isQuestionAnswered: boolean;
+}
+
+export class FormPageResource {
+pageId: number;
+pageName: string;
+description: string;
+questions?: PageQuestionResource[];
+}
+
+export class FormTemplateResource {
+  templateId: number;
+  orgUnitId: string;
+  formName: string;
+  description: string;
+  isActive: string;
+  pages?: FormPageResource[];
+}
+export class InfoTrackerAnswerResource {
+  questionId: number;
+  question: string;
+  questionDisplayIndex: number;
+  answer: string;
+}
+export class InfoTrackerInputResource {
+  empId: string;
+  empFirstName: string;
+  empLastName: string;
+  userId: string;
+  userFirstName: string;
+  userLastName: string;
+  geoLocation: string;
+  reportedDate: string;
+  answers?: InfoTrackerAnswerResource[];
+}
+
+export class InfoTrackerDocumentResource {
+  docId: string;
+  docSize: number;
+  notes: string;
+}
+export class InfoTrackerAmmendmentResource {
+  addendumSeqNo: number;
+  docId: string;
+  reviewedBy: string;
+  reviewedDateTime: string;
+  auditTrailId: number
+}
+export class InfoTrackerReviewStatusResource {
+  reviewTrackerId: string;
+  docId: string;
+  reviewedBy: string;
+  reviewedDateTime: string;
+  status: string;
+  addendumCount: number;
+  addendums?: InfoTrackerAmmendmentResource[];
+}
+export class InfoTrackerResource {
+  trackerId: string;
+  orgUnitId: string;
+  templateId: number;
+  templateName: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  employeeId: string;
+  empFirstName: string;
+  empLastName: string;
+  infoTrackRole: string;
+  geoLocation: string;
+  reportedDate: string;
+  finalResult: string;
+  status: string;
+  recordStatus: string;
+  displayPriority: number;
+  fourTeenDaysStatus: string;
+  quarantineCountDown: number;
+  lastCriticalReportedDate: string;
+  notes?: string[];
+  answers?:  InfoTrackerAnswerResource[];
+  attachments?: InfoTrackerDocumentResource[];
+  reviewStatus: InfoTrackerReviewStatusResource;
+}

@@ -23,6 +23,10 @@ import { ConfirmationDialogComponent } from '../esign/controls/shared/confirmati
 import { InfotrackerConfirmDialogComponent } from './shared/infotracker-confirm-dialog/infotracker-confirm-dialog.component';
 import { InfotrackerViewreportComponent } from './infotracker-viewreport/infotracker-viewreport.component';
 import { InfotrackerGridcolpopupComponent } from './shared/infotracker-gridcolpopup/infotracker-gridcolpopup.component';
+import { SelfreportComponent } from './selfreport/selfreport.component';
+import { AdminreportComponent } from './adminreport/adminreport.component';
+import { SelfreportsummaryComponent } from './selfreportsummary/selfreportsummary.component';
+import { ViewReportRendererComponent } from './shared/ViewReportRenderer.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -39,7 +43,7 @@ import { InfotrackerGridcolpopupComponent } from './shared/infotracker-gridcolpo
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressSpinnerModule, MatDialogModule, CurrencyMaskModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([ViewReportRendererComponent])
    ],
   declarations: [InfotrackerComponent, InfoTrackSafePipe,
      FormassignmentComponent, InfotrackeroptionsComponent,
@@ -47,12 +51,15 @@ import { InfotrackerGridcolpopupComponent } from './shared/infotracker-gridcolpo
      InfotrackerlocationsComponent,
      AddupdatelocationComponent,
      InfotrackerConfirmDialogComponent,
-     InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent, InfotrackerGridcolpopupComponent
+     InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent,
+     InfotrackerGridcolpopupComponent, SelfreportComponent, AdminreportComponent,
+     SelfreportsummaryComponent, ViewReportRendererComponent
   ],
   entryComponents: [FormassignmentComponent, InfotrackerPdfPopupComponent,
     DesignatedusersComponent, InfotrackerlocationsComponent,
     AddupdatelocationComponent, InfotrackerConfirmDialogComponent,
-    InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent
+    InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent,
+    SelfreportComponent, AdminreportComponent, SelfreportsummaryComponent
     ],
   providers: [
   ESignGuard,

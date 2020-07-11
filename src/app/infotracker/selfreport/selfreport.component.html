@@ -1,0 +1,104 @@
+<span>
+  <label class="heading-label">Self Report</label>
+  <button mat-icon-button color="warn" style="margin-left:30%" (click)="cancelSelfReport()">
+    <mat-icon style="font-size: 40px;">clear</mat-icon>
+  </button>
+</span>
+
+<div>
+  <br/>
+  <mat-spinner *ngIf='!isDataFetched' diameter='40'></mat-spinner>
+  <span *ngIf='!isDataFetched'>Processing...</span>
+</div>
+
+<div fxLayout="column" *ngIf='isDataFetched'>
+
+  <form [formGroup]="selfReportForm">
+    <mat-form-field class="casefield" appearance="outline">
+      <mat-label>Report Date</mat-label>
+      <input required matInput [matDatepicker]="startDate" readonly date="true" formControlName="reportDateFormControl">
+    </mat-form-field>
+
+    <mat-form-field class="casefield" appearance="outline">
+      <mat-label>Add For</mat-label>
+      <input matInput #focusField readonly type="text" formControlName="userNameFormControl" [(ngModel)]="userName">
+    </mat-form-field>
+  </form>
+  <table *ngIf='isAlreadyReported' class="qstnTable">
+    <tr>
+      <td>
+        <p class="alreadyReportedlabel">Your previous response has not been reviewed by an admin. You may edit your answers below and submit again.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <div *ngFor="let qstn of questions">
+    <table class="qstnTable">
+      <tr>
+        <td class="qstnlabelfield">
+          {{qstn.question}}
+        </td>
+      </tr>
+      <tr>
+          <td>
+              <button class='NoButton' (click)="selectAnswer(qstn.questionId,'no')" 
+              mat-stroked-button><mat-icon *ngIf='qstn.noSelected'>check</mat-icon>&nbsp;&nbsp;No</button>
+           </td>
+        </tr>
+        <tr>
+          <td>
+              <button class='YesButton' (click)="selectAnswer(qstn.questionId,'yes')" 
+              mat-stroked-button><mat-icon *ngIf='qstn.yesSelected'>check</mat-icon>&nbsp;&nbsp;Yes</button>
+          </td>
+        </tr>
+        <tr><br/></tr>      
+    </table>
+
+  </div>
+
+  <div>
+    <br/>
+  </div>
+
+  <div class="button-row">
+    <div fxLayout="row">
+      <button mat-raised-button class="text-upper" (click)="cancelSelfReport()">
+        Cancel
+      </button>
+      &nbsp; &nbsp;
+
+      <span *ngIf='!showSubmitSpinner'>
+        <button *ngIf='!isAlreadyReported' [disabled]="!isReadyToSubmit" mat-raised-button color="accent" class="text-upper" 
+        (click)="openConfirmationDialogforSelfReport('submit')">
+          Submit
+          <mat-icon>check_circle_outline</mat-icon>
+        </button>
+      </span>
+      <mat-spinner *ngIf='showSubmitSpinner' diameter='40'></mat-spinner>
+      <span *ngIf='showSubmitSpinner'>Processing...</span>
+      &nbsp; &nbsp;
+
+      <span *ngIf='!showEditSpinner'>
+        <button *ngIf='isAlreadyReported' [disabled]="!isReadyToSubmit" mat-raised-button color="accent" class="text-upper" 
+        (click)="openConfirmationDialogforSelfReport('edit')()">
+          Edit
+          <mat-icon>edit</mat-icon>
+        </button>
+      </span>
+      <mat-spinner *ngIf='showEditSpinner' diameter='40'></mat-spinner>
+      <span *ngIf='showEditSpinner'>Processing...</span>
+      &nbsp; &nbsp;
+      <!-- 
+      <span *ngIf='!showAddendumSpinner'>
+        <button *ngIf='isAlreadyReported' mat-raised-button color="accent" class="text-upper" (click)="submitAddendum()">
+          Addendum
+          <mat-icon>check_circle_outline</mat-icon>
+        </button>
+      </span>
+      <mat-spinner *ngIf='showAddendumSpinner' diameter='40'></mat-spinner>
+      <span *ngIf='showAddendumSpinner'>Processing...</span>
+      &nbsp; &nbsp; -->
+    </div>
+  </div>
+</div>

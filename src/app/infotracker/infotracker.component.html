@@ -25,12 +25,12 @@
 </div>
 <table class="trackertable5">
     <tr align="left">
-        <td colspan="2" *ngIf='!hasForms && isITDataFetched'>
+        <td colspan="3" *ngIf='!hasForms && isITDataFetched'>
             <button mat-raised-button color="accent" matTooltip="Activate" (click)="activateInfoTrackFunction()">
                 <mat-icon>check_circle</mat-icon>&nbsp;ACTIVATE
             </button>
         </td>
-        <td colspan="2" *ngIf='hasForms && isITDataFetched'>
+        <td colspan="3" *ngIf='hasForms && isITDataFetched'>
             <button mat-raised-button color="accent" matTooltip="Activate" (click)="addRemoveForms()">
                 <mat-icon>description</mat-icon>&nbsp;FORMS
             </button>
@@ -40,15 +40,15 @@
                     <mat-icon>location_city</mat-icon>&nbsp;LOCATIONS
             </button>
     </td> -->
-        <td colspan="2" *ngIf='hasForms && isITDataFetched'>
+        <td colspan="3" *ngIf='hasForms && isITDataFetched'>
             <button mat-raised-button color="accent" matTooltip="Designated Users" (click)="manageDesignatedUsers()">
                 <mat-icon>person_add</mat-icon>&nbsp;DESIGNATED USERS
             </button>
         </td>
 
-        <td colspan="2" *ngIf='hasForms && isITDataFetched'>
-            <button mat-raised-button color="accent" matTooltip="Admin View" (click)="adminView()">
-                <mat-icon>person_add</mat-icon>&nbsp;ADMIN VIEW
+        <td colspan="3" *ngIf='hasForms && isITDataFetched'>
+            <button mat-raised-button *ngIf ='userRole == "ADMIN" || userRole == "OWNER"' color="accent" matTooltip="Admin View" (click)="adminView()">
+                <mat-icon>person_add</mat-icon>&nbsp;ADMIN DASHBOARD
             </button>
         </td>
     </tr>
@@ -79,23 +79,23 @@
         <mat-cell *matCellDef="let element" style="font-weight: bold;color:black"> {{element.formName}} </mat-cell>
     </ng-container>
 
-    <!-- <ng-container matColumnDef="submitForm">
-    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999">Add New </mat-header-cell>
+     <ng-container matColumnDef="selfReport">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"></mat-header-cell>
     <mat-cell *matCellDef="let row">
-        <button mat-icon-button matTooltip="Submit form" (click)="submitNewForm(row.templateId)">
+        <button mat-icon-button matTooltip="Self Report" (click)="selfReport(row.templateId)">
             <mat-icon style="color:#004d00;font-weight: bold">attach_file</mat-icon>
-            <label style="color:#004d00;;font-weight: bold">Add New</label></button>
+            <label style="color:#004d00;;font-weight: bold">Self-Report</label></button>
     </mat-cell>
-</ng-container> -->
+</ng-container> 
 
-    <!-- <ng-container matColumnDef="viewReport">
-    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Admin View </mat-header-cell>
+<ng-container matColumnDef="view">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"></mat-header-cell>
     <mat-cell *matCellDef="let row">
-        <button mat-icon-button matTooltip="View Report" (click)="viewReport(row.templateId)">
+        <button mat-icon-button matTooltip="View" (click)="view(row.templateId, row.formName)">
             <mat-icon style="color:#004d00;font-weight: bold">insert_chart_outlined</mat-icon>
             <label style="color:#004d00;;font-weight: bold">View</label></button>
     </mat-cell>
-</ng-container> -->
+</ng-container>
 
     <!-- <ng-container matColumnDef="options">
     <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Options </mat-header-cell>
@@ -118,3 +118,4 @@
     <mat-header-row *matHeaderRowDef="displayedColumns" style="background-color: white"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
+

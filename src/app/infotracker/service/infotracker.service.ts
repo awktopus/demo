@@ -114,4 +114,62 @@ export class InfoTrackerService {
       templateId + '/reporteddates';
     return this.http.get(url, this.auth.getESignOptions());
   }
+
+  GetFormTemplateConfig(orgUnitId: string, employeeId: string,
+    templateId: number): Observable<any> {
+      console.log('Get form template config');
+      const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+      '/user/' + this.auth.getUserID() + '/formtemplate/' +
+      templateId + '/config';
+    return this.http.get(url, this.auth.getESignOptions());
+    }
+
+    AddUser(orgUnitId: string, employeeId: string, newUser: any): Observable<any> {
+      console.log('Add user:');
+      return this.http.post(this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+        '/employee/' + this.auth.getUserID() + '/adduser',
+        newUser, this.auth.getESignOptions());
+    }
+
+    SearchUsers(orgUnitId: string, employeeId: string,
+      usertype: string, userSearchToken: string) {
+        console.log('Search users');
+        const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+        '/employee/' + this.auth.getUserID() + '/usertype/' +
+        usertype + '/usersearch/' + userSearchToken;
+      return this.http.get(url, this.auth.getESignOptions());
+    }
+
+    GetFormInfo(orgUnitId: string, employeeId: string,
+      trackerId: string): Observable<any> {
+        console.log('Get form info');
+        const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+        '/employee/' + this.auth.getUserID() + '/track/' +
+        trackerId + '/forminfo';
+      return this.http.get(url, this.auth.getESignOptions());
+      }
+
+      SubmitForm(orgUnitId: string, employeeId: string, templateId: number, pageId: number, formInfo: any): Observable<any> {
+        console.log('Submit form:');
+        return this.http.post(this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+          '/employee/' + this.auth.getUserID() + '/formtemplate/' + templateId + '/page/' + pageId +
+          '/submitform',
+          formInfo, this.auth.getESignOptions());
+      }
+
+      EditForm(orgUnitId: string, employeeId: string, trackerId: string, formInfo: any): Observable<any> {
+        console.log('Edit form:');
+        return this.http.put(this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+          '/employee/' + this.auth.getUserID() + '/track/' + trackerId + '/editform',
+          formInfo, this.auth.getESignOptions());
+      }
+
+      GetUserCurrentFormStatus(orgUnitId: string, employeeId: string, userId: string,
+      templateId: number, reportedDate: string ): Observable<any> {
+        console.log('GetUserCurrentFormStatus');
+        const url = this.auth.baseurl + '/infotracker/orgunit/' + this.auth.getOrgUnitID() +
+        '/employee/' + this.auth.getUserID() + '/user/' + userId +
+        '/formtemplate/' + templateId +   '/reporteddate/' + reportedDate + '/currentstatus';
+      return this.http.get(url, this.auth.getESignOptions());
+      }
 }

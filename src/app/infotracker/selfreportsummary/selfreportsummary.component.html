@@ -1,0 +1,96 @@
+<span>
+  <label class="heading-label">Health Check Summary</label>
+  <button mat-icon-button color="warn" style="margin-left:85%" (click)="cancelSelfReport()">
+    <mat-icon style="font-size: 40px;">clear</mat-icon>
+  </button>
+</span>
+
+<div>
+  <br/>
+  <mat-spinner *ngIf='!isDataFetched' diameter='40'></mat-spinner>
+  <span *ngIf='!isDataFetched'>Processing...</span>
+</div>
+
+<table *ngIf='!infoTrackerId' id="summaryTable">
+  <tr>
+    <td>
+      <p class="alreadyReportedlabel">Health check status has not been self reported.
+      </p>
+    </td>
+  </tr>
+</table>
+<div fxLayout="column" *ngIf='isDataFetched && infoTrackerId'>
+  <form [formGroup]="selfReportSummaryForm">
+    <table id="summaryTable">
+      <tr>
+        <td width="25%">
+          User Name
+        </td>
+        <td>
+          {{userName}}
+        </td>
+      </tr>
+      <tr>
+        <td width="25%">
+          Form
+        </td>
+        <td>
+          {{formName}}
+        </td>
+      </tr>
+      <tr>
+        <td width="25%">
+          Track #
+        </td>
+        <td>
+          {{infoTrackerId}}
+        </td>
+      </tr>
+      <tr>
+        <td width="25%">
+          Report Date
+        </td>
+        <td>
+          {{reportDate}}
+        </td>
+      </tr>
+
+      <tr>
+        <td width="25%">
+          Message
+        </td>
+        <td>
+          <mat-label *ngIf="recordStatus == 'at-risk'" style="color:red">{{message}}</mat-label>
+          <mat-label *ngIf="recordStatus == 'cleared'" style="color:green">{{message}}</mat-label>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <div *ngFor="let qstn of questions">
+    <table id="summaryTable">
+      <tr>
+        <td class="qstnlabelfield">
+          {{qstn.question}}
+        </td>
+      </tr>
+      <tr>
+        <td class="labelfield">
+          {{qstn.answer}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div>
+  <br/>
+</div>
+<div class="button-row">
+  <div fxLayout="row">
+    <button color="accent" mat-raised-button class="text-upper" (click)="cancelSelfReport()">
+      OK
+    </button>
+    &nbsp; &nbsp;
+  </div>
+</div>

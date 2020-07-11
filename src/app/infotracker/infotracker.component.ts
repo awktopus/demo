@@ -13,6 +13,8 @@ import { DesignatedusersComponent } from './designatedusers/designatedusers.comp
 import { DomSanitizer } from '@angular/platform-browser';
 import { InfotrackerlocationsComponent } from './infotrackerlocations/infotrackerlocations.component';
 import { InfotrackerViewreportComponent } from './infotracker-viewreport/infotracker-viewreport.component';
+import { SelfreportComponent } from './selfreport/selfreport.component';
+import { StringMapWithRename } from '@angular/core/src/render3/jit/compiler_facade_interface';
 
 @Component({
   selector: 'app-infotracker',
@@ -23,11 +25,12 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
   hasForms = false;
   addForm = false;
   isITDataFetched = false;
-  orgInfoTrackForms: InfoTrackForm[]
-  displayedColumns: string[] = ['formName'];
+  orgInfoTrackForms: InfoTrackForm[];
+  formName: string;
+  displayedColumns: string[] = ['formName', 'selfReport', 'view'];
     // displayedColumns: string[] = ['formName', 'submitForm',
     // 'viewReport', 'options', 'delete'];
-
+  userRole: string;
   constructor(private service: InfoTrackerService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router,
     private uiservice: EsignuiserviceService
@@ -38,6 +41,10 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     console.log('Info track init');
+    if (this.service.auth.getUserRole()) {
+    this.userRole = this.service.auth.getUserRole().toUpperCase();
+    }
+    console.log(this.userRole);
     this.service.GetOrgInfoTrackForms(this.service.auth.getOrgUnitID(),
       this.service.auth.getUserID()).subscribe(resp => {
         console.log('Info track forms');
@@ -87,46 +94,27 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
       });
   }
 
-  EditFormOptions(templateId: string) {
-    //   console.log('editCompany:');
-    //   const dialogRef = this.dialog.open(IetCompanyComponent, {
-    //     width: '700px', height: '650px'
-    //   });
-    //   dialogRef.componentInstance.ietSettingsRef = this;
-    //   dialogRef.componentInstance.setMode('editcompany');
-    //   dialogRef.componentInstance.setEditCompanyinfo(clientCompany);
-  }
-
-  deleteCompany(companyId: string) {
-    //   console.log('delete company:' + companyId);
-    //   this.service.deleteCompany(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(), companyId).subscribe(resp => {
-    //     console.log(resp);
-    //     this.clientCompanies = resp;
-    //     this.loadCompanies();
-    //   });
-  }
-
-  submitNewForm(templateId: string) {
-    // console.log('add Receipt:');
-    // console.log(companyTypeId);
-    // console.log(companyId);
-    // const dialogRef = this.dialog.open(IetAddreceiptComponent, {
-    //   width: '700px', height: '900px'
-    // });
-    // dialogRef.componentInstance.ietSettingsRef = this;
-    // dialogRef.componentInstance.setOperation('addreceipt');
-    // dialogRef.componentInstance.setAddReceiptInfo(companyTypeId, companyId);
-  }
-
-  adminView(templateId: string) {
-    console.log('viewReport');
+  selfReport(templateId: number) {
+    console.log('self report:');
     console.log(templateId);
-    // const dialogRef = this.dialog.open(InfotrackerViewreportComponent, {
-    //   width: '1200px'
-    // });
-    // dialogRef.componentInstance.infoTrackerRef = this;
-    // dialogRef.componentInstance.setData(templateId);
-    const url = 'main/infotracker/report';
+    const dialogRef = this.dialog.open(SelfreportComponent, {
+      width: '700px', height: '950px'
+    });
+    dialogRef.componentInstance.infoTrackerRef = this;
+    dialogRef.componentInstance.setData(templateId);
+  }
+
+  view(templateId: string, formName: string) {
+    console.log('view');
+    console.log(templateId);
+    console.log(formName);
+    this.formName = formName;
+  //   const dialogRef = this.dialog.open(InfotrackerViewreportComponent, {
+  //      width: '1200px'
+  //    });
+  //  dialogRef.componentInstance.infoTrackerRef = this;
+  //  dialogRef.componentInstance.setData(templateId, formName);
+    const url = 'main/infotracker/userreport/' + templateId;
     this.router.navigateByUrl(url);
   }
 

@@ -13,13 +13,7 @@
   .appfield2 > * {
     width: 50%
   }
-  .appfield {
-    width: 30%
-  }
-  
-  .appfield > * {
-    width: 30%
-  }
+
   .trackertable {
     // margin-top: 20px;
     // margin-left:30px;
@@ -90,13 +84,4 @@
 }
 .docicon:hover {
   background-color: #ccccff;
-}
-
-#headerTable {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-#headerTable td, #headerTable th {
-  padding: 8px;
 }
