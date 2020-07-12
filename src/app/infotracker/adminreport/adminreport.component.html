@@ -1,39 +1,24 @@
 <table>
-    <tr>
-      <th>
-        <label class="heading-label">User Report Summary: </label>
-    </tr>
-  </table>
-  <div>
-    <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='40'></mat-spinner>
-    <span *ngIf='!isInfoTrackerDataFetched'>Processing...</span>
-  </div>
-  
-  <table class="trackertable4" *ngIf='isInfoTrackerDataFetched'>
-    <tr align="left">
-      <td colspan="12">
-        <button mat-stroked-button (click)="navigateInfoTracker()">
-          Back
-          <mat-icon>
-            reply</mat-icon>
-        </button>
-      </td>
-    <!-- </tr> -->
-  <!-- </table>
-  
-  <table class="trackertable" *ngIf='isInfoTrackerDataFetched'> -->
-    <!-- <tr> -->
-     
-        <td align="left">
-            <form [formGroup]="adminViewReportForm">
-          <!-- <h6> {{ templateName }} </h6> -->
-          <mat-form-field class="appfield" appearance="outline">
-            <mat-label>Start date</mat-label>
-            <input matInput [matDatepicker]="startDate" date="true" formControlName="startDateFormControl">
-            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-            <mat-datepicker #startDate></mat-datepicker>
-          </mat-form-field>
-          <!-- <mat-form-field class="casefield" appearance="outline">
+  <tr>
+    <th>
+      <label class="heading-label">Info Tracker Admin Report </label>
+  </tr>
+</table>
+<div>
+  <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='40'></mat-spinner>
+  <span *ngIf='!isInfoTrackerDataFetched'>Processing...</span>
+</div>
+
+<table class="trackertable4" *ngIf='isInfoTrackerDataFetched'>
+  <tr align="left">
+    <td colspan="12">
+      <button mat-stroked-button (click)="navigateInfoTracker()">
+        Back
+        <mat-icon>
+          reply</mat-icon>
+      </button>
+    </td>
+    <!-- <mat-form-field class="casefield" appearance="outline">
             <mat-label>Select Reported Date</mat-label>
             <mat-select [(ngModel)]="reportedDate" 
             (selectionChange)="getReportedDateInfo()">
@@ -42,52 +27,111 @@
               </mat-option>
             </mat-select>
           </mat-form-field> -->
-        <!-- </td>
-        <td align="left"> -->
-          <mat-form-field class="appfield2" appearance="outline">
-            <mat-label>End date</mat-label>
-            <input matInput [matDatepicker]="endDate" date="true" formControlName="endDateFormControl">
-            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-            <mat-datepicker #endDate></mat-datepicker>
-          </mat-form-field>
-        </form>
-        </td>
-  <!-- 
-    </tr>
-  
-    <tr> -->
-      <td align="left">
-        <mat-form-field class="appfield2" appearance="outline">
-          <mat-label>Download as</mat-label>
-          <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
-            <mat-option value="CSV">
-              EXCEL/CSV
-            </mat-option>
-          </mat-select>
+
+    <td>
+      <form [formGroup]="adminViewReportForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Start date</mat-label>
+          <input matInput [matDatepicker]="startDate" date="true" formControlName="startDateFormControl">
+          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
         </mat-form-field>
-        <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
-          <mat-icon style="font-size: 40px;">get_app</mat-icon>
-        </button>
-      </td>
-    </tr>
-  
-  </table>
-  
-  <table width=99%>
-    <tr>
-      <td align=right width='30'>
-      </td>
-      <td align=right>
-        <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(infoTrackerGridApi)'>list_alt</mat-icon>
-        <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll()" matTooltip="Expand All">swap_horiz</mat-icon>
-        <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll()" matTooltip="Refit">tune</mat-icon>
-      </td>
-    </tr>
-  </table>
-  <div style="margin-left: 1px;margin-right: 1px">
-    <ag-grid-angular #agGridInfoTracker style="width: 100%; height: 650px; font-size:11pt; " class="ag-theme-balham" [rowData]="infoTrackerGridData"
-      [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
-      [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="50" (gridReady)="onGridReady($event)"
-      [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef" (firstDataRendered)="onFirstDataRendered($event)" [defaultColDef]="defaultColDef"
-      [domLayout]="autoHeight"></ag-grid-angular>
-  </div>
+        &nbsp;
+        <mat-form-field appearance="outline">
+          <mat-label>End date</mat-label>
+          <input matInput [matDatepicker]="endDate" date="true" formControlName="endDateFormControl">
+          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+          <mat-datepicker #endDate></mat-datepicker>
+        </mat-form-field>
+        &nbsp;
+        <span *ngIf='!showRefreshSpinner'>
+          <button [disabled]="adminViewReportForm.invalid" mat-raised-button color="accent" class="text-upper" (click)="loadInfoTrackUserReport()">
+            Refresh
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </span>
+        <mat-spinner *ngIf='showRefreshSpinner' diameter='40'></mat-spinner>
+      </form>
+    </td>
+
+    <td align="left">
+      <mat-form-field class="appfield2" appearance="outline">
+        <mat-label>Download as</mat-label>
+        <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
+          <mat-option value="CSV">
+            EXCEL/CSV
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
+        <mat-icon style="font-size: 40px;">get_app</mat-icon>
+      </button>
+    </td>
+  </tr>
+
+</table>
+
+<mat-tab-group style='padding-left:15pt;padding-top:5pt' (focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
+ 
+  <mat-tab label="Ready for review">
+    <table width=99%>
+      <tr>
+        <td align=right width='30'>
+        </td>
+        <td align=right>
+          <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(infoTrackerGridApi)'>list_alt</mat-icon>
+          <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll()" matTooltip="Expand All">swap_horiz</mat-icon>
+          <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll()" matTooltip="Refit">tune</mat-icon>
+        </td>
+      </tr>
+    </table>
+    <div style="margin-left: 1px;margin-right: 1px">
+      <ag-grid-angular #agGridInfoTracker style="width: 100%; height: 650px; font-size:11pt; " class="ag-theme-balham" [rowData]="infoTrackerGridData"
+        [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+        [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="25" (gridReady)="onGridReady($event)"
+        [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef" (firstDataRendered)="onFirstDataRendered($event)" [defaultColDef]="defaultColDef"
+        [domLayout]="domLayout"></ag-grid-angular>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Unknown">
+    <table width=99%>
+      <tr>
+        <td align=right width='30'>
+        </td>
+        <td align=right>
+          <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(infoTrackerGridApi)'>list_alt</mat-icon>
+          <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll()" matTooltip="Expand All">swap_horiz</mat-icon>
+          <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll()" matTooltip="Refit">tune</mat-icon>
+        </td>
+      </tr>
+    </table>
+    <div style="margin-left: 1px;margin-right: 1px">
+      <ag-grid-angular #agGridInfoTracker style="width: 100%; height: 650px; font-size:11pt; " class="ag-theme-balham" [rowData]="infoTrackerGridData"
+        [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+        [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="25" (gridReady)="onGridReady($event)"
+        [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef" (firstDataRendered)="onFirstDataRendered($event)" [defaultColDef]="defaultColDef"
+        [domLayout]="domLayout"></ag-grid-angular>
+    </div>
+  </mat-tab>
+  <mat-tab label="Reviewed">
+    <table width=99%>
+      <tr>
+        <td align=right width='30'>
+        </td>
+        <td align=right>
+          <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(infoTrackerGridApi)'>list_alt</mat-icon>
+          <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll()" matTooltip="Expand All">swap_horiz</mat-icon>
+          <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll()" matTooltip="Refit">tune</mat-icon>
+        </td>
+      </tr>
+    </table>
+    <div style="margin-left: 1px;margin-right: 1px">
+      <ag-grid-angular #agGridInfoTracker style="width: 100%; height: 650px; font-size:11pt; " class="ag-theme-balham" [rowData]="infoTrackerGridData"
+        [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+        [frameworkComponents]="frameworkComponents" [context]="context" [pagination]="true" [paginationPageSize]="25" (gridReady)="onGridReady($event)"
+        [rowHeight]="45" [autoGroupColumnDef]="autoGroupColumnDef" (firstDataRendered)="onFirstDataRendered($event)" [defaultColDef]="defaultColDef"
+        [domLayout]="domLayout"></ag-grid-angular>
+    </div>
+  </mat-tab>
+</mat-tab-group>

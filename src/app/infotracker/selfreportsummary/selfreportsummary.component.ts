@@ -5,6 +5,7 @@ import { MatDialogRef } from '@angular/material';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { FormTemplateResource, PageQuestionResource, InfoTrackerAnswerResource, InfoTrackerResource } from '../../esign/beans/ESignCase';
 import { InfotrackerViewreportComponent } from '../infotracker-viewreport/infotracker-viewreport.component';
+import { AdminreportComponent } from '../adminreport/adminreport.component';
 
 
 @Component({
@@ -15,6 +16,7 @@ import { InfotrackerViewreportComponent } from '../infotracker-viewreport/infotr
 export class SelfreportsummaryComponent implements OnInit {
   infoTrackerRef: InfotrackerComponent;
   iTUserViewRptRef: InfotrackerViewreportComponent;
+  iTAdminViewRptRef: AdminreportComponent;
   isDataFetched = false;
   infoTrackerId: string;
   formInfo: InfoTrackerResource;

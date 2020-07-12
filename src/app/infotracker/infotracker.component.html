@@ -47,7 +47,7 @@
         </td>
 
         <td colspan="3" *ngIf='hasForms && isITDataFetched'>
-            <button mat-raised-button *ngIf ='userRole == "ADMIN" || userRole == "OWNER"' color="accent" matTooltip="Admin View" (click)="adminView()">
+            <button mat-raised-button *ngIf ='userRole == "ADMIN1" || userRole == "OWNER1"' color="accent" matTooltip="Admin View" (click)="adminDashboard()">
                 <mat-icon>person_add</mat-icon>&nbsp;ADMIN DASHBOARD
             </button>
         </td>
@@ -93,7 +93,7 @@
     <mat-cell *matCellDef="let row">
         <button mat-icon-button matTooltip="View" (click)="view(row.templateId, row.formName)">
             <mat-icon style="color:#004d00;font-weight: bold">insert_chart_outlined</mat-icon>
-            <label style="color:#004d00;;font-weight: bold">View</label></button>
+            <label style="color:#004d00;;font-weight: bold">Self-Report View</label></button>
     </mat-cell>
 </ng-container>
 

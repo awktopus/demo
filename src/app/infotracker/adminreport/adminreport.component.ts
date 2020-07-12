@@ -7,6 +7,8 @@ import { InfotrackerComponent } from '../infotracker.component';
 import { InfotrackerConfirmDialogComponent } from '../shared/infotracker-confirm-dialog/infotracker-confirm-dialog.component';
 import { InfotrackerGridcolpopupComponent } from '../shared/infotracker-gridcolpopup/infotracker-gridcolpopup.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ViewReportRendererComponent } from '../shared/ViewReportRenderer.component';
+import { SelfreportsummaryComponent } from '../selfreportsummary/selfreportsummary.component';
 
 @Component({
   selector: 'app-adminreport',
@@ -35,125 +37,60 @@ export class AdminreportComponent implements OnInit {
   reportedDate: any;
   reportedDates: string[];
   tooltipShowDelay;
-  stDate = (new Date()).toISOString();
+  startDate: any;
+  endDate: any;
+  domLayout: any;
+
   adminViewReportForm: FormGroup = new FormGroup({
-    startDateFormControl: new FormControl({value: this.stDate, disabled: true}, Validators.required),
-    endDateFormControl: new FormControl({value: this.stDate, disabled: true}, Validators.required)
+  startDateFormControl: new FormControl((new Date()).toISOString(), Validators.required),
+    endDateFormControl: new FormControl((new Date()).toISOString(), Validators.required)
   });
   constructor(private service: InfoTrackerService, public dialog: MatDialog,
     private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit() {
-
-    // console.log('Info tracker viewreport initialization...');
-    // this.route.paramMap.subscribe(para => {
-    //   this.templateId = para.get('templateId');
-    // });
-    // console.log('templateId: ' + this.templateId);
+   console.log('Admin report initialization...');
     this.gridColumnDefs = this.configColDef();
-    this.service.GetReportedDates(this.service.auth.getOrgUnitID(),
-      this.service.auth.getUserID(), this.templateId).subscribe(resp2 => {
-        this.reportedDates = resp2;
-        console.log(this.reportedDates);
-        if (resp2 && this.reportedDates.length > 0) {
-          this.reportedDate = this.reportedDates[0];
-          console.log('default fiscal year:' + this.reportedDate);
-          // let rDate: Date = new Date(this.reportedDate);
-          // console.log('date:' + rDate.getDate());
-          // console.log('month:' + rDate.getMonth());
-          // console.log('year:' + rDate.getFullYear());
-          // let month = Number(rDate.getMonth()) + 1;
-          // let tDate = rDate.getFullYear() + '-' + month + '-' + rDate.getDate();
-          // // console.log('formatted start date:');
-          // console.log(tDate);
-          // let tDate2 = rDate.getFullYear() + '-' + month + '-' + rDate.getDate();
-          // console.log('formatted end date:');
-          // console.log(tDate2);
+    this.frameworkComponents = {
+      viewHealthCheckSummaryRenderer: ViewReportRendererComponent
+    };
+    let tStartDate: Date = new Date(this.adminViewReportForm.controls['startDateFormControl'].value);
+    this.startDate = tStartDate.getMonth() + 1 + '-' + tStartDate.getDate() + '-' + tStartDate.getFullYear();
+    console.log('report start date:' + this.startDate);
 
-          let date1: Date = new Date();
-          let month = Number(date1.getMonth()) + 1;
-          let sDate1 = month + "-"  +  date1.getDate() + '-' + date1.getFullYear();
-          let sDate2 = month + "-"  +  date1.getDate() + '-' + date1.getFullYear();
-          console.log(sDate1);
-          console.log(sDate2);
-          this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
-          sDate1, "ALL",  sDate2).subscribe(uReport => {
-              if (uReport) {
-                console.log('Get all user status');
-                console.log(uReport);
-                this.infoTrackerGridData = <InfoTrackUserStatusReport[]>uReport;
-                //  if (this.infoTrackerGridData) {
-                //     this.gridColumnDefs = this.generateColumns(this.infoTrackerGridData);
-                //   }
-                this.isInfoTrackerDataFetched = true;
-              }
-            });
+    let tEndDate: Date = new Date(this.adminViewReportForm.controls['endDateFormControl'].value);
+    this.endDate = tEndDate.getMonth() + 1 + '-' + tEndDate.getDate() + '-' + tEndDate.getFullYear();
+    console.log('report end date:' + this.endDate);
+
+    this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
+      this.startDate, "ALL", this.endDate).subscribe(uReport => {
+        if (uReport) {
+          console.log('Get all user status');
+          console.log(uReport);
+          this.infoTrackerGridData = <InfoTrackUserStatusReport[]>uReport;
+          this.isInfoTrackerDataFetched = true;
         }
       });
   }
 
 
-  // generateColumns(data: any[]) {
-  //   let columnDefinitions = [];
+   loadInfoTrackUserReport() {
+    let tStartDate: Date = new Date(this.adminViewReportForm.controls['startDateFormControl'].value);
+    this.startDate = tStartDate.getMonth() + 1 + '-' + tStartDate.getDate() + '-' + tStartDate.getFullYear();
+    console.log('report start date:' + this.startDate);
 
-  //   data.map(object => {
-  //     // console.log('object');
-  //     // console.log(object);
-  //     Object
-  //       .keys(object)
-  //       .map(key => {
-  //         // console.log('key');
-  //         // console.log(key);
-  //         let headerName;
-  //         let width;
-  //         let cellStyle;
-  //         if (key === 'reportedDate') {
-  //           headerName = 'Reported Date';
-  //           width = 100;
-  //           cellStyle = this.changeRowColor;
-  //           let mappedColumn = {
-  //             headerName: headerName,
-  //             field: key,
-  //             width: width,
-  //             cellStyle: cellStyle
-  //           }
-  //           columnDefinitions.push(mappedColumn);
-  //         } else {
-  //         let mappedColumn = {
-  //           headerName: key.toUpperCase(),
-  //           field: key,
-  //         }
-  //         columnDefinitions.push(mappedColumn);
-  //       }
-  //       })
-  //   })
-  //   columnDefinitions = columnDefinitions.filter((column, index, self) =>
-  //     index === self.findIndex((colAtIndex) => (
-  //       colAtIndex.field === column.field
-  //     ))
-  //   )
-  //   return columnDefinitions;
-  // }
+    let tEndDate: Date = new Date(this.adminViewReportForm.controls['endDateFormControl'].value);
+    this.endDate = tEndDate.getMonth() + 1 + '-' + tEndDate.getDate() + '-' + tEndDate.getFullYear();
+    console.log('report end date:' + this.endDate);
 
-  loadInfoTrackUserReport() {
-    let rDate: Date = new Date(this.reportedDate);
-    console.log('date:' + rDate.getDate());
-    console.log('month:' + rDate.getMonth());
-    console.log('year:' + rDate.getFullYear());
-    let month = Number(rDate.getMonth()) + 1;
-    let tDate = rDate.getFullYear() + '-' + month + '-' + rDate.getDate();
-    console.log('formatted date:');
-    console.log(tDate);
-    let date1: Date = new Date();
-          let sDate1 = date1.getDate() + '-' + date1.getMonth() + '-' + date1.getFullYear();
-          let sDate2 = date1.getDate() + '-' + date1.getMonth() + '-' + date1.getFullYear();
-          this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
-      "ALL", sDate1, sDate2).subscribe(uReport => {
+    this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
+      this.startDate, "EMPLOYEE", this.endDate).subscribe(uReport => {
         if (uReport) {
           console.log('Get all user status');
           console.log(uReport);
           this.infoTrackerGridData = <InfoTrackUserStatusReport[]>uReport;
+          this.isInfoTrackerDataFetched = true;
         }
       });
   }
@@ -162,76 +99,36 @@ export class AdminreportComponent implements OnInit {
   configColDef() {
     const res = [
       {
-        headerName: 'Reported Date', field: 'reportedDate', width: 100,
+        headerName: 'User Name', field: 'userName', width: 50,
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Form Name', field: 'formName', width: 200,
+        headerName: 'Reported Date', field: 'reportedDate', width: 50,
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'User Name', field: 'userName', width: 200, cellStyle: this.changeRowColor,
-      },
-      {
-        headerName: 'Status', field: 'recordStatus', width: 200,
+        headerName: 'Status', field: 'recordStatus', width: 50,
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Question1', field: 'question1', width: 200,
-        cellStyle: this.changeRowColor, hide: true
-      },
-      {
-        headerName: 'Answer1', field: 'answer1', width: 200,
-        cellStyle: this.changeRowColor, hide: true
-      },
-      {
-        headerName: 'Question2', field: 'question2', width: 200,
-        cellStyle: this.changeRowColor, hide: true
-      },
-      {
-        headerName: 'Answer2', field: 'answer2', width: 200,
-        cellStyle: this.changeRowColor, hide: true
-      },
-      {
-        headerName: 'Question3', field: 'question3', width: 200,
-        cellStyle: this.changeRowColor, hide: true
-      },
-      {
-        headerName: 'Answer3', field: 'answer3', width: 200,
-        cellStyle: this.changeRowColor, hide: true
-      },
-      {
-        headerName: 'Question4', field: 'question4', width: 200,
-        cellStyle: this.changeRowColor, hide: true
-      },
-      {
-        headerName: 'Answer4', field: 'answer4', width: 200,
-        cellStyle: this.changeRowColor, hide: true
-      },
-      {
-        headerName: 'Last Critical Report Date', field: 'lastCriticalReportedDate', width: 200,
+        headerName: 'Last Critical Report Date', field: 'lastCriticalReportedDate', width: 50,
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Location', field: 'location', width: 200,
+        headerName: 'TrackerId', field: 'trackerId', width: 50,
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Final Result', field: 'finalResult',
-        cellStyle: this.changeRowColor
-      },
-      {
-        headerName: 'TrackerId', field: 'trackerId', width: 100,
-        cellStyle: this.changeRowColor
-      },
+        headerName: 'View Summary', field: 'viewSummary', width: 50,
+        cellRenderer: 'viewHealthCheckSummaryRenderer', cellStyle: this.changeRowColor
+      }
     ]
+    this.domLayout = 'autoHeight';
     this.context = { componentParent: this };
     return res;
   }
 
   changeRowColor(params) {
-    console.log('params');
-    console.log(params);
     if (params.data.recordStatus === 'at-risk') {
       return { 'background-color': '#DE2A2A', 'text-align': "left" };
     } else if (params.data.recordStatus === 'unknown') {
@@ -326,4 +223,27 @@ export class AdminreportComponent implements OnInit {
     }
   }
 
+  viewHealthCheckSummary(trackerId: string) {
+    console.log('viewHealthCheckSummary');
+    console.log(trackerId);
+    const dialogRef = this.dialog.open(SelfreportsummaryComponent, {
+      width: '700px', height: '900px'
+    });
+    dialogRef.componentInstance.iTAdminViewRptRef = this;
+    dialogRef.componentInstance.setData(trackerId);
+  }
+  public changeTab(e) {
+    console.log(e);
+    switch (e.index) {
+      case 0:
+        console.log('tab:' + e.index);
+        break;
+      case 1:
+        console.log('tab:' + e.index);
+        break;
+      case 2:
+      console.log('tab:' + e.index);
+      break;
+    }
+  }
 }

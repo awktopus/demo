@@ -95,7 +95,7 @@ export class InfotrackerViewreportComponent implements OnInit {
     console.log('report end date:' + this.endDate);
 
     this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
-      this.startDate, "EMPLOYEE", this.endDate).subscribe(uReport => {
+      this.startDate, "SELF", this.endDate).subscribe(uReport => {
         if (uReport) {
           console.log('Get all user status');
           console.log(uReport);
@@ -118,7 +118,7 @@ export class InfotrackerViewreportComponent implements OnInit {
     console.log('report end date:' + this.endDate);
 
     this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
-      this.startDate, "EMPLOYEE", this.endDate).subscribe(uReport => {
+      this.startDate, "SELF", this.endDate).subscribe(uReport => {
         if (uReport) {
           console.log('Get all user status');
           console.log(uReport);
@@ -162,8 +162,6 @@ export class InfotrackerViewreportComponent implements OnInit {
   }
 
   changeRowColor(params) {
-    console.log('params');
-    console.log(params);
     if (params.data.recordStatus === 'at-risk') {
       return { 'background-color': '#DE2A2A', 'text-align': "left" };
     } else if (params.data.recordStatus === 'unknown') {

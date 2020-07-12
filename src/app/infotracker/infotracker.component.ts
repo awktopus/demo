@@ -28,8 +28,8 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
   orgInfoTrackForms: InfoTrackForm[];
   formName: string;
   displayedColumns: string[] = ['formName', 'selfReport', 'view'];
-    // displayedColumns: string[] = ['formName', 'submitForm',
-    // 'viewReport', 'options', 'delete'];
+  // displayedColumns: string[] = ['formName', 'submitForm',
+  // 'viewReport', 'options', 'delete'];
   userRole: string;
   constructor(private service: InfoTrackerService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router,
@@ -41,9 +41,15 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     console.log('Info track init');
-    if (this.service.auth.getUserRole()) {
-    this.userRole = this.service.auth.getUserRole().toUpperCase();
+    console.log('actual role');
+    this.userRole = this.service.auth.getUserRole();
+    console.log(this.userRole);
+    if (typeof this.userRole === "undefined" || this.userRole === null) {
+      this.userRole = 'ADMIN';
+    } else {
+      this.userRole = this.userRole.toUpperCase();
     }
+    console.log('converted role');
     console.log(this.userRole);
     this.service.GetOrgInfoTrackForms(this.service.auth.getOrgUnitID(),
       this.service.auth.getUserID()).subscribe(resp => {
@@ -109,11 +115,11 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     console.log(templateId);
     console.log(formName);
     this.formName = formName;
-  //   const dialogRef = this.dialog.open(InfotrackerViewreportComponent, {
-  //      width: '1200px'
-  //    });
-  //  dialogRef.componentInstance.infoTrackerRef = this;
-  //  dialogRef.componentInstance.setData(templateId, formName);
+    //   const dialogRef = this.dialog.open(InfotrackerViewreportComponent, {
+    //      width: '1200px'
+    //    });
+    //  dialogRef.componentInstance.infoTrackerRef = this;
+    //  dialogRef.componentInstance.setData(templateId, formName);
     const url = 'main/infotracker/userreport/' + templateId;
     this.router.navigateByUrl(url);
   }
@@ -149,6 +155,13 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     dialogRef.componentInstance.setData("Add/Update Organization Location",
       this.service.auth.getOrgUnitName());
   }
+
+  adminDashboard() {
+    console.log('adminDashboard');
+    const url = 'main/infotracker/adminreport';
+    this.router.navigateByUrl(url);
+  }
+
 }
 
 @Pipe({ name: 'safe' })

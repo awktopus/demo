@@ -157,6 +157,21 @@ export class EsignAuthService {
   getUserID(): string {
     return this.esignstate.getCurrentUser().userId;
   }
+  getUserFirstName(): string {
+    return this.esignstate.getCurrentUser().firstName;
+  }
+
+  getUserLastName(): string {
+    return this.esignstate.getCurrentUser().lastName;
+  }
+
+  getUserRole(): string {
+  //  console.log('get user role inside esign auth');
+  //  console.log(this.esignstate.getCurrentOrgUser());
+    if (this.esignstate.getCurrentOrgUser()) {
+      return this.esignstate.getCurrentOrgUser().role;
+    }
+  }
 
   getESignOptions() {
     const token: any = this.getESignToken();
