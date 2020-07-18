@@ -24,7 +24,7 @@
       <input matInput #focusField readonly type="text" formControlName="userNameFormControl" [(ngModel)]="userName">
     </mat-form-field>
   </form>
-  <table *ngIf='isAlreadyReported' class="qstnTable">
+  <table *ngIf="reportStatus == 'edit'" class="qstnTable">
     <tr>
       <td>
         <p class="alreadyReportedlabel">Your previous response has not been reviewed by an admin. You may edit your answers below and submit again.
@@ -69,7 +69,7 @@
       &nbsp; &nbsp;
 
       <span *ngIf='!showSubmitSpinner'>
-        <button *ngIf='!isAlreadyReported' [disabled]="!isReadyToSubmit" mat-raised-button color="accent" class="text-upper" 
+        <button *ngIf="reportStatus == 'submit'" [disabled]="!isReadyToSubmit" mat-raised-button color="accent" class="text-upper" 
         (click)="openConfirmationDialogforSelfReport('submit')">
           Submit
           <mat-icon>check_circle_outline</mat-icon>
@@ -80,7 +80,7 @@
       &nbsp; &nbsp;
 
       <span *ngIf='!showEditSpinner'>
-        <button *ngIf='isAlreadyReported' [disabled]="!isReadyToSubmit" mat-raised-button color="accent" class="text-upper" 
+        <button *ngIf="reportStatus == 'edit'" [disabled]="!isReadyToSubmit" mat-raised-button color="accent" class="text-upper" 
         (click)="openConfirmationDialogforSelfReport('edit')()">
           Edit
           <mat-icon>edit</mat-icon>
@@ -88,17 +88,8 @@
       </span>
       <mat-spinner *ngIf='showEditSpinner' diameter='40'></mat-spinner>
       <span *ngIf='showEditSpinner'>Processing...</span>
-      &nbsp; &nbsp;
-      <!-- 
-      <span *ngIf='!showAddendumSpinner'>
-        <button *ngIf='isAlreadyReported' mat-raised-button color="accent" class="text-upper" (click)="submitAddendum()">
-          Addendum
-          <mat-icon>check_circle_outline</mat-icon>
-        </button>
-      </span>
-      <mat-spinner *ngIf='showAddendumSpinner' diameter='40'></mat-spinner>
-      <span *ngIf='showAddendumSpinner'>Processing...</span>
-      &nbsp; &nbsp; -->
+      &nbsp; &nbsp;    
+      
     </div>
   </div>
 </div>

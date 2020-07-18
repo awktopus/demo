@@ -33,6 +33,24 @@ export class InfotrackerPdfPopupComponent implements OnInit {
     });
    }
 
+  getTobeSignedPDF(orgUnitId: string, employeeId: string, reviewFormData: any): void {
+     this.service.ReviewedFormsPrePosting(orgUnitId, employeeId, reviewFormData).subscribe(resp => {
+        const file = new Blob([<any>resp], {type: 'application/pdf'});
+       const fileURL = URL.createObjectURL(file);
+       console.log('set pdf:' + fileURL);
+       this.pdfSrc = fileURL;
+    });
+   }
+
+   getInfoTrackerDocumentPDF(orgUnitId: string, employeeId: string, docId: string): void {
+    this.service.GetInfoTrackerDocumentStream(orgUnitId, employeeId, docId).subscribe(resp => {
+       const file = new Blob([<any>resp], {type: 'application/pdf'});
+      const fileURL = URL.createObjectURL(file);
+      console.log('set pdf:' + fileURL);
+      this.pdfSrc = fileURL;
+   });
+  }
+
    closeme(): void {
     this.dialogRef.close();
   }

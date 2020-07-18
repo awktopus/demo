@@ -47,7 +47,7 @@
         </td>
 
         <td colspan="3" *ngIf='hasForms && isITDataFetched'>
-            <button mat-raised-button *ngIf ='userRole == "ADMIN1" || userRole == "OWNER1"' color="accent" matTooltip="Admin View" (click)="adminDashboard()">
+            <button mat-raised-button *ngIf ='userRole == "ADMIN" || userRole == "OWNER"' color="accent" matTooltip="Admin View" (click)="adminDashboard()">
                 <mat-icon>person_add</mat-icon>&nbsp;ADMIN DASHBOARD
             </button>
         </td>
@@ -97,23 +97,23 @@
     </mat-cell>
 </ng-container>
 
-    <!-- <ng-container matColumnDef="options">
-    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"> Options </mat-header-cell>
+<ng-container matColumnDef="reportForOthers">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"></mat-header-cell>
     <mat-cell *matCellDef="let row">
-        <button mat-icon-button matTooltip="Options" (click)="EditFormOptions(row)">
-            <mat-icon>settings</mat-icon>
-        </button>
+        <button mat-icon-button matTooltip="Report for Others" (click)="reportForOthers(row.templateId)">
+            <mat-icon style="color:#004d00;font-weight: bold">attach_file</mat-icon>
+            <label style="color:#004d00;;font-weight: bold">Report-for-Others</label></button>
+    </mat-cell>
+</ng-container> 
+
+<ng-container matColumnDef="reportForOthersView">
+    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"></mat-header-cell>
+    <mat-cell *matCellDef="let row">
+        <button mat-icon-button matTooltip="View" (click)="reportForOthersView(row.templateId, row.formName)">
+            <mat-icon style="color:#004d00;font-weight: bold">insert_chart_outlined</mat-icon>
+            <label style="color:#004d00;;font-weight: bold">Report-for-Others View</label></button>
     </mat-cell>
 </ng-container>
-
-<ng-container matColumnDef="delete">
-    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999">Delete </mat-header-cell>
-    <mat-cell *matCellDef="let row">
-        <button mat-icon-button matTooltip="Delete Company" (click)="openConfirmationDialogforCompanyDeletion(row.templateId)">
-            <mat-icon>delete</mat-icon>
-        </button>
-    </mat-cell>
-</ng-container> -->
 
     <mat-header-row *matHeaderRowDef="displayedColumns" style="background-color: white"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

@@ -25,10 +25,11 @@ export class SelfreportComponent implements OnInit {
   reportDate: any;
   selAnswers: InfoTrackerAnswerResource[];
   isReadyToSubmit = false;
-  isAlreadyReported = false;
   showEditSpinner = false;
   showAddendumSpinner = false;
   existingTrackerId: string;
+  reportStatus: string;
+
   selfReportForm: FormGroup = new FormGroup({
     reportDateFormControl: new FormControl((new Date()).toISOString(), Validators.required),
     userNameFormControl: new FormControl(''),
@@ -42,22 +43,6 @@ export class SelfreportComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    console.log('self report init');
-    let date1: Date = new Date();
-    let month = Number(date1.getMonth()) + 1;
-    let rDate1 = month + "-"  +  date1.getDate() + '-' + date1.getFullYear();
-    console.log('todate');
-    console.log(rDate1);
-    console.log('Self report init');
-    this.service.GetUserCurrentFormStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
-    this.service.auth.getUserID(), this.templateId, rDate1).subscribe(resp2 => {
-      console.log('today user status');
-      console.log(resp2);
-      if (resp2 && resp2.trackerId !== null) {
-        this.isAlreadyReported = true;
-        this.existingTrackerId = resp2.trackerId;
-      }
       this.service.GetFormTemplateConfig(this.service.auth.getOrgUnitID(),
         this.service.auth.getUserID(), this.templateId).subscribe(resp => {
           this.formTemplate = <FormTemplateResource>resp;
@@ -79,11 +64,12 @@ export class SelfreportComponent implements OnInit {
       console.log('user id');
       console.log(this.userId);
       this.selfReportForm.controls['userNameFormControl'].setValue(this.userName);
-    });
   }
 
-  setData(templateId: number) {
+  setData(templateId: number, reportStatus: string, existingTrackerId: string) {
     this.templateId = templateId;
+    this.reportStatus = reportStatus;
+    this.existingTrackerId = existingTrackerId;
   }
 
   selectAnswer(questionId: any, answerOption: any) {
@@ -176,7 +162,7 @@ export class SelfreportComponent implements OnInit {
             width: '700px', height: '900px'
           });
           dialogRef.componentInstance.infoTrackerRef = this.infoTrackerRef;
-          dialogRef.componentInstance.setData(resp.trackerId);
+          dialogRef.componentInstance.setData(resp.trackerId, '');
         }
       });
   }
@@ -230,7 +216,7 @@ export class SelfreportComponent implements OnInit {
             width: '700px', height: '900px'
           });
           dialogRef.componentInstance.infoTrackerRef = this.infoTrackerRef;
-          dialogRef.componentInstance.setData(resp.trackerId);
+          dialogRef.componentInstance.setData(resp.trackerId, 'selfreported');
         }
       });
   }

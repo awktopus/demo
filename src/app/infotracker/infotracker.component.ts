@@ -15,6 +15,8 @@ import { InfotrackerlocationsComponent } from './infotrackerlocations/infotracke
 import { InfotrackerViewreportComponent } from './infotracker-viewreport/infotracker-viewreport.component';
 import { SelfreportComponent } from './selfreport/selfreport.component';
 import { StringMapWithRename } from '@angular/core/src/render3/jit/compiler_facade_interface';
+import { ReportforothersComponent } from './reportforothers/reportforothers.component';
+import { SelfreportsummaryComponent } from './selfreportsummary/selfreportsummary.component';
 
 @Component({
   selector: 'app-infotracker',
@@ -27,7 +29,8 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
   isITDataFetched = false;
   orgInfoTrackForms: InfoTrackForm[];
   formName: string;
-  displayedColumns: string[] = ['formName', 'selfReport', 'view'];
+  displayedColumns: string[] = ['formName', 'selfReport', 'view',
+    'reportForOthers', 'reportForOthersView'];
   // displayedColumns: string[] = ['formName', 'submitForm',
   // 'viewReport', 'options', 'delete'];
   userRole: string;
@@ -103,11 +106,39 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
   selfReport(templateId: number) {
     console.log('self report:');
     console.log(templateId);
-    const dialogRef = this.dialog.open(SelfreportComponent, {
-      width: '700px', height: '950px'
-    });
-    dialogRef.componentInstance.infoTrackerRef = this;
-    dialogRef.componentInstance.setData(templateId);
+
+    console.log('self report init');
+    let date1: Date = new Date();
+    let month = Number(date1.getMonth()) + 1;
+    let rDate1 = month + "-" + date1.getDate() + '-' + date1.getFullYear();
+    console.log('todate');
+    console.log(rDate1);
+    console.log('Self report init');
+    this.service.GetUserCurrentFormStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
+      this.service.auth.getUserID(), templateId, rDate1).subscribe(resp2 => {
+        console.log('today user status');
+        console.log(resp2);
+        if (resp2 && resp2.trackerId === null) {
+          const dialogRef = this.dialog.open(SelfreportComponent, {
+            width: '700px', height: '950px'
+          });
+          dialogRef.componentInstance.infoTrackerRef = this;
+          dialogRef.componentInstance.setData(templateId, 'submit', null);
+        } else if ((resp2 && resp2.trackerId !== null) && (resp2.reviewStatus === null)) {
+          const dialogRef = this.dialog.open(SelfreportComponent, {
+            width: '700px', height: '950px'
+          });
+          dialogRef.componentInstance.infoTrackerRef = this;
+          dialogRef.componentInstance.setData(templateId, 'edit', resp2.trackerId);
+        } else if ((resp2 && resp2.trackerId !== null) && (resp2.reviewStatus !== null)) {
+          console.log('addendum');
+          const dialogRef = this.dialog.open(SelfreportsummaryComponent, {
+            width: '700px', height: '900px'
+          });
+          dialogRef.componentInstance.infoTrackerRef = this;
+          dialogRef.componentInstance.setData(resp2.trackerId, 'addendum');
+        }
+      });
   }
 
   view(templateId: string, formName: string) {
@@ -122,19 +153,6 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     //  dialogRef.componentInstance.setData(templateId, formName);
     const url = 'main/infotracker/userreport/' + templateId;
     this.router.navigateByUrl(url);
-  }
-
-  openConfirmationDialogforCompanyDeletion(templateId: string): void {
-    //   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-    //     width: '450px', height: '150px',
-    //     data: "Do you confirm the deletion of this company?"
-    //   });
-    //   dialogRef.afterClosed().subscribe(result => {
-    //     if (result) {
-    //       console.log('Yes clicked');
-    //        this.deleteCompany(cmpnyId);
-    //     }
-    //   });
   }
 
   manageDesignatedUsers() {
@@ -162,6 +180,24 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(url);
   }
 
+  reportForOthers(templateId: number) {
+    console.log('self report:');
+    console.log(templateId);
+    const dialogRef = this.dialog.open(ReportforothersComponent, {
+      width: '700px', height: '950px'
+    });
+    dialogRef.componentInstance.infoTrackerRef = this;
+    dialogRef.componentInstance.setData(templateId);
+  }
+
+  reportForOthersView(templateId: string, formName: string) {
+    console.log('view');
+    console.log(templateId);
+    console.log(formName);
+    this.formName = formName;
+    const url = 'main/infotracker/othersreport/' + templateId;
+    this.router.navigateByUrl(url);
+  }
 }
 
 @Pipe({ name: 'safe' })

@@ -439,13 +439,13 @@ export class ELCompanyStaff {
 }
 
 export class InfoTrackLocation {
-orgUnitId: string;
-locSeqNo: number;
-geoLocation: string;
-address: string;
-zipCode: string;
-phone: string;
-isActive: string;
+  orgUnitId: string;
+  locSeqNo: number;
+  geoLocation: string;
+  address: string;
+  zipCode: string;
+  phone: string;
+  isActive: string;
 }
 export class InfoTrackUserStatusReport {
   reportedDate: string;
@@ -479,10 +479,10 @@ export class PageQuestionResource {
 }
 
 export class FormPageResource {
-pageId: number;
-pageName: string;
-description: string;
-questions?: PageQuestionResource[];
+  pageId: number;
+  pageName: string;
+  description: string;
+  questions?: PageQuestionResource[];
 }
 
 export class FormTemplateResource {
@@ -554,7 +554,97 @@ export class InfoTrackerResource {
   quarantineCountDown: number;
   lastCriticalReportedDate: string;
   notes?: string[];
-  answers?:  InfoTrackerAnswerResource[];
+  answers?: InfoTrackerAnswerResource[];
   attachments?: InfoTrackerDocumentResource[];
   reviewStatus: InfoTrackerReviewStatusResource;
+}
+export class AgreementAuditResource {
+  auditTrailId: number;
+  ipAddress: string;
+  browser: string;
+  isAgreementAccepted: string;
+}
+
+export class InfoTrackerReviewFormResource {
+  templateId: number;
+  trackerId: string;
+  formName: string;
+  reportedDate: string;
+  userId: string;
+  userName: string;
+  userType: string;
+  recordStatus: string;
+  displayPriority: number;
+  isReviewed: string;
+  reviewTrackerId: string;
+  reviewedBy: string;
+  reviewerEmpId: string;
+  reviewedDateTime: string;
+  lastCriticalReportedDate: string;
+}
+
+export class InfoTrackerReviewHistoryResource {
+  reviewTrackerId: string;
+  docId: string;
+  reviewedBy: string;
+  reviewedDateTime: string;
+  status: string;
+  auditTrailId: number;
+  ammendments?: InfoTrackerAmmendmentResource[];
+}
+
+export class ReviewTracker {
+  templateId: number;
+  formName: string;
+  trackerId: string;
+  userName: string;
+  recordStatus: string;
+  displayPriority: number;
+}
+
+export class InfoTrackerReviewFormSubmitResource {
+  orgUnitId: string;
+  orgUnitName: string;
+  reportedDate: string;
+  reviewTrackers: ReviewTracker[];
+  reviewedBy: string;
+  reviewedDateTime: string;
+  signatureDataUrl: string;
+  notes: string;
+  auditTrailId: number;
+  location: string;
+  actionType: string;
+}
+
+export class ReviewerNotes {
+  reviewedBy: string;
+  notes: string;
+}
+
+export class ReviewReportResource {
+reviewTrackerId: string;
+docId: string;
+reviewedBy: string;
+reviewedDateTime: string;
+status: string;
+auditTrailId: string;
+addendumCount: number;
+addendums: InfoTrackerAmmendmentResource[];
+}
+
+export class InfoTrackerReviewReportResource {
+  headerRowDesc: string;
+  reviewReports: ReviewReportResource[];
+}
+
+export class InfoTrackerUser {
+  orgUnitId: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  emailId: string;
+  phone: string;
+  badgeId: string;
+  role: string;
+  userType: string;
 }

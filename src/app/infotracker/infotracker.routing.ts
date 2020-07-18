@@ -5,6 +5,7 @@ import { ESignGuard } from '../esign/service/esignauth';
 import { InfotrackerComponent } from './infotracker.component';
 import { InfotrackerViewreportComponent } from './infotracker-viewreport/infotracker-viewreport.component';
 import { AdminreportComponent } from './adminreport/adminreport.component';
+import { ReportforothersummaryComponent } from './reportforothersummary/reportforothersummary.component';
 
 export const InfoTrackerRoutes: Routes = [
     {
@@ -30,6 +31,11 @@ export const InfoTrackerRoutes: Routes = [
         path: 'adminreport',
         canActivate: [AuthGuard, ESignGuard],
         component: AdminreportComponent
+    },
+    {
+        path: 'othersreport/:templateId',
+        canActivate: [AuthGuard, ESignGuard],
+        component: ReportforothersummaryComponent
     }
 ];
 

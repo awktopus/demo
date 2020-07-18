@@ -27,6 +27,14 @@ import { SelfreportComponent } from './selfreport/selfreport.component';
 import { AdminreportComponent } from './adminreport/adminreport.component';
 import { SelfreportsummaryComponent } from './selfreportsummary/selfreportsummary.component';
 import { ViewReportRendererComponent } from './shared/ViewReportRenderer.component';
+import { InfotrackeragreementComponent } from './shared/infotrackeragreement/infotrackeragreement.component';
+import { InfotrackerEsignatureComponent } from './infotracker-esignature/infotracker-esignature.component';
+import { SignaturePadModule } from 'angular2-signaturepad';
+import { ReportforothersComponent } from './reportforothers/reportforothers.component';
+import { ReportforothersummaryComponent } from './reportforothersummary/reportforothersummary.component';
+import { AddupdateuserComponent } from './reportforothers/addupdateuser/addupdateuser.component';
+import { ViewDocumentRendererComponent } from './shared/ViewDocumentRenderer.component';
+import { AdminreviewsummaryComponent } from './adminreviewsummary/adminreviewsummary.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -42,8 +50,9 @@ import { ViewReportRendererComponent } from './shared/ViewReportRenderer.compone
     SharedBaseModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    SignaturePadModule,
     MatProgressSpinnerModule, MatDialogModule, CurrencyMaskModule,
-    AgGridModule.withComponents([ViewReportRendererComponent])
+    AgGridModule.withComponents([ViewReportRendererComponent, ViewDocumentRendererComponent])
    ],
   declarations: [InfotrackerComponent, InfoTrackSafePipe,
      FormassignmentComponent, InfotrackeroptionsComponent,
@@ -53,13 +62,17 @@ import { ViewReportRendererComponent } from './shared/ViewReportRenderer.compone
      InfotrackerConfirmDialogComponent,
      InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent,
      InfotrackerGridcolpopupComponent, SelfreportComponent, AdminreportComponent,
-     SelfreportsummaryComponent, ViewReportRendererComponent
+     SelfreportsummaryComponent, ViewReportRendererComponent, ViewDocumentRendererComponent,
+     InfotrackeragreementComponent, InfotrackerEsignatureComponent,
+     ReportforothersComponent, ReportforothersummaryComponent, AddupdateuserComponent, AdminreviewsummaryComponent
   ],
   entryComponents: [FormassignmentComponent, InfotrackerPdfPopupComponent,
     DesignatedusersComponent, InfotrackerlocationsComponent,
     AddupdatelocationComponent, InfotrackerConfirmDialogComponent,
     InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent,
-    SelfreportComponent, AdminreportComponent, SelfreportsummaryComponent
+    SelfreportComponent, AdminreportComponent, SelfreportsummaryComponent,
+    InfotrackeragreementComponent, InfotrackerEsignatureComponent,
+    ReportforothersComponent, AddupdateuserComponent, AdminreviewsummaryComponent
     ],
   providers: [
   ESignGuard,

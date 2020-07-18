@@ -1,0 +1,77 @@
+<span>
+  <label class="heading-label">{{ title }}</label>
+  <button mat-icon-button color="warn" style="margin-left:90%" (click)="cancelPopup()">
+    <mat-icon style="font-size: 40px;">clear</mat-icon>
+  </button>
+</span>
+<div fxLayout="column">
+  <div class="invgridColumn">
+    <form [formGroup]="userForm">
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input required #focusField matInput [(ngModel)]="firstName" formControlName="firstNameFormControl">
+        <mat-error *ngIf="userForm.get('firstNameFormControl').hasError('required')">
+          First name is required
+        </mat-error>
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input required #focusField matInput [(ngModel)]="lastName" formControlName="lastNameFormControl">
+        <mat-error *ngIf="userForm.get('lastNameFormControl').hasError('required')">
+          Last name is required
+        </mat-error>
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input #focusField matInput [(ngModel)]="phone" formControlName="phoneFormControl">
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Email Id</mat-label>
+        <input #focusField matInput [(ngModel)]="emailId" formControlName="emailIdFormControl">
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Badge Id</mat-label>
+        <input #focusField matInput [(ngModel)]="badgeId" formControlName="badgeIdFormControl">
+      </mat-form-field>
+      <br/>
+
+    </form>
+    <div>
+      <br/>
+    </div>
+    <div class="button-row">
+      <div fxLayout="row">
+        <button mat-raised-button class="text-upper" (click)="cancelPopup()">
+          Cancel
+        </button>
+        &nbsp; &nbsp;
+
+        <span *ngIf='!showEditUserspinner'>
+          <button *ngIf='operation =="edituser"' [disabled]="userForm.invalid" mat-raised-button color="accent" class="text-upper"
+            (click)="addUpdateUser()">
+            Update
+            <mat-icon>loop</mat-icon>
+          </button>
+        </span>
+        <mat-spinner *ngIf='showEditUserspinner' diameter='40'></mat-spinner>
+        <span *ngIf='showEditUserspinner'>Processing...</span>
+
+        &nbsp; &nbsp;
+
+        <span *ngIf='!showAddUserspinner'>
+          <button *ngIf='operation !="edituser"' [disabled]="userForm.invalid" mat-raised-button color="accent" class="text-upper"
+            (click)="addUpdateUser()">
+            SAVE
+            <mat-icon>play_circle_outline</mat-icon>
+          </button>
+        </span>
+        <mat-spinner *ngIf='showAddUserspinner' diameter='40'></mat-spinner>
+        <span *ngIf='showAddUserspinner'>Processing...</span>
+      </div>
+    </div>
+  </div>
+</div>

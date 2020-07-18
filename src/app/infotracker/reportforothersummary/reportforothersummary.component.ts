@@ -10,11 +10,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ViewReportRendererComponent } from '../shared/ViewReportRenderer.component';
 import { SelfreportsummaryComponent } from '../selfreportsummary/selfreportsummary.component';
 @Component({
-  selector: 'app-infotracker-viewreport',
-  templateUrl: './infotracker-viewreport.component.html',
-  styleUrls: ['./infotracker-viewreport.component.scss']
+  selector: 'app-reportforothersummary',
+  templateUrl: './reportforothersummary.component.html',
+  styleUrls: ['./reportforothersummary.component.scss']
 })
-export class InfotrackerViewreportComponent implements OnInit {
+export class ReportforothersummaryComponent implements OnInit {
   infoTrackerRef: InfotrackerComponent;
   infoTrackerGridData: InfoTrackUserStatusReport[];
   infoTrackerGridApi: any = {};
@@ -53,7 +53,7 @@ export class InfotrackerViewreportComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Info tracker viewreport initialization...');
+    console.log('Info tracker report for other initialization...');
     // console.log('form Name:' + this.formName);
     this.route.paramMap.subscribe(para => {
       this.templateId = para.get('templateId');
@@ -95,7 +95,7 @@ export class InfotrackerViewreportComponent implements OnInit {
     console.log('report end date:' + this.endDate);
 
     this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
-      this.startDate, "SELF", this.endDate).subscribe(uReport => {
+      this.startDate, "ALL", this.endDate).subscribe(uReport => {
         if (uReport) {
           console.log('Get all user status');
           console.log(uReport);
@@ -258,7 +258,7 @@ export class InfotrackerViewreportComponent implements OnInit {
     const dialogRef = this.dialog.open(SelfreportsummaryComponent, {
       width: '700px', height: '900px'
     });
-    dialogRef.componentInstance.iTUserViewRptRef = this;
+    dialogRef.componentInstance.iTReportForOtherViewRptRef = this;
     dialogRef.componentInstance.setData(trackerId, 'selfreported');
   }
 

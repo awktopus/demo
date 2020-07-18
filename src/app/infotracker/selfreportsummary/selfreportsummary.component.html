@@ -19,6 +19,17 @@
     </td>
   </tr>
 </table>
+
+<table *ngIf="reportStatus == 'addendum'" class="qstnTable">
+    <tr>
+      <td>
+        <p class="alreadyReportedlabel">Your previous response has been reviewed and approved by admin.
+          You may not be able to edit your answers but you can add addendum.
+        </p>
+      </td>
+    </tr>
+  </table>
+
 <div fxLayout="column" *ngIf='isDataFetched && infoTrackerId'>
   <form [formGroup]="selfReportSummaryForm">
     <table id="summaryTable">
@@ -92,5 +103,15 @@
       OK
     </button>
     &nbsp; &nbsp;
+    <span *ngIf='!showAddendumSpinner'>
+        <button *ngIf="reportStatus == 'addendum'" mat-raised-button color="accent" class="text-upper" 
+        (click)="submitAddendum()">
+          Addendum
+          <mat-icon>check_circle_outline</mat-icon>
+        </button>
+      </span>
+      <mat-spinner *ngIf='showAddendumSpinner' diameter='40'></mat-spinner>
+      <span *ngIf='showAddendumSpinner'>Processing...</span>
+      &nbsp; &nbsp; 
   </div>
 </div>

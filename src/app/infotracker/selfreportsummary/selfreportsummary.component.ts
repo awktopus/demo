@@ -6,6 +6,7 @@ import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@ang
 import { FormTemplateResource, PageQuestionResource, InfoTrackerAnswerResource, InfoTrackerResource } from '../../esign/beans/ESignCase';
 import { InfotrackerViewreportComponent } from '../infotracker-viewreport/infotracker-viewreport.component';
 import { AdminreportComponent } from '../adminreport/adminreport.component';
+import { ReportforothersummaryComponent } from '../reportforothersummary/reportforothersummary.component';
 
 
 @Component({
@@ -16,6 +17,7 @@ import { AdminreportComponent } from '../adminreport/adminreport.component';
 export class SelfreportsummaryComponent implements OnInit {
   infoTrackerRef: InfotrackerComponent;
   iTUserViewRptRef: InfotrackerViewreportComponent;
+  iTReportForOtherViewRptRef: ReportforothersummaryComponent;
   iTAdminViewRptRef: AdminreportComponent;
   isDataFetched = false;
   infoTrackerId: string;
@@ -26,6 +28,7 @@ export class SelfreportsummaryComponent implements OnInit {
   reportDate: string;
   message: string;
   recordStatus: string;
+  reportStatus: string;
   selfReportSummaryForm: FormGroup = new FormGroup({
      formNameControl: new FormControl(),
      trackerIdControl: new FormControl(),
@@ -67,8 +70,9 @@ export class SelfreportsummaryComponent implements OnInit {
     }
   }
 
-  setData(infoTrackerId: string) {
+  setData(infoTrackerId: string, reportStatus: string) {
     this.infoTrackerId = infoTrackerId;
+    this.reportStatus = reportStatus;
   }
 
   cancelSelfReport() {
