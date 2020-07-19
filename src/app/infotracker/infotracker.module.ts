@@ -35,6 +35,7 @@ import { ReportforothersummaryComponent } from './reportforothersummary/reportfo
 import { AddupdateuserComponent } from './reportforothers/addupdateuser/addupdateuser.component';
 import { ViewDocumentRendererComponent } from './shared/ViewDocumentRenderer.component';
 import { AdminreviewsummaryComponent } from './adminreviewsummary/adminreviewsummary.component';
+import { QuestionnaireAddendumComponent } from './questionnaire-addendum/questionnaire-addendum.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -64,7 +65,8 @@ import { AdminreviewsummaryComponent } from './adminreviewsummary/adminreviewsum
      InfotrackerGridcolpopupComponent, SelfreportComponent, AdminreportComponent,
      SelfreportsummaryComponent, ViewReportRendererComponent, ViewDocumentRendererComponent,
      InfotrackeragreementComponent, InfotrackerEsignatureComponent,
-     ReportforothersComponent, ReportforothersummaryComponent, AddupdateuserComponent, AdminreviewsummaryComponent
+     ReportforothersComponent, ReportforothersummaryComponent, AddupdateuserComponent,
+     AdminreviewsummaryComponent, QuestionnaireAddendumComponent
   ],
   entryComponents: [FormassignmentComponent, InfotrackerPdfPopupComponent,
     DesignatedusersComponent, InfotrackerlocationsComponent,
@@ -72,7 +74,8 @@ import { AdminreviewsummaryComponent } from './adminreviewsummary/adminreviewsum
     InfotrackerViewreportComponent, InfotrackerGridcolpopupComponent,
     SelfreportComponent, AdminreportComponent, SelfreportsummaryComponent,
     InfotrackeragreementComponent, InfotrackerEsignatureComponent,
-    ReportforothersComponent, AddupdateuserComponent, AdminreviewsummaryComponent
+    ReportforothersComponent, AddupdateuserComponent, AdminreviewsummaryComponent,
+    QuestionnaireAddendumComponent
     ],
   providers: [
   ESignGuard,

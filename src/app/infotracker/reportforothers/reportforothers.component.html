@@ -12,28 +12,21 @@
 </div>
 
 <div fxLayout="column" *ngIf='isDataFetched'>
-
   <form [formGroup]="selfReportForm">
     <mat-form-field class="casefield" appearance="outline">
       <mat-label>Report Date</mat-label>
       <input required matInput [matDatepicker]="startDate" readonly date="true" formControlName="reportDateFormControl">
     </mat-form-field>
 
-    <!-- <mat-form-field class="casefield" appearance="outline">
-            <mat-label>Add For</mat-label>
-            <input matInput #focusField type="text" formControlName="userNameFormControl" [(ngModel)]="userName">
-          </mat-form-field> -->
     <mat-form-field class="casefield" appearance="outline">
-      <mat-chip-list #infoTrackUserchips placeholder="Select User">
+      <input matInput #focusField type="text" placeholder="Select User" [matChipInputFor]="infoTrackUserchips"  [matAutocomplete]="autoInfoTrackUser"
+        formControlName="userNameFormControl" (focusout)="infoTrackUserfocusOut()" (keydown.Tab)="infoTrackUserOnKey($event)">
+      
+      <mat-chip-list #infoTrackUserchips>
         <mat-chip *ngIf="infoTrackUser" [selectable]="selectable" [removable]="removable" (removed)="removeInfoTrackUser()">
           {{infoTrackUser.firstName}} {{infoTrackUser.lastName}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
-        <input #focusField placeholder="Select User" [matChipInputFor]="infoTrackUserchips" matInput [matAutocomplete]="autoInfoTrackUser"
-          formControlName="userNameFormControl">
-        <mat-error *ngIf="selfReportForm.get('userNameFormControl').hasError('required')">
-          User name is required
-        </mat-error>
         <mat-autocomplete #autoInfoTrackUser="matAutocomplete">
           <mat-option *ngFor="let cc of infoTrackUsers" [value]="cc.userId" (onSelectionChange)="addInfoTrackUser($event)">
             {{ cc.firstName }} {{ cc.lastName }}
@@ -42,58 +35,157 @@
       </mat-chip-list>
     </mat-form-field>
 
+    
+    <!-- <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Vendor/Customer Name</mat-label>
+        <input matInput #focusField type="text" [matChipInputFor]="vendorchips" [matAutocomplete]="autovendor" formControlName="vendorNameFormControl"
+          [(ngModel)]="vendorNameInput" required>
+        <mat-error *ngIf="receiptForm.get('vendorNameFormControl').hasError('required')">
+          Vendor name is required
+        </mat-error>
+        <mat-chip-list #vendorchips>
+          <mat-chip *ngIf="vendorName" [selectable]="selectable" [removable]="removable" (removed)="removeVendor()">
+            {{ vendorName }}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <mat-autocomplete #autovendor="matAutocomplete">
+            <mat-option *ngFor="let vendor of vendors" [value]="vendor" (onSelectionChange)="selectVendor($event)">
+              {{ vendor }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-chip-list>
+      </mat-form-field> -->
+
     &nbsp;&nbsp;
     <button mat-raised-button color="accent" class="text-upper" (click)="addUpdateUser()">
       <mat-icon>person_add</mat-icon>
     </button>
-
   </form>
-  <table *ngIf="reportStatus == 'edit'" class="qstnTable">
-    <tr>
-      <td>
-        <p class="alreadyReportedlabel">The user's previous response has not been reviewed by an admin. You may edit user's answers below and submit again.
-        </p>
-      </td>
-    </tr>
-  </table>
 
-  <table *ngIf="reportStatus == 'addendum'" class="qstnTable">
-    <tr>
-      <td>
-        <p class="alreadyReportedlabel">User's previous response has been reviewed and approved by admin. You may not be able to edit user's answers.
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <div *ngFor="let qstn of questions">
-    <table *ngIf="reportStatus != 'addendum'" class="qstnTable">
-      <tr>
-        <td class="qstnlabelfield">
-          {{qstn.question}}
-        </td>
-      </tr>
+  <div *ngIf="reportStatus != 'addendum' && infoTrackUser">
+    <table *ngIf="reportStatus == 'edit'" class="qstnTable">
       <tr>
         <td>
-          <button class='NoButton' (click)="selectAnswer(qstn.questionId,'no')" mat-stroked-button>
-            <mat-icon *ngIf='qstn.noSelected'>check</mat-icon>&nbsp;&nbsp;No</button>
+          <p class="alreadyReportedlabel">The user's previous response has not been reviewed by an admin. You may edit user's answers below and submit again.
+          </p>
         </td>
-      </tr>
-      <tr>
-        <td>
-          <button class='YesButton' (click)="selectAnswer(qstn.questionId,'yes')" mat-stroked-button>
-            <mat-icon *ngIf='qstn.yesSelected'>check</mat-icon>&nbsp;&nbsp;Yes</button>
-        </td>
-      </tr>
-      <tr>
-        <br/>
       </tr>
     </table>
+    <div *ngFor="let qstn of questions">
+      <table class="qstnTable">
+        <tr>
+          <td class="qstnlabelfield">
+            {{qstn.question}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button class='NoButton' (click)="selectAnswer(qstn.questionId,'no')" mat-stroked-button>
+              <mat-icon *ngIf='qstn.noSelected'>check</mat-icon>&nbsp;&nbsp;No</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button class='YesButton' (click)="selectAnswer(qstn.questionId,'yes')" mat-stroked-button>
+              <mat-icon *ngIf='qstn.yesSelected'>check</mat-icon>&nbsp;&nbsp;Yes</button>
+          </td>
+        </tr>
+        <tr>
+          <br/>
+        </tr>
+      </table>
 
+    </div>
+    <div>
+      <br/>
+    </div>
   </div>
 
-  <div>
-    <br/>
+  <div fxLayout="column" *ngIf="reportStatus == 'addendum' && infoTrackUser">
+    <table class="qstnTable">
+      <tr>
+        <td>
+          <p class="alreadyReportedlabel">User's previous response has been reviewed and approved by admin. You may not be able to edit user's answers but
+            you can add addendum.
+          </p>
+        </td>
+      </tr>
+    </table>
+    <table id="summaryTable">
+      <tr>
+        <td width="25%">
+          User Name
+        </td>
+        <td>
+          {{userName}}
+        </td>
+      </tr>
+      <tr>
+        <td width="25%">
+          Form
+        </td>
+        <td>
+          {{formName}}
+        </td>
+      </tr>
+      <tr>
+        <td width="25%">
+          Track #
+        </td>
+        <td>
+          {{existingTrackerId}}
+        </td>
+      </tr>
+      <tr>
+        <td width="25%">
+          Report Date
+        </td>
+        <td>
+          {{reportDate}}
+        </td>
+      </tr>
+
+      <tr>
+        <td width="25%">
+          Message
+        </td>
+        <td>
+          <mat-label *ngIf="recordStatus == 'at-risk'" style="color:red">{{message}}</mat-label>
+          <mat-label *ngIf="recordStatus == 'cleared'" style="color:green">{{message}}</mat-label>
+        </td>
+      </tr>
+    </table>
+    <div *ngFor="let qstn of extAnsers">
+      <table id="summaryTable">
+        <tr>
+          <td class="qstnlabelfield">
+            {{qstn.question}}
+          </td>
+        </tr>
+        <tr>
+          <td class="labelfield">
+            {{qstn.answer}}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div fxLayout="column" *ngIf="splitAddendumLines && splitAddendumLines.length > 0">
+      <table id="summaryTable">
+        <tr>
+          <td colspan=2>
+            <u style="font-weight: bold"> Addendum:</u>
+            <ul>
+              <li *ngFor="let line of splitAddendumLines">
+                {{line}}
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <br/>
+    </div>
   </div>
 
   <div class="button-row">
@@ -125,7 +217,7 @@
       <span *ngIf='showEditSpinner'>Processing...</span>
       &nbsp; &nbsp;
 
-      <!-- <span *ngIf='!showAddendumSpinner'>
+      <span *ngIf='!showAddendumSpinner'>
         <button *ngIf="reportStatus == 'addendum'" mat-raised-button color="accent" class="text-upper" (click)="submitAddendum()">
           Addendum
           <mat-icon>check_circle_outline</mat-icon>
@@ -133,7 +225,7 @@
       </span>
       <mat-spinner *ngIf='showAddendumSpinner' diameter='40'></mat-spinner>
       <span *ngIf='showAddendumSpinner'>Processing...</span>
-      &nbsp; &nbsp; -->
+      &nbsp; &nbsp;
     </div>
   </div>
 </div>

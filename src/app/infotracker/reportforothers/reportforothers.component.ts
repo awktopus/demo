@@ -1,19 +1,20 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { InfotrackerComponent } from '../infotracker.component';
 import { InfoTrackerService } from '../service/infotracker.service';
-import { MatDialogRef, MatDialog, MatOptionSelectionChange } from '@angular/material';
+import { MatDialogRef, MatDialog, MatOptionSelectionChange, MatSelect } from '@angular/material';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray, ValidatorFn, AbstractControl } from '@angular/forms';
 import { FormTemplateResource, PageQuestionResource, InfoTrackerAnswerResource, InfoTrackerUser } from '../../esign/beans/ESignCase';
 import { SelfreportsummaryComponent } from '../selfreportsummary/selfreportsummary.component';
 import { InfotrackerConfirmDialogComponent } from '../shared/infotracker-confirm-dialog/infotracker-confirm-dialog.component';
 import { AddupdateuserComponent } from './addupdateuser/addupdateuser.component';
+import { QuestionnaireAddendumComponent } from '../questionnaire-addendum/questionnaire-addendum.component';
 
 @Component({
   selector: 'app-reportforothers',
   templateUrl: './reportforothers.component.html',
   styleUrls: ['./reportforothers.component.scss']
 })
-export class ReportforothersComponent implements OnInit {
+export class ReportforothersComponent implements OnInit, AfterViewInit {
 
   infoTrackerRef: InfotrackerComponent;
   templateId: number;
@@ -37,9 +38,16 @@ export class ReportforothersComponent implements OnInit {
   removable = true;
   user_var = '';
   reportStatus: string;
+  splitAddendumLines: string[];
+
+  formName: string;
+  message: string;
+  recordStatus: string;
+  extAnsers: InfoTrackerAnswerResource[];
+
   selfReportForm: FormGroup = new FormGroup({
     reportDateFormControl: new FormControl((new Date()).toISOString(), Validators.required),
-    userNameFormControl: new FormControl('', Validators.required),
+    userNameFormControl: new FormControl(''),
   });
 
   @ViewChild('focusField') focusField: ElementRef;
@@ -49,79 +57,68 @@ export class ReportforothersComponent implements OnInit {
   }
 
   ngOnInit() {
-
     console.log('self report init');
-    let date1: Date = new Date();
-    let month = Number(date1.getMonth()) + 1;
-    let rDate1 = month + "-" + date1.getDate() + '-' + date1.getFullYear();
-    console.log('todate');
-    console.log(rDate1);
-    console.log('Self report init');
-
+    // let date1: Date = new Date();
+    // let month = Number(date1.getMonth()) + 1;
+    // let rDate1 = month + "-" + date1.getDate() + '-' + date1.getFullYear();
+    // console.log('todate');
+    // console.log(rDate1);
     this.service.GetInfoTrackerUsers(this.service.auth.getOrgUnitID(),
-    this.service.auth.getUserID()).subscribe(uResp => {
-      this.infoTrackUsers = [];
-      this.infoTrackUsers = <InfoTrackerUser[]>uResp;
-      this.cacheInfoTrackUsers = <InfoTrackerUser[]>uResp;
-      console.log('info track users');
-      console.log(this.infoTrackUsers);
-
-    });
+      this.service.auth.getUserID()).subscribe(uResp => {
+        this.infoTrackUsers = [];
+        this.infoTrackUsers = <InfoTrackerUser[]>uResp;
+        this.cacheInfoTrackUsers = <InfoTrackerUser[]>uResp;
+        console.log('info track users');
+        console.log(this.infoTrackUsers);
+      });
 
     this.service.GetFormTemplateConfig(this.service.auth.getOrgUnitID(),
-    this.service.auth.getUserID(), this.templateId).subscribe(resp => {
-      this.formTemplate = <FormTemplateResource>resp;
-      console.log('GetFormTemplateConfig response');
-      console.log(this.formTemplate);
-      if (this.formTemplate) {
-        if (this.formTemplate.pages) {
-          this.questions = this.formTemplate.pages[0].questions;
-          console.log(this.questions);
+      this.service.auth.getUserID(), this.templateId).subscribe(resp => {
+        this.formTemplate = <FormTemplateResource>resp;
+        console.log('GetFormTemplateConfig response');
+        console.log(this.formTemplate);
+        if (this.formTemplate) {
+          if (this.formTemplate.pages) {
+            this.questions = this.formTemplate.pages[0].questions;
+            console.log(this.questions);
+          }
         }
-      }
-      this.isDataFetched = true;
-      this.focusField.nativeElement.focus();
+        this.isDataFetched = true;
+       // this.focusField.nativeElement.focus();
     });
 
-    // this.userName = this.service.auth.getUserFirstName() + " " + this.service.auth.getUserLastName();
-    // this.userId = this.service.auth.getUserID();
-    // console.log('user name');
-    // console.log(this.userName);
-    // console.log('user id');
-    // console.log(this.userId);
-    // this.selfReportForm.controls['userNameFormControl'].setValue(this.userName);
+    this.selfReportForm.controls['userNameFormControl'].valueChanges.subscribe(searchToken => {
+      console.log('userNameFormControl search called');
+      console.log("searchToken:" + searchToken.trim());
+      console.log(this.user_var);
+      console.log(typeof searchToken);
+      console.log(this.infoTrackUser);
+      if (this.infoTrackUser) {
+        return;
+      }
+      if (searchToken && typeof searchToken !== 'object') {
+        if (this.user_var === searchToken.trim()) {
+          return;
+        } else {
+          console.log('userNameFormControl searching...');
+          this.infoTrackUsers = [];
+          console.log('cache infoTrackUsers');
+          console.log(this.cacheInfoTrackUsers);
+          this.cacheInfoTrackUsers.forEach(cc => {
+            if ((cc.firstName && cc.firstName.toLowerCase().search(searchToken.toLowerCase()) !== -1) ||
+              (cc.lastName && cc.lastName.toLowerCase().search(searchToken.toLowerCase()) !== -1)) {
+              this.infoTrackUsers.push(cc);
+            }
+          });
+          console.log(this.infoTrackUsers);
+        }
+      } else {
+        this.infoTrackUsers = <InfoTrackerUser[]>this.cacheInfoTrackUsers;
+      }
+    });
+  }
 
-
-
-    // this.selfReportForm.controls['userNameFormControl'].valueChanges.subscribe(searchToken => {
-    //   console.log('userNameFormControl search called');
-    //   console.log("searchToken:" + searchToken.trim());
-    //   console.log(this.user_var);
-    //   console.log(typeof searchToken);
-    //   console.log(this.infoTrackUser);
-    //   if (this.infoTrackUser) {
-    //     return;
-    //   }
-    //   if (searchToken && typeof searchToken !== 'object') {
-    //     if (this.user_var === searchToken.trim()) {
-    //       return;
-    //     } else {
-    //       console.log('userNameFormControl searching...');
-    //       this.infoTrackUsers = [];
-    //       console.log('cache infoTrackUsers');
-    //       console.log(this.cacheInfoTrackUsers);
-    //       this.cacheInfoTrackUsers.forEach(cc => {
-    //         if ((cc.firstName && cc.firstName.toLowerCase().search(searchToken.toLowerCase()) !== -1) ||
-    //           (cc.lastName && cc.lastName.toLowerCase().search(searchToken.toLowerCase()) !== -1)) {
-    //           this.infoTrackUsers.push(cc);
-    //         }
-    //       });
-    //       console.log(this.infoTrackUsers);
-    //     }
-    //   } else {
-    //     this.infoTrackUsers = <InfoTrackerUser[]>this.cacheInfoTrackUsers;
-    //   }
-    // });
+  ngAfterViewInit() {
   }
 
   addInfoTrackUser(event: MatOptionSelectionChange): void {
@@ -140,20 +137,30 @@ export class ReportforothersComponent implements OnInit {
       console.log('todate');
       console.log(rDate1);
       this.service.GetUserCurrentFormStatus(this.service.auth.getOrgUnitID(),
-      this.service.auth.getUserID(),
-      this.infoTrackUser.userId, this.templateId, rDate1).subscribe(resp2 => {
-        console.log('today user status');
-        console.log(resp2);
-        if (resp2 && resp2.trackerId === null) {
-          this.reportStatus = 'submit';
-        } else if ((resp2 && resp2.trackerId !== null) && (resp2.reviewStatus === null)) {
-          this.reportStatus = 'edit';
-          this.existingTrackerId = resp2.existingTrackerId;
-        } else if ((resp2 && resp2.trackerId !== null) && (resp2.reviewStatus !== null)) {
-          this.reportStatus = 'addendum';
-          this.existingTrackerId = resp2.existingTrackerId;
-        }
-      });
+        this.service.auth.getUserID(),
+        this.infoTrackUser.userId, this.templateId, rDate1).subscribe(resp2 => {
+          console.log('today user status');
+          console.log(resp2);
+          if (resp2 && resp2.trackerId === null) {
+            this.reportStatus = 'submit';
+          } else if ((resp2 && resp2.trackerId !== null) && (resp2.reviewStatus === null)) {
+            this.reportStatus = 'edit';
+            this.existingTrackerId = resp2.trackerId;
+          } else if ((resp2 && resp2.trackerId !== null) && (resp2.reviewStatus !== null)) {
+            this.reportStatus = 'addendum';
+
+            this.existingTrackerId = resp2.trackerId;
+            this.formName = resp2.templateName;
+            this.reportDate = resp2.reportedDate;
+            this.userName = resp2.empFirstName + " " + resp2.empLastName;
+            this.message = resp2.finalResult;
+            this.recordStatus = resp2.recordStatus;
+            this.splitAddendumLines = resp2.notes;
+            if (resp2.answers) {
+              this.extAnsers = resp2.answers;
+            }
+          }
+        });
       this.selfReportForm.controls['userNameFormControl'].setValue('');
     }
   }
@@ -162,9 +169,9 @@ export class ReportforothersComponent implements OnInit {
     console.log('removeInfoTrackUser');
     this.infoTrackUser = null;
     this.reportStatus = null;
-  //  this.selfReportForm.controls['userNameFormControl'].setValue('');
+    this.selfReportForm.controls['userNameFormControl'].setValue('');
     this.infoTrackUsers = <InfoTrackerUser[]>this.cacheInfoTrackUsers;
-  //  this.infoTrackUserValidator();
+    //  this.infoTrackUserValidator();
   }
 
   infoTrackUserValidator(): ValidatorFn {
@@ -182,26 +189,26 @@ export class ReportforothersComponent implements OnInit {
 
   infoTrackUserfocusOut() {
     console.log('infoTrackUserfocusOut event');
-  //  this.infoTrackUserValidator();
-  //  this.infoTrackUserInput.nativeElement.value = "";
+    //  this.infoTrackUserValidator();
+    this.focusField.nativeElement.value = "";
   }
 
   infoTrackUserOnKey(event) {
     console.log('infoTrackUserOnKey event');
-  //  this.infoTrackUserInput.nativeElement.value = "";
-  //  this.selfReportForm.controls['userNameFormControl'].setValue('');
-  //  this.infoTrackUserValidator();
+    this.focusField.nativeElement.value = "";
+    this.selfReportForm.controls['userNameFormControl'].setValue('');
+    //  this.infoTrackUserValidator();
   }
 
   loadUsers() {
     this.service.GetInfoTrackerUsers(this.service.auth.getOrgUnitID(),
-    this.service.auth.getUserID()).subscribe(uResp => {
-      this.infoTrackUsers = [];
-      this.infoTrackUsers = <InfoTrackerUser[]>uResp;
-      this.cacheInfoTrackUsers = <InfoTrackerUser[]>uResp;
-      console.log('info track users');
-      console.log(this.infoTrackUsers);
-    });
+      this.service.auth.getUserID()).subscribe(uResp => {
+        this.infoTrackUsers = [];
+        this.infoTrackUsers = <InfoTrackerUser[]>uResp;
+        this.cacheInfoTrackUsers = <InfoTrackerUser[]>uResp;
+        console.log('info track users');
+        console.log(this.infoTrackUsers);
+      });
   }
 
   setData(templateId: number) {
@@ -358,7 +365,18 @@ export class ReportforothersComponent implements OnInit {
   }
 
   submitAddendum() {
+    console.log('submitAddendum');
+    console.log(this.existingTrackerId);
+    const dialogRef = this.dialog.open(QuestionnaireAddendumComponent, {
+      width: '500px', height: '250px'
+    });
+    dialogRef.componentInstance.reportForOthersRef = this;
+    dialogRef.componentInstance.setData(this.existingTrackerId, this.userName,
+      'reportforothers');
+  }
 
+  questionnaireAddendum(splitAddendumLines: string[]) {
+    this.splitAddendumLines = splitAddendumLines;
   }
 
   addUpdateUser() {

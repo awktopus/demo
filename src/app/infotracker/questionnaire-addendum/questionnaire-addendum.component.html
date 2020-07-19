@@ -1,0 +1,31 @@
+<div class="container">
+    <table id='summaryTable'>
+      <tr><td>Tracker #:</td><td><font color='#336699'>{{trackerId}}</font></td></tr>
+      <!-- <tr><td colspan=2>
+         <u> Notes:</u>
+         <ul>
+             <li *ngFor ="let line of splitLines">
+               {{line}}
+             </li>
+           </ul>
+      </td></tr> -->
+      <tr>
+        <td colspan=2>
+           <mat-form-field class="textareafd">
+               <textarea matInput placeholder="Add addendum note" [(ngModel)]="newnotes"></textarea>
+             </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+           <span>
+               <button mat-raised-button color="accent" class="text-upper" (click)='questionnaireAddendum()'>Submit</button>
+              &nbsp; <button mat-raised-button color="accent" class="text-upper" (click)="closePopup()">Cancel</button>  
+           </span>
+        </td>
+      </tr>
+    </table>
+    
+   </div>
+   

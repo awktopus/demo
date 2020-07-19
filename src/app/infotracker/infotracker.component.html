@@ -84,34 +84,35 @@
     <mat-cell *matCellDef="let row">
         <button mat-icon-button matTooltip="Self Report" (click)="selfReport(row.templateId)">
             <mat-icon style="color:#004d00;font-weight: bold">attach_file</mat-icon>
-            <label style="color:#004d00;;font-weight: bold">Self-Report</label></button>
+            <label style="color:#004d00;;font-weight: bold">Self Report</label></button>
     </mat-cell>
 </ng-container> 
 
-<ng-container matColumnDef="view">
+
+<ng-container matColumnDef="assistedReport">
+    <mat-header-cell *matHeaderCellDef [hidden]='userRole != "ADMIN" && userRole != "OWNER"' style="font-size: 20px;font-weight: bold;color:#999"></mat-header-cell>
+    <mat-cell *matCellDef="let row" [hidden]='userRole != "ADMIN" && userRole != "OWNER"'>
+        <button mat-icon-button matTooltip="Report for Others" (click)="reportForOthers(row.templateId)">
+            <mat-icon style="color:#004d00;font-weight: bold">people</mat-icon>
+            <label style="color:#004d00;;font-weight: bold">Assisted Report</label></button>
+    </mat-cell>
+</ng-container> 
+
+<!-- <ng-container matColumnDef="view">
     <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"></mat-header-cell>
     <mat-cell *matCellDef="let row">
         <button mat-icon-button matTooltip="View" (click)="view(row.templateId, row.formName)">
             <mat-icon style="color:#004d00;font-weight: bold">insert_chart_outlined</mat-icon>
             <label style="color:#004d00;;font-weight: bold">Self-Report View</label></button>
     </mat-cell>
-</ng-container>
+</ng-container> -->
 
-<ng-container matColumnDef="reportForOthers">
+<ng-container matColumnDef="view">
     <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"></mat-header-cell>
     <mat-cell *matCellDef="let row">
-        <button mat-icon-button matTooltip="Report for Others" (click)="reportForOthers(row.templateId)">
-            <mat-icon style="color:#004d00;font-weight: bold">attach_file</mat-icon>
-            <label style="color:#004d00;;font-weight: bold">Report-for-Others</label></button>
-    </mat-cell>
-</ng-container> 
-
-<ng-container matColumnDef="reportForOthersView">
-    <mat-header-cell *matHeaderCellDef style="font-size: 20px;font-weight: bold;color:#999"></mat-header-cell>
-    <mat-cell *matCellDef="let row">
-        <button mat-icon-button matTooltip="View" (click)="reportForOthersView(row.templateId, row.formName)">
-            <mat-icon style="color:#004d00;font-weight: bold">insert_chart_outlined</mat-icon>
-            <label style="color:#004d00;;font-weight: bold">Report-for-Others View</label></button>
+        <button mat-icon-button matTooltip="View" (click)="view(row.templateId, row.formName)">
+            <mat-icon style="color:#004d00;font-weight: bold">collections</mat-icon>
+            <label style="color:#004d00;;font-weight: bold">View</label></button>
     </mat-cell>
 </ng-container>
 

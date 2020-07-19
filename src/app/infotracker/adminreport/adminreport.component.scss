@@ -64,11 +64,10 @@
 }
 
 .trackertable4 {
-  margin-top: 20px;
+  margin-top: 5px;
   padding-bottom: 15px;
   padding-right:15px;
-  max-width: 1200px;
-  width: 100%;
+  width: 90%;
 }
 
 .ag-theme-balham .sick-days-warning {
@@ -85,3 +84,16 @@
 .docicon:hover {
   background-color: #ccccff;
 }
+
+#summaryTable {
+  border-collapse: collapse;
+}
+
+#summaryTable td, #summaryTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#summaryTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#summaryTable tr:hover {background-color: #ddd;}

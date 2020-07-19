@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { InfotrackerComponent } from '../infotracker.component';
 import { InfoTrackerService } from '../service/infotracker.service';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { FormTemplateResource, PageQuestionResource, InfoTrackerAnswerResource, InfoTrackerResource } from '../../esign/beans/ESignCase';
 import { InfotrackerViewreportComponent } from '../infotracker-viewreport/infotracker-viewreport.component';
 import { AdminreportComponent } from '../adminreport/adminreport.component';
 import { ReportforothersummaryComponent } from '../reportforothersummary/reportforothersummary.component';
+import { QuestionnaireAddendumComponent } from '../questionnaire-addendum/questionnaire-addendum.component';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class SelfreportsummaryComponent implements OnInit {
   message: string;
   recordStatus: string;
   reportStatus: string;
+  splitAddendumLines: string[];
   selfReportSummaryForm: FormGroup = new FormGroup({
      formNameControl: new FormControl(),
      trackerIdControl: new FormControl(),
@@ -39,7 +41,7 @@ export class SelfreportsummaryComponent implements OnInit {
 
   @ViewChild('focusField') focusField: ElementRef;
 
-  constructor(private service: InfoTrackerService,
+  constructor(private service: InfoTrackerService, public dialog: MatDialog,
     public dialogRef: MatDialogRef<SelfreportsummaryComponent>) {
     dialogRef.disableClose = true;
   }
@@ -61,6 +63,7 @@ export class SelfreportsummaryComponent implements OnInit {
           this.userName = this.formInfo.firstName + " " + this.formInfo.lastName;
           this.message = this.formInfo.finalResult;
           this.recordStatus = this.formInfo.recordStatus;
+          this.splitAddendumLines = this.formInfo.notes;
         if (this.formInfo.answers) {
           this.questions = this.formInfo.answers;
         }
@@ -73,6 +76,20 @@ export class SelfreportsummaryComponent implements OnInit {
   setData(infoTrackerId: string, reportStatus: string) {
     this.infoTrackerId = infoTrackerId;
     this.reportStatus = reportStatus;
+  }
+
+  submitAddendum() {
+    console.log('submitAddendum');
+    console.log(this.infoTrackerId);
+    const dialogRef = this.dialog.open(QuestionnaireAddendumComponent, {
+      width: '500px', height: '250px'
+    });
+    dialogRef.componentInstance.selfReportSummaryRef = this;
+    dialogRef.componentInstance.setData(this.infoTrackerId, this.userName, 'selfreport');
+  }
+
+  questionnaireAddendum(splitAddendumLines: string[]) {
+       this.splitAddendumLines = splitAddendumLines;
   }
 
   cancelSelfReport() {

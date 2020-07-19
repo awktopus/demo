@@ -1,6 +1,11 @@
 <table *ngIf='isInfoTrackerDataFetched'>
   <tr>
-    <th>
+    <th>   
+    <button mat-stroked-button (click)="navigateInfoTracker()">
+        Back
+        <mat-icon>
+          reply</mat-icon>
+      </button> &nbsp;&nbsp;
       <label class="heading-label">User Report Summary: {{formName}}</label>
     </th>
   </tr>
@@ -9,18 +14,11 @@
   <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='40'></mat-spinner>
   <span *ngIf='!isInfoTrackerDataFetched'>Processing...</span>
 </div>
+
 <div fxLayout="row">
 <table id="headerTable" *ngIf='isInfoTrackerDataFetched'>
   <tr>
-    <td>
-      <button mat-stroked-button (click)="navigateInfoTracker()">
-        Back
-        <mat-icon>
-          reply</mat-icon>
-      </button>
-    </td>
-
-    <td>
+     <td width=50%>
       <form [formGroup]="userViewReportForm">
         <mat-form-field appearance="outline">
           <mat-label>Start date</mat-label>
@@ -45,32 +43,25 @@
         <mat-spinner *ngIf='showRefreshSpinner' diameter='40'></mat-spinner>
       </form>
     </td>
-    <td>
-      <mat-form-field class="appfield2" appearance="outline">
-        <mat-label>Download as</mat-label>
-        <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
-          <mat-option value="CSV">
-            EXCEL/CSV
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
-        <mat-icon style="font-size: 40px;">get_app</mat-icon>
-      </button>
-    </td>
-  </tr>
-</table></div>
-<table width=99%>
-  <tr>
-    <td align=right width='30'>
-    </td>
     <td align=right>
       <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(infoTrackerGridApi)'>list_alt</mat-icon>
       <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll()" matTooltip="Expand All">swap_horiz</mat-icon>
       <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll()" matTooltip="Refit">tune</mat-icon>
+      <mat-form-field appearance="outline">
+          <mat-label>Download as</mat-label>
+          <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
+            <mat-option value="CSV">
+              EXCEL/CSV
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
+          <mat-icon style="font-size: 40px;">get_app</mat-icon>
+        </button>
     </td>
   </tr>
 </table>
+</div>
 <div style="margin-left: 1px;margin-right: 1px">
   <ag-grid-angular #agGridInfoTracker style="width: 100%;  font-size:11pt; " class="ag-theme-balham" [rowData]="infoTrackerGridData"
     [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"

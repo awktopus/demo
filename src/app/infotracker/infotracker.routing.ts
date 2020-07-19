@@ -33,7 +33,7 @@ export const InfoTrackerRoutes: Routes = [
         component: AdminreportComponent
     },
     {
-        path: 'othersreport/:templateId',
+        path: 'view/:templateId',
         canActivate: [AuthGuard, ESignGuard],
         component: ReportforothersummaryComponent
     }

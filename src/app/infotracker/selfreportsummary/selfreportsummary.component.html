@@ -21,14 +21,14 @@
 </table>
 
 <table *ngIf="reportStatus == 'addendum'" class="qstnTable">
-    <tr>
-      <td>
-        <p class="alreadyReportedlabel">Your previous response has been reviewed and approved by admin.
-          You may not be able to edit your answers but you can add addendum.
-        </p>
-      </td>
-    </tr>
-  </table>
+  <tr>
+    <td>
+      <p class="alreadyReportedlabel">Your previous response has been reviewed and approved by admin. You may not be able to edit your answers but you can
+        add addendum.
+      </p>
+    </td>
+  </tr>
+</table>
 
 <div fxLayout="column" *ngIf='isDataFetched && infoTrackerId'>
   <form [formGroup]="selfReportSummaryForm">
@@ -104,14 +104,30 @@
     </button>
     &nbsp; &nbsp;
     <span *ngIf='!showAddendumSpinner'>
-        <button *ngIf="reportStatus == 'addendum'" mat-raised-button color="accent" class="text-upper" 
-        (click)="submitAddendum()">
-          Addendum
-          <mat-icon>check_circle_outline</mat-icon>
-        </button>
-      </span>
-      <mat-spinner *ngIf='showAddendumSpinner' diameter='40'></mat-spinner>
-      <span *ngIf='showAddendumSpinner'>Processing...</span>
-      &nbsp; &nbsp; 
+      <button *ngIf="reportStatus == 'addendum'" mat-raised-button color="accent" class="text-upper" (click)="submitAddendum()">
+        Addendum
+        <mat-icon>check_circle_outline</mat-icon>
+      </button>
+    </span>
+    <mat-spinner *ngIf='showAddendumSpinner' diameter='40'></mat-spinner>
+    <span *ngIf='showAddendumSpinner'>Processing...</span>
+    &nbsp; &nbsp;
   </div>
 </div>
+<div>
+  <br/>
+</div>
+  <div fxLayout="column" *ngIf="splitAddendumLines && splitAddendumLines.length > 0" >
+    <table id="summaryTable">
+      <tr>
+        <td colspan=2>
+          <u style="font-weight: bold"> Addendum:</u>
+          <ul>
+            <li *ngFor="let line of splitAddendumLines">
+              {{line}}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </div>

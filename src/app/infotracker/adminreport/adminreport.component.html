@@ -10,6 +10,7 @@
     </th>
   </tr>
 </table>
+
 <div>
   <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='40'></mat-spinner>
   <span *ngIf='!isInfoTrackerDataFetched'>Processing...</span>
@@ -38,14 +39,13 @@
 </table> -->
 
 <mat-tab-group style='padding-left:15pt;padding-top:5pt' (focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
-
   <mat-tab>
     <ng-template mat-tab-label>
       Ready for review ({{readyToReviewCount}})
     </ng-template>
-    <table class="trackertable4" *ngIf='isInfoTrackerDataFetched'>
-      <tr align="left">
-        <td>
+    <table width=99%  *ngIf='isInfoTrackerDataFetched'>
+      <tr>
+        <td> 
           <form [formGroup]="readyToReviewForm">
             <mat-form-field appearance="outline">
               <mat-label>Report date</mat-label>
@@ -53,50 +53,57 @@
               <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
               <mat-datepicker #startDate></mat-datepicker>
             </mat-form-field>
-            &nbsp;
-            <!-- <mat-form-field appearance="outline">
-              <mat-label>End date</mat-label>
-              <input matInput [matDatepicker]="endDate" date="true" formControlName="endDateFormControl">
-              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-              <mat-datepicker #endDate></mat-datepicker>
-            </mat-form-field>
-            &nbsp;
-            <span *ngIf='!showRefreshSpinner'>
-              <button [disabled]="adminViewReportForm.invalid" mat-raised-button color="accent" class="text-upper" (click)="loadInfoTrackUserReport()">
-                Refresh
-                <mat-icon>refresh</mat-icon>
-              </button>
-            </span>
-            <mat-spinner *ngIf='showRefreshSpinner' diameter='40'></mat-spinner> -->
           </form>
+          <table *ngIf="curReviewStatus && reviewStatus == 'addendum'" id='summaryTable'>
+            <tr>
+              <td>Review Tracker #:</td>
+              <td>
+                <font color='#336699'>{{curReviewStatus.reviewTrackerId}}</font>
+               &nbsp; &nbsp;
+                    <button mat-icon-button matTooltip="Preview" (click)="viewReviewedDocument()">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+              </td>
+            </tr>
+            <tr>
+              <td>Reviewed Date Time:</td>
+              <td>
+                <font color='#336699'>{{curReviewStatus.reviewedDateTime}}</font>
+              </td>
+            </tr>
+            <tr>
+              <td>Reviewed By: </td>
+              <td>
+                <font color='#336699'>{{curReviewStatus.reviewedBy}}</font>
+              </td>
+            </tr>
+             <tr>
+              <td>Addendum Count: </td>
+              <td>
+                <font color='#336699'>{{addendumCount}}</font>
+              </td>
+            </tr>          
+          </table>
         </td>
-        <td align="left">
-          <mat-form-field class="appfield2" appearance="outline">
-            <mat-label>Download as</mat-label>
-            <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
-              <mat-option value="CSV">
-                EXCEL/CSV
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
-            <mat-icon style="font-size: 40px;">get_app</mat-icon>
-          </button>
-        </td>
+        <td align=right >
+            <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(iTReadyForReviewGridApi)'>list_alt</mat-icon>
+            <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('ReadyForReview')" matTooltip="Expand All">swap_horiz</mat-icon>
+            <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('ReadyForReview')" matTooltip="Refit">tune</mat-icon>
+            <mat-form-field appearance="outline">
+              <mat-label>Download as</mat-label>
+              <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
+                <mat-option value="CSV">
+                  EXCEL/CSV
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
+              <mat-icon style="font-size: 40px;">get_app</mat-icon>
+            </button>
+          </td>
       </tr>
     </table>
-
-    <table width=99%>
-      <tr>
-        <td align=right width='30'>
-        </td>
-        <td align=right>
-          <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(iTReadyForReviewGridApi)'>list_alt</mat-icon>
-          <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('ReadyForReview')" matTooltip="Expand All">swap_horiz</mat-icon>
-          <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('ReadyForReview')" matTooltip="Refit">tune</mat-icon>
-        </td>
-      </tr>
-    </table>
+ <div><br/></div>
     <div style="margin-left: 1px;margin-right: 1px">
       <ag-grid-angular #agReadyForReviewGridInfoTracker style="width: 100%; font-size:11pt; " class="ag-theme-balham" [rowData]="iTReadyForReviewGridData"
         [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="readyForReviewGridColumnDefs" [enableColResize]="true"
@@ -132,9 +139,9 @@
     <ng-template mat-tab-label>
       Unknown ({{unknownCount}})
     </ng-template>
-    <table class="trackertable4" *ngIf='isInfoTrackerDataFetched'>
-      <tr align="left">
-        <td>
+    <table width=99% *ngIf='isInfoTrackerDataFetched'>
+      <tr>
+        <td width=50%>
           <form [formGroup]="unknownForm">
             <mat-form-field appearance="outline">
               <mat-label>Report date</mat-label>
@@ -145,32 +152,25 @@
             &nbsp;
           </form>
         </td>
-        <td align="left">
-          <mat-form-field class="appfield2" appearance="outline">
-            <mat-label>Download as</mat-label>
-            <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
-              <mat-option value="CSV">
-                EXCEL/CSV
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
-            <mat-icon style="font-size: 40px;">get_app</mat-icon>
-          </button>
-        </td>
-      </tr>
-    </table>
-    <table width=99%>
-      <tr>
-        <td align=right width='30'>
-        </td>
         <td align=right>
-          <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(iTUnknownGridApi)'>list_alt</mat-icon>
-          <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('Unknown')" matTooltip="Expand All">swap_horiz</mat-icon>
-          <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('Unknown')" matTooltip="Refit">tune</mat-icon>
-        </td>
-      </tr>
+            <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(iTUnknownGridApi)'>list_alt</mat-icon>
+            <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('Unknown')" matTooltip="Expand All">swap_horiz</mat-icon>
+            <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('Unknown')" matTooltip="Refit">tune</mat-icon>
+            <mat-form-field appearance="outline">
+                <mat-label>Download as</mat-label>
+                <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
+                  <mat-option value="CSV">
+                    EXCEL/CSV
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
+                <mat-icon style="font-size: 40px;">get_app</mat-icon>
+              </button>
+          </td>
+       </tr>
     </table>
+ 
     <div style="margin-left: 1px;margin-right: 1px">
       <ag-grid-angular #agUnknownGridInfoTracker style="width: 100%; font-size:11pt; " class="ag-theme-balham" [rowData]="iTUnknownGridData"
         [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="unknownGridColumnDefs" [enableColResize]="true"
@@ -228,12 +228,21 @@
         </table> -->
     <table width=99%>
       <tr>
-        <td align=right width='30'>
-        </td>
-        <td align=right>
+       <td align=right>
           <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(iTReviewedGridApi)'>list_alt</mat-icon>
           <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('Reviewed')" matTooltip="Expand All">swap_horiz</mat-icon>
           <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('Reviewed')" matTooltip="Refit">tune</mat-icon>
+          <mat-form-field appearance="outline">
+              <mat-label>Download as</mat-label>
+              <mat-select [(value)]="downloadAs" (selectionChange)="onDownloadAsSelection()">
+                <mat-option value="CSV">
+                  EXCEL/CSV
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button matTooltip="Download" (click)="downloadReport()">
+              <mat-icon style="font-size: 40px;">get_app</mat-icon>
+            </button>
         </td>
       </tr>
     </table>

@@ -42,6 +42,8 @@ export class ReportforothersummaryComponent implements OnInit {
   startDate: any;
   endDate: any;
   domLayout: any;
+  userRole: string;
+  userType: string;
   userViewReportForm: FormGroup = new FormGroup({
     // startDateFormControl: new FormControl({value: this.stDate, disabled: true}, Validators.required),
     // endDateFormControl: new FormControl({value: this.stDate, disabled: true}, Validators.required)
@@ -54,6 +56,21 @@ export class ReportforothersummaryComponent implements OnInit {
 
   ngOnInit() {
     console.log('Info tracker report for other initialization...');
+    console.log('actual role');
+    this.userRole = this.service.auth.getUserRole();
+    console.log(this.userRole);
+    if (typeof this.userRole === "undefined" || this.userRole === null) {
+     // this.userRole = 'ADMIN';
+    } else {
+      this.userRole = this.userRole.toUpperCase();
+    }
+    console.log('converted role');
+    console.log(this.userRole);
+    if (this.userRole === 'ADMIN' || this.userRole === 'OWNER') {
+      this.userType = "ALL";
+    } else {
+      this.userType = "SELF";
+    }
     // console.log('form Name:' + this.formName);
     this.route.paramMap.subscribe(para => {
       this.templateId = para.get('templateId');
@@ -95,7 +112,7 @@ export class ReportforothersummaryComponent implements OnInit {
     console.log('report end date:' + this.endDate);
 
     this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
-      this.startDate, "ALL", this.endDate).subscribe(uReport => {
+      this.startDate, this.userType, this.endDate).subscribe(uReport => {
         if (uReport) {
           console.log('Get all user status');
           console.log(uReport);
@@ -118,7 +135,7 @@ export class ReportforothersummaryComponent implements OnInit {
     console.log('report end date:' + this.endDate);
 
     this.service.GetAllUserStatus(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
-      this.startDate, "SELF", this.endDate).subscribe(uReport => {
+      this.startDate, this.userType, this.endDate).subscribe(uReport => {
         if (uReport) {
           console.log('Get all user status');
           console.log(uReport);

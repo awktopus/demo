@@ -29,8 +29,8 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
   isITDataFetched = false;
   orgInfoTrackForms: InfoTrackForm[];
   formName: string;
-  displayedColumns: string[] = ['formName', 'selfReport', 'view',
-    'reportForOthers', 'reportForOthersView'];
+  displayedColumns: string[] = ['formName', 'selfReport', 'assistedReport',
+    'view'];
   // displayedColumns: string[] = ['formName', 'submitForm',
   // 'viewReport', 'options', 'delete'];
   userRole: string;
@@ -48,7 +48,7 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     this.userRole = this.service.auth.getUserRole();
     console.log(this.userRole);
     if (typeof this.userRole === "undefined" || this.userRole === null) {
-      this.userRole = 'ADMIN';
+    //  this.userRole = 'ADMIN';
     } else {
       this.userRole = this.userRole.toUpperCase();
     }
@@ -141,19 +141,19 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
       });
   }
 
-  view(templateId: string, formName: string) {
-    console.log('view');
-    console.log(templateId);
-    console.log(formName);
-    this.formName = formName;
-    //   const dialogRef = this.dialog.open(InfotrackerViewreportComponent, {
-    //      width: '1200px'
-    //    });
-    //  dialogRef.componentInstance.infoTrackerRef = this;
-    //  dialogRef.componentInstance.setData(templateId, formName);
-    const url = 'main/infotracker/userreport/' + templateId;
-    this.router.navigateByUrl(url);
-  }
+  // view(templateId: string, formName: string) {
+  //   console.log('view');
+  //   console.log(templateId);
+  //   console.log(formName);
+  //   this.formName = formName;
+  //   //   const dialogRef = this.dialog.open(InfotrackerViewreportComponent, {
+  //   //      width: '1200px'
+  //   //    });
+  //   //  dialogRef.componentInstance.infoTrackerRef = this;
+  //   //  dialogRef.componentInstance.setData(templateId, formName);
+  //   const url = 'main/infotracker/userreport/' + templateId;
+  //   this.router.navigateByUrl(url);
+  // }
 
   manageDesignatedUsers() {
     console.log('manageDesignatedUsers:');
@@ -190,12 +190,12 @@ export class InfotrackerComponent implements OnInit, AfterViewInit {
     dialogRef.componentInstance.setData(templateId);
   }
 
-  reportForOthersView(templateId: string, formName: string) {
+  view(templateId: string, formName: string) {
     console.log('view');
     console.log(templateId);
     console.log(formName);
     this.formName = formName;
-    const url = 'main/infotracker/othersreport/' + templateId;
+    const url = 'main/infotracker/view/' + templateId;
     this.router.navigateByUrl(url);
   }
 }

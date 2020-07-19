@@ -64,6 +64,7 @@ export class InfotrackerEsignatureComponent implements OnInit, AfterViewInit {
       this.service.auth.getUserID()).subscribe(lResp => {
         if (lResp) {
           this.locations = lResp;
+          this.locationInput = lResp[0];
         }
       });
     console.log('locations');
@@ -169,17 +170,18 @@ export class InfotrackerEsignatureComponent implements OnInit, AfterViewInit {
     console.log('submit review');
     console.log(this.signaturePad);
     let location = this.reviewReportForm.controls['locationFormControl'].value;
-    console.log('isToBeSignedDocumentPreviewed');
-    console.log(this.isToBeSignedDocumentPreviewed);
-    if (!this.isToBeSignedDocumentPreviewed) {
-      this.snackBar.open("Please preview signed document before signing", '', { duration: 3000 });
-      return;
-    }
     console.log('location');
     console.log(location);
     if (typeof location === "undefined" || location === '' || location === null) {
       this.snackBar.open("Please enter the location", '', { duration: 3000 });
       this.locationElement.nativeElement.focus();
+      return;
+    }
+
+    console.log('isToBeSignedDocumentPreviewed');
+    console.log(this.isToBeSignedDocumentPreviewed);
+    if (!this.isToBeSignedDocumentPreviewed) {
+      this.snackBar.open("Please preview signed document before signing", '', { duration: 3000 });
       return;
     }
     // console.log('signagure empty status');

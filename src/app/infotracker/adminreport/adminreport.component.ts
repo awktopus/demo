@@ -77,7 +77,7 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
   showReviewSpinner = false;
   showAddendumSpinner = false;
   reviewStatus: string;
-
+  addendumCount = 0;
   readyToReviewForm: FormGroup = new FormGroup({
     readyToReviewStartDateControl: new FormControl({ value: this.stDate, disabled: true }, Validators.required),
     // readyToReviewEndDateControl: new FormControl({ value: this.stDate, disabled: true }, Validators.required)
@@ -124,7 +124,14 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
         this.curReviewStatus = <InfoTrackerReviewHistoryResource>curStatus;
         console.log('Current review status');
         console.log(this.curReviewStatus);
-        this.reviewStatus = "addendum";
+        if (this.curReviewStatus) {
+          this.reviewStatus = "addendum";
+        } else {
+          this.reviewStatus = "review";
+        }
+        if (this.curReviewStatus && this.curReviewStatus.ammendments) {
+          this.addendumCount = this.curReviewStatus.ammendments.length;
+        }
       });
 
     this.service.GetAdminReviewForms(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
@@ -178,6 +185,14 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
         this.curReviewStatus = <InfoTrackerReviewHistoryResource>curStatus;
         console.log('Current review status');
         console.log(this.curReviewStatus);
+        if (this.curReviewStatus) {
+          this.reviewStatus = "addendum";
+        } else {
+          this.reviewStatus = "review";
+        }
+        if (this.curReviewStatus && this.curReviewStatus.ammendments) {
+          this.addendumCount = this.curReviewStatus.ammendments.length;
+        }
       });
 
     this.service.GetAdminReviewForms(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
@@ -215,7 +230,7 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
     let tStartDate: Date = new Date(this.unknownForm.controls['unknownStartDateControl'].value);
     this.startDate = tStartDate.getMonth() + 1 + '-' + tStartDate.getDate() + '-' + tStartDate.getFullYear();
     console.log('report start date:' + this.startDate);
-
+    this.iTUnknownGridApi.api.sizeColumnsToFit();
     this.service.GetAdminReviewForms(this.service.auth.getOrgUnitID(), this.service.auth.getUserID(),
       this.startDate).subscribe(uReport => {
         if (uReport) {
@@ -238,9 +253,8 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
             console.log(this.iTReadyForReviewGridData);
             console.log('unknown forms');
             console.log(this.iTUnknownGridData);
-            this.iTReadyForReviewGridApi.api.sizeColumnsToFit();
-            this.iTUnknownGridApi.api.sizeColumnsToFit();
-            this.readyToReviewCount = this.iTReadyForReviewGridData.length;
+           // this.iTReadyForReviewGridApi.api.sizeColumnsToFit();
+           // this.readyToReviewCount = this.iTReadyForReviewGridData.length;
             this.unknownCount = this.iTUnknownGridData.length;
           }
         }
@@ -248,13 +262,14 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
   }
 
   loadReviewedDocuments() {
+    this.iTReviewedGridApi.api.sizeColumnsToFit();
     this.service.GetReviewStatusReports(this.service.auth.getOrgUnitID(), this.service.auth.getUserID()).subscribe(rReport => {
+      console.log('Get already reviewed status reports');
+      console.log(rReport);
       if (rReport) {
-        console.log('Get already reviewed status reports');
-        console.log(rReport);
         this.reviewReportResource = <InfoTrackerReviewReportResource[]>rReport;
-        this.iTReviewedGridData = [];
         if (this.reviewReportResource) {
+          this.iTReviewedGridData = [];
           this.reviewReportResource.forEach(cc => {
             cc.reviewReports.forEach(rr => {
               let rrRes = new ReviewReportResource();
@@ -266,11 +281,13 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
               rrRes.reviewedBy = rr.reviewedBy;
               rrRes.reviewedDateTime = rr.reviewedDateTime;
               rrRes.reviewTrackerId = rr.reviewTrackerId;
+              rrRes.status = rr.status;
               this.iTReviewedGridData.push(rrRes);
             });
           });
         }
-        this.iTReviewedGridApi.api.sizeColumnsToFit();
+       } else {
+        this.iTReviewedGridData = [];
       }
     });
   }
@@ -568,26 +585,26 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
     console.log(selectedTrackers);
     if (selectedTrackers && selectedTrackers.length > 0) {
       this.reviewSubmitRes = new InfoTrackerReviewFormSubmitResource();
-      if (this.reviewStatus !== 'addendum') {
-      this.reviewSubmitRes.orgUnitName = this.service.auth.getOrgUnitName();
-      this.reviewSubmitRes.orgUnitId = this.service.auth.getOrgUnitID();
-      this.reviewSubmitRes.reportedDate = this.startDate;
-      this.reviewSubmitRes.reviewedBy = this.service.auth.getUserFirstName() + " " + this.service.auth.getUserLastName();
-      this.reviewSubmitRes.actionType = "review";
-      this.reviewTrackers = [];
-      selectedTrackers.forEach(cc => {
-        let reviewTracker = new ReviewTracker();
-        reviewTracker.recordStatus = cc.data.recordStatus;
-        reviewTracker.formName = cc.data.formName;
-        reviewTracker.templateId = cc.data.templateId;
-        reviewTracker.userName = cc.data.userName;
-        reviewTracker.trackerId = cc.data.trackerId;
-        reviewTracker.displayPriority = cc.data.displayPriority;
-        this.reviewTrackers.push(reviewTracker);
-      });
-      this.reviewSubmitRes.reviewTrackers = this.reviewTrackers;
-      console.log('review submit resource');
-      console.log(this.reviewSubmitRes);
+      if (this.reviewStatus === 'review') {
+        this.reviewSubmitRes.orgUnitName = this.service.auth.getOrgUnitName();
+        this.reviewSubmitRes.orgUnitId = this.service.auth.getOrgUnitID();
+        this.reviewSubmitRes.reportedDate = this.startDate;
+        this.reviewSubmitRes.reviewedBy = this.service.auth.getUserFirstName() + " " + this.service.auth.getUserLastName();
+        this.reviewSubmitRes.actionType = this.reviewStatus;
+        this.reviewTrackers = [];
+        selectedTrackers.forEach(cc => {
+          let reviewTracker = new ReviewTracker();
+          reviewTracker.recordStatus = cc.data.recordStatus;
+          reviewTracker.formName = cc.data.formName;
+          reviewTracker.templateId = cc.data.templateId;
+          reviewTracker.userName = cc.data.userName;
+          reviewTracker.trackerId = cc.data.trackerId;
+          reviewTracker.displayPriority = cc.data.displayPriority;
+          this.reviewTrackers.push(reviewTracker);
+        });
+        this.reviewSubmitRes.reviewTrackers = this.reviewTrackers;
+        console.log('review submit resource');
+        console.log(this.reviewSubmitRes);
         const dialogRef = this.dialog.open(InfotrackeragreementComponent, {
           width: '600px', height: '350px',
           data: "By confirming, I agree that my electronic signatures on the following document are my own" +
@@ -609,26 +626,26 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
             dialogRef2.componentInstance.setData(this.reviewSubmitRes);
           }
         });
-      } else {
+      } else if (this.reviewStatus === 'addendum') {
         this.reviewSubmitRes.orgUnitName = this.service.auth.getOrgUnitName();
-      this.reviewSubmitRes.orgUnitId = this.service.auth.getOrgUnitID();
-      this.reviewSubmitRes.reportedDate = this.startDate;
-      this.reviewSubmitRes.reviewedBy = this.service.auth.getUserFirstName() + " " + this.service.auth.getUserLastName();
-      this.reviewSubmitRes.actionType = "addendum";
-      this.reviewTrackers = [];
-      selectedTrackers.forEach(cc => {
-        let reviewTracker = new ReviewTracker();
-        reviewTracker.recordStatus = cc.data.recordStatus;
-        reviewTracker.formName = cc.data.formName;
-        reviewTracker.templateId = cc.data.templateId;
-        reviewTracker.userName = cc.data.userName;
-        reviewTracker.trackerId = cc.data.trackerId;
-        reviewTracker.displayPriority = cc.data.displayPriority;
-        this.reviewTrackers.push(reviewTracker);
-      });
-      this.reviewSubmitRes.reviewTrackers = this.reviewTrackers;
-      console.log('review addendum resource');
-      console.log(this.reviewSubmitRes);
+        this.reviewSubmitRes.orgUnitId = this.service.auth.getOrgUnitID();
+        this.reviewSubmitRes.reportedDate = this.startDate;
+        this.reviewSubmitRes.reviewedBy = this.service.auth.getUserFirstName() + " " + this.service.auth.getUserLastName();
+        this.reviewSubmitRes.actionType = this.reviewStatus;
+        this.reviewTrackers = [];
+        selectedTrackers.forEach(cc => {
+          let reviewTracker = new ReviewTracker();
+          reviewTracker.recordStatus = cc.data.recordStatus;
+          reviewTracker.formName = cc.data.formName;
+          reviewTracker.templateId = cc.data.templateId;
+          reviewTracker.userName = cc.data.userName;
+          reviewTracker.trackerId = cc.data.trackerId;
+          reviewTracker.displayPriority = cc.data.displayPriority;
+          this.reviewTrackers.push(reviewTracker);
+        });
+        this.reviewSubmitRes.reviewTrackers = this.reviewTrackers;
+        console.log('review addendum resource');
+        console.log(this.reviewSubmitRes);
         const dialogRef2 = this.dialog.open(InfotrackerEsignatureComponent, {
           width: '700px', height: '900px'
         });
@@ -647,5 +664,12 @@ export class AdminreportComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(InfotrackerPdfPopupComponent, { width: '520pt' });
     dialogRef.componentInstance.getInfoTrackerDocumentPDF(this.service.auth.getOrgUnitID(),
       this.service.auth.getUserID(), docId);
+  }
+
+  viewReviewedDocument() {
+    console.log('viewReviewedDocument');
+    const dialogRef = this.dialog.open(InfotrackerPdfPopupComponent, { width: '520pt' });
+    dialogRef.componentInstance.getInfoTrackerDocumentPDF(this.service.auth.getOrgUnitID(),
+      this.service.auth.getUserID(), this.curReviewStatus.docId);
   }
 }
