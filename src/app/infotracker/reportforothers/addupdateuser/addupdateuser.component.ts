@@ -23,7 +23,7 @@ export class AddupdateuserComponent implements OnInit {
   lastName: string;
   emailId: string;
   phone: string;
-  bardgeId: string;
+  badgeId: string;
   userForm: FormGroup = new FormGroup({
     firstNameFormControl: new FormControl('', Validators.required),
     lastNameFormControl: new FormControl('', Validators.required),

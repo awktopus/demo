@@ -31,6 +31,7 @@ export class SelfreportsummaryComponent implements OnInit {
   recordStatus: string;
   reportStatus: string;
   splitAddendumLines: string[];
+  showAddendumSpinner =  false;
   selfReportSummaryForm: FormGroup = new FormGroup({
      formNameControl: new FormControl(),
      trackerIdControl: new FormControl(),
