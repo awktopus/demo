@@ -44,8 +44,10 @@ export class SenderdocumentsComponent implements OnInit {
   ezSignDoc: File | FileList;
   uploadedFileName: string;
   isEZsignDataFetched = false;
+  showProcessSpinner = false;
   private rowHeight;
   private rowClass;
+  domLayout: any;
   constructor(public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
@@ -78,7 +80,7 @@ export class SenderdocumentsComponent implements OnInit {
     const res = [
       {
         headerName: 'EZSign Tracking Id', field: 'ezSignTrackingId',
-        cellStyle: { color: 'blue', textAlign: 'left'},
+        cellStyle: { color: 'blue', textAlign: 'left' },
         cellRenderer: 'ezsignLinkRenderer'
       },
       { headerName: 'Document Name', field: 'documentName', cellStyle: { textAlign: 'left' } },
@@ -122,6 +124,7 @@ export class SenderdocumentsComponent implements OnInit {
     ];
     this.context = { componentParent: this, ezsignfit: false };
     this.rowHeight = 40;
+    this.domLayout = 'autoHeight';
     this.rowClass = 'ezsign-history-grid';
     return res;
   }
@@ -136,7 +139,7 @@ export class SenderdocumentsComponent implements OnInit {
   viewEZSignDocument(selectedRow: any) {
     console.log('view ezsign document');
     console.log(selectedRow);
-   const dialogRef = this.dialog.open(EzsignPdfPopupComponent, { width: '520pt'});
+    const dialogRef = this.dialog.open(EzsignPdfPopupComponent, { width: '520pt' });
     dialogRef.componentInstance.setPDF(this.ezSignDataService.auth.baseurl +
       '/Ezsign/tracking/' + selectedRow.rowData.ezSignTrackingId + '/signedform');
   }
@@ -221,7 +224,7 @@ export class SenderdocumentsComponent implements OnInit {
     console.log('addSigners');
     console.log('tracking id:' + ezSignDocRow.rowData.ezSignTrackingId);
     const dialogRef = this.dialog.open(AddsignersComponent, {
-      width: '1260px', height: '500px'
+      width: '70%', height: '70%'
     });
     dialogRef.componentInstance.senderDocumentsref = this;
     dialogRef.componentInstance.setData(ezSignDocRow.rowData.ezSignTrackingId,
@@ -231,7 +234,7 @@ export class SenderdocumentsComponent implements OnInit {
   launchNewEZSignDocument() {
     console.log('createNewEZSignDocument');
     const dialogRef = this.dialog.open(UploadDocumentComponent, {
-      width: '1300px'
+      width: '70%', height: '80%'
     });
     dialogRef.componentInstance.senderDocumentCompomentRef = this;
   }
@@ -252,9 +255,16 @@ export class SenderdocumentsComponent implements OnInit {
   }
 
   createNewEZSignDocument() {
+    this.showProcessSpinner = true;
     this.ezSignDataService.createNewEZSignDocument(this.ezSignDoc).subscribe(resp => {
       console.log(resp);
-      this.loadEZSignDocuments();
+      if (resp) {
+        const ezSignDoc: EZSignDocResource = <EZSignDocResource>resp;
+        //  this.loadEZSignDocuments();
+        const url = '/main/ezsign/addfields/' + ezSignDoc.ezSignTrackingId;
+        this.router.navigateByUrl(url);
+      }
+      this.showProcessSpinner = false;
     });
 
   }
@@ -271,4 +281,7 @@ export class SenderdocumentsComponent implements OnInit {
     });
   }
 
+  changeTab(event) {
+
+  }
 }

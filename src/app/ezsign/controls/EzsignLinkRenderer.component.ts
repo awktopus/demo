@@ -4,7 +4,7 @@ import { Component} from '@angular/core';
 
 @Component({
     template: `
-    <button mat-icon-button [disabled]='ezSignDocResource.status !="Uploaded"' color="primary"
+    <button mat-icon-button color="primary"
     (click)="invokeParentMethod()" matTooltip="Add fields and send invite">
     {{params.value}}
    </button>
@@ -18,7 +18,8 @@ import { Component} from '@angular/core';
     ]
 })
 
-// <span class="caselink" mdbRippleRadius (click)="invokeParentMethod()"
+//  [disabled]='ezSignDocResource.status !="Uploaded"'
+//  <span class="caselink" mdbRippleRadius (click)="invokeParentMethod()"
 //     [disabled]='ezSignDocResource.status !="Uploaded"'>
 //     {{params.value}}
 //     </span>

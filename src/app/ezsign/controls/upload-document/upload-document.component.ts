@@ -4,6 +4,7 @@ import { ViewChild, AfterViewInit } from '@angular/core';
 import { EzsigndataService } from '../../service/ezsigndata.service';
 import { EZSignDocResource } from '../../../esign/beans/ESignCase';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-document',
@@ -18,7 +19,8 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
   senderDocumentCompomentRef: SenderdocumentsComponent;
   showProcessSpinner = false;
   isLinear: any;
-  constructor(private dialogRef: MatDialogRef<UploadDocumentComponent> , private ezSignDataService: EzsigndataService) { }
+  constructor(private dialogRef: MatDialogRef<UploadDocumentComponent>
+    , private ezSignDataService: EzsigndataService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -42,8 +44,14 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
     this.showProcessSpinner = true;
     this.ezSignDataService.createNewEZSignDocument(this.ezSignDoc).subscribe(resp => {
       console.log(resp);
+     // this.senderDocumentCompomentRef.loadEZSignDocuments();
+      if (resp) {
+        const ezSignDoc: EZSignDocResource = <EZSignDocResource>resp;
+        //  this.loadEZSignDocuments();
+        const url = '/main/ezsign/addfields/' + ezSignDoc.ezSignTrackingId;
+        this.router.navigateByUrl(url);
+      }
       this.showProcessSpinner = false;
-      this.senderDocumentCompomentRef.loadEZSignDocuments();
       this.closeMe();
     });
   }

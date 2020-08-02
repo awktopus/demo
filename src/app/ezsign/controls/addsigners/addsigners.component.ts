@@ -74,7 +74,7 @@ export class AddsignersComponent implements OnInit, OnDestroy, OnChanges {
     console.log('Add signers ngOnInit');
     this.isImageDataUrlFetched = true;
     console.log(this.ezSignTrackingId);
-    this.contactsDisplayedColumns.push('more');
+   // this.contactsDisplayedColumns.push('more');
 
     this.ezSignDataService.getOrganizationEZSignSigners().subscribe(results => {
       console.log('get company staff');
@@ -136,7 +136,7 @@ export class AddsignersComponent implements OnInit, OnDestroy, OnChanges {
     this.ezSignDataService.getEZSignSigners(this.ezSignTrackingId).subscribe(resp => {
       console.log(resp);
       this.contactsDataSource = new MatTableDataSource<Signer>(resp);
-      this.contactsDisplayedColumns.push('more');
+    //  this.contactsDisplayedColumns.push('more');
     });
   }
 

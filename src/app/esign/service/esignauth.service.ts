@@ -165,6 +165,9 @@ export class EsignAuthService {
     return this.esignstate.getCurrentUser().lastName;
   }
 
+  getUserEmail(): string {
+    return this.esignstate.getCurrentUser().email;
+  }
   getUserRole(): string {
   //  console.log('get user role inside esign auth');
   //  console.log(this.esignstate.getCurrentOrgUser());

@@ -404,6 +404,46 @@ export class EzSignHistory {
   ezsignDate: string;
 }
 
+export class EzSignField {
+  fieldSeqNo: number;
+  showBox: boolean;
+  isTagExists: boolean;
+  posX: number;
+  posY: number;
+  width: number;
+  height: number;
+  fieldType: string;
+  labelName: string;
+  receiverId: string;
+  receiverFirstName: string;
+  receiverLastName: string;
+  receiverEmailId: string;
+  status: string;
+  createdDateTime: string;
+  isSender: string;
+  isSenderSigner: string;
+  isSelected: boolean;
+  fieldEndOffset: Offset;
+  fieldMovingOffset: Offset;
+}
+
+export class Offset {
+  x: number;
+  y: number;
+}
+
+export class SignerData {
+  docId: string;
+  status: string;
+  pageSeqNo: number;
+  dataUrl: string;
+  pageCount: number;
+  title: string;
+  pageWidth: number;
+  pageHeight: number;
+  fields?: EzSignField[];
+}
+
 /** File node data with nested structure. */
 export interface FileNode {
   name: string;
@@ -648,3 +688,4 @@ export class InfoTrackerUser {
   role: string;
   userType: string;
 }
+

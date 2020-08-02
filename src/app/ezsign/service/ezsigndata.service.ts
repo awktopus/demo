@@ -79,9 +79,15 @@ export class EzsigndataService implements Resolve<any> {
     const formData: FormData = new FormData();
     formData.append('orgunit', this.auth.getOrgUnitID());
     formData.append('sender', this.auth.getUserID());
+    formData.append('firstName', this.auth.getUserFirstName());
+    formData.append('lastName', this.auth.getUserLastName());
+    formData.append('email', this.auth.getUserEmail());
     formData.append('file', ff, ff.name);
     console.log(formData.getAll('orgunit'));
     console.log(formData.getAll('sender'));
+    console.log(formData.getAll('firstName'));
+    console.log(formData.getAll('lastName'));
+    console.log(formData.getAll('email'));
     console.log(ff.name);
     console.log(formData);
     return this.http.post(this.auth.baseurl + '/ezsign/document', formData, this.auth.getEZSignOptions());
@@ -100,7 +106,7 @@ export class EzsigndataService implements Resolve<any> {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
-  getEZSignPdfFormMirrorImage(trackingId: string, docId: string, seqNo: string): Observable<any> {
+  GetPageSignerData(trackingId: string, docId: string, seqNo: string): Observable<any> {
     console.log('calling getPdfFormMirrorImage api:' + docId + ',' + seqNo);
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID() + '/sender/' +
     this.auth.getUserID() + '/tracking/' + trackingId + '/document/' + docId + '/page/' + seqNo + '/mirrorimage'
@@ -172,12 +178,12 @@ export class EzsigndataService implements Resolve<any> {
          this.auth.getESignOptions());
   }
 
-  sendInviteToSigners(trackingId: string): Observable<any> {
+  sendInviteToSigners(trackingId: string, coverLetterInfo: any): Observable<any> {
     console.log('calling sendInviteToSigners api:' + trackingId);
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
     + '/sender/' +  this.auth.getUserID() + '/tracking/' + trackingId + '/invitesigners'
     console.log(url);
-    return this.http.post(url, null, this.auth.getESignOptions());
+    return this.http.post(url, coverLetterInfo, this.auth.getESignOptions());
   }
 
   getEzSignHistoryData(trackingId: string): Observable<any> {
@@ -192,5 +198,19 @@ export class EzsigndataService implements Resolve<any> {
     opps['responseType'] = 'arraybuffer';
     console.log('get content url:' + url);
     return this.http.get(url, opps);
+  }
+
+  GetSignerData(trackingId: string): Observable<any> {
+    console.log('calling GetSignerData api:' + trackingId);
+    const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID() + '/sender/' +
+    this.auth.getUserID() + '/tracking/' + trackingId + '/signerdata'
+    console.log(url);
+    return this.http.get(url, this.auth.getESignOptions());
+  }
+
+  GetCoverLetter(orgUnitId: string, templateName: string): Observable<any> {
+    const url = this.auth.baseurl + '/Configs/coverletter/orgunit/' + orgUnitId +
+    '/template/' + templateName;
+    return this.http.get(url, this.auth.getESignOptions());
   }
 }

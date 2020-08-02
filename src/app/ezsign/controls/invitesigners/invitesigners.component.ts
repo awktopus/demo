@@ -42,6 +42,13 @@ ngOnInit() {
       console.log(respSigners);
       this.eZSigners = respSigners;
       this.subject = "Signature for ezfile authorization";
+      this.service.GetCoverLetter(this.service.auth.getOrgUnitID(), "ezsign_client_communication").subscribe(resp => {
+        console.log('Get cover letter');
+        console.log(resp);
+        if (resp) {
+        this.body = resp.content;
+      }
+      });
     });
 
   }
@@ -59,7 +66,11 @@ ngOnInit() {
   sendInvite() {
     this.showProcessSpinner = true;
     console.log('sendInvite');
-    this.service.sendInviteToSigners(this.ezSignTrackingId).subscribe(resp => {
+    const coverLetterInfo = {
+      body: this.body,
+      subject: this.subject,
+    };
+    this.service.sendInviteToSigners(this.ezSignTrackingId, coverLetterInfo).subscribe(resp => {
       console.log(resp);
       if (resp && resp.statusCode === "200") {
         this.showProcessSpinner = false;
