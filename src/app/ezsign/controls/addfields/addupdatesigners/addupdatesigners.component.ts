@@ -31,6 +31,9 @@ export class AddupdatesignersComponent implements OnInit {
   ezSignTrackingId: string;
   fieldRecord: EzSignField;
   receiverNameInput: any;
+  fieldType: any;
+  fieldDesc: any;
+  receiverEmailId: any;
   signerForm: FormGroup = new FormGroup({
     receiverNameControl: new FormControl('', Validators.required),
     receiverEmailIdControl: new FormControl(''),
