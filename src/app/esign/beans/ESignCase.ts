@@ -418,6 +418,7 @@ export class EzSignField {
   receiverFirstName: string;
   receiverLastName: string;
   receiverEmailId: string;
+  isGuest: string;
   status: string;
   createdDateTime: string;
   isSender: string;

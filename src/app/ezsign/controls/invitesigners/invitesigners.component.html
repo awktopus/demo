@@ -60,23 +60,25 @@
 
     <table width=100%>
       <tr>
-        <td width=25%></td>
-        <td width=75%>
-          <span>
-            &nbsp;&nbsp;
+        <td width=20%></td>
+        <td>
+             &nbsp;&nbsp;
             <button mat-raised-button class="text-upper" (click)='closeMe()'>Cancel</button>
             &nbsp; &nbsp;
             <button mat-raised-button color="accent" class="text-upper" (click)='editDocument()'>
               <mat-icon>edit</mat-icon>&nbsp;Edit Document</button>
             <!-- &nbsp; &nbsp; <button mat-raised-button color="accent" class="text-upper" (click)='preview()'>Preview </button> -->
             &nbsp; &nbsp;
+
             <span *ngIf='!showProcessSpinner'>
               <button mat-raised-button color="accent" class="text-upper" (click)='sendInvite()'>
-                  <mat-icon>send</mat-icon>&nbsp;Send Invite</button>
-            </span>
-            <mat-spinner *ngIf='showProcessSpinner' diameter='40'></mat-spinner>
+                  <mat-icon>send</mat-icon>&nbsp;Send Invite              
+                </button>              
+            </span>          
+        </td>
+        <td>
+            <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
             <span *ngIf='showProcessSpinner'>Processing...</span>
-          </span>
         </td>
       </tr>
     </table>

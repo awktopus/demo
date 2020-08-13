@@ -213,4 +213,11 @@ export class EzsigndataService implements Resolve<any> {
     '/template/' + templateName;
     return this.http.get(url, this.auth.getESignOptions());
   }
+
+  GetOrganizationGuestContacts() {
+    console.log('calling GetOrganizationGuestContacts server api');
+    const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
+    + '/sender/' +  this.auth.getUserID() + '/guestcontacts';
+    return this.http.get(url, this.auth.getESignOptions());
+  }
 }

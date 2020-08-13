@@ -1,0 +1,102 @@
+<span>
+  <label class="heading-label">{{ title }}</label>
+  <button mat-icon-button color="warn" style="margin-left:90%" (click)="cancelPopup()">
+    <mat-icon style="font-size: 40px;">clear</mat-icon>
+  </button>
+</span>
+<div fxLayout="column">
+  <div class="invgridColumn">
+    <form [formGroup]="guestSignerForm">
+
+      <!-- <mat-form-field class="appfield" appearance="outline" >
+        <mat-label>First Name</mat-label>
+        <input matInput [(ngModel)]="firstName" formControlName="receiverFirstNameControl">
+        <mat-error *ngIf="guestSignerForm.get('receiverFirstNameControl').hasError('required')">
+            First name is required
+          </mat-error>
+      </mat-form-field> -->
+      
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-chip-list #guestchips>
+          <mat-chip *ngIf="guestSigner" [selectable]="selectable" [removable]="removable" 
+          (removed)="removeGuest('guest')">
+            {{guestSigner.firstName}} {{guestSigner.lastName}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input type="text" class="search" placeholder="Search for a guest contact or Enter first name" 
+          [matChipInputFor]="guestchips" matInput [matAutocomplete]="autoguest"
+            formControlName="guestSignerCtrl" #focusField>
+          <mat-autocomplete #autoguest="matAutocomplete">
+            <mat-option *ngFor="let cc of guestSigners" [value]="cc.clientId" 
+            (onSelectionChange)="addGuestSigner($event)">
+              {{ cc.firstName }} {{ cc.lastName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-chip-list>
+      </mat-form-field>
+
+      <br/>
+      <mat-form-field class="appfield" appearance="outline" >
+          <mat-label>Last Name</mat-label>
+          <input matInput [(ngModel)]="lastName" formControlName="receiverLastNameControl">
+          <mat-error *ngIf="guestSignerForm.get('receiverLastNameControl').hasError('required')">
+              Last name is required
+            </mat-error>
+        </mat-form-field>
+
+      <br/>
+      <mat-form-field class="appfield" appearance="outline" >
+          <mat-label>Receiver email address</mat-label>
+          <input matInput [(ngModel)]="receiverEmailId" formControlName="receiverEmailIdControl">
+          <mat-error *ngIf="guestSignerForm.get('receiverEmailIdControl').hasError('required')">
+              Guest email address is required
+            </mat-error>
+        </mat-form-field>
+        <br/>
+
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Select field type</mat-label>
+        <mat-select required [(value)]="fieldType" (selectionChange)="selectFieldType($event)" 
+        formControlName="fieldTypeControl">
+        <mat-option value="initial">Initial</mat-option>
+        <mat-option value="date">Date</mat-option>
+        <mat-option value="signature">Signature</mat-option>
+        <mat-option value="text">Text</mat-option> 
+      </mat-select>
+        <mat-error *ngIf="guestSignerForm.get('fieldTypeControl').hasError('required')">
+          Field Type is required
+        </mat-error>
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Field description</mat-label>
+        <input required matInput [(ngModel)]="fieldDesc" formControlName="fieldDescControl">
+        <mat-error *ngIf="guestSignerForm.get('fieldDescControl').hasError('required')">
+          Field Description is required
+        </mat-error>
+      </mat-form-field>
+      
+    </form>
+    <div>
+      <br/>
+    </div>
+    <div class="button-row">
+      <div fxLayout="row">
+        <button mat-raised-button class="text-upper" (click)="cancelPopup()">
+          Cancel
+        </button>
+        &nbsp; &nbsp;
+
+        <span *ngIf='!showAddFieldSpinner'>
+          <button [disabled]="guestSignerForm.invalid" mat-raised-button color="accent" class="text-upper"
+            (click)="addGuestFieldData()">
+            SAVE
+            <mat-icon>play_circle_outline</mat-icon>
+          </button>
+        </span>
+        <mat-spinner *ngIf='showAddFieldSpinner' diameter='40'></mat-spinner>
+        <span *ngIf='showAddFieldSpinner'>Processing...</span>
+      </div>
+    </div>
+  </div>
+</div>
