@@ -214,6 +214,27 @@ export class EzsigndataService implements Resolve<any> {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
+  getEZSignDocs() {
+    const url = this.auth.baseurl + "/EZSign/orgunit/" + this.auth.getOrgUnitID()+"/receiver/"+this.auth.getUserID() + "/alldocuments";
+    return this.http.get(url, this.auth.getESignOptions());
+  }
+
+  postEzsignAgreementAudit(docId, pageSeq) {
+    const json = {
+      "ClientId": this.auth.getUserID(),
+      "DocId": docId,
+      "PageSeqNo": pageSeq,
+      "Agreement": "",
+      "IpAddress": "001.01.00.00",
+      "IsAgreementAccepted": "N"
+    }
+    const url = this.auth.baseurl + '/EZSign/agreement/audit';
+    return this.http.post(url, json, this.auth.getESignOptions());
+  }
+  postSubmitSignCap(json){
+    const url = this.auth.baseurl + '/EZSign/receiver/' + this.auth.getUserID() + '/formsubmit';
+    return this.http.post(url, json, this.auth.getESignOptions());
+  }
   GetOrganizationGuestContacts() {
     console.log('calling GetOrganizationGuestContacts server api');
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
