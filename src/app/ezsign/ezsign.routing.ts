@@ -6,6 +6,7 @@ import { SenderdocumentsComponent } from './controls/senderdocuments/senderdocum
 import { ReceiverdocumentsComponent } from './controls/receiverdocuments/receiverdocuments.component';
 import { ESignGuard } from './../esign/service/esignauth';
 import { AddfieldsComponent } from './controls/addfields/addfields.component';
+import { MyEzsignDocsComponent } from './controls/myezsigndocs/myezsigndocs.component';
 export const EZSignRoutes: Routes = [
     {
         path: '',
@@ -35,6 +36,11 @@ export const EZSignRoutes: Routes = [
         path: 'addfields/:trackingId',
         canActivate: [AuthGuard, ESignGuard],
         component: AddfieldsComponent
+    },
+    {
+        path: 'ezsigndocs',
+        canActivate: [AuthGuard, ESignGuard],
+        component: MyEzsignDocsComponent
     },
 ];
 

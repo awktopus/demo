@@ -36,6 +36,8 @@ import { EzsignViewButtonRendererComponent } from './controls/Ezsignviewbutton-r
 import { EzsignPdfPopupComponent } from './controls/shared/ezsign-pdf-popup/ezsign-pdf-popup.component';
 import { AddupdatesignersComponent } from './controls/addfields/addupdatesigners/addupdatesigners.component';
 import { GridColConfigPopupComponent } from '../esign/controls/history/gridcolpopup/grid-col-config-popup.component';
+// tslint:disable-next-line:max-line-length
+import { MyEzsignDocsComponent, DialogNoFormMessageDialogComponent, DialogMissingDataMessageDialogComponent } from './controls/myezsigndocs/myezsigndocs.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -67,6 +69,7 @@ import { GridColConfigPopupComponent } from '../esign/controls/history/gridcolpo
     EzsignComponent,
     SafePipe,
     SenderdocumentsComponent,
+    DialogNoFormMessageDialogComponent,
     ReceiverdocumentsComponent,
     UploadDocumentComponent,
     DragDropDirective,
@@ -83,10 +86,13 @@ import { GridColConfigPopupComponent } from '../esign/controls/history/gridcolpo
     EzsignLinkRendererComponent,
     EzsignPdfPopupComponent,
     AddupdatesignersComponent,
+    MyEzsignDocsComponent,
+    DialogMissingDataMessageDialogComponent
     ],
   entryComponents: [AddsignersComponent, UploadDocumentComponent, EzsignPdfPopupComponent,
     EzsignConfirmationDialogComponent, InvitesignersComponent, AddupdatesignersComponent,
-    DocumenthistoryComponent ],
+    DocumenthistoryComponent, MyEzsignDocsComponent, DialogNoFormMessageDialogComponent,
+    DialogMissingDataMessageDialogComponent ],
   providers: [
     ESignGuard,
     EzsigndataService
