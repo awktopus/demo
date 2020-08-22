@@ -160,7 +160,8 @@ export class AddupdatesignersComponent implements OnInit {
     fieldData.receiverId = this.primarysigner.clientId;
     fieldData.receiverFirstName = this.primarysigner.firstName;
     fieldData.receiverLastName = this.primarysigner.lastName;
-    fieldData.receiverEmailId = this.primarysigner.emailId;
+    fieldData.receiverEmailId = this.receiverEmailId;
+    fieldData.isGuest = "N";
     fieldData.isSenderSigner = isSenderSigner;
     fieldData.isSender = isSender;
     fieldData.fieldType = this.signerForm.controls['fieldTypeControl'].value;
@@ -207,13 +208,13 @@ export class AddupdatesignersComponent implements OnInit {
     console.log(event);
 
     if (event.value === 'signature') {
-      this.signerForm.controls['fieldDescControl'].setValue('SignHere');
+      this.signerForm.controls['fieldDescControl'].setValue('Sign here');
     } else if (event.value === 'text') {
-      this.signerForm.controls['fieldDescControl'].setValue('e.g. Title');
+      this.signerForm.controls['fieldDescControl'].setValue('Text field title here');
     } else if (event.value === 'date') {
-      this.signerForm.controls['fieldDescControl'].setValue('DateHere');
+      this.signerForm.controls['fieldDescControl'].setValue('Select date');
     } else if (event.value === 'initial') {
-      this.signerForm.controls['fieldDescControl'].setValue('InitialHere');
+      this.signerForm.controls['fieldDescControl'].setValue('Initial here');
     }
   }
 

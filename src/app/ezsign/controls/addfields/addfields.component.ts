@@ -18,6 +18,7 @@ import { AddupdatesignersComponent } from './addupdatesigners/addupdatesigners.c
 import { EzsignConfirmationDialogComponent } from '../shared/ezsign-confirmation-dialog/ezsign-confirmation-dialog.component';
 import { AnyMxRecord } from 'dns';
 import { delay } from 'q';
+import { AddguestsComponent } from './addguests/addguests.component';
 @Component({
   selector: 'app-addfields',
   templateUrl: './addfields.component.html',
@@ -104,11 +105,11 @@ export class AddfieldsComponent implements OnChanges, OnInit {
           console.log(this.ezSignFields);
         }
         this.isFieldsReadyToShow = true;
-    })();
+      })();
     });
   }
 
-   sanitize(url: string) {
+  sanitize(url: string) {
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
@@ -175,7 +176,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
     if (this.ezSignFields) {
       this.ezSignFields.forEach(sf => {
         if (sf.fieldSeqNo === fieldSeqNo) {
-         sf.isSelected = true;
+          sf.isSelected = true;
           // this.fldMovingOffset.x = event.x;
           // this.fldMovingOffset.y = event.y;
         } else {
@@ -221,7 +222,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
         }
       });
     }
-   // console.log(this.sigEndOffset.x + ',' + this.sigEndOffset.y);
+    // console.log(this.sigEndOffset.x + ',' + this.sigEndOffset.y);
     //  this.activeSignatureFieldSeqNo = fieldSeqNo;
   }
 
@@ -256,7 +257,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
     console.log('previewAndSendInvite');
     if (!this.ezSignFields || this.ezSignFields.length === 0) {
       this.snackBar.open("Please add fields and signers", '', { duration: 3000 });
-      return ;
+      return;
     }
     const dialogRef = this.dialog.open(InvitesignersComponent, {
       width: '980px',
@@ -269,7 +270,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
   }
 
   addField() {
-    console.log('addSigner:');
+    console.log('addField:');
     const dialogRef = this.dialog.open(AddupdatesignersComponent, {
       width: '500px', height: '600px'
     });
@@ -277,6 +278,14 @@ export class AddfieldsComponent implements OnChanges, OnInit {
     dialogRef.componentInstance.setData("addfield", "Add Field", null, this.ezSignTrackingId);
   }
 
+  addGuestField() {
+    console.log('addGuestField:');
+    const dialogRef = this.dialog.open(AddguestsComponent, {
+      width: '600px', height: '700px'
+    });
+    dialogRef.componentInstance.addFieldsRef = this;
+    dialogRef.componentInstance.setData("addguest", "New Guests", null, this.ezSignTrackingId);
+  }
   addFieldData(fieldData: EzSignField) {
     console.log('addFieldData');
     // Step1: save Signer
@@ -286,33 +295,27 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       receiverLastName: fieldData.receiverLastName,
       receiverEmailId: fieldData.receiverEmailId,
       isSenderSigner: fieldData.isSenderSigner,
-      isSender: fieldData.isSender
+      isSender: fieldData.isSender,
+      isGuest: fieldData.isGuest
     };
     console.log(newSignerJson);
     this.service.addNewSigner(this.ezSignTrackingId, newSignerJson).subscribe(resp => {
+      console.log('add new signer response');
       console.log(resp);
+      if (resp) {
+        fieldData.receiverId = resp.receiverId;
+      }
+      console.log('add field - start');
+      fieldData.posX = 0;
+      fieldData.posY = this.ezSignPageImageData.pageHeight;
+      fieldData.height = 18;
+      fieldData.width = 140;
+      fieldData.showBox = true;
+      fieldData.isTagExists = true;
+      console.log('add field - end');
+      console.log(fieldData);
+      this.saveField(fieldData);
     });
-
-    console.log('add field - start');
-
-    // let nFldSeqNo: number;
-    // if (this.ezSignFields) {
-    //   nFldSeqNo = this.ezSignFields.length;
-    // } else {
-    //   nFldSeqNo = 0;
-    // }
-    // this.activeFieldSeqNo = nFldSeqNo + 1;
-    // console.log(this.activeFieldSeqNo);
-    // fieldData.fieldSeqNo = this.activeFieldSeqNo;
-    fieldData.posX = 0;
-    fieldData.posY = this.ezSignPageImageData.pageHeight;
-    fieldData.height = 18;
-    fieldData.width = 140;
-    fieldData.showBox = true;
-    fieldData.isTagExists = true;
-    console.log('add field - end');
-    console.log(fieldData);
-    this.saveField(fieldData);
   }
 
   saveField(fieldData: EzSignField) {
@@ -371,9 +374,9 @@ export class AddfieldsComponent implements OnChanges, OnInit {
           this.ezSignFields = ezSignPageTempData.fields;
           console.log('updated fields after save field');
           console.log(this.ezSignFields);
-         // this.fldMovingOffset = { x: 0, y: 0 };
-         // this.fldEndOffset = { x: 0, y: 0 };
-         // this.readyToSendInvite = true;
+          // this.fldMovingOffset = { x: 0, y: 0 };
+          // this.fldEndOffset = { x: 0, y: 0 };
+          // this.readyToSendInvite = true;
         }
       });
   }

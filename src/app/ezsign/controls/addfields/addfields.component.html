@@ -159,9 +159,13 @@
       <br/>
     </div>
     <div>
-      <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Add Field" (click)="addField()">
+      <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Add Signer and Field" (click)="addField()">
         <mat-icon>border_inner</mat-icon>&nbsp;ADD
       </button>
+      <!-- &nbsp;&nbsp;
+      <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Add Guest Signer and Field" (click)="addGuestField()">
+        <mat-icon>border_inner</mat-icon>&nbsp;ADD GUEST
+      </button> -->
       &nbsp;&nbsp;
       <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Preview and Send Invite" (click)="previewAndSendInvite()">
           <mat-icon>event_note</mat-icon>&nbsp;SEND INVITE

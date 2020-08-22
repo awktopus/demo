@@ -41,7 +41,7 @@ ngOnInit() {
     this.service.getEZSignSigners(this.ezSignTrackingId).subscribe(respSigners => {
       console.log(respSigners);
       this.eZSigners = respSigners;
-      this.subject = "Signature for ezfile authorization";
+      this.subject = "You have a new EZSign document";
       this.service.GetCoverLetter(this.service.auth.getOrgUnitID(), "ezsign_client_communication").subscribe(resp => {
         console.log('Get cover letter');
         console.log(resp);

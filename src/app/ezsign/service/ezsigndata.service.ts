@@ -235,4 +235,10 @@ export class EzsigndataService implements Resolve<any> {
     const url = this.auth.baseurl + '/EZSign/receiver/' + this.auth.getUserID() + '/formsubmit';
     return this.http.post(url, json, this.auth.getESignOptions());
   }
+  GetOrganizationGuestContacts() {
+    console.log('calling GetOrganizationGuestContacts server api');
+    const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
+    + '/sender/' +  this.auth.getUserID() + '/guestcontacts';
+    return this.http.get(url, this.auth.getESignOptions());
+  }
 }
