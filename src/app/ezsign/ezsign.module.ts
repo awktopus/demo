@@ -35,8 +35,8 @@ import { EzsignLinkRendererComponent } from './controls/EzsignLinkRenderer.compo
 import { EzsignViewButtonRendererComponent } from './controls/Ezsignviewbutton-renderer.component';
 import { EzsignPdfPopupComponent } from './controls/shared/ezsign-pdf-popup/ezsign-pdf-popup.component';
 import { AddupdatesignersComponent } from './controls/addfields/addupdatesigners/addupdatesigners.component';
-import { GridColConfigPopupComponent } from '../esign/controls/history/gridcolpopup/grid-col-config-popup.component';
 import { AddguestsComponent } from './controls/addfields/addguests/addguests.component';
+import { EzsignGridcolpopupComponent } from './controls/shared/ezsign-gridcolpopup/ezsign-gridcolpopup.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -85,10 +85,11 @@ import { AddguestsComponent } from './controls/addfields/addguests/addguests.com
     EzsignPdfPopupComponent,
     AddupdatesignersComponent,
     AddguestsComponent,
+    EzsignGridcolpopupComponent,
     ],
   entryComponents: [AddsignersComponent, UploadDocumentComponent, EzsignPdfPopupComponent,
     EzsignConfirmationDialogComponent, InvitesignersComponent, AddupdatesignersComponent,
-    DocumenthistoryComponent, AddguestsComponent ],
+    DocumenthistoryComponent, AddguestsComponent, EzsignGridcolpopupComponent ],
   providers: [
     ESignGuard,
     EzsigndataService

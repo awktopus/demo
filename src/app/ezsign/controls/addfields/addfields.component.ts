@@ -296,7 +296,8 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       receiverEmailId: fieldData.receiverEmailId,
       isSenderSigner: fieldData.isSenderSigner,
       isSender: fieldData.isSender,
-      isGuest: fieldData.isGuest
+      isGuest: fieldData.isGuest,
+      isContactTobeSaved: fieldData.isContactTobeSaved
     };
     console.log(newSignerJson);
     this.service.addNewSigner(this.ezSignTrackingId, newSignerJson).subscribe(resp => {

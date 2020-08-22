@@ -105,7 +105,7 @@
 
       <ng-container matColumnDef="receiverEmailId">
           <mat-header-cell *matHeaderCellDef 
-          class="mat-column-emailid">EmailId</mat-header-cell>
+          class="mat-column-emailid">EmailID</mat-header-cell>
           <mat-cell *matCellDef="let row" 
           class="mat-column-emailid">
             {{ row.receiverEmailId }}
@@ -162,12 +162,12 @@
       <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Add Signer and Field" (click)="addField()">
         <mat-icon>border_inner</mat-icon>&nbsp;ADD
       </button>
-      <!-- &nbsp;&nbsp;
+      &nbsp;&nbsp;
       <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Add Guest Signer and Field" (click)="addGuestField()">
         <mat-icon>border_inner</mat-icon>&nbsp;ADD GUEST
-      </button> -->
+      </button>
       &nbsp;&nbsp;
-      <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Preview and Send Invite" (click)="previewAndSendInvite()">
+      <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Send Invite" (click)="previewAndSendInvite()">
           <mat-icon>event_note</mat-icon>&nbsp;SEND INVITE
       </button>
     </div>

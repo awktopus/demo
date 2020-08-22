@@ -426,6 +426,7 @@ export class EzSignField {
   isSelected: boolean;
   fieldEndOffset: Offset;
   fieldMovingOffset: Offset;
+  isContactTobeSaved: boolean;
 }
 
 export class Offset {
