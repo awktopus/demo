@@ -1,0 +1,216 @@
+
+   .row{
+        white-space: nowrap;
+    }
+    .caselist {
+      padding-right: 2px;
+      padding-left:2px;
+      margin-top: 2px;
+      width: 22%; 
+      height: 640px;
+      float: left;
+      direction: ltr;
+      border:1pt;
+      overflow-y: auto;
+    }
+    .casecontent{
+      padding-right: 2px;
+      padding-left:2px;
+      margin-top: 2px;
+      width: 25%; 
+      min-height:480pt;
+      height: 720px;
+      float: left;
+      direction: ltr;
+      overflow-y: auto;
+      border:1px solid gold;
+      //border: 1px solid #ddd;
+    }
+    .signcapcls{
+      padding-right: 4px;
+      padding-left:4px;
+      margin-top:2px;
+      float: left;
+      direction: ltr;
+      width: 30%; 
+      min-height:480pt;
+      height: 720px;
+      border-top:1px solid gold;
+      border-bottom:1px solid gold;
+      border-right:1px solid gold;
+     //border: 1px solid #ddd;
+    }
+    .casedoc{
+      padding-right: 4px;
+      padding-left:4px;
+      margin-top:2px;
+      float: left;
+      direction: ltr;
+      width: 45%; 
+      min-height:480pt;
+      height: 720px;
+      border-top:1px solid gold;
+      border-bottom:1px solid gold;
+      border-right:1px solid gold;
+     //border: 1px solid #ddd;
+    }
+    .cardlbl{
+      float: right;
+      right:10px !important;
+      margin-top: 12px;
+      vertical-align:middle;
+    }
+    .casecard{
+      word-break:break-all;
+      white-space:normal !important;
+      cursor: pointer;
+      position: relative;
+      left: 0;
+     // background-color: #eeeeff;
+      margin: .1em;
+      padding: .3em 0;
+      border-radius: 4px;
+    }
+    .casecard.selected:hover {
+      background-color: #BBD8DC !important;
+      color: white;
+    }
+    .casecard:hover {
+      color: #607D8B;
+      background-color: #eeffee;
+      left: .1em;
+    }
+    .sig-container {
+      padding-left:15px;
+      border-style: dashed;
+      border-width: 1px;
+      width: 420px;
+    }
+    .heading-label {
+      margin-left:10px;
+      color: #03a9f4;
+      margin-bottom: 1rem;
+      margin-top: 1rem;
+      font-size: 25px;
+      line-height: 48px;
+    }
+    .casefield {
+      margin-left:15px;
+      width: 25%
+    }
+    .casefield > * {
+      width: 100%;
+    }
+    .questionfield {
+        margin-left:15px;
+        width: 50%
+      }
+      .questionfield > * {
+        width: 100%;
+      }
+    .information-label {
+     // margin-left:2px;
+      margin-bottom: 1rem;
+     // margin-top: 1rem;
+      font-size: 16px;
+      line-height: 48px;
+      font-weight: bold;
+    }
+    #back {
+      width: 30px;
+      height: 20px;
+      padding: 10px;
+  }
+  
+  .white {
+      color: white;
+  }
+  
+  #whole {
+      height: 100%;
+      width: 100%;
+      background-color: green;
+  }
+  
+  #esign {
+      height: 45%;
+      width: 39%;
+      margin: auto;
+      margin-top: 5%;
+      background-color: white;
+      border-radius: 2px;
+      border: 5px solid #00b0c1;
+      display: grid;
+      grid-template: 3% 19% 43% 14% 16% / 100%;
+  }
+  
+  .general {
+     padding-left: 5%;
+     padding-right: 5%;
+  }
+  
+  .bold {
+      font-weight: bold;
+  }
+  
+  .normaltext {
+      font-size: 13px;
+  }
+  
+  .smalltext {
+      font-size: 8px;
+  }
+  
+  .instructions {
+      grid-area: 2 / 1 / span 1 / span 1;
+  }
+  
+  .terms {
+      grid-area: 3 / 1 / span 1 / span 1;
+  }
+  
+  .check {
+      grid-area: 4 / 1 / span 1 / span 1;
+  }
+  
+  .begin {
+      grid-area: 5 / 1 / span 1 / span 1;
+      display: flex;
+      justify-content: center;
+  }
+  
+  .small {
+      grid-area: 6 / 1 / span 1 / span 1;
+  }
+  
+  .elblue {
+      color: #00b0c1;
+  }
+  
+  .elgreen {
+      background-color: #c9da2b;
+  }
+  
+  .off {
+      background-color: white;
+      opacity: 0.8;
+  }
+
+  .fileinputfiled{
+    width:40%;
+}
+.row{
+    white-space: nowrap !important;
+}
+
+.container{
+    width: 100%; 
+  } 
+
+  .spinner {
+    width: 50%;
+    height: 50%
+  }
+  .textareafd{
+    width:96%
+}

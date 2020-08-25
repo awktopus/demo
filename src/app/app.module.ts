@@ -34,6 +34,10 @@ import { EsignStateSelector } from './esign/service/esign.state.selector';
 import { AbstractStateSelector } from './core/states/abstract.state.selector';
 import { PubSub } from './core/services/pubsub.service';
 import { InfotrackerComponent } from './infotracker/infotracker.component';
+import { GuestEzsignModule } from './guestezsign/guestezsign.module';
+import { GuestEzsignService } from './guestezsign/service/guestezsign.service';
+import { GuestEzsignGuard } from './guestezsign/service/guestezsignauth';
+import { GuestEZsignAuthService } from './guestezsign/service/guestezsignauth.service';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {};
 
 // AoT requires an exported function for factories for translate module
@@ -83,6 +87,9 @@ export function createTranslateLoader(http: HttpClient) {
     EsignserviceService,
     EsignuiserviceService,
     EsignAuthService,
+    GuestEzsignService,
+    GuestEzsignGuard,
+    GuestEZsignAuthService,
       { provide: AbstractStateSelector, useClass: EsignStateSelector }
   ],
   bootstrap: [AppComponent]

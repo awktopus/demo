@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { PageNotFoundComponent } from '../pages/page-not-found/page-not-found.component';
 import { LoginPageComponent } from '../pages/login-page/login-page.component';
 import { GuestEzsignModule } from '../guestezsign/guestezsign.module';
+import { GuestEzsignComponent } from '../guestezsign/guestezsign.component';
 
 const APP_ROUTES: Routes = [
   {
@@ -21,7 +22,7 @@ const APP_ROUTES: Routes = [
   },
   { path: '404', component: PageNotFoundComponent },
   { path: 'login', component: LoginPageComponent },
-  { path: 'guestezsign', component: GuestEzsignModule},
+  { path: 'guestezsign', loadChildren: 'app/guestezsign/guestezsign.module#GuestEzsignModule'},
   { path: '', redirectTo: '/main/dashboard', pathMatch: 'prefix' },
   { path: '**', redirectTo: '/main/dashboard', pathMatch: 'prefix' }
 

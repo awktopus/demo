@@ -1,3 +1,60 @@
+
 <p>
-  GuestEzsign works!!
+  <mat-toolbar color="primary">
+    <span>EverLeagues Guest Ezsign</span>
+  </mat-toolbar>
+  
 </p>
+<div class="nav"></div>
+<div class="content" *ngIf="tokenStatus == 'expired'">
+  <font size=+2 color=green>
+    <br>
+    <br>
+  The URL Link you used is expired. Please use the button below to resend the link to your
+  email box.
+  </font>
+  <br>
+    <br>
+      <br>
+        <br>
+  <table width=90%>
+  <tr><td align=center>
+    <button mat-raised-button color="primary" (click)="resendLink()">Resend Link</button>
+  </td>
+  </tr>
+  </table>
+</div>
+<div class="content" *ngIf="tokenStatus == 'valid'">
+<p>
+</p>
+  <table width=90%>
+  <tr><td align=center>
+    <font size=+2 color=green>
+    <br>
+    <br>
+  You have an Ezsign Document.
+  </font>
+  <br>
+    <br>
+      <br>
+        <br>
+    <button mat-raised-button color="primary" (click)="goToGuestDoc()">Begin</button>
+  </td>
+  </tr>
+  </table>
+</div>
+<div class="content" *ngIf="tokenStatus == 'invalid'">
+<p>
+</p>
+  <font size=+2 color=green>
+    <br>
+    <br>
+  The Link is invalid.
+  </font>
+  <br>
+    <br>
+      <br>
+        <br>
+
+</div>
+
