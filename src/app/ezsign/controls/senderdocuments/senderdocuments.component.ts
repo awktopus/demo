@@ -18,6 +18,7 @@ import { DocumenthistoryComponent } from './documenthistory/documenthistory.comp
 import { EzsignLinkRendererComponent } from '../EzsignLinkRenderer.component';
 import { EzsignViewButtonRendererComponent } from '../Ezsignviewbutton-renderer.component';
 import { EzsignPdfPopupComponent } from '../shared/ezsign-pdf-popup/ezsign-pdf-popup.component';
+import { EzsignGridcolpopupComponent } from '../shared/ezsign-gridcolpopup/ezsign-gridcolpopup.component';
 
 @Component({
   selector: 'app-senderdocuments',
@@ -203,7 +204,7 @@ export class SenderdocumentsComponent implements OnInit {
   }
 
   openColumnConfig(api) {
-    this.dialog.open(GridColConfigPopupComponent, { width: '200', data: api });
+    this.dialog.open(EzsignGridcolpopupComponent, { width: '200', data: api });
   }
 
   onFirstDataRendered(params, gridname) {

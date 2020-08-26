@@ -28,6 +28,7 @@ export class AddguestsComponent implements OnInit {
   lastName: any;
   fieldType: any;
   fieldDesc: any;
+  firstNameInput: any;
   receiverEmailId: any;
   guestSignerForm: FormGroup = new FormGroup({
     guestSignerCtrl: new FormControl('', Validators.required),
@@ -43,6 +44,7 @@ export class AddguestsComponent implements OnInit {
   removable = true;
   isGuestContactsFetched = false;
   guestSigner_var = '';
+  isContactToBeSaved = false;
   @ViewChild('focusField') focusField: ElementRef;
   constructor(private service: EzsigndataService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router, private snackBar: MatSnackBar,
@@ -118,16 +120,32 @@ export class AddguestsComponent implements OnInit {
 
   removeGuest(): void {
     this.guestSigner = null;
-    this.guestSignerForm.contains['receiverEmailIdControl'].setValue('');
+    this.focusField.nativeElement.value = "";
+    this.guestSignerForm.controls['receiverEmailIdControl'].setValue('');
+    this.firstNameInput = null;
     this.cacheGuestSigners = <CompanyStaff[]>this.cacheGuestSigners;
   }
 
   addGuestFieldData() {
     console.log('add guest field data - start');
-    if (!this.firstName) {
-      this.snackBar.open("Please enter guest first name", '', { duration: 3000 });
+    console.log(this.guestSigner);
+    console.log(this.firstNameInput)
+    if (!this.guestSigner && (typeof this.firstNameInput === 'undefined'
+    || this.firstNameInput === '' || this.firstNameInput === null)) {
+      this.snackBar.open("Search for a guest contact or Enter first name", '', { duration: 3000 });
       return ;
     }
+    if (this.guestSigner) {
+      this.firstName = this.guestSigner.firstName;
+      this.lastName = this.guestSigner.lastName;
+    } else {
+      this.firstName = this.firstNameInput;
+      this.lastName =  this.guestSignerForm.controls['receiverLastNameControl'].value;
+    }
+    // if (!this.firstName) {
+    //   this.snackBar.open("Please enter guest first name", '', { duration: 3000 });
+    //   return ;
+    // }
     // if (!this.lastName) {
     //   this.snackBar.open("Please enter guest last name", '', { duration: 3000 });
     //   return ;
@@ -156,11 +174,20 @@ export class AddguestsComponent implements OnInit {
     fieldEndOffset.y = 0;
     fieldData.fieldMovingOffset = fieldMovingOffset;
     fieldData.fieldEndOffset = fieldEndOffset;
+    fieldData.isContactTobeSaved = this.isContactToBeSaved;
     console.log('guest field data');
     console.log(fieldData);
     this.addFieldsRef.addFieldData(fieldData);
     this.showAddFieldSpinner = false;
     this.cancelPopup();
+  }
+
+  saveAsContact(event) {
+    if (event.checked) {
+      this.isContactToBeSaved = true;
+    } else {
+      this.isContactToBeSaved = false;
+    }
   }
 
   selectFieldType(event: any) {

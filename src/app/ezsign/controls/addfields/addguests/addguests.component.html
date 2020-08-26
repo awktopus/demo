@@ -15,20 +15,17 @@
             First name is required
           </mat-error>
       </mat-form-field> -->
-      
+
       <mat-form-field class="appfield" appearance="outline">
         <mat-chip-list #guestchips>
-          <mat-chip *ngIf="guestSigner" [selectable]="selectable" [removable]="removable" 
-          (removed)="removeGuest('guest')">
+          <mat-chip *ngIf="guestSigner" [selectable]="selectable" [removable]="removable" (removed)="removeGuest('guest')">
             {{guestSigner.firstName}} {{guestSigner.lastName}}
             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
-          <input type="text" class="search" placeholder="Search for a guest contact or Enter first name" 
-          [matChipInputFor]="guestchips" matInput [matAutocomplete]="autoguest"
-            formControlName="guestSignerCtrl" #focusField>
+          <input type="text" class="search" placeholder="Search for a guest contact or Enter first name" [matChipInputFor]="guestchips"
+            matInput [matAutocomplete]="autoguest" formControlName="guestSignerCtrl" #focusField [(ngModel)]="firstNameInput">
           <mat-autocomplete #autoguest="matAutocomplete">
-            <mat-option *ngFor="let cc of guestSigners" [value]="cc.clientId" 
-            (onSelectionChange)="addGuestSigner($event)">
+            <mat-option *ngFor="let cc of guestSigners" [value]="cc.clientId" (onSelectionChange)="addGuestSigner($event)">
               {{ cc.firstName }} {{ cc.lastName }}
             </mat-option>
           </mat-autocomplete>
@@ -36,33 +33,35 @@
       </mat-form-field>
 
       <br/>
-      <mat-form-field class="appfield" appearance="outline" >
-          <mat-label>Last Name</mat-label>
-          <input matInput [(ngModel)]="lastName" formControlName="receiverLastNameControl">
-          <mat-error *ngIf="guestSignerForm.get('receiverLastNameControl').hasError('required')">
-              Last name is required
-            </mat-error>
-        </mat-form-field>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput [(ngModel)]="lastName" formControlName="receiverLastNameControl">
+        <mat-error *ngIf="guestSignerForm.get('receiverLastNameControl').hasError('required')">
+          Last name is required
+        </mat-error>
+      </mat-form-field>
 
       <br/>
-      <mat-form-field class="appfield" appearance="outline" >
-          <mat-label>Receiver email address</mat-label>
-          <input matInput [(ngModel)]="receiverEmailId" formControlName="receiverEmailIdControl">
-          <mat-error *ngIf="guestSignerForm.get('receiverEmailIdControl').hasError('required')">
-              Guest email address is required
-            </mat-error>
-        </mat-form-field>
-        <br/>
+      <mat-form-field class="appfield" appearance="outline">
+        <mat-label>Receiver email address</mat-label>
+        <input matInput [(ngModel)]="receiverEmailId" formControlName="receiverEmailIdControl">
+        <mat-error *ngIf="guestSignerForm.get('receiverEmailIdControl').hasError('required')">
+          Guest email address is required
+        </mat-error>
+      </mat-form-field>
+      <br/>
 
+      <mat-checkbox class="appfield" (change)='saveAsContact($event)'>Save as contact</mat-checkbox>
+      <br/>
+      <br/>
       <mat-form-field class="appfield" appearance="outline">
         <mat-label>Select field type</mat-label>
-        <mat-select required [(value)]="fieldType" (selectionChange)="selectFieldType($event)" 
-        formControlName="fieldTypeControl">
-        <mat-option value="initial">Initial</mat-option>
-        <mat-option value="date">Date</mat-option>
-        <mat-option value="signature">Signature</mat-option>
-        <mat-option value="text">Text</mat-option> 
-      </mat-select>
+        <mat-select required [(value)]="fieldType" (selectionChange)="selectFieldType($event)" formControlName="fieldTypeControl">
+          <mat-option value="initial">Initial</mat-option>
+          <mat-option value="date">Date</mat-option>
+          <mat-option value="signature">Signature</mat-option>
+          <mat-option value="text">Text</mat-option>
+        </mat-select>
         <mat-error *ngIf="guestSignerForm.get('fieldTypeControl').hasError('required')">
           Field Type is required
         </mat-error>
@@ -75,7 +74,7 @@
           Field Description is required
         </mat-error>
       </mat-form-field>
-      
+
     </form>
     <div>
       <br/>
@@ -88,8 +87,7 @@
         &nbsp; &nbsp;
 
         <span *ngIf='!showAddFieldSpinner'>
-          <button [disabled]="guestSignerForm.invalid" mat-raised-button color="accent" class="text-upper"
-            (click)="addGuestFieldData()">
+          <button [disabled]="guestSignerForm.invalid" mat-raised-button color="accent" class="text-upper" (click)="addGuestFieldData()">
             SAVE
             <mat-icon>play_circle_outline</mat-icon>
           </button>
