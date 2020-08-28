@@ -1,15 +1,16 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
-import {EzsigndataService } from '../../service/ezsigndata.service';
+import { DatePipe } from '@angular/common';
+import {GuestEzsignService } from '../service/guestezsign.service';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { MatDialog } from '@angular/material';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 @Component({
-  selector: 'app-myezsigndocs',
-  templateUrl: './myezsigndocs.component.html',
-  styleUrls: ['./myezsigndocs.component.scss']
+  selector: 'app-guesetezsigndoc',
+  templateUrl: './guestdoc.component.html',
+  styleUrls: ['./guestdoc.component.scss']
 })
-export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
+export class EzsignGuestDocComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(SignaturePad) public sigPadList: QueryList< SignaturePad>;
   public signaturePadOptions: any = {
@@ -42,7 +43,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
   signcapform: FormGroup = new FormGroup({});
   myinput: any = {};
   mysigs: any = {};
-  constructor(private service: EzsigndataService,
+  constructor(private service: GuestEzsignService, private datepipe: DatePipe,
     public dialog: MatDialog) {
 
   }
@@ -50,18 +51,18 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
    // throw new Error("Method not implemented.");
   }
   ngOnInit() {
-    this.service.getEZSignDocs().subscribe(resp => {
+    this.service.getGuestEzsignDoc().subscribe(resp => {
       console.log(resp);
-      this.mycases = resp;
+      this.mycases = [resp];
       this.prepareData();
       console.log(this.mycases);
     });
   }
 
   reloadCaseData() {
-    this.service.getEZSignDocs().subscribe(resp => {
+    this.service.getGuestEzsignDoc().subscribe(resp => {
       console.log(resp);
-      this.mycases = resp;
+      this.mycases = [resp];
       this.prepareData();
       console.log(this.mycases);
     });
@@ -90,7 +91,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
   prepareData() {
 
     if (this.mycases) {
-    const userID = this.service.auth.getUserID();
+    const userID = this.service.auth.getSingerClientID();
     this.mycases.forEach(cc => {
       // not calculation display names
       if (cc.documentName.length < 40) {
@@ -123,7 +124,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
     let firstseq = cc.eZSignDocPages[0].pageSeqNo;
     let signer: any = null;
     cc.ezSignDocSigners.forEach(ss => {
-        if (ss.receiverId === this.service.auth.getUserID()) {
+        if (ss.receiverId === this.service.auth.getSingerClientID()) {
           signer = ss;
         }
     });
@@ -183,7 +184,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
   }
 
   displayPDFDocPage(docId, seq, mergeFlag) {
-    let url = this.service.auth.baseurl + '/EZSign/document/' + docId + "/page/" + seq;
+    let url = this.service.auth.baseurl + '/guestezsign/document/' + docId + "/page/" + seq;
     console.log(url);
     if (mergeFlag === 'Y') {
       url = url + '/mergedform';
@@ -212,7 +213,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
     let signer: any = null;
     this.agreementselected = false;
     cc.ezSignDocSigners.forEach( ss => {
-        if (ss.receiverId === this.service.auth.getUserID()) {
+        if (ss.receiverId === this.service.auth.getSingerClientID()) {
           signer = ss;
         }
     });
@@ -313,9 +314,9 @@ goSignCap() {
   }
 
   getInput() {
+    console.log(this.signcapform);
     let fields = this.curpage.filterFields;
     let allfilled = true;
-    //console.log(fields);
     let sigindex = 0;
     let res = this.sigPadList.toArray();
     this.curpage.filterFields.forEach( fd => {
@@ -340,7 +341,6 @@ goSignCap() {
         }
       }
     });
-    //console.log(this.myinput);
     return allfilled;
   }
 
@@ -378,16 +378,18 @@ goSignCap() {
 
   buildJson() {
     // build fields
-    console.log(this.signcapform);
     var fddata = [];
     this.curpage.filterFields.forEach( fd => {
         if (fd.fieldTypeName === 'Signature') {
           fd.signatureDataUrl = this.myinput[fd.labelName];
+        } else if (fd.fieldTypeName === 'Date') {
+          fd.fieldValue = this.datepipe.transform(this.myinput[fd.labelName], 'MM/dd/yyyy');
         } else {
           fd.fieldValue = this.myinput[fd.labelName];
         }
         fddata.push(fd);
     });
+    console.log(fddata);
     let json = {
       ezSignTrackingId: this.curcase.ezSignTrackingId,
       status: "",

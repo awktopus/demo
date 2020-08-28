@@ -1,69 +1,64 @@
-// this service handle Esign service security etc
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { GuestEZsignAuthService } from './guestezsignauth.service';
 
-
-
-// import { EventEmitter } from '@angular/core';
 @Injectable()
-export class GuestEZsignAuthService {
-  public baseurl = environment.apiEsignLink;
+export class GuestEzsignService implements Resolve<any> {
 
-  private _guestezsigntoken: any = null;
-  private _guesttoken: any = null;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, public auth: GuestEZsignAuthService) {
+    // Set the defaults
+  }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
+    return new Promise((resolve, reject) => {
 
+      Promise.all([
+      ]).then(
+        () => {
+          resolve();
+        },
+        reject
+      );
+    });
+  }
+ getGuestEzsignDoc() {
+    const url = this.auth.baseurl + "/guestezsign/orgunit/" + this.auth.getOrgUnitId() + "/receiver/"
+    + this.auth.getSingerClientID() + "/tracker/" + this.auth.getEzSignTrackingId() + "/document";
+    return this.http.get(url, this.auth.getGuestEzsignOptions());
   }
 
-  getGuestToken(): any {
-    return this._guesttoken;
+  postEzsignAgreementAudit(docId, seq): any {
+    const url = this.auth.baseurl + "/guestezsign/agreement/audit";
+    const json = {
+      "ClientId": this.auth.getSingerClientID(),
+      "DocId": docId,
+      "PageSeqNo": seq,
+      "Agreement": "",
+      "IpAddress": "",
+      "IsAgreementAccepted": ""
+    };
+    return this.http.post(url, json, this.auth.getGuestEzsignOptions());
   }
 
-  setGuestToken(token: any) {
-    this._guesttoken = token;
+  getPDFBlob(url) {
+    const opps = this.auth.getGuestEzsignNoContentOptions();
+    opps['responseType'] = 'arraybuffer';
+    console.log('get content url:' + url);
+    return this.http.get(url, opps);
   }
 
-  clearEzsignGuestAuthToken() {
-    // localStorage.removeItem(this.KEY_ESign);
-      this._guestezsigntoken = null;
+  // http://localhost:55940/api/guestezsign/receiver/cf0907c8-dafd-4235-a793-5afce024b1f0/formsubmit
+  postSubmitSignCap(json): any {
+    // tslint:disable-next-line: max-line-length
+    const url = this.auth.baseurl + "/guestezsign/orgUnit/" + this.auth.getOrgUnitId() + "/receiver/" + this.auth.getSingerClientID() + "/formsubmit";
+    console.log(json);
+    console.log(url);
+    return this.http.post(url, json, this.auth.getGuestEzsignOptions());
   }
 
-  getEzsignGuestAuthToken() {
-      return this._guestezsigntoken;
+  refreshGuestUrl(token) {
+    const url = this.auth.baseurl + "/guestezsign/resend/securelink";
+    return this.http.post(url, {"token": token});
   }
-
-  isGuestEzsignAuth(): boolean {
-    // const auth = localStorage.getItem(this.esign_key);
-    if (this.getEzsignGuestAuthToken()) { return true; } else { return false; }
-  }
-  setEzsignGuestAuthToken(token: string) {
-    this._guestezsigntoken = token;
-  }
-
-  runGuestEzsignAuth(guestToken: any) {
-    const url = this.baseurl + '/guestezsign/token/validate';
-    // console.log(this.getELOptions());
-    console.log('get auth data');
-    return this.http.post(url, { 'token': guestToken});
-  }
-  getGuestEzsignOptions() {
-    const token = this.getEzsignGuestAuthToken();
-    let header = new HttpHeaders();
-    header = header.append('Content-Type', 'application/json');
-    header = header.append('Accept', 'application/json');
-    header = header.append('Authorization', 'Bearer ' + token.accessToken);
-    console.log(header);
-    return { 'headers': header };
-  }
-
-
-  getGuestEzsignNoContentOptions() {
-    const token: any = this.getEzsignGuestAuthToken();
-    let header = new HttpHeaders();
-    header = header.append('Authorization', 'Bearer ' + token);
-    return { 'headers': header };
-  }
-
 }
