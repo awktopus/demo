@@ -94,7 +94,7 @@ import { EzsignClientReminderComponent } from './controls/shared/ezsign-client-r
     EzsignGridcolpopupComponent,
     MyEzsignDocsComponent,
     DialogMissingDataMessageDialogComponent,
-    EzsignClientReminderComponent
+    EzsignClientReminderComponent, EzSignReminderRendererComponent
     ],
   entryComponents: [AddsignersComponent, UploadDocumentComponent, EzsignPdfPopupComponent,
     EzsignConfirmationDialogComponent, InvitesignersComponent, AddupdatesignersComponent,

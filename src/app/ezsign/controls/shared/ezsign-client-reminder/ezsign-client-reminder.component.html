@@ -30,7 +30,7 @@
        </td>
        <td width=40%>
            <span>
-             <b>Case# </b>{{mycaseId}}
+             <b>Case# </b>{{ezSignTrackingId}}
              <br>
              <b>Status: </b>{{status}}
              <br>
@@ -65,7 +65,7 @@
            <mat-checkbox class="casefield"  [(ngModel)]="sendReminderNow">Send Reminder Now?</mat-checkbox>
            &nbsp; <button mat-raised-button color="accent" class="text-upper" (click)='saveSchedule()'>Save Schedule</button>
            &nbsp;<button mat-raised-button color="accent" class="text-upper" (click)='closeme()'>Cancel</button>
-           &nbsp;<button mat-raised-button color="accent" class="text-upper" (click)='deleteSchedule(mycaseId)'>Delete Schedule</button>
+           &nbsp;<button mat-raised-button color="accent" class="text-upper" (click)='deleteSchedule(ezSignTrackingId)'>Delete Schedule</button>
          </span>
        </td>
      </tr>
