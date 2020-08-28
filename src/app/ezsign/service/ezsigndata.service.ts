@@ -255,7 +255,7 @@ export class EzsigndataService implements Resolve<any> {
     if (clientReminder) {
       ezSignTrackingId = clientReminder.ezSignTrackingId;
       recurrenceInDays = clientReminder.recurrenceInDays;
-      signers = clientReminder.clients;
+      signers = clientReminder.signers;
       subject = clientReminder.subject;
       body = clientReminder.body;
       cpaid = this.auth.getUserID();
@@ -288,12 +288,12 @@ export class EzsigndataService implements Resolve<any> {
     let body: string;
     let cpaid: string;
     let sendReminderNow: string;
-    let clients: EZSignDocSigner[];
+    let signers: EZSignDocSigner[];
     let count = 0;
     if (clientReminder) {
       ezSignTrackingId = clientReminder.ezSignTrackingId;
       recurrenceInDays = clientReminder.recurrenceInDays;
-      clients = clientReminder.clients;
+      signers = clientReminder.signers;
       subject = clientReminder.subject;
       body = clientReminder.body;
       cpaid = clientReminder.senderId;
@@ -303,7 +303,7 @@ export class EzsigndataService implements Resolve<any> {
     const url = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/update';
     const json = {
       caseId: ezSignTrackingId,
-      clients: clients,
+      signers: signers,
       recurrenceInDays: recurrenceInDays,
       subject: subject,
       body: body,
