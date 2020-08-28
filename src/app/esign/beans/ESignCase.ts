@@ -303,6 +303,8 @@ export class EZSignDocResource {
   lastModifiedDateTime: string;
   ezSignDocSigners?: EZSignDocSigner[];
   eZSignDocPages?: EZSignDocPage[];
+  eZSignClientReminder?: EzSignClientReminder;
+  clientReminderFlag: string;
 }
 
 export class EZSignDocSigner {
@@ -444,6 +446,19 @@ export class SignerData {
   pageWidth: number;
   pageHeight: number;
   fields?: EzSignField[];
+}
+
+export class EzSignClientReminder {
+  ezSignTrackingId: string;
+  status: string;
+  signers: EZSignDocSigner[];
+  recurrenceInDays: number;
+  subject: string;
+  body: string;
+  senderId: string;
+  senderEmailId: string;
+  lastReminderDateTime: string;
+  sendReminderNow: string;
 }
 
 /** File node data with nested structure. */

@@ -1,0 +1,73 @@
+<div class="container">
+  <table width=100%>
+     <tr>
+       <td width=60%>
+         <h6>Schedule client reminder</h6>  
+           <b>
+             <label>Recipients:</label>
+           </b>
+           <mat-checkbox class="casefield" disabled='true' checked='true' *ngIf="primarySigner" [(ngModel)]='priSigCheck'>{{primarySigner.firstName}} {{primarySigner.lastName}}</mat-checkbox>
+           <mat-checkbox class="casefield" checked='true' *ngIf="secondarySigner" [(ngModel)]='secSigCheck'>{{secondarySigner.firstName}} {{secondarySigner.lastName}}</mat-checkbox>
+         <br>
+             <b>
+                 <label>Repeat in days:</label>
+             </b>        
+           <mat-form-field class="casefield">
+             <mat-select  [(value)]="recurrenceInDays">
+             <mat-option value="1" >1</mat-option>
+             <mat-option value="2" >2</mat-option>
+             <mat-option value="3" >3</mat-option>
+             <mat-option value="4" >4</mat-option>
+             <mat-option value="5" >5</mat-option>
+             <mat-option value="6" >6</mat-option>
+             <mat-option value="7" >7</mat-option>
+             </mat-select>
+           </mat-form-field>
+           <br>
+           <mat-form-field class='inputfield'>
+               <input matInput placeholder='Subject' [(ngModel)]="subject">
+             </mat-form-field>
+       </td>
+       <td width=40%>
+           <span>
+             <b>Case# </b>{{mycaseId}}
+             <br>
+             <b>Status: </b>{{status}}
+             <br>
+             <b>Last reminder sent on: </b>{{lastReminderDateTime}}
+             <br>
+           </span>
+         </td>  
+     </tr>
+   </table>
+   <div class='coverlettercontainer'>
+   <div *ngIf='viewControl.view'>
+       <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" 
+       [(ngModel)]="body" height='200px'></app-ngx-editor>
+       <br/>
+     </div>
+     <ng-container *ngIf='viewControl.edit'>
+       <label *ngIf="errorMessage">
+         <font color='red'>{{errorMessage}}</font>
+       </label>  
+       <mat-form-field class='inputfield' *ngFor="let inp of myInputs">
+         <input matInput [placeholder]='inp.name' disabled [(ngModel)]="inp.value">
+       </mat-form-field>
+       <span></span>
+     </ng-container>
+     <div class="controls" *ngIf='viewControl.edit'>
+    </div>
+    <table width=100%>
+     <tr>
+       <td width=25%></td>
+       <td width=75%>
+         <span>
+           <mat-checkbox class="casefield"  [(ngModel)]="sendReminderNow">Send Reminder Now?</mat-checkbox>
+           &nbsp; <button mat-raised-button color="accent" class="text-upper" (click)='saveSchedule()'>Save Schedule</button>
+           &nbsp;<button mat-raised-button color="accent" class="text-upper" (click)='closeme()'>Cancel</button>
+           &nbsp;<button mat-raised-button color="accent" class="text-upper" (click)='deleteSchedule(mycaseId)'>Delete Schedule</button>
+         </span>
+       </td>
+     </tr>
+   </table>
+ </div>

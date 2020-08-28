@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { EsignAuthService } from '../../esign/service/esignauth.service';
-import { EZSignDocResource } from '../../esign/beans/ESignCase';
+import { EZSignDocResource, EzSignClientReminder, EZSignDocSigner } from '../../esign/beans/ESignCase';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 @Injectable()
@@ -215,7 +215,8 @@ export class EzsigndataService implements Resolve<any> {
   }
 
   getEZSignDocs() {
-    const url = this.auth.baseurl + "/EZSign/orgunit/" + this.auth.getOrgUnitID()+"/receiver/"+this.auth.getUserID() + "/alldocuments";
+    const url = this.auth.baseurl + "/EZSign/orgunit/" + this.auth.getOrgUnitID() + "/receiver/"
+    + this.auth.getUserID() + "/alldocuments";
     return this.http.get(url, this.auth.getESignOptions());
   }
 
@@ -231,7 +232,7 @@ export class EzsigndataService implements Resolve<any> {
     const url = this.auth.baseurl + '/EZSign/agreement/audit';
     return this.http.post(url, json, this.auth.getESignOptions());
   }
-  postSubmitSignCap(json){
+  postSubmitSignCap(json) {
     const url = this.auth.baseurl + '/EZSign/receiver/' + this.auth.getUserID() + '/formsubmit';
     return this.http.post(url, json, this.auth.getESignOptions());
   }
@@ -240,5 +241,83 @@ export class EzsigndataService implements Resolve<any> {
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
     + '/sender/' +  this.auth.getUserID() + '/guestcontacts';
     return this.http.get(url, this.auth.getESignOptions());
+  }
+
+  saveScheduleClientReminder(clientReminder: EzSignClientReminder) {
+    let ezSignTrackingId: string;
+    let recurrenceInDays: number;
+    let subject: string;
+    let body: string;
+    let cpaid: string;
+    let sendReminderNow: string;
+    let signers: EZSignDocSigner[];
+    let count = 0;
+    if (clientReminder) {
+      ezSignTrackingId = clientReminder.ezSignTrackingId;
+      recurrenceInDays = clientReminder.recurrenceInDays;
+      signers = clientReminder.clients;
+      subject = clientReminder.subject;
+      body = clientReminder.body;
+      cpaid = this.auth.getUserID();
+      sendReminderNow = clientReminder.sendReminderNow;
+      count = count + 1;
+    }
+    const url = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/update';
+    const json = {
+      caseId: ezSignTrackingId,
+      signers: signers,
+      recurrenceInDays: recurrenceInDays,
+      subject: subject,
+      body: body,
+      cpaid: cpaid,
+      sendReminderNow: sendReminderNow,
+    };
+    console.log('save client reminder:' + json);
+    return this.http.put(url, json, this.auth.getESignOptions());
+  }
+
+  getClientScheduleReminder(ezSignTrackingId: string) {
+    const url: string = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/';
+    return this.http.get(url, this.auth.getESignOptions());
+  }
+
+  updateScheduleClientReminder(clientReminder: EzSignClientReminder) {
+    let ezSignTrackingId: string;
+    let recurrenceInDays: number;
+    let subject: string;
+    let body: string;
+    let cpaid: string;
+    let sendReminderNow: string;
+    let clients: EZSignDocSigner[];
+    let count = 0;
+    if (clientReminder) {
+      ezSignTrackingId = clientReminder.ezSignTrackingId;
+      recurrenceInDays = clientReminder.recurrenceInDays;
+      clients = clientReminder.clients;
+      subject = clientReminder.subject;
+      body = clientReminder.body;
+      cpaid = clientReminder.senderId;
+      sendReminderNow = clientReminder.sendReminderNow;
+      count = count + 1;
+    }
+    const url = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/update';
+    const json = {
+      caseId: ezSignTrackingId,
+      clients: clients,
+      recurrenceInDays: recurrenceInDays,
+      subject: subject,
+      body: body,
+      cpaid: cpaid,
+      sendReminderNow: sendReminderNow,
+    };
+    console.log(json);
+    return this.http.post(url, json, this.auth.getESignOptions());
+  }
+
+  deleteScheduleClientReminder(ezSignTrackingId: string) {
+    console.log('delete schedule reminder:' + ezSignTrackingId);
+    const url = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/delete';
+    console.log('url:' + url);
+    return this.http.delete(url, this.auth.getESignOptions());
   }
 }

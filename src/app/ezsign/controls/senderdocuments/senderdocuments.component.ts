@@ -19,6 +19,8 @@ import { EzsignLinkRendererComponent } from '../EzsignLinkRenderer.component';
 import { EzsignViewButtonRendererComponent } from '../Ezsignviewbutton-renderer.component';
 import { EzsignPdfPopupComponent } from '../shared/ezsign-pdf-popup/ezsign-pdf-popup.component';
 import { EzsignGridcolpopupComponent } from '../shared/ezsign-gridcolpopup/ezsign-gridcolpopup.component';
+import { EzSignReminderRendererComponent } from '../EzsignReminderRenderer.component';
+import { EzsignClientReminderComponent } from '../shared/ezsign-client-reminder/ezsign-client-reminder.component';
 
 @Component({
   selector: 'app-senderdocuments',
@@ -58,7 +60,8 @@ export class SenderdocumentsComponent implements OnInit {
       viewButtonRender: EzsignViewButtonRendererComponent,
       addSignersButtonRenderer: EzsignAddSignersButtonRendererComponent,
       historyButtonRenderer: EzsignHistoryButtonRendererComponent,
-      deleteButtonRender: EzsignDeleteButtonRendererComponent
+      deleteButtonRender: EzsignDeleteButtonRendererComponent,
+      reminderRenderer: EzSignReminderRendererComponent
     }
   }
 
@@ -121,13 +124,37 @@ export class SenderdocumentsComponent implements OnInit {
           label: 'HISTORY'
         },
         cellStyle: { 'justify-content': "center" }
-      }
+      }, {
+        headerName: 'Reminder', field: 'clientReminderFlag', cellRenderer: 'reminderRenderer',
+        minwidth: 100
+      },
     ];
     this.context = { componentParent: this, ezsignfit: false };
     this.rowHeight = 40;
     this.domLayout = 'autoHeight';
     this.rowClass = 'ezsign-history-grid';
     return res;
+  }
+
+  createClientReminder(ezSignTrackingId: string): void {
+     const dialogRef = this.dialog.open(EzsignClientReminderComponent, {
+      width: '980px',
+    });
+    dialogRef.componentInstance.senderDocRef = this;
+    this.ezSignDataService.getClientScheduleReminder(ezSignTrackingId).subscribe(resp => {
+      const res_c = <any>resp;
+      //   console.log(res_c);
+      dialogRef.componentInstance.setClientReminderInfo(res_c);
+    });
+  }
+
+  updateClientReminderFlag(ezSignTrackingId: string, flag: string) {
+    this.ezSignDocsgridData.forEach(cc => {
+      if (cc.ezSignTrackingId === ezSignTrackingId
+      ) {
+        cc.clientReminderFlag = flag;
+      }
+    });
   }
 
   showEzSignDocument(selectedRow: any) {
