@@ -243,7 +243,7 @@ export class EzsigndataService implements Resolve<any> {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
-  saveScheduleClientReminder(clientReminder: EzSignClientReminder) {
+  saveScheduleClientReminder(clientReminder: EzSignClientReminder): Observable<any> {
     let ezSignTrackingId: string;
     let recurrenceInDays: number;
     let subject: string;
@@ -262,9 +262,10 @@ export class EzsigndataService implements Resolve<any> {
       sendReminderNow = clientReminder.sendReminderNow;
       count = count + 1;
     }
-    const url = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/update';
+    const url = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
+    + '/sender/' +  this.auth.getUserID() + '/schedulereminder/create';
     const json = {
-      caseId: ezSignTrackingId,
+      ezSignTrackingId: ezSignTrackingId,
       signers: signers,
       recurrenceInDays: recurrenceInDays,
       subject: subject,
@@ -273,15 +274,16 @@ export class EzsigndataService implements Resolve<any> {
       sendReminderNow: sendReminderNow,
     };
     console.log('save client reminder:' + json);
-    return this.http.put(url, json, this.auth.getESignOptions());
+    return this.http.post(url, json, this.auth.getESignOptions());
   }
 
-  getClientScheduleReminder(ezSignTrackingId: string) {
-    const url: string = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/';
+  getClientScheduleReminder(ezSignTrackingId: string): Observable<any> {
+    const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
+    + '/sender/' +  this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder';
     return this.http.get(url, this.auth.getESignOptions());
   }
 
-  updateScheduleClientReminder(clientReminder: EzSignClientReminder) {
+  updateScheduleClientReminder(clientReminder: EzSignClientReminder): Observable<any> {
     let ezSignTrackingId: string;
     let recurrenceInDays: number;
     let subject: string;
@@ -300,9 +302,10 @@ export class EzsigndataService implements Resolve<any> {
       sendReminderNow = clientReminder.sendReminderNow;
       count = count + 1;
     }
-    const url = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/update';
+    const url = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
+    + '/sender/' +  this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder/update';
     const json = {
-      caseId: ezSignTrackingId,
+      ezSignTrackingId: ezSignTrackingId,
       signers: signers,
       recurrenceInDays: recurrenceInDays,
       subject: subject,
@@ -314,9 +317,10 @@ export class EzsigndataService implements Resolve<any> {
     return this.http.post(url, json, this.auth.getESignOptions());
   }
 
-  deleteScheduleClientReminder(ezSignTrackingId: string) {
+  deleteScheduleClientReminder(ezSignTrackingId: string): Observable<any> {
     console.log('delete schedule reminder:' + ezSignTrackingId);
-    const url = this.auth.baseurl + '/Clients/case/' + ezSignTrackingId + '/schedulereminder/delete';
+    const url = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
+    + '/sender/' +  this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder/delete';
     console.log('url:' + url);
     return this.http.delete(url, this.auth.getESignOptions());
   }

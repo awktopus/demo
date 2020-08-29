@@ -314,7 +314,7 @@ goSignCap() {
   getInput() {
     let fields = this.curpage.filterFields;
     let allfilled = true;
-    //console.log(fields);
+    // console.log(fields);
     let sigindex = 0;
     let res = this.sigPadList.toArray();
     this.curpage.filterFields.forEach( fd => {
@@ -339,7 +339,7 @@ goSignCap() {
         }
       }
     });
-    //console.log(this.myinput);
+    // console.log(this.myinput);
     return allfilled;
   }
 

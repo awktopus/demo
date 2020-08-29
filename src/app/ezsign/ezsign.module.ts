@@ -101,7 +101,7 @@ import { EzsignMainComponent } from './controls/ezsignmain/ezsignmain.component'
     DocumenthistoryComponent, AddguestsComponent, EzsignGridcolpopupComponent ,
     MyEzsignDocsComponent,
     DialogMissingDataMessageDialogComponent, DialogMissingDataMessageDialogComponent ,
-    AddguestsComponent,EzsignMainComponent
+    AddguestsComponent, EzsignMainComponent, EzsignClientReminderComponent
     ],
   providers: [
     ESignGuard,

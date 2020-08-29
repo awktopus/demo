@@ -3,10 +3,11 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { Component} from '@angular/core';
 
 @Component({
-    template: `<mat-icon class='remindericon' color='{{colorstr}}' *ngIf='ezSign.status=="ESign"
-    && (ezSign.clientReminderFlag =="Y"||ezSign.clientReminderFlag =="N")' mdbRippleRadius
-      (click)="invokeParentMethod(ezSign.ezSignTrackingId)">scheduleicon
-    </mat-icon>`,
+    template: `<button mat-icon-button color='{{colorstr}}'
+    *ngIf='ezSign.status=="Sent to recipient" && (ezSign.clientReminderFlag =="Y"||ezSign.clientReminderFlag =="N")' mdbRippleRadius
+      (click)="invokeParentMethod(ezSign.ezSignTrackingId)">
+      <mat-icon>scheduleicon</mat-icon>
+    </button>`,
     styles: [
         `.remindericon{
             margin-left: 15px;

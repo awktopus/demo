@@ -3,13 +3,14 @@
     <tr>
       <td>
         <mat-radio-group [(ngModel)]="casefilter">
-          <mat-radio-button value=0 selected>All &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button value=0 checked>All &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
           <mat-radio-button value=1>To be Signed&nbsp;&nbsp;&nbsp;</mat-radio-button>
           <mat-radio-button value=2>Signed&nbsp;&nbsp;&nbsp;</mat-radio-button>
         </mat-radio-group>
       </td>
     </tr>
   </table>
+  <br>
   <div class='caselist'>
     <div *ngFor="let case of mycases">
       <mat-card *ngIf='casefilter==0||(casefilter==1&&case.status=="Sent to recipient")||(casefilter==2&&case.status=="Signed")' class='casecard'

@@ -250,7 +250,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
   }
 
   goToEZSignDocumentsView() {
-    this.router.navigateByUrl('main/ezsign/senderdocuments');
+    this.router.navigateByUrl('main/ezsign/ezsignmain');
   }
 
   previewAndSendInvite() {

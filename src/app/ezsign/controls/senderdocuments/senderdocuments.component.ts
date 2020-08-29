@@ -72,6 +72,7 @@ export class SenderdocumentsComponent implements OnInit {
   }
 
   loadEZSignDocuments() {
+    this.isEZsignDataFetched = false;
     this.ezSignDataService.getEZSignDocuments().subscribe(resp => {
       const ezSignDocs: EZSignDocResource[] = <EZSignDocResource[]>resp;
       console.log(ezSignDocs);
@@ -124,9 +125,10 @@ export class SenderdocumentsComponent implements OnInit {
           label: 'HISTORY'
         },
         cellStyle: { 'justify-content': "center" }
-      }, {
+      },
+      {
         headerName: 'Reminder', field: 'clientReminderFlag', cellRenderer: 'reminderRenderer',
-        minwidth: 100
+        cellStyle: { 'justify-content': "center" }
       },
     ];
     this.context = { componentParent: this, ezsignfit: false };
@@ -149,12 +151,16 @@ export class SenderdocumentsComponent implements OnInit {
   }
 
   updateClientReminderFlag(ezSignTrackingId: string, flag: string) {
+    console.log('update receiver reminder flag');
+    console.log(ezSignTrackingId);
+    console.log(flag);
     this.ezSignDocsgridData.forEach(cc => {
       if (cc.ezSignTrackingId === ezSignTrackingId
       ) {
         cc.clientReminderFlag = flag;
       }
     });
+    this.loadEZSignDocuments();
   }
 
   showEzSignDocument(selectedRow: any) {

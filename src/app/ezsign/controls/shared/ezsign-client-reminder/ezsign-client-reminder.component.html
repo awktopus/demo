@@ -2,13 +2,16 @@
   <table width=100%>
      <tr>
        <td width=60%>
-         <h6>Schedule client reminder</h6>  
-           <b>
-             <label>Recipients:</label>
-           </b>
-           <mat-checkbox class="casefield" disabled='true' checked='true' *ngIf="primarySigner" [(ngModel)]='priSigCheck'>{{primarySigner.firstName}} {{primarySigner.lastName}}</mat-checkbox>
-           <mat-checkbox class="casefield" checked='true' *ngIf="secondarySigner" [(ngModel)]='secSigCheck'>{{secondarySigner.firstName}} {{secondarySigner.lastName}}</mat-checkbox>
-         <br>
+         <h6>Schedule EZSign receiver reminder</h6>  
+           <label class="heading-label">Recipients:</label>
+           <div *ngFor="let signer of eZSigners">
+             <mat-checkbox class="casefield" [(checked)]="signer.isChecked" [(ngModel)]='signer.isChecked'>
+               <label class="heading-label2">
+                 {{signer.receiverFirstName}} {{signer.receiverLastName}}
+               </label>
+             </mat-checkbox>
+           </div>
+            <br>
              <b>
                  <label>Repeat in days:</label>
              </b>        
@@ -30,7 +33,7 @@
        </td>
        <td width=40%>
            <span>
-             <b>Case# </b>{{ezSignTrackingId}}
+             <b>EZSign Tracking# </b>{{ezSignTrackingId}}
              <br>
              <b>Status: </b>{{status}}
              <br>

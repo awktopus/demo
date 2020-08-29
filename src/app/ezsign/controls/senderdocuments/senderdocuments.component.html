@@ -10,6 +10,11 @@
                     <button *ngIf="ezSignDocsgridData" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="launchNewEZSignDocument()">
                         <mat-icon>note_add</mat-icon>&nbsp;EZSIGN DOCUMENT
                     </button>
+                    &nbsp;&nbsp;
+                    <button mat-icon-button *ngIf="ezSignDocsgridData" matTooltip="refresh" 
+                        (click)="loadEZSignDocuments()">
+                        <mat-icon>refresh</mat-icon>&nbsp;REFRESH
+                    </button>
                 </td>
                 <td align=right>
                     <div *ngIf="ezSignDocsgridData && isEZsignDataFetched">
@@ -90,7 +95,7 @@
                         <div>
                             <span *ngIf='!showProcessSpinner'>
                                     <button *ngIf="files.length != 0" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="createNewEZSignDocument()">
-                                        + NEW EZSIGN DOCUMENT
+                                      UPLOAD
                                     </button>
                                 </span>
                                 <mat-spinner *ngIf='showProcessSpinner' diameter='40'></mat-spinner>

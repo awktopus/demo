@@ -28,7 +28,7 @@ import { EzsignClientReminderComponent } from '../shared/ezsign-client-reminder/
   styleUrls: ['./ezsignmain.component.scss']
 })
 export class EzsignMainComponent implements OnInit {
-
+  selectedIndex: any;
   constructor(public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,

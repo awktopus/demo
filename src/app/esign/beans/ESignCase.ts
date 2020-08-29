@@ -286,7 +286,9 @@ export class Signer {
   isSenderSigner: string;
   isSender: string;
   signerSequenceNo: number;
-  status: string
+  status: string;
+  isEmailReminderScheduled: string;
+  isChecked: boolean;
 }
 
 export class MetaData {

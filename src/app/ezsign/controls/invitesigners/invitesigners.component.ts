@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import {
 Signer
 } from '../../../esign/beans/ESignCase';
+import { EzsignClientReminderComponent } from '../shared/ezsign-client-reminder/ezsign-client-reminder.component';
 @Component({
   selector: 'app-invitesigners',
   templateUrl: './invitesigners.component.html',
@@ -24,7 +25,7 @@ export class InvitesignersComponent implements OnInit, AfterViewInit {
   showProcessSpinner = false;
   status: string;
   constructor(private service: EzsigndataService, private router: Router,
-    public dialogRef: MatDialogRef<InvitesignersComponent>) {
+    public dialogRef: MatDialogRef<InvitesignersComponent>, public dialog: MatDialog) {
       dialogRef.disableClose = true;
       this.viewControl = {
         view: true,
@@ -81,6 +82,21 @@ ngOnInit() {
     });
   }
 
+  createEzSignReceiverReminder() {
+    console.log('createEzSignReceiverReminder:' + this.ezSignTrackingId);
+    const dialogRef = this.dialog.open(EzsignClientReminderComponent, {
+      width: '980px',
+    });
+    dialogRef.componentInstance.inviteSignersRef = this;
+    this.service.getClientScheduleReminder(this.ezSignTrackingId).subscribe(resp => {
+      const res_c = <any>resp;
+      console.log(res_c);
+      dialogRef.componentInstance.setClientReminderInfo(res_c);
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
   closeMe() {
     this.dialogRef.close();
   }
