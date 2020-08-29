@@ -364,6 +364,7 @@ goSignCap() {
              this.viewType = "signingFormView";
           } else {
               // all signing done for this form
+              this.dialog.open(DialogCompletedEzsignComponent);
               this.viewType = "";
               this.curseq = -1;
               this.curpage = null;

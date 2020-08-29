@@ -13,6 +13,7 @@ export class GuestEzsignComponent implements OnInit {
 
   guestToken: any = null;
   tokenStatus: any = "" ;
+  resendstatus = "N";
   constructor(private route: ActivatedRoute, private service: GuestEzsignService,
     private router: Router) {
 
@@ -36,6 +37,9 @@ export class GuestEzsignComponent implements OnInit {
          } else if ( resp.statusCode === "406") {
             console.log(" token is good but expired");
             this.tokenStatus = "expired";
+         } else if (resp.statusCode === "404") {
+            console.log(" token is good but document removed");
+            this.tokenStatus = "notfound";
          } else {
             console.log(" token is invalid");
             this.tokenStatus = "invalid";
@@ -49,6 +53,7 @@ export class GuestEzsignComponent implements OnInit {
     this.service.refreshGuestUrl(this.guestToken).subscribe(resp => {
         console.log(resp);
         console.log("resend done");
+        this.resendstatus = "Y";
     });
   }
   goToGuestDoc () {
