@@ -9,7 +9,7 @@ import {
    MatNativeDateModule, MatMenuModule
 } from '@angular/material';
 import { CovalentLayoutModule } from '@covalent/core/layout';
-import { SharedBaseModule } from '../shared/shared.module';
+import { SharedBaseModule } from '../../shared/shared.module';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { NgxEditorModule } from 'ngx-editor';
 import { AgGridModule } from 'ag-grid-angular';
@@ -17,7 +17,10 @@ import { AngularDraggableModule } from 'angular2-draggable';
 import { GuestEZSignRouting } from './guestezsign.routing';
 import { GuestEzsignGuard} from './service/guestezsignauth';
 import { GuestEZsignAuthService } from './service/guestezsignauth.service';
-import { EzsignGuestDocComponent, DialogMissingDataMessageDialogComponent, DialogNoFormMessageDialogComponent } from './guestdoc/guestdoc.component';
+// tslint:disable-next-line:max-line-length
+import {  DialogNoFormMessageDialogComponent, DialogCompletedEzsignComponent } from './guestdoc/guestdoc.component';
+import { EzsignGuestDocComponent, DialogMissingDataMessageDialogComponent, } from './guestdoc/guestdoc.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -45,10 +48,11 @@ import { EzsignGuestDocComponent, DialogMissingDataMessageDialogComponent, Dialo
     EzsignGuestDocComponent,
     DialogMissingDataMessageDialogComponent,
     DialogNoFormMessageDialogComponent,
+    DialogCompletedEzsignComponent,
     SafePipe,
     ],
   entryComponents: [ DialogMissingDataMessageDialogComponent,
-    DialogNoFormMessageDialogComponent,],
+    DialogNoFormMessageDialogComponent,DialogCompletedEzsignComponent],
   providers: [
     // AuthGuard,
     // EsignserviceService,

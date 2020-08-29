@@ -3,10 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { EzsignComponent } from './ezsign.component';
 import { ModuleWithProviders } from '@angular/core';
 import { SenderdocumentsComponent } from './controls/senderdocuments/senderdocuments.component';
-import { ReceiverdocumentsComponent } from './controls/receiverdocuments/receiverdocuments.component';
 import { ESignGuard } from './../esign/service/esignauth';
 import { AddfieldsComponent } from './controls/addfields/addfields.component';
 import { MyEzsignDocsComponent } from './controls/myezsigndocs/myezsigndocs.component';
+import { EzsignMainComponent } from './controls/ezsignmain/ezsignmain.component';
 export const EZSignRoutes: Routes = [
     {
         path: '',
@@ -23,11 +23,6 @@ export const EZSignRoutes: Routes = [
         component: SenderdocumentsComponent
     },
     {
-        path: 'receiverdocuments',
-        canActivate: [AuthGuard, ESignGuard],
-        component: ReceiverdocumentsComponent
-    },
-    {
         path: 'addfields',
         canActivate: [AuthGuard, ESignGuard],
         component: AddfieldsComponent
@@ -41,6 +36,11 @@ export const EZSignRoutes: Routes = [
         path: 'ezsigndocs',
         canActivate: [AuthGuard, ESignGuard],
         component: MyEzsignDocsComponent
+    },
+    {
+        path: 'ezsignmain',
+        canActivate: [AuthGuard, ESignGuard],
+        component: EzsignMainComponent
     },
 ];
 

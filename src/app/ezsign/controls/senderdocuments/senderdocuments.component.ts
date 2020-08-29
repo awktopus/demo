@@ -23,7 +23,7 @@ import { EzSignReminderRendererComponent } from '../EzsignReminderRenderer.compo
 import { EzsignClientReminderComponent } from '../shared/ezsign-client-reminder/ezsign-client-reminder.component';
 
 @Component({
-  selector: 'app-senderdocuments',
+  selector: 'app-ezsign-senderdocuments',
   templateUrl: './senderdocuments.component.html',
   styleUrls: ['./senderdocuments.component.scss']
 })

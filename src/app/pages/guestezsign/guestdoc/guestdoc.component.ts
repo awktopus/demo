@@ -416,3 +416,9 @@ export class DialogNoFormMessageDialogComponent {}
   templateUrl: 'dialog-missingdata-message-dialog.html',
 })
 export class DialogMissingDataMessageDialogComponent {}
+
+@Component({
+  selector: 'dialog-complete-ezsign',
+  templateUrl: 'dialog-complete-signing.html',
+})
+export class DialogCompletedEzsignComponent {}

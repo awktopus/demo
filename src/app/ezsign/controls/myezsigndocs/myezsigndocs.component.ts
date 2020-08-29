@@ -14,7 +14,6 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
   @ViewChildren(SignaturePad) public sigPadList: QueryList< SignaturePad>;
   public signaturePadOptions: any = {
     'minWidth': 1,
-    'canvasWidth': 420,
     'canvasHeight': 220,
     'backgroundColor': '#eeffee'
   };

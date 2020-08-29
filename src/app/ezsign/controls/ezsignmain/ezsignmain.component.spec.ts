@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReceiverdocumentsComponent } from './receiverdocuments.component';
+import { EzsignMainComponent } from './ezsignmain.component';
 
-describe('ReceiverdocumentsComponent', () => {
-  let component: ReceiverdocumentsComponent;
-  let fixture: ComponentFixture<ReceiverdocumentsComponent>;
+describe('SenderdocumentsComponent', () => {
+  let component: EzsignMainComponent;
+  let fixture: ComponentFixture<EzsignMainComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReceiverdocumentsComponent ]
+      declarations: [ EzsignMainComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReceiverdocumentsComponent);
+    fixture = TestBed.createComponent(EzsignMainComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

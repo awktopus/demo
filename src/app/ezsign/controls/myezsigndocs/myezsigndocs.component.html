@@ -2,11 +2,6 @@
   <table width=60%>
     <tr>
       <td>
-        <label class="heading-label">EZSign</label>
-      </td>
-    </tr>
-    <tr>
-      <td>
         <mat-radio-group [(ngModel)]="casefilter">
           <mat-radio-button value=0 selected>All &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
           <mat-radio-button value=1>To be Signed&nbsp;&nbsp;&nbsp;</mat-radio-button>
@@ -139,7 +134,7 @@
       </tr>
     </table>
   </div>
-    <div *ngIf="viewType=='signingFormView'" class='casedoc' style="word-break:break-word;white-space:normal !important;">
+    <div *ngIf="viewType=='signingFormView' || viewType=='signcapview'" class='casedoc' style="word-break:break-word;white-space:normal !important;">
        <iframe width="95%" height="600" [src]="pdfUrl | safe">
     </iframe>
   <div *ngIf='fieldsCount>0 && signedCount==fieldsCount'>

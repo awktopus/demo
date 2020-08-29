@@ -16,7 +16,6 @@ import { NgxEditorModule } from 'ngx-editor';
 import { AgGridModule } from 'ag-grid-angular';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { ESignGuard } from './../esign/service/esignauth';
-import { ReceiverdocumentsComponent } from './controls/receiverdocuments/receiverdocuments.component';
 import { SenderdocumentsComponent } from './controls/senderdocuments/senderdocuments.component';
 import { UploadDocumentComponent } from './controls/upload-document/upload-document.component';
 import { DragDropDirective } from './../ezsign/controls/upload-document/drag-drop.directive';
@@ -42,6 +41,7 @@ import { AddguestsComponent } from './controls/addfields/addguests/addguests.com
 import { EzsignGridcolpopupComponent } from './controls/shared/ezsign-gridcolpopup/ezsign-gridcolpopup.component';
 import { EzSignReminderRendererComponent } from './controls/EzsignReminderRenderer.component';
 import { EzsignClientReminderComponent } from './controls/shared/ezsign-client-reminder/ezsign-client-reminder.component';
+import { EzsignMainComponent } from './controls/ezsignmain/ezsignmain.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -72,9 +72,9 @@ import { EzsignClientReminderComponent } from './controls/shared/ezsign-client-r
   declarations: [
     EzsignComponent,
     SafePipe,
+    EzsignMainComponent,
     SenderdocumentsComponent,
     DialogNoFormMessageDialogComponent,
-    ReceiverdocumentsComponent,
     UploadDocumentComponent,
     DragDropDirective,
     UploadDocumentComponent,
@@ -101,7 +101,7 @@ import { EzsignClientReminderComponent } from './controls/shared/ezsign-client-r
     DocumenthistoryComponent, AddguestsComponent, EzsignGridcolpopupComponent ,
     MyEzsignDocsComponent,
     DialogMissingDataMessageDialogComponent, DialogMissingDataMessageDialogComponent ,
-    AddguestsComponent
+    AddguestsComponent,EzsignMainComponent
     ],
   providers: [
     ESignGuard,

@@ -1,22 +1,10 @@
-<table>
-    <tr>
-        <th>
-            <label class="heading-label">EZSign</label>
-        </th>
-    </tr>
-</table>
+
 <div>
     <mat-spinner *ngIf='!isEZsignDataFetched' diameter='30'></mat-spinner>
     <span *ngIf='!isEZsignDataFetched'>Processing...</span>
 </div>
 <br>
-<mat-tab-group (focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
-    <mat-tab>
-        <ng-template mat-tab-label>
-            Send Documents
-        </ng-template>
-        <br/>
-        <table width=90% *ngIf='isEZsignDataFetched'>
+<table width=90% *ngIf='isEZsignDataFetched'>
             <tr>
                 <td width=45%>
                     <button *ngIf="ezSignDocsgridData" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="launchNewEZSignDocument()">
@@ -133,11 +121,3 @@
                 (firstDataRendered)="onFirstDataRendered($event,'ezsign')" [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout">
             </ag-grid-angular>
         </div>
-    </mat-tab>
-
-    <mat-tab>
-        <ng-template mat-tab-label>
-            Received Documents
-        </ng-template>
-    </mat-tab>
-</mat-tab-group>
