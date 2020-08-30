@@ -199,8 +199,12 @@
   </div>
   <tr>
   <td align=center>
-     <button mat-raised-button color="accent"  (click)="submitSignCapData()">Save</button>
-  </td>
+      <span *ngIf='!showProcessSpinner'>
+       <button mat-raised-button color="accent"  (click)="submitSignCapData()">Save</button>
+      </span>  
+      <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+      <span *ngIf='showProcessSpinner'>Processing...</span>
+      </td>
   </tr>
   </table>
   </form>

@@ -75,7 +75,7 @@ ngOnInit() {
       console.log(resp);
       if (resp && resp.statusCode === "200") {
         this.showProcessSpinner = false;
-        const url = 'main/ezsign/senderdocuments';
+        const url = 'main/ezsign/ezsignmain';
         this.router.navigateByUrl(url);
         this.closeMe();
       }

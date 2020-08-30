@@ -41,6 +41,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
   signcapform: FormGroup = new FormGroup({});
   myinput: any = {};
   mysigs: any = {};
+  showProcessSpinner = false;
   constructor(private service: EzsigndataService,
     public dialog: MatDialog) {
 
@@ -344,6 +345,7 @@ goSignCap() {
   }
 
   submitSignCapData() {
+    this.showProcessSpinner = true;
     if (this.getInput()) {
       console.log(this.myinput);
 
@@ -368,8 +370,10 @@ goSignCap() {
               this.curpage = null;
               this.curcase = null;
           }
+          this.showProcessSpinner = false;
       });
     } else {
+      this.showProcessSpinner = false;
       console.log("Missing data");
       this.dialog.open(DialogMissingDataMessageDialogComponent);
     }
