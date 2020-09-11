@@ -11,6 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddfieldsComponent } from '../addfields.component';
 import { EzsigndataService } from '../../../service/ezsigndata.service';
 import { MatSnackBar } from '@angular/material';
+import { AddguestsComponent } from '../addguests/addguests.component';
 @Component({
   selector: 'app-addupdatesigners',
   templateUrl: './addupdatesigners.component.html',
@@ -36,7 +37,7 @@ export class AddupdatesignersComponent implements OnInit {
   receiverEmailId: any;
   signerForm: FormGroup = new FormGroup({
     receiverNameControl: new FormControl('', Validators.required),
-    receiverEmailIdControl: new FormControl(''),
+    receiverEmailIdControl: new FormControl('', Validators.required),
     fieldTypeControl: new FormControl('', Validators.required),
     fieldDescControl: new FormControl('', Validators.required)
   });
@@ -162,6 +163,7 @@ export class AddupdatesignersComponent implements OnInit {
     fieldData.receiverLastName = this.primarysigner.lastName;
     fieldData.receiverEmailId = this.receiverEmailId;
     fieldData.isGuest = "N";
+    fieldData.isELMember = this.primarysigner.isELMember;
     fieldData.isSenderSigner = isSenderSigner;
     fieldData.isSender = isSender;
     fieldData.fieldType = this.signerForm.controls['fieldTypeControl'].value;
@@ -179,29 +181,29 @@ export class AddupdatesignersComponent implements OnInit {
     this.cancelPopup();
   }
 
-  updateFieldData() {
-    this.showEditFieldSpinner = true;
-    console.log('update field data');
-    console.log(this.primarysigner);
-    let isSender = "N";
-    let isSenderSigner = "N";
-    if (this.primarysigner.clientId === this.service.auth.getUserID()) {
-      isSender = "Y";
-      isSenderSigner = "Y";
-    }
-    let fieldData = new EzSignField();
-    fieldData.receiverId = this.primarysigner.clientId;
-    fieldData.receiverFirstName = this.primarysigner.firstName;
-    fieldData.receiverLastName = this.primarysigner.lastName;
-    fieldData.receiverEmailId = this.primarysigner.emailId;
-    fieldData.isSenderSigner = isSenderSigner;
-    fieldData.isSender = isSender;
-    fieldData.fieldType = this.signerForm.controls['fieldTypeControl'].value;
-    fieldData.labelName = this.signerForm.controls['fieldDescControl'].value;
-    this.addFieldsRef.addFieldData(fieldData);
-    this.showEditFieldSpinner = false;
-    this.cancelPopup();
-  }
+  // updateFieldData() {
+  //   this.showEditFieldSpinner = true;
+  //   console.log('update field data');
+  //   console.log(this.primarysigner);
+  //   let isSender = "N";
+  //   let isSenderSigner = "N";
+  //   if (this.primarysigner.clientId === this.service.auth.getUserID()) {
+  //     isSender = "Y";
+  //     isSenderSigner = "Y";
+  //   }
+  //   let fieldData = new EzSignField();
+  //   fieldData.receiverId = this.primarysigner.clientId;
+  //   fieldData.receiverFirstName = this.primarysigner.firstName;
+  //   fieldData.receiverLastName = this.primarysigner.lastName;
+  //   fieldData.receiverEmailId = this.primarysigner.emailId;
+  //   fieldData.isSenderSigner = isSenderSigner;
+  //   fieldData.isSender = isSender;
+  //   fieldData.fieldType = this.signerForm.controls['fieldTypeControl'].value;
+  //   fieldData.labelName = this.signerForm.controls['fieldDescControl'].value;
+  //   this.addFieldsRef.addFieldData(fieldData);
+  //   this.showEditFieldSpinner = false;
+  //   this.cancelPopup();
+  // }
 
   selectFieldType(event: any) {
     console.log('select field type selection');
@@ -220,6 +222,16 @@ export class AddupdatesignersComponent implements OnInit {
 
   cancelPopup() {
     this.dialogRef.close();
+  }
+
+  addGuestField() {
+    console.log('addGuestField:');
+    const dialogRef = this.dialog.open(AddguestsComponent, {
+      width: '600px', height: '700px'
+    });
+    dialogRef.componentInstance.addSignersRef = this;
+    dialogRef.componentInstance.addFieldsRef = this.addFieldsRef;
+    dialogRef.componentInstance.setData("addguest", "New Guests", null, this.ezSignTrackingId);
   }
 
 }

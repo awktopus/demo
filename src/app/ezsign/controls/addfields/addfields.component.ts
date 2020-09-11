@@ -275,17 +275,9 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       width: '500px', height: '600px'
     });
     dialogRef.componentInstance.addFieldsRef = this;
-    dialogRef.componentInstance.setData("addfield", "Add Field", null, this.ezSignTrackingId);
+    dialogRef.componentInstance.setData("addfield", "Add Signer", null, this.ezSignTrackingId);
   }
 
-  addGuestField() {
-    console.log('addGuestField:');
-    const dialogRef = this.dialog.open(AddguestsComponent, {
-      width: '600px', height: '700px'
-    });
-    dialogRef.componentInstance.addFieldsRef = this;
-    dialogRef.componentInstance.setData("addguest", "New Guests", null, this.ezSignTrackingId);
-  }
   addFieldData(fieldData: EzSignField) {
     console.log('addFieldData');
     // Step1: save Signer
@@ -297,7 +289,8 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       isSenderSigner: fieldData.isSenderSigner,
       isSender: fieldData.isSender,
       isGuest: fieldData.isGuest,
-      isContactTobeSaved: fieldData.isContactTobeSaved
+      isContactTobeSaved: fieldData.isContactTobeSaved,
+      isELMember: fieldData.isELMember
     };
     console.log(newSignerJson);
     this.service.addNewSigner(this.ezSignTrackingId, newSignerJson).subscribe(resp => {

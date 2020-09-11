@@ -11,6 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddfieldsComponent } from '../addfields.component';
 import { EzsigndataService } from '../../../service/ezsigndata.service';
 import { MatSnackBar } from '@angular/material';
+import { AddupdatesignersComponent } from '../addupdatesigners/addupdatesigners.component';
 
 @Component({
   selector: 'app-addguests',
@@ -22,6 +23,7 @@ export class AddguestsComponent implements OnInit {
   operation: string;
   title: string;
   addFieldsRef: AddfieldsComponent;
+  addSignersRef: AddupdatesignersComponent;
   ezSignTrackingId: string;
   fieldRecord: EzSignField;
   firstName: any;
@@ -82,7 +84,7 @@ export class AddguestsComponent implements OnInit {
           return;
         } else {
           console.log('guest signer searching...');
-        this.guestSigners = [];
+          this.guestSigners = [];
           console.log('cache guest signers');
           console.log(this.cacheGuestSigners);
           this.cacheGuestSigners.forEach(cc => {
@@ -131,16 +133,16 @@ export class AddguestsComponent implements OnInit {
     console.log(this.guestSigner);
     console.log(this.firstNameInput)
     if (!this.guestSigner && (typeof this.firstNameInput === 'undefined'
-    || this.firstNameInput === '' || this.firstNameInput === null)) {
+      || this.firstNameInput === '' || this.firstNameInput === null)) {
       this.snackBar.open("Search for a guest contact or Enter first name", '', { duration: 3000 });
-      return ;
+      return;
     }
     if (this.guestSigner) {
       this.firstName = this.guestSigner.firstName;
       this.lastName = this.guestSigner.lastName;
     } else {
       this.firstName = this.firstNameInput;
-      this.lastName =  this.guestSignerForm.controls['receiverLastNameControl'].value;
+      this.lastName = this.guestSignerForm.controls['receiverLastNameControl'].value;
     }
     // if (!this.firstName) {
     //   this.snackBar.open("Please enter guest first name", '', { duration: 3000 });
@@ -152,7 +154,7 @@ export class AddguestsComponent implements OnInit {
     // }
     if (!this.receiverEmailId) {
       this.snackBar.open("Please enter guest email address", '', { duration: 3000 });
-      return ;
+      return;
     }
     this.showAddFieldSpinner = true;
     let isSender = "N";
@@ -161,7 +163,18 @@ export class AddguestsComponent implements OnInit {
     fieldData.receiverFirstName = this.firstName;
     fieldData.receiverLastName = this.lastName;
     fieldData.receiverEmailId = this.receiverEmailId;
-    fieldData.isGuest = "Y";
+    if (this.guestSigner) {
+      if (this.guestSigner.isELMember === "Y") {
+        fieldData.isELMember = "Y";
+        fieldData.isGuest = "N";
+      } else {
+        fieldData.isELMember = "N";
+        fieldData.isGuest = "Y";
+      }
+    } else {
+      fieldData.isELMember = "N";
+      fieldData.isGuest = "Y";
+    }
     fieldData.isSenderSigner = isSenderSigner;
     fieldData.isSender = isSender;
     fieldData.fieldType = this.guestSignerForm.controls['fieldTypeControl'].value;
@@ -180,6 +193,7 @@ export class AddguestsComponent implements OnInit {
     this.addFieldsRef.addFieldData(fieldData);
     this.showAddFieldSpinner = false;
     this.cancelPopup();
+    this.cancelAddSignersPopup();
   }
 
   saveAsContact(event) {
@@ -207,5 +221,8 @@ export class AddguestsComponent implements OnInit {
 
   cancelPopup() {
     this.dialogRef.close();
+  }
+  cancelAddSignersPopup() {
+    this.addSignersRef.cancelPopup();
   }
 }

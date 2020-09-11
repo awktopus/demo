@@ -176,14 +176,16 @@
  <div *ngFor='let field of curpage.filterFields'>
    <tr>
        <td>
-        <div *ngIf='field.fieldTypeName=="Signature"' >
+        <div *ngIf='field.fieldTypeName=="Signature"'  >
           <font color="#33699" size=-1>Please sign below as:  <b>{{cursigner.receiverFullName}}</b></font>
             <button mat-icon-button color="primary" (click)='clearSigCap(field)' *ngIf='field.fieldTypeName=="Signature"'>
               <mat-icon>delete</mat-icon>
               </button>
               <br>
-           <signature-pad   [options]="signaturePadOptions"  id="{{field.labelName}}"></signature-pad>
-           </div>
+              <div  style="border:1px solid">
+           <signature-pad  [options]="signaturePadOptions"  id="{{field.labelName}}"></signature-pad>
+          </div>
+          </div>
           <mat-form-field *ngIf='field.fieldTypeName=="Initial" || field.fieldTypeName=="Text" '>
                 <mat-label>{{field.labelName}}</mat-label>
                 <input matInput placeholder={{field.labelName}} formControlName="{{field.labelName}}">

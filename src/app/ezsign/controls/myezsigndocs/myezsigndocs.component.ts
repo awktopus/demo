@@ -15,7 +15,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
   public signaturePadOptions: any = {
     'minWidth': 1,
     'canvasHeight': 220,
-    'backgroundColor': '#eeffee'
+    'backgroundColor': '#ffffff'
   };
 
   myDate: Date = new Date();

@@ -6,8 +6,13 @@
 </span>
 <div fxLayout="column">
   <div class="invgridColumn">
-    <form [formGroup]="signerForm">
-
+    <button mat-raised-button color="accent" matTooltip="Add Guest Signer and Field" (click)="addGuestField()">
+        <mat-icon>border_inner</mat-icon>&nbsp;ADD GUEST
+      </button>
+      <div>
+          <br/>
+        </div>
+        <form [formGroup]="signerForm">
       <mat-form-field class="appfield" appearance="outline">
 
           <mat-label>Search for a Signer</mat-label>          
@@ -58,7 +63,10 @@
       <br/>
       <mat-form-field class="appfield" appearance="outline" readonly>
         <mat-label>Receiver email address</mat-label>
-        <input matInput [(ngModel)]="receiverEmailId" formControlName="receiverEmailIdControl">
+        <input required matInput [(ngModel)]="receiverEmailId" formControlName="receiverEmailIdControl">
+        <mat-error *ngIf="signerForm.get('receiverEmailIdControl').hasError('required')">
+          Email address is required
+        </mat-error>
       </mat-form-field>
     </form>
     <div>

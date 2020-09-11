@@ -203,6 +203,7 @@ export class CompanyStaff {
   emailId: string;
   mobileNumber: string;
   role: string;
+  isELMember: string;
 }
 export class TaxYearReceipts {
   fiscalYear: string;
@@ -431,6 +432,7 @@ export class EzSignField {
   fieldEndOffset: Offset;
   fieldMovingOffset: Offset;
   isContactTobeSaved: boolean;
+  isELMember: string;
 }
 
 export class Offset {
