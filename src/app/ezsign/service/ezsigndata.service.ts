@@ -324,4 +324,12 @@ export class EzsigndataService implements Resolve<any> {
     console.log('url:' + url);
     return this.http.delete(url, this.auth.getESignOptions());
   }
+
+  GetEZSignTrackingSource(trackingId: string): Observable<any> {
+    console.log('calling GetEZSignTrackingSource api:' + trackingId);
+    const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID() + '/sender/' +
+    this.auth.getUserID() + '/tracking/' + trackingId;
+    console.log(url);
+    return this.http.get(url, this.auth.getESignOptions());
+  }
 }

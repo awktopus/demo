@@ -266,11 +266,13 @@ export class SenderdocumentsComponent implements OnInit {
   }
 
   launchNewEZSignDocument() {
-    console.log('createNewEZSignDocument');
-    const dialogRef = this.dialog.open(UploadDocumentComponent, {
-      width: '70%', height: '80%'
-    });
-    dialogRef.componentInstance.senderDocumentCompomentRef = this;
+    const url = '/main/ezsign/upload';
+    this.router.navigateByUrl(url);
+    // console.log('createNewEZSignDocument');
+    // const dialogRef = this.dialog.open(UploadDocumentComponent, {
+    //   width: '70%', height: '80%'
+    // });
+    // dialogRef.componentInstance.senderDocumentCompomentRef = this;
   }
 
   uploadFile(event) {

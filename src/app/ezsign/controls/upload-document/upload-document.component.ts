@@ -19,8 +19,9 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
   senderDocumentCompomentRef: SenderdocumentsComponent;
   showProcessSpinner = false;
   isLinear: any;
-  constructor(private dialogRef: MatDialogRef<UploadDocumentComponent>
-    , private ezSignDataService: EzsigndataService, private router: Router) { }
+  constructor(private ezSignDataService: EzsigndataService, private router: Router) {
+    //  dialogRef.disableClose = true;
+    }
 
   ngOnInit() {
   }
@@ -57,6 +58,9 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
   }
 
   closeMe() {
-    this.dialogRef.close();
+  //  this.dialogRef.close();
+  }
+  goToEZSignDocumentsView() {
+    this.router.navigateByUrl('main/ezsign/ezsignmain');
   }
 }
