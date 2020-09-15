@@ -42,16 +42,14 @@
     }
     .casedoc{
       padding-right: 4px;
-      padding-left:4px;
+      padding-left:8px;
       margin-top:2px;
       float: left;
       direction: ltr;
       width: 45%; 
       min-height:480pt;
-      height: 720px;
-      border-top:1px solid gold;
-      border-bottom:1px solid gold;
-      border-right:1px solid gold;
+      border:1px solid lightblue;
+      word-wrap: break-word
      //border: 1px solid #ddd;
     }
     .cardlbl{
