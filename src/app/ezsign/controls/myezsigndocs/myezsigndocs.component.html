@@ -13,7 +13,9 @@
   <br>
   <div class='caselist'>
     <div *ngFor="let case of mycases">
-      <mat-card *ngIf='casefilter==0||(casefilter==1&&case.status=="Sent to recipient")||(casefilter==2&&case.status=="Signed")' class='casecard'
+      <mat-card *ngIf='casefilter==0||(casefilter==1&&(case.status=="Sent to recipient" || case.status=="Inprogress"))
+                                    ||(casefilter==2&&case.status=="Signed")' 
+                                    class='casecard'
         (click)='selectcase(case.docId)' [style.background]="case.selected ? '#ffffee':''">
         <mat-card-header>
           <img src="/assets/imgs/esign.png" mat-card-avatar big>
@@ -202,7 +204,7 @@
   <tr>
   <td align=center>
       <span *ngIf='!showProcessSpinner'>
-       <button mat-raised-button color="accent"  (click)="submitSignCapData()">Save</button>
+       <button mat-raised-button color="accent"  (click)="submitSignCapData()">Submit</button>
       </span>  
       <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
       <span *ngIf='showProcessSpinner'>Processing...</span>

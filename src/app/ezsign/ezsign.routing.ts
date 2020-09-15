@@ -7,6 +7,8 @@ import { ESignGuard } from './../esign/service/esignauth';
 import { AddfieldsComponent } from './controls/addfields/addfields.component';
 import { MyEzsignDocsComponent } from './controls/myezsigndocs/myezsigndocs.component';
 import { EzsignMainComponent } from './controls/ezsignmain/ezsignmain.component';
+import { InvitesignersComponent } from './controls/invitesigners/invitesigners.component';
+import { UploadDocumentComponent } from './controls/upload-document/upload-document.component';
 export const EZSignRoutes: Routes = [
     {
         path: '',
@@ -42,6 +44,16 @@ export const EZSignRoutes: Routes = [
         canActivate: [AuthGuard, ESignGuard],
         component: EzsignMainComponent
     },
+    {
+        path: 'invite/:trackingId',
+        canActivate: [AuthGuard, ESignGuard],
+        component: InvitesignersComponent
+    },
+    {
+        path: 'upload',
+        canActivate: [AuthGuard, ESignGuard],
+        component: UploadDocumentComponent
+    }
 ];
 
 export const EZSignRouting: ModuleWithProviders = RouterModule.forChild(EZSignRoutes);

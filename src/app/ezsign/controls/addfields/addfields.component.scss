@@ -1,39 +1,77 @@
 .mat-column-select {
+  flex: 0 0 7%;
+}
+
+.mat-column-fieldSeqNo {
+  flex: 0 0 3%;
+}
+
+.mat-column-receiverName {
+  flex: 0 0 21%;
   word-wrap: break-word !important;
-  white-space: unset !important;
-  width: 1% !important;
   overflow-wrap: break-word;
-  word-wrap: break-word;
+}
 
-  word-break: break-word;
+.mat-column-receiverEmailId {
+  flex: 0 0 30%;
+}
 
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-  font-size: 14px;
+.mat-column-fieldType {
+  flex: 0 0 9%;
+}
+
+.mat-column-fieldDescription {
+  flex: 0 0 20%;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word;
+}
+
+.mat-column-delete {
+  flex: 0 0 10%;
+}
+
+.mat-header-class {
   font-weight: bold;
+  font-size: 14px;
   color:#999;
 }
 
-.mat-column-emailid {
-  word-wrap: break-word !important;
-  white-space: unset !important;
-  flex: 0 0 25% !important;
-  width: 25% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+// .mat-column-select {
+//   word-wrap: break-word !important;
+//   white-space: unset !important;
+//   width: 1% !important;
+//   overflow-wrap: break-word;
+//   word-wrap: break-word;
 
-  word-break: break-word;
+//   word-break: break-word;
 
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-  font-size: 14px;
-  font-weight: bold;
-  color:#999;
-}
+//   -ms-hyphens: auto;
+//   -moz-hyphens: auto;
+//   -webkit-hyphens: auto;
+//   hyphens: auto;
+//   font-size: 14px;
+//   font-weight: bold;
+//   color:#999;
+// }
+
+// .mat-column-emailid {
+//   word-wrap: break-word !important;
+//   white-space: unset !important;
+//   flex: 0 0 25% !important;
+//   width: 25% !important;
+//   overflow-wrap: break-word;
+//   word-wrap: break-word;
+
+//   word-break: break-word;
+
+//   -ms-hyphens: auto;
+//   -moz-hyphens: auto;
+//   -webkit-hyphens: auto;
+//   hyphens: auto;
+//   font-size: 14px;
+//   font-weight: bold;
+//   color:#999;
+// }
 
 .fieldTag {
   float: left;

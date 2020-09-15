@@ -1,14 +1,15 @@
 .uploadfilecontainer {
     background-image: url("../../../../assets/imgs/cloud-2044823_960_720.png");
     background-repeat: no-repeat;
-    background-size:10%;
+    background-size:100px;
     background-position: center;
-    height: 30%;
-    width: 95%;
+    height: 200px;
+    width: 80%;
     margin: 20px auto;
     border: 2px dashed #1C8ADB;
     border-radius: 10px;
   }
+
   
   .uploadfilecontainer:hover {
     cursor: pointer;
@@ -51,4 +52,13 @@
   .fab-add {
     margin-top: 1px;
     margin-right: 20px;
+  }
+
+    
+  .trackertable4 {
+    margin-top: 20px;
+    padding-bottom: 15px;
+    padding-right:15px;
+    max-width: 1200px;
+    width: 100%;
   }

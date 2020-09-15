@@ -212,7 +212,7 @@ export class AddupdatesignersComponent implements OnInit {
     if (event.value === 'signature') {
       this.signerForm.controls['fieldDescControl'].setValue('Sign here');
     } else if (event.value === 'text') {
-      this.signerForm.controls['fieldDescControl'].setValue('Text field title here');
+      this.signerForm.controls['fieldDescControl'].setValue('Text field, e.g. Title Here');
     } else if (event.value === 'date') {
       this.signerForm.controls['fieldDescControl'].setValue('Select date');
     } else if (event.value === 'initial') {

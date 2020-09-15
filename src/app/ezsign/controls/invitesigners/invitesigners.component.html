@@ -1,12 +1,43 @@
-<div class="container">
-  <mat-toolbar color="primary">
+
+
+    <table>
+        <tr>
+          <th>
+            <label class="header-label">Send EZSign Invite</label>
+          </th>
+        </tr>
+      </table>
+      <div>
+        <mat-spinner *ngIf='!isInvitationReadyToShow' diameter='40'></mat-spinner>
+        <span *ngIf='!isInvitationReadyToShow'>Processing...</span>
+      </div>
+      <table class="trackertable4" *ngIf='isInvitationReadyToShow'>
+        <tr align="left">
+          <td colspan="8">
+            <button mat-stroked-button (click)="goBack()">
+              Back
+              <mat-icon>
+                reply</mat-icon>
+            </button>
+          </td>
+          <td>
+              <button mat-raised-button color="accent" matTooltip="Go to EZSign documents view" (click)="goToEZSignDocumentsView()">
+                  <mat-icon>home</mat-icon>&nbsp;EZSIGN DOCUMENTS
+                </button>
+          </td>
+        </tr>
+      </table>
+
+<div fxLayout="column" *ngIf='isInvitationReadyToShow' fxLayoutAlign="space-around none">
+  <!-- <mat-toolbar color="primary">
     <div *ngIf="1 > 0; then none else null"></div>
     <ng-template #none>
       Send EZSign Invite
     </ng-template>
     <span class="fill-remaining"></span>
-  </mat-toolbar>
-  <table width=100%>
+  </mat-toolbar> -->
+
+  <table width=90%>
     <tr>
       <td>
         <label class="heading-label">Document Title: </label>
@@ -23,15 +54,7 @@
             </label>
           </mat-checkbox>
         </div>
-      </td>
-      <!-- <td width=40%>
-             <span>
-                <b>Document Title: </b>{{title}}
-                <br>
-               <b>Tracking Id: </b>{{ezSignTrackingId}}
-               <br> 
-             </span>
-           </td>   -->
+      </td> 
     </tr>
     <tr>
       <td>
@@ -41,6 +64,7 @@
       </td>
     </tr>
   </table>
+  
   <div class='coverlettercontainer'>
     <div *ngIf='viewControl.view'>
       <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" [(ngModel)]="body" height='200px'></app-ngx-editor>
@@ -57,35 +81,25 @@
     </ng-container>
     <div class="controls" *ngIf='viewControl.edit'>
     </div>
-
-    <table width=100%>
-      <tr>
-        <td>
-             &nbsp;&nbsp;
-            <button mat-raised-button class="text-upper" (click)='closeMe()'>Cancel</button>
-            &nbsp; &nbsp;
-            <!-- <button mat-raised-button color="accent" class="text-upper" (click)='editDocument()'>
-              <mat-icon>edit</mat-icon>&nbsp;Edit Document</button> -->
-            <!-- &nbsp; &nbsp; <button mat-raised-button color="accent" class="text-upper" (click)='preview()'>Preview </button> -->
-            <!-- &nbsp; &nbsp; -->
-
-            <!-- <span>
-              <mat-icon class='remindericon' mdbRippleRadius>scheduleicon</mat-icon>&nbsp;
-              <font color="green">EZSign reminder for receiver</font>&nbsp;
-              <button mat-raised-button color="accent" class="text-upper" 
-                (click)="createEzSignReceiverReminder()">Create</button>
-            </span>  &nbsp;  -->
-
-            <span *ngIf='!showProcessSpinner'>
-              <button mat-raised-button color="accent" class="text-upper" (click)='sendInvite()'>
-                  <mat-icon>send</mat-icon>&nbsp;Send Invite              
-                </button>              
-            </span>          
-        </td>
-        <td>
-            <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
-            <span *ngIf='showProcessSpinner'>Processing...</span>
-        </td>
-      </tr>
-    </table>
   </div>
+  
+  <table width=100%>
+    <tr>
+      <td>
+        &nbsp;&nbsp;
+        <button mat-raised-button class="text-upper" (click)='goBack()'>Cancel</button>
+        &nbsp; &nbsp;
+        <span *ngIf='!showProcessSpinner'>
+          <button mat-raised-button color="accent" class="text-upper" (click)='sendInvite()'>
+            <mat-icon>send</mat-icon>&nbsp;Send Invite
+          </button>
+        </span>
+      </td>
+      <td>
+        <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+        <span *ngIf='showProcessSpinner'>Processing...</span>
+      </td>
+    </tr>
+  </table>
+
+</div>

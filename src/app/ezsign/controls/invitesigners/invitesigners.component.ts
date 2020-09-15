@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup } from '@angular/forms';
 import { EzsigndataService } from '../../service/ezsigndata.service';
 import { AddfieldsComponent } from '../addfields/addfields.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
 Signer
 } from '../../../esign/beans/ESignCase';
@@ -23,10 +23,10 @@ export class InvitesignersComponent implements OnInit, AfterViewInit {
   title: string;
   eZSigners: Signer[];
   showProcessSpinner = false;
-  status: string;
-  constructor(private service: EzsigndataService, private router: Router,
-    public dialogRef: MatDialogRef<InvitesignersComponent>, public dialog: MatDialog) {
-      dialogRef.disableClose = true;
+ // status: string;
+  isInvitationReadyToShow = false;
+  constructor(private service: EzsigndataService, private router: Router, public dialog: MatDialog,
+    private route: ActivatedRoute) {
       this.viewControl = {
         view: true,
         edit: false,
@@ -35,6 +35,17 @@ export class InvitesignersComponent implements OnInit, AfterViewInit {
     }
 
 ngOnInit() {
+  console.log('invite signers ngOnInit event');
+    this.route.paramMap.subscribe(para => {
+      this.ezSignTrackingId = para.get('trackingId');
+      console.log(this.ezSignTrackingId);
+      this.service.GetEZSignTrackingSource(this.ezSignTrackingId).subscribe(resp => {
+       console.log(resp);
+        if (resp) {
+          this.title = resp.documentName;
+        }
+      })
+    });
   }
 
   ngAfterViewInit() {
@@ -49,19 +60,13 @@ ngOnInit() {
         if (resp) {
         this.body = resp.content;
       }
+      this.isInvitationReadyToShow = true;
       });
     });
-
   }
-  setData(ezSignTrackingId: string, title: string, status: string) {
+  setData(ezSignTrackingId: string, title: string) {
     this.ezSignTrackingId = ezSignTrackingId;
     this.title = title;
-    this.status = status;
-  }
-  editDocument() {
-    const url = '/main/ezsign/addfields/' + this.ezSignTrackingId;
-    this.router.navigateByUrl(url);
-    this.closeMe();
   }
 
   sendInvite() {
@@ -77,7 +82,7 @@ ngOnInit() {
         this.showProcessSpinner = false;
         const url = 'main/ezsign/ezsignmain';
         this.router.navigateByUrl(url);
-        this.closeMe();
+       // this.closeMe();
       }
     });
   }
@@ -97,7 +102,12 @@ ngOnInit() {
       console.log('The dialog was closed');
     });
   }
-  closeMe() {
-    this.dialogRef.close();
+  goBack() {
+    const url = '/main/ezsign/addfields/' + this.ezSignTrackingId;
+    this.router.navigateByUrl(url);
+  }
+
+  goToEZSignDocumentsView() {
+    this.router.navigateByUrl('main/ezsign/ezsignmain');
   }
 }
