@@ -34,10 +34,7 @@
       direction: ltr;
       width: 30%; 
       min-height:480pt;
-      height: 720px;
-      border-top:1px solid gold;
-      border-bottom:1px solid gold;
-      border-right:1px solid gold;
+      border:1px solid lightblue;
      //border: 1px solid #ddd;
     }
     .casedoc{
@@ -46,7 +43,7 @@
       margin-top:2px;
       float: left;
       direction: ltr;
-      width: 45%; 
+      width: 35%; 
       min-height:480pt;
       border:1px solid lightblue;
       word-wrap: break-word
