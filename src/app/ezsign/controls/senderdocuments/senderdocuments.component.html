@@ -72,16 +72,6 @@
             </tr>
             <tr>
                 <td colspan="12">
-                    <!-- <div>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <label class="heading-label">Create New EZSign Document</label>
-                                        <hr>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div> -->
                     <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
                         <label class="heading-label">Drag and drop or Upload PDF document here</label>
                         <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
@@ -92,7 +82,12 @@
                             <img src="../../../../assets/imgs/Recycle_Bin_Full.png">
                         </button>
                     </div>
-                    <div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="12">
+                    <div class="uploadbtn">
                         <span *ngIf='!showProcessSpinner'>
                             <button *ngIf="files.length != 0" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="createNewEZSignDocument()">
                                 UPLOAD
@@ -105,6 +100,7 @@
             </tr>
         </table>
     </div>
+
     <br/>
     <div style="margin-left: 1px;margin-right: 1px" *ngIf="ezSignDocsgridData && isEZsignDataFetched">
         <!-- <br>

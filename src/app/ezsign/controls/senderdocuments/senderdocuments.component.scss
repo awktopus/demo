@@ -103,6 +103,7 @@
     border: 2px dashed #1C8ADB;
     border-radius: 10px;
   }
+
   
   .uploadfilecontainer:hover {
     cursor: pointer;
@@ -114,7 +115,8 @@
     display: flex;
     justify-content: space-between;
     width: 80%;
-    margin: 10px auto;
+    // margin: 10px auto;
+    margin: 20px auto;
     background: #ffffff;
     border: 1px dashed;
     border-radius: 12px;
@@ -130,6 +132,11 @@
   .files-list .delete-file img{
     width:30px;
   }
+
+  .uploadbtn {
+    margin-left: 47%;
+  }
+
   .heading-label {
     margin-left:10px;
     color: #03a9f4;

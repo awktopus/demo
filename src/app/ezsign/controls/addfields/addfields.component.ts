@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatSelect, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatFormField, MatSnackBar } from '@angular/material';
 import {
   ESignCase, ESignDoc, ESignCPA, ESignClient, ClientReminder, Signer,
-  EZSignPageImageData, EsignFormField, SignatureField, DateField, TextField, EZSignDocResource, SignerData, EzSignField
+  EZSignPageImageData, EsignFormField, SignatureField, DateField, TextField, EZSignDocResource, SignerData, EzSignField, CompanyStaff
 } from '../../../esign/beans/ESignCase';
 import { EsignserviceService } from '../../../esign/service/esignservice.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -59,6 +59,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
     'fieldDescription', 'delete'];
   @ViewChild('focusSignatureField') focusSignatureField: MatSelect;
   selectedFieldRow: any;
+  prevSelectedSigner: CompanyStaff = null;
   constructor(private service: EzsigndataService, public dialog: MatDialog,
     private sanitizer: DomSanitizer, private router: Router, private snackBar: MatSnackBar,
     private route: ActivatedRoute) {
@@ -103,6 +104,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
           this.ezSignFields = <EzSignField[]>this.ezSignPageImageData.fields;
           console.log('ez sign fields');
           console.log(this.ezSignFields);
+          this.set_previously_selected_signer(this.ezSignFields);
         }
         this.isFieldsReadyToShow = true;
       })();
@@ -131,6 +133,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       } else {
         this.ezSignFields = this.ezSignPageImageData.fields;
       }
+      this.set_previously_selected_signer(this.ezSignFields);
       this.isImageDataUrlFetched = true;
       if (actionType === 'previous') {
         if (pageSeqNo === 1) {
@@ -261,15 +264,6 @@ export class AddfieldsComponent implements OnChanges, OnInit {
     }
     const url = '/main/ezsign/invite/' + this.ezSignTrackingId;
     this.router.navigateByUrl(url);
-
-    // const dialogRef = this.dialog.open(InvitesignersComponent, {
-    //   width: '980px',
-    // });
-    // dialogRef.componentInstance.addFieldsComp = this;
-    // dialogRef.componentInstance.setData(this.ezSignTrackingId, this.title, this.status);
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    // });
   }
 
   addField() {
@@ -278,7 +272,8 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       width: '500px', height: '600px'
     });
     dialogRef.componentInstance.addFieldsRef = this;
-    dialogRef.componentInstance.setData("addfield", "Add Signer", null, this.ezSignTrackingId);
+    dialogRef.componentInstance.setData("addfield", "Add Signer", null,
+    this.ezSignTrackingId, null);
   }
 
   addFieldData(fieldData: EzSignField) {
@@ -371,9 +366,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
           this.ezSignFields = ezSignPageTempData.fields;
           console.log('updated fields after save field');
           console.log(this.ezSignFields);
-          // this.fldMovingOffset = { x: 0, y: 0 };
-          // this.fldEndOffset = { x: 0, y: 0 };
-          // this.readyToSendInvite = true;
+          this.set_previously_selected_signer(this.ezSignFields);
         }
       });
   }
@@ -415,8 +408,10 @@ export class AddfieldsComponent implements OnChanges, OnInit {
           this.ezSignFields = ezSignPageTempData.fields;
           console.log('updated signature fields');
           console.log(this.ezSignFields);
+          this.set_previously_selected_signer(this.ezSignFields);
         } else {
           this.ezSignFields = null;
+          this.set_previously_selected_signer(this.ezSignFields);
         }
       });
   }
@@ -447,12 +442,19 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       }
     }
   }
-  editField(fieldData: EzSignField) {
-    console.log('update field:');
-    const dialogRef = this.dialog.open(AddupdatesignersComponent, {
-      width: '500px', height: '600px'
+
+  set_previously_selected_signer(ezSignFields: EzSignField[]) {
+    if (ezSignFields) {
+    this.ezSignFields.forEach(sf => {
+      this.prevSelectedSigner = new CompanyStaff();
+        this.prevSelectedSigner.clientId = sf.receiverId;
+        this.prevSelectedSigner.emailId = sf.receiverEmailId;
+        this.prevSelectedSigner.firstName = sf.receiverFirstName;
+        this.prevSelectedSigner.lastName = sf.receiverLastName;
+        this.prevSelectedSigner.isELMember = sf.isELMember;
     });
-    dialogRef.componentInstance.addFieldsRef = this;
-    dialogRef.componentInstance.setData("editfield", "Update Field", fieldData, this.ezSignTrackingId);
+  } else {
+    this.prevSelectedSigner = null;
+  }
   }
 }

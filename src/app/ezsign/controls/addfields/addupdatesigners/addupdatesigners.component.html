@@ -16,7 +16,7 @@
       <mat-form-field class="appfield" appearance="outline">
 
           <mat-label>Search for a Signer</mat-label>          
-          <input matInput  type="text" #focusField [matChipInputFor]="primarychips"  
+          <input matInput  type="text" style="width:95%;" #focusField [matChipInputFor]="primarychips"  
           [matAutocomplete]="autoprimary" formControlName="receiverNameControl" 
           [(ngModel)]="receiverNameInput" required>
           <mat-error *ngIf="signerForm.get('receiverNameControl').hasError('required')">

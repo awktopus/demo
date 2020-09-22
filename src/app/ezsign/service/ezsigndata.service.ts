@@ -68,27 +68,45 @@ export class EzsigndataService implements Resolve<any> {
 
   createNewEZSignDocument(fileToUpload: File | FileList) {
     console.log('createNewEZSignDocument');
-    let ff: File;
-    if (fileToUpload instanceof (FileList)) {
-      ff = fileToUpload.item(0);
-    } else {
-      ff = fileToUpload;
-    }
-    console.log('ff');
-    console.log(ff);
+    console.log(fileToUpload);
+    // let ff: File;
+    // if (fileToUpload instanceof (FileList)) {
+    //   ff = fileToUpload.item(0);
+    // } else {
+    //   ff = fileToUpload;
+    // }
+    // console.log('ff');
+    // console.log(ff);
     const formData: FormData = new FormData();
     formData.append('orgunit', this.auth.getOrgUnitID());
     formData.append('sender', this.auth.getUserID());
     formData.append('firstName', this.auth.getUserFirstName());
     formData.append('lastName', this.auth.getUserLastName());
     formData.append('email', this.auth.getUserEmail());
-    formData.append('file', ff, ff.name);
+
+    if (fileToUpload instanceof (FileList)) {
+      // ff = fileToUpload.item(0);
+      let tff: File;
+      console.log('sender uploaded multiple files');
+      for (let i = 0; i < fileToUpload.length; i++) {
+        tff = fileToUpload.item(i);
+        formData.append('file', tff, tff.name);
+        console.log(tff.name);
+      }
+    } else {
+      let ff: File;
+      console.log('sender uploaded single file');
+      ff = fileToUpload;
+      console.log(ff);
+      formData.append('file', ff, ff.name);
+      console.log(fileToUpload.name);
+    }
+
     console.log(formData.getAll('orgunit'));
     console.log(formData.getAll('sender'));
     console.log(formData.getAll('firstName'));
     console.log(formData.getAll('lastName'));
     console.log(formData.getAll('email'));
-    console.log(ff.name);
     console.log(formData);
     return this.http.post(this.auth.baseurl + '/ezsign/document', formData, this.auth.getEZSignOptions());
   }
@@ -109,7 +127,7 @@ export class EzsigndataService implements Resolve<any> {
   GetPageSignerData(trackingId: string, docId: string, seqNo: string): Observable<any> {
     console.log('calling getPdfFormMirrorImage api:' + docId + ',' + seqNo);
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID() + '/sender/' +
-    this.auth.getUserID() + '/tracking/' + trackingId + '/document/' + docId + '/page/' + seqNo + '/mirrorimage'
+      this.auth.getUserID() + '/tracking/' + trackingId + '/document/' + docId + '/page/' + seqNo + '/mirrorimage'
     console.log(url);
     return this.http.get(url, this.auth.getESignOptions());
   }
@@ -117,7 +135,7 @@ export class EzsigndataService implements Resolve<any> {
   getEZSignPdfFormMirrorImageByTrackingId(trackingId: string): Observable<any> {
     console.log('calling getEZSignPdfFormMirrorImageByTrackingId api:' + trackingId);
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID() + '/sender/' +
-    this.auth.getUserID() + '/tracking/' + trackingId + '/mirrorimage'
+      this.auth.getUserID() + '/tracking/' + trackingId + '/mirrorimage'
     console.log(url);
     return this.http.get(url, this.auth.getESignOptions());
   }
@@ -142,19 +160,19 @@ export class EzsigndataService implements Resolve<any> {
   getOrganizationEZSignSigners() {
     console.log('calling getOrganizationEZSignSigners server api');
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/signers';
+      + '/sender/' + this.auth.getUserID() + '/signers';
     return this.http.get(url, this.auth.getESignOptions());
   }
 
   getOrganizationEZSignSignersBySearchToken(searchToken: string) {
     console.log('calling getOrganizationEZSignSignersBySearchToken server api');
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/searchtoken/' + searchToken;
+      + '/sender/' + this.auth.getUserID() + '/searchtoken/' + searchToken;
     return this.http.get(url, this.auth.getESignOptions());
   }
 
   addFieldToEZSignPage(trackingId: string, docId: string,
-                      pageSeqNo: number, newFieldInfo: any): Observable<any> {
+    pageSeqNo: number, newFieldInfo: any): Observable<any> {
     console.log('AddFieldToEZSignPage:');
     console.log(trackingId);
     console.log(newFieldInfo);
@@ -166,22 +184,22 @@ export class EzsigndataService implements Resolve<any> {
 
   deleteFieldFromEZSignPage(trackingId: string, docId: string,
     pageSeqNo: number, fieldSeqNo: number, fieldTypeId: number): Observable<any> {
-      console.log('deleteFieldFromEZSignPage:');
-      console.log(trackingId);
-      console.log(docId);
-      console.log(pageSeqNo);
-      console.log(fieldSeqNo);
-      return this.http.delete(this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
+    console.log('deleteFieldFromEZSignPage:');
+    console.log(trackingId);
+    console.log(docId);
+    console.log(pageSeqNo);
+    console.log(fieldSeqNo);
+    return this.http.delete(this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
       + '/sender/' + this.auth.getUserID() + '/tracking/' + trackingId +
-      '/document/' + docId  + '/page/' + pageSeqNo + '/field/' + fieldSeqNo + '/fieldtype/' + fieldTypeId
+      '/document/' + docId + '/page/' + pageSeqNo + '/field/' + fieldSeqNo + '/fieldtype/' + fieldTypeId
       + '/deletefield',
-         this.auth.getESignOptions());
+      this.auth.getESignOptions());
   }
 
   sendInviteToSigners(trackingId: string, coverLetterInfo: any): Observable<any> {
     console.log('calling sendInviteToSigners api:' + trackingId);
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/tracking/' + trackingId + '/invitesigners'
+      + '/sender/' + this.auth.getUserID() + '/tracking/' + trackingId + '/invitesigners'
     console.log(url);
     return this.http.post(url, coverLetterInfo, this.auth.getESignOptions());
   }
@@ -189,9 +207,9 @@ export class EzsigndataService implements Resolve<any> {
   getEzSignHistoryData(trackingId: string): Observable<any> {
     console.log('calling getEzSignHistoryData api:' + trackingId);
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/tracking/' + trackingId + '/history'
+      + '/sender/' + this.auth.getUserID() + '/tracking/' + trackingId + '/history'
     console.log(url);
-     return this.http.get(url, this.auth.getESignOptions());
+    return this.http.get(url, this.auth.getESignOptions());
   }
   getPDFBlob(url: string) {
     const opps = this.auth.getESignOptionswithoutElToken();
@@ -203,20 +221,20 @@ export class EzsigndataService implements Resolve<any> {
   GetSignerData(trackingId: string): Observable<any> {
     console.log('calling GetSignerData api:' + trackingId);
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID() + '/sender/' +
-    this.auth.getUserID() + '/tracking/' + trackingId + '/signerdata'
+      this.auth.getUserID() + '/tracking/' + trackingId + '/signerdata'
     console.log(url);
     return this.http.get(url, this.auth.getESignOptions());
   }
 
   GetCoverLetter(orgUnitId: string, templateName: string): Observable<any> {
     const url = this.auth.baseurl + '/Configs/coverletter/orgunit/' + orgUnitId +
-    '/template/' + templateName;
+      '/template/' + templateName;
     return this.http.get(url, this.auth.getESignOptions());
   }
 
   getEZSignDocs() {
     const url = this.auth.baseurl + "/EZSign/orgunit/" + this.auth.getOrgUnitID() + "/receiver/"
-    + this.auth.getUserID() + "/alldocuments";
+      + this.auth.getUserID() + "/alldocuments";
     return this.http.get(url, this.auth.getESignOptions());
   }
 
@@ -239,7 +257,7 @@ export class EzsigndataService implements Resolve<any> {
   GetOrganizationGuestContacts() {
     console.log('calling GetOrganizationGuestContacts server api');
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/guestcontacts';
+      + '/sender/' + this.auth.getUserID() + '/guestcontacts';
     return this.http.get(url, this.auth.getESignOptions());
   }
 
@@ -263,7 +281,7 @@ export class EzsigndataService implements Resolve<any> {
       count = count + 1;
     }
     const url = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/schedulereminder/create';
+      + '/sender/' + this.auth.getUserID() + '/schedulereminder/create';
     const json = {
       ezSignTrackingId: ezSignTrackingId,
       signers: signers,
@@ -279,7 +297,7 @@ export class EzsigndataService implements Resolve<any> {
 
   getClientScheduleReminder(ezSignTrackingId: string): Observable<any> {
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder';
+      + '/sender/' + this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder';
     return this.http.get(url, this.auth.getESignOptions());
   }
 
@@ -303,7 +321,7 @@ export class EzsigndataService implements Resolve<any> {
       count = count + 1;
     }
     const url = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder/update';
+      + '/sender/' + this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder/update';
     const json = {
       ezSignTrackingId: ezSignTrackingId,
       signers: signers,
@@ -320,7 +338,7 @@ export class EzsigndataService implements Resolve<any> {
   deleteScheduleClientReminder(ezSignTrackingId: string): Observable<any> {
     console.log('delete schedule reminder:' + ezSignTrackingId);
     const url = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
-    + '/sender/' +  this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder/delete';
+      + '/sender/' + this.auth.getUserID() + '/tracking/' + ezSignTrackingId + '/schedulereminder/delete';
     console.log('url:' + url);
     return this.http.delete(url, this.auth.getESignOptions());
   }
@@ -328,7 +346,7 @@ export class EzsigndataService implements Resolve<any> {
   GetEZSignTrackingSource(trackingId: string): Observable<any> {
     console.log('calling GetEZSignTrackingSource api:' + trackingId);
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID() + '/sender/' +
-    this.auth.getUserID() + '/tracking/' + trackingId;
+      this.auth.getUserID() + '/tracking/' + trackingId;
     console.log(url);
     return this.http.get(url, this.auth.getESignOptions());
   }

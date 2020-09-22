@@ -21,7 +21,8 @@
     display: flex;
    // justify-content: space-between;
     width: 80%;
-    margin-left: 10px;
+   // margin-left: 10px;
+   margin: 20px auto;
     background: #ffffff;
     border: 1px dashed;
     border-radius: 12px;
@@ -37,6 +38,11 @@
   .files-list .delete-file img{
     width:30px;
   }
+
+  .uploadbtn {
+    margin-left: 47%;
+  }
+  
   .heading-label {
     margin-left:10px;
     color: #03a9f4;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import {
   CompanyType, ESignCPA, CompanyStaff, Company, InfoTrackLocation, Signer, SignerData,
   EzSignField,
@@ -43,6 +43,7 @@ export class AddupdatesignersComponent implements OnInit {
   });
   senderId = '';
   @ViewChild('focusField') focusField: ElementRef;
+  @ViewChild('focusField2') focusField2: ElementRef;
 
   constructor(private service: EzsigndataService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router, private snackBar: MatSnackBar,
@@ -62,23 +63,13 @@ export class AddupdatesignersComponent implements OnInit {
       console.log(this.clients);
       console.log(this.operation);
       console.log(this.fieldRecord);
-      // if (this.operation === 'editfield' && this.fieldRecord) {
-      //   console.log('addupdate location ngOnInit()');
-      //   console.log(this.operation);
-      //   console.log(this.fieldRecord);
-      //   let cmpnyStaff = new CompanyStaff();
-      //   cmpnyStaff.clientId = this.fieldRecord.receiverId;
-      //   cmpnyStaff.emailId = this.fieldRecord.receiverEmailId;
-      //   cmpnyStaff.firstName = this.fieldRecord.receiverFirstName;
-      //   cmpnyStaff.lastName = this.fieldRecord.receiverLastName;
-      //   this.primarysigner = cmpnyStaff;
-      //   this.signerForm.controls['receiverEmailIdControl'].setValue(this.fieldRecord.receiverEmailId);
-      //   this.signerForm.controls['fieldTypeControl'].setValue(this.fieldRecord.fieldType);
-      //   this.signerForm.controls['fieldDescControl'].setValue(this.fieldRecord.labelName);
-      //  } else {
-      //  }
-       this.focusField.nativeElement.focus();
-      });
+      if (this.primarysigner) {
+        this.signerForm.controls['receiverEmailIdControl'].setValue(this.primarysigner.emailId);
+     //   this.signerForm.controls['receiverNameControl'].setValue('');
+      } else {
+      this.focusField.nativeElement.focus();
+    }
+    });
 
     this.signerForm.controls['receiverNameControl'].valueChanges.subscribe(searchToken => {
       console.log('receiver name search called');
@@ -115,11 +106,13 @@ export class AddupdatesignersComponent implements OnInit {
     });
   }
 
-  setData(operation: string, title: string, fieldRecord: EzSignField, ezSignTrackingId: string) {
+  setData(operation: string, title: string, fieldRecord: EzSignField,
+    ezSignTrackingId: string, prevSelectedSigner: CompanyStaff) {
     this.operation = operation;
     this.title = title;
     this.ezSignTrackingId = ezSignTrackingId;
     this.fieldRecord = fieldRecord;
+    this.primarysigner = prevSelectedSigner;
   }
 
   addPrimary(event: MatOptionSelectionChange): void {
@@ -180,30 +173,6 @@ export class AddupdatesignersComponent implements OnInit {
     this.showAddFieldSpinner = false;
     this.cancelPopup();
   }
-
-  // updateFieldData() {
-  //   this.showEditFieldSpinner = true;
-  //   console.log('update field data');
-  //   console.log(this.primarysigner);
-  //   let isSender = "N";
-  //   let isSenderSigner = "N";
-  //   if (this.primarysigner.clientId === this.service.auth.getUserID()) {
-  //     isSender = "Y";
-  //     isSenderSigner = "Y";
-  //   }
-  //   let fieldData = new EzSignField();
-  //   fieldData.receiverId = this.primarysigner.clientId;
-  //   fieldData.receiverFirstName = this.primarysigner.firstName;
-  //   fieldData.receiverLastName = this.primarysigner.lastName;
-  //   fieldData.receiverEmailId = this.primarysigner.emailId;
-  //   fieldData.isSenderSigner = isSenderSigner;
-  //   fieldData.isSender = isSender;
-  //   fieldData.fieldType = this.signerForm.controls['fieldTypeControl'].value;
-  //   fieldData.labelName = this.signerForm.controls['fieldDescControl'].value;
-  //   this.addFieldsRef.addFieldData(fieldData);
-  //   this.showEditFieldSpinner = false;
-  //   this.cancelPopup();
-  // }
 
   selectFieldType(event: any) {
     console.log('select field type selection');
