@@ -5,16 +5,16 @@ import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { MatDialog } from '@angular/material';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 @Component({
-  selector: 'app-myezsigndocs',
-  templateUrl: './myezsigndocs.component.html',
-  styleUrls: ['./myezsigndocs.component.scss']
+  selector: 'app-docsigning',
+  templateUrl: './docSigning.component.html',
+  styleUrls: ['./docSigning.component.scss']
 })
-export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
+export class DocSigningComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(SignaturePad) public sigPadList: QueryList< SignaturePad>;
   public signaturePadOptions: any = {
     'minWidth': 1,
-    'canvasHeight': 220,
+    'canvasHeight': 160,
     'backgroundColor': '#ffffff'
   };
 
@@ -22,7 +22,8 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
   type: string;
   selected: any = false;
   selectedPaperConsent: any = false;
-  mycases: any = [];
+ //mycases: any = [];
+  mycase: any;
   casefilter = 0;
   selectedcase: any = {};
   curcase: any = {};
@@ -42,6 +43,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
   myinput: any = {};
   mysigs: any = {};
   showProcessSpinner = false;
+  pageToSign = 0;
   constructor(private service: EzsigndataService,
     public dialog: MatDialog,private router:Router) {
 
@@ -50,32 +52,14 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
    // throw new Error("Method not implemented.");
   }
   ngOnInit() {
-    this.service.getEZSignDocs().subscribe(resp => {
-      console.log(resp);
-      this.mycases = resp;
-      this.prepareData();
-      console.log(this.mycases);
-    });
-  }
-
-  reloadCaseData() {
-    this.service.getEZSignDocs().subscribe(resp => {
-      console.log(resp);
-      this.mycases = resp;
-      this.prepareData();
-      console.log(this.mycases);
-    });
-  }
-  selectcase(docId: any) {
-    this.mycases.forEach(cc => {
-      if (cc.docId === docId) {
-        cc.selected = true;
-        this.selectedcase = cc;
-      } else {
-        cc.selected = false;
-      }
-    });
-    // this.loadCaseContent(docId);
+    this.mycase=this.service.getCacheData("case");
+    console.log(this.mycase);
+    this.curcase = this.mycase;
+    this.prepareData();
+    // by default will should the consent page
+    this.initPagesView();
+    this.pageToSign = this.countTotalUnsignedPages();
+    this.viewType="consentview";
   }
 
 
@@ -89,9 +73,9 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
 
   prepareData() {
 
-    if (this.mycases) {
+    if (this.mycase) {
     const userID = this.service.auth.getUserID();
-    this.mycases.forEach(cc => {
+      let cc = this.mycase;
       // not calculation display names
       if (cc.documentName.length < 40) {
         cc.displayName = cc.documentName;
@@ -114,7 +98,6 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
           });
         }
       });
-    });
   }
   }
   displayReviewDoc(cc: any){
@@ -122,15 +105,17 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
     this.service.setCacheData("case",cc);
     this.router.navigate(['main/ezsign/docreview']);
   }
-  displayReviewDoc_old(cc: any) {
-    this.viewType = "reviewDoc";
-    let firstseq = cc.eZSignDocPages[0].pageSeqNo;
+  
+  initPagesView() {
+    //this.viewType = "reviewDoc";
+    let cc = this.mycase;
     let signer: any = null;
     cc.ezSignDocSigners.forEach(ss => {
         if (ss.receiverId === this.service.auth.getUserID()) {
           signer = ss;
         }
     });
+    let firstseq = this.findSignPageSeq(cc, signer);
     // now display the document
     // this.paramRouter.navigate('/tools/ezsign/ezsignformview', {case: cc,pageSeq:firstseq,signer:signer});
     this.curcase = cc;
@@ -142,6 +127,7 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
 
   prepareReviewData() {
     let unsignedforms = [];
+    console.log(this.curcase);
     if (this.curcase) {
       this.curDocID = this.curcase.docId;
       let index = 0;
@@ -210,12 +196,8 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
     */
   }
 
-  goAgreementView(cc: any ){
-    console.log(cc);
-    this.service.setCacheData("case",cc);
-    this.router.navigate(['main/ezsign/docsigning']);
-  }
-   goAgreementView_old (cc: any ) {
+
+   goAgreementView (cc: any ) {
     this.viewType = "";
     let signer: any = null;
     this.agreementselected = false;
@@ -236,6 +218,28 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  countTotalUnsignedPages(){
+    let count =0;
+    let cc = this.curcase;
+    let signer= this.cursigner;
+    cc.eZSignDocPages.forEach(page => {
+      console.log(page.pageSeqNo);
+      if ( page.status !== "Signed") {
+        if (page.pageFields) {
+          let found=false;
+          page.pageFields.forEach(fd => {
+            if ((fd.receiverId === signer.receiverId) && (fd.status !== 'Signed')) {
+              found=true;
+            }
+          });
+          if(found){
+            count = count+1;
+          }
+        }
+      }
+    });
+    return count;
+  }
   findSignPageSeq(cc, signer) {
       let pseq = -1;
       cc.eZSignDocPages.forEach(page => {
@@ -263,8 +267,8 @@ export class MyEzsignDocsComponent implements OnInit, AfterViewInit {
         console.log(resp);
         this.cursigner.isAgreementAccepted = (<any>resp).isAgreementAccepted;
        // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.case,pageSeq:this.pageSeq,signer:this.signer});
-       this.prepareReviewData();
-       this.viewType = "signingFormView";
+       //this.viewType = "signcapview";
+       this.goSignCap();
       }
     });
 
@@ -362,7 +366,7 @@ goSignCap() {
           this.curcase = res;
           console.log(this.curcase);
           // we also need to update the case list
-          this.reloadCaseData();
+        //  this.reloadCaseData();
           let nextseq = this.findSignPageSeq(this.curcase, this.cursigner);
           console.log("the next page seq:", nextseq);
           console.log(nextseq);
@@ -370,13 +374,16 @@ goSignCap() {
              // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.mycase,pageSeq:nextseq,signer:this.signer});
              this.curseq = nextseq;
              this.prepareReviewData();
-             this.viewType = "signingFormView";
+             this.countTotalUnsignedPages();
+             this.goSignCap();
           } else {
               // all signing done for this form
               this.viewType = "";
               this.curseq = -1;
               this.curpage = null;
               this.curcase = null;
+              // now need to 
+              console.log("need navigate back to the main page");
           }
           this.showProcessSpinner = false;
       });

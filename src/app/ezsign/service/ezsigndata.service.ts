@@ -9,6 +9,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 @Injectable()
 export class EzsigndataService implements Resolve<any> {
 
+  cacheData = {};
   onCategoriesChanged: BehaviorSubject<any>;
   // public baseurl = environment.apiEsignLink;
   // this is pass along the ezsign document information between components
@@ -20,6 +21,14 @@ export class EzsigndataService implements Resolve<any> {
   constructor(private http: HttpClient, public auth: EsignAuthService) {
     // Set the defaults
     this.onCategoriesChanged = new BehaviorSubject({});
+  }
+
+  setCacheData(key,value){
+    this.cacheData[key]=value;
+  }
+  
+  getCacheData(key){
+    return this.cacheData[key];
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {

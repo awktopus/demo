@@ -9,6 +9,8 @@ import { MyEzsignDocsComponent } from './controls/myezsigndocs/myezsigndocs.comp
 import { EzsignMainComponent } from './controls/ezsignmain/ezsignmain.component';
 import { InvitesignersComponent } from './controls/invitesigners/invitesigners.component';
 import { UploadDocumentComponent } from './controls/upload-document/upload-document.component';
+import { DocReviewComponent } from './controls/docReview/docReview.component';
+import { DocSigningComponent } from './controls/docSigning/docSigning.component';
 export const EZSignRoutes: Routes = [
     {
         path: '',
@@ -53,6 +55,16 @@ export const EZSignRoutes: Routes = [
         path: 'upload',
         canActivate: [AuthGuard, ESignGuard],
         component: UploadDocumentComponent
+    },
+    {
+        path: 'docreview',
+        canActivate: [AuthGuard, ESignGuard],
+        component: DocReviewComponent
+    },
+    {
+        path: 'docsigning',
+        canActivate: [AuthGuard, ESignGuard],
+        component: DocSigningComponent
     }
 ];
 

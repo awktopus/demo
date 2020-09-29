@@ -1,0 +1,129 @@
+ 
+ <div *ngIf="mycase">
+  <table width=95%>
+    <tr>
+      <td colspan=5 align="center">
+        <h5>
+          {{mycase.documentName}}
+        </h5>
+      </td>
+    </tr>
+  <tr>
+    <td valign=top>  <font color="a0a0a0" size=-1>Tracking #</font><br>
+      <b>
+        {{mycase.ezSignTrackingId}}
+      </b>  </td>
+      <td valign=top> 
+        <font color="a0a0a0" size=-1>Date</font><br>
+            <b>{{mycase.lastModifiedDateTime}}</b>
+      </td>
+      <td valign=top>                  <font color="a0a0a0" size=-1>Clients</font><br>
+        <span *ngFor='let usr of mycase.ezSignDocSigners'>
+        <b>
+          {{usr.receiverFirstName}} {{usr.receiverLastName}}
+        </b> <br>
+        </span></td>
+        <td valign=top><font color="a0a0a0" size=-1># Page to Sign</font><br>
+          <span >
+          <b>
+            {{pageToSign}}
+          </b> <br>
+          </span></td>
+          <td valign=top><font color="a0a0a0" size=-1>Page Seq #</font><br>
+            <span >
+            <b>
+              {{curseq}}
+            </b> <br>
+            </span></td>
+  </tr>
+  </table>
+</div>
+ <div *ngIf="viewType == 'consentview'" class="consent" style="word-break:break-word;white-space:normal !important;">
+    <table width=98%>
+      <tr>
+        <td align="center">
+          <p>
+            <strong>EZSign Consent</strong>
+          </p>
+          <hr>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <b>Check the checkbox indicating your consent to sign this document electronically and click “BEGIN”
+              when you are ready to begin the e-sign process.</b>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            By checking the checkbox below, I agree that my electronic signatures on the following document
+            are my own and are legally valid as if I had signed the document with ink on paper, in accordance
+            with the Electronic Signatures in Global and National Commerce Act (E-SIGN) of 2000 and the
+           Uniform Electronic Transactions Act (UETA).
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-checkbox (change)="agreementselected=!agreementselected">I have read and agree to the above.</mat-checkbox>
+        </td>
+      </tr>
+      <br/>
+      <tr>
+        <td align="center">
+          <!-- <a routerLink="/" style="color: black" *ngIf="selected"> -->
+          <button mat-raised-button color="accent" *ngIf="agreementselected" (click)="completeConsent()">BEGIN</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+    <div *ngIf="viewType=='signingFormView' || viewType=='signcapview'" class='casedoc' style="word-break:break-word;white-space:normal !important;">
+       <iframe width="95%" height="600" [src]="pdfUrl | safe">
+    </iframe>
+</div>
+ <div *ngIf="viewType=='signcapview'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
+ <form [formGroup]="signcapform">
+ <table width=95%>
+ <div *ngFor='let field of curpage.filterFields'>
+   <tr>
+       <td>
+        <div *ngIf='field.fieldTypeName=="Signature"'  >
+          <font color="#33699">Please sign below as:  <br><b>{{cursigner.receiverFullName}}</b></font>
+              <br>
+            <div  style="border:1px solid">
+           <signature-pad  [options]="signaturePadOptions"  id="{{field.labelName}}"></signature-pad>
+          </div>
+          <div align='end' style="margin-right:20pt">
+            <button align="right" small mat-icon-button color="primary" (click)='clearSigCap(field)' *ngIf='field.fieldTypeName=="Signature"'>
+              <mat-icon>refresh</mat-icon> clear
+              </button>
+          </div>
+          </div>
+          <mat-form-field *ngIf='field.fieldTypeName=="Initial" || field.fieldTypeName=="Text" '>
+                <mat-label>{{field.labelName}}</mat-label>
+                <input matInput placeholder={{field.labelName}} formControlName="{{field.labelName}}">
+          </mat-form-field>
+          <mat-form-field *ngIf='field.fieldTypeName=="Date"'>
+          <mat-label>{{field.labelName}}</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="{{field.labelName}}">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+  </td>
+  </tr>
+  </div>
+  <tr>
+  <td align=center>
+      <span *ngIf='!showProcessSpinner'>
+       <button mat-raised-button color="accent"  (click)="submitSignCapData()">Submit</button>
+      </span>  
+      <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+      <span *ngIf='showProcessSpinner'>Processing...</span>
+      </td>
+  </tr>
+  </table>
+  </form>
+ </div>
