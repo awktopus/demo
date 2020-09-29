@@ -1,0 +1,33 @@
+<div fxLayout="column">
+  <div>
+      <mat-spinner *ngIf='!isEZsignDataFetched' diameter='30'></mat-spinner>
+      <span *ngIf='!isEZsignDataFetched'>Processing...</span>
+  </div>
+  <br>
+  <table width=90% *ngIf='isEZsignDataFetched'>
+      <tr>
+          <td width=45%>
+              <button mat-icon-button *ngIf="ezSignDocsgridData" matTooltip="refresh" (click)="loadEZSignDocuments()">
+                  <mat-icon>refresh</mat-icon>&nbsp;REFRESH
+              </button>
+          </td>
+          <td align=right>
+              <div *ngIf="ezSignDocsgridData && isEZsignDataFetched">
+                  <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(receiverEzSignApi)'>list_alt</mat-icon>
+                  <mat-icon class='docicon' mdbRippleRadius (click)="gridExport('ezsign')" matTooltip="Export CSV">insert_link</mat-icon>
+                  <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('ezsign')" matTooltip="Expand All">swap_horiz</mat-icon>
+                  <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('ezsign')" matTooltip="Refit">tune</mat-icon>
+              </div>
+          </td>
+      </tr>
+  </table>
+
+  <br/>
+  <div style="margin-left: 1px;margin-right: 1px" *ngIf="ezSignDocsgridData && isEZsignDataFetched">
+      <ag-grid-angular #agGrid id="receiverEzSignDocsGrid" style="width: 93%;  font-size:11pt" class="ag-theme-balham" [rowData]="ezSignDocsgridData"
+          [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+          [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'ezsign')"
+          [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout">
+      </ag-grid-angular>
+  </div>
+</div>
