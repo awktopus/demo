@@ -1,4 +1,4 @@
-<div fxLayout="column">
+<div fxLayout="column" *ngIf="viewType==='grid'">
   <div>
       <mat-spinner *ngIf='!isEZsignDataFetched' diameter='30'></mat-spinner>
       <span *ngIf='!isEZsignDataFetched'>Processing...</span>
@@ -30,4 +30,10 @@
           [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout">
       </ag-grid-angular>
   </div>
+</div>
+<div *ngIf="viewType==='signing'">
+    <app-docsigning (switchToGridView)= "switchToGridView()"></app-docsigning>
+</div>
+<div *ngIf="viewType==='pagereview'">
+    <app-docreview (switchToGridView)= "switchToGridView()"></app-docreview>
 </div>

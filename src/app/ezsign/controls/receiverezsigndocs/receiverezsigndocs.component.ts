@@ -49,6 +49,7 @@ export class ReceiverezsigndocsComponent implements OnInit {
   uploadedFileName: string;
   isEZsignDataFetched = false;
   showProcessSpinner = false;
+  viewType = 'grid';
   private rowHeight;
   private rowClass;
   domLayout: any;
@@ -65,6 +66,7 @@ export class ReceiverezsigndocsComponent implements OnInit {
   ngOnInit() {
     this.gridColumnDefs = this.configColDef();
     this.loadEZSignDocuments();
+    this.viewType = 'grid';
    }
 
   loadEZSignDocuments() {
@@ -111,8 +113,12 @@ export class ReceiverezsigndocsComponent implements OnInit {
     return res;
   }
 
-
   viewEZSignDocument(selectedRow: any) {
+    console.log(selectedRow.rowData);
+    this.ezSignDataService.setCacheData("case",selectedRow.rowData);
+    this.viewType="pagereview";
+  }
+  viewEZSignDocument_old(selectedRow: any) {
     console.log('view ezsign document');
     console.log(selectedRow);
     const dialogRef = this.dialog.open(EzsignPdfPopupComponent, { width: '520pt' });
@@ -123,7 +129,20 @@ export class ReceiverezsigndocsComponent implements OnInit {
   startReceiverEzsign(ezSignTrackingId: string) {
     console.log('start ezsigning document...');
     console.log(ezSignTrackingId);
+    // find the corresponding signing document
+    this.ezSignDocsgridData.forEach(doc=>{
+      if(doc.ezSignTrackingId==ezSignTrackingId)
+      {
+        console.log(doc);
+        this.ezSignDataService.setCacheData("case",doc);
+        this.viewType='signing';
+      }
+    });
   }
+
+   switchToGridView(){
+     this.viewType = 'grid';
+   }
 
    resizeAll(gridname) {
     console.log(gridname);

@@ -1,13 +1,6 @@
  
- <div *ngIf="mycase">
+ <div *ngIf="mycase" style="background:#eeeeff">
   <table width=95%>
-    <tr>
-      <td colspan=5 align="center">
-        <h5>
-          {{mycase.documentName}}
-        </h5>
-      </td>
-    </tr>
   <tr>
     <td valign=top>  <font color="a0a0a0" size=-1>Tracking #</font><br>
       <b>
@@ -35,8 +28,14 @@
               {{curseq}}
             </b> <br>
             </span></td>
+        <td>
+          <button mat-icon-button color="primary" (click)="switchToGrid.emit()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </td>
   </tr>
   </table>
+  <hr>
 </div>
  <div *ngIf="viewType == 'consentview'" class="consent" style="word-break:break-word;white-space:normal !important;">
     <table width=98%>

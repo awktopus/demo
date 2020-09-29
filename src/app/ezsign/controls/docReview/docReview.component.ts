@@ -1,16 +1,13 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Output,EventEmitter, AfterViewInit } from '@angular/core';
 import {EzsigndataService } from '../../service/ezsigndata.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { MatDialog } from '@angular/material';
-import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 @Component({
-  selector: 'app-doc-review',
+  selector: 'app-docreview',
   templateUrl: './docReview.component.html',
   styleUrls: ['./docReview.component.scss']
 })
 export class DocReviewComponent implements OnInit, AfterViewInit {
-
+  @Output("switchToGridView") switchToGrid: EventEmitter<any> = new EventEmitter();
   myDate: Date = new Date();
   type: string;
   selected: any = false;
@@ -31,7 +28,6 @@ export class DocReviewComponent implements OnInit, AfterViewInit {
   fieldsCount = 0;
   signedCount = 0;
   agreementselected = false;
-  signcapform: FormGroup = new FormGroup({});
   myinput: any = {};
   mysigs: any = {};
   showProcessSpinner = false;

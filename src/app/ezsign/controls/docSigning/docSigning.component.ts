@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component,EventEmitter, OnInit, Output, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import {EzsigndataService } from '../../service/ezsigndata.service';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
@@ -10,7 +10,7 @@ import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from
   styleUrls: ['./docSigning.component.scss']
 })
 export class DocSigningComponent implements OnInit, AfterViewInit {
-
+  @Output("switchToGridView") switchToGrid: EventEmitter<any> = new EventEmitter();
   @ViewChildren(SignaturePad) public sigPadList: QueryList< SignaturePad>;
   public signaturePadOptions: any = {
     'minWidth': 1,
@@ -384,6 +384,7 @@ goSignCap() {
               this.curcase = null;
               // now need to 
               console.log("need navigate back to the main page");
+              this.switchToGrid.emit();
           }
           this.showProcessSpinner = false;
       });
