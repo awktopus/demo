@@ -36,14 +36,14 @@ import { EzsignPdfPopupComponent } from './controls/shared/ezsign-pdf-popup/ezsi
 import { AddupdatesignersComponent } from './controls/addfields/addupdatesigners/addupdatesigners.component';
 import { GridColConfigPopupComponent } from '../esign/controls/history/gridcolpopup/grid-col-config-popup.component';
 // tslint:disable-next-line:max-line-length
-import { MyEzsignDocsComponent, DialogNoFormMessageDialogComponent, DialogMissingDataMessageDialogComponent } from './controls/myezsigndocs/myezsigndocs.component';
+import { MyEzsignDocsComponent } from './controls/myezsigndocs/myezsigndocs.component';
 import { AddguestsComponent } from './controls/addfields/addguests/addguests.component';
 import { EzsignGridcolpopupComponent } from './controls/shared/ezsign-gridcolpopup/ezsign-gridcolpopup.component';
 import { EzSignReminderRendererComponent } from './controls/EzsignReminderRenderer.component';
 import { EzsignClientReminderComponent } from './controls/shared/ezsign-client-reminder/ezsign-client-reminder.component';
 import { EzsignMainComponent } from './controls/ezsignmain/ezsignmain.component';
 import { DocReviewComponent } from './controls/docReview/docReview.component';
-import { DocSigningComponent } from './controls/docSigning/docSigning.component';
+import { DocSigningComponent,DialogNoFormMessageDialogComponent, DialogMissingDataMessageDialogComponent} from './controls/docSigning/docSigning.component';
 import { ReceiverezsigndocsComponent } from './controls/receiverezsigndocs/receiverezsigndocs.component';
 import { ReceiverEzsigningRendererComponent } from './controls/ReceiverEzsigningbutton-renderer.component';
 @NgModule({
