@@ -3,6 +3,7 @@ import {EzsigndataService } from '../../service/ezsigndata.service';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { MatDialog } from '@angular/material';
+import { DialogMissingDataMessageDialogComponent,DialogNoFormMessageDialogComponent} from '../docSigning/docSigning.component'
 import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 @Component({
   selector: 'app-myezsigndocs',
@@ -414,7 +415,7 @@ goSignCap() {
   }
 
 }
-
+/*
 @Component({
   selector: 'dialog-noform_message-dialog',
   templateUrl: 'dialog-noform_message-dialog.html',
@@ -425,3 +426,4 @@ export class DialogNoFormMessageDialogComponent {}
   templateUrl: 'dialog-missingdata-message-dialog.html',
 })
 export class DialogMissingDataMessageDialogComponent {}
+*/
