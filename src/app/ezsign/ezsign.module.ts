@@ -46,6 +46,7 @@ import { DocReviewComponent } from './controls/docReview/docReview.component';
 import { DocSigningComponent } from './controls/docSigning/docSigning.component';
 import { ReceiverezsigndocsComponent } from './controls/receiverezsigndocs/receiverezsigndocs.component';
 import { ReceiverEzsigningRendererComponent } from './controls/ReceiverEzsigningbutton-renderer.component';
+import { EzsignDownloadButtonRendererComponent } from './controls/EzsignDownloadbutton-renderer.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -98,16 +99,19 @@ import { ReceiverEzsigningRendererComponent } from './controls/ReceiverEzsigning
     EzsignGridcolpopupComponent,
     MyEzsignDocsComponent,
     DialogMissingDataMessageDialogComponent,
-    DocReviewComponent,DocSigningComponent,
-    EzsignClientReminderComponent, EzSignReminderRendererComponent, ReceiverezsigndocsComponent, ReceiverEzsigningRendererComponent
+    DocReviewComponent, DocSigningComponent,
+    EzsignClientReminderComponent, EzSignReminderRendererComponent,
+    ReceiverezsigndocsComponent, ReceiverEzsigningRendererComponent,
+    EzsignDownloadButtonRendererComponent
     ],
   entryComponents: [AddsignersComponent, UploadDocumentComponent, EzsignPdfPopupComponent,
     EzsignConfirmationDialogComponent, InvitesignersComponent, AddupdatesignersComponent,
     DocumenthistoryComponent, AddguestsComponent, EzsignGridcolpopupComponent ,
-    MyEzsignDocsComponent,DocReviewComponent,DocSigningComponent,
+    MyEzsignDocsComponent, DocReviewComponent, DocSigningComponent,
     DialogMissingDataMessageDialogComponent, DialogMissingDataMessageDialogComponent ,
     AddguestsComponent, EzsignMainComponent, EzsignClientReminderComponent,
-    DialogNoFormMessageDialogComponent, ReceiverEzsigningRendererComponent
+    DialogNoFormMessageDialogComponent, ReceiverEzsigningRendererComponent, 
+    EzsignDownloadButtonRendererComponent
     ],
   providers: [
     ESignGuard,

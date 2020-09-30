@@ -74,7 +74,7 @@
                 <td colspan="12">
                     <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
                         <label class="heading-label">Drag and drop or Upload PDF document here</label>
-                        <input multiple hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
+                        <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
                     </div>
                     <div class="files-list" *ngFor="let file of files;let i=index">
                         <p>{{ file.name }}</p>

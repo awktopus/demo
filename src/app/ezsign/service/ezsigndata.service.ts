@@ -23,11 +23,11 @@ export class EzsigndataService implements Resolve<any> {
     this.onCategoriesChanged = new BehaviorSubject({});
   }
 
-  setCacheData(key,value){
-    this.cacheData[key]=value;
+  setCacheData(key, value) {
+    this.cacheData[key] = value;
   }
-  
-  getCacheData(key){
+
+  getCacheData(key) {
     return this.cacheData[key];
   }
 
@@ -358,5 +358,23 @@ export class EzsigndataService implements Resolve<any> {
       this.auth.getUserID() + '/tracking/' + trackingId;
     console.log(url);
     return this.http.get(url, this.auth.getESignOptions());
+  }
+
+  downloadEzsignDocument(trackingId: string, attachment: any): any {
+
+    console.log('downloadEzsignDocument service api call..');
+    const url: string = this.auth.baseurl +
+      '/Ezsign/tracking/' + trackingId + '/signedform';
+     console.log(url);
+    this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      console.log('set pdf:' + fileURL);
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = fileURL;
+      link.download = attachment;
+      link.click();
+    });
   }
 }

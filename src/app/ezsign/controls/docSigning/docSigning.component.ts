@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { MatDialog } from '@angular/material';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+
 @Component({
   selector: 'app-docsigning',
   templateUrl: './docSigning.component.html',
@@ -22,7 +23,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   type: string;
   selected: any = false;
   selectedPaperConsent: any = false;
- //mycases: any = [];
+ // mycases: any = [];
   mycase: any;
   casefilter = 0;
   selectedcase: any = {};

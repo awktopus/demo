@@ -308,6 +308,7 @@ export class EZSignDocResource {
   eZSignDocPages?: EZSignDocPage[];
   eZSignClientReminder?: EzSignClientReminder;
   clientReminderFlag: string;
+  receiverSigningStatus: string;
 }
 
 export class EZSignDocSigner {

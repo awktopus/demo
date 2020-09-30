@@ -9,7 +9,9 @@
         </td>
         <td>
           <button mat-icon-button color="primary" (click)="switchToGrid.emit()">
-            <mat-icon>menu</mat-icon>
+            Back
+        <mat-icon>
+          reply</mat-icon>
           </button>
         </td>
       </tr>
@@ -22,7 +24,7 @@
           <font color="a0a0a0" size=-1>Date</font><br>
               <b>{{mycase.lastModifiedDateTime}}</b>
         </td>
-        <td valign=top>                  <font color="a0a0a0" size=-1>Clients</font><br>
+        <td valign=top>                  <font color="a0a0a0" size=-1>Signers</font><br>
           <span *ngFor='let usr of mycase.ezSignDocSigners'>
           <b>
             {{usr.receiverFirstName}} {{usr.receiverLastName}}

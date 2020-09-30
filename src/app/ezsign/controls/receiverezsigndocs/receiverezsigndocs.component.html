@@ -7,12 +7,12 @@
   <table width=90% *ngIf='isEZsignDataFetched'>
       <tr>
           <td width=45%>
-              <button mat-icon-button *ngIf="ezSignDocsgridData" matTooltip="refresh" (click)="loadEZSignDocuments()">
+              <button mat-icon-button *ngIf="ezSignReceiverDocsgridData" matTooltip="refresh" (click)="loadEZSignDocuments()">
                   <mat-icon>refresh</mat-icon>&nbsp;REFRESH
               </button>
           </td>
           <td align=right>
-              <div *ngIf="ezSignDocsgridData && isEZsignDataFetched">
+              <div *ngIf="ezSignReceiverDocsgridData && isEZsignDataFetched">
                   <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(receiverEzSignApi)'>list_alt</mat-icon>
                   <mat-icon class='docicon' mdbRippleRadius (click)="gridExport('ezsign')" matTooltip="Export CSV">insert_link</mat-icon>
                   <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('ezsign')" matTooltip="Expand All">swap_horiz</mat-icon>
@@ -23,11 +23,11 @@
   </table>
 
   <br/>
-  <div style="margin-left: 1px;margin-right: 1px" *ngIf="ezSignDocsgridData && isEZsignDataFetched">
-      <ag-grid-angular #agGrid id="receiverEzSignDocsGrid" style="width: 93%;  font-size:11pt" class="ag-theme-balham" [rowData]="ezSignDocsgridData"
+  <div style="margin-left: 1px;margin-right: 1px" *ngIf="ezSignReceiverDocsgridData && isEZsignDataFetched">
+      <ag-grid-angular #agGrid id="receiverEzSignDocsGrid" style="width: 88%;  font-size:11pt" class="ag-theme-balham" [rowData]="ezSignReceiverDocsgridData"
           [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
           [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'ezsign')"
-          [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout">
+          [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout" (gridReady)="onGridReady($event,'ezsign')">
       </ag-grid-angular>
   </div>
 </div>

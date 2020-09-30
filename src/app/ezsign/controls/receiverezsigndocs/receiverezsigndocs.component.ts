@@ -21,6 +21,7 @@ import { EzsignGridcolpopupComponent } from '../shared/ezsign-gridcolpopup/ezsig
 import { EzSignReminderRendererComponent } from '../EzsignReminderRenderer.component';
 import { EzsignClientReminderComponent } from '../shared/ezsign-client-reminder/ezsign-client-reminder.component';
 import { ReceiverEzsigningRendererComponent } from '../ReceiverEzsigningbutton-renderer.component';
+import { EzsignDownloadButtonRendererComponent } from '../EzsignDownloadbutton-renderer.component';
 
 @Component({
   selector: 'app-receiverezsigndocs',
@@ -30,7 +31,7 @@ import { ReceiverEzsigningRendererComponent } from '../ReceiverEzsigningbutton-r
 export class ReceiverezsigndocsComponent implements OnInit {
 
   isLinear = false;
-  ezSignDocsgridData: any;
+  ezSignReceiverDocsgridData: EZSignDocResource[];
   gridColumnDefs: any;
   ezsignctrl: FormControl = new FormControl();
   search_val: string;
@@ -59,11 +60,13 @@ export class ReceiverezsigndocsComponent implements OnInit {
     private ezSignDataService: EzsigndataService) {
     this.frameworkComponents = {
       viewButtonRender: EzsignViewButtonRendererComponent,
-      receiverEzsigningButtonRender: ReceiverEzsigningRendererComponent
+      receiverEzsigningButtonRender: ReceiverEzsigningRendererComponent,
+      ezsignDownloadButtonRender: EzsignDownloadButtonRendererComponent
     }
   }
 
   ngOnInit() {
+    console.log('receiver ezsing ng on init');
     this.gridColumnDefs = this.configColDef();
     this.loadEZSignDocuments();
     this.viewType = 'grid';
@@ -74,7 +77,34 @@ export class ReceiverezsigndocsComponent implements OnInit {
     this.ezSignDataService.getEZSignDocs().subscribe(resp => {
       const ezSignDocs: EZSignDocResource[] = <EZSignDocResource[]>resp;
       console.log(ezSignDocs);
-      this.ezSignDocsgridData = ezSignDocs;
+      if (ezSignDocs) {
+        this.ezSignReceiverDocsgridData = [];
+        this.ezSignReceiverDocsgridData = ezSignDocs;
+        this.ezSignReceiverDocsgridData.forEach(doc => {
+          if (doc.receiverSigningStatus === "Signed" && doc.status === "Inprogress") {
+            doc.status = doc.status + " " + "(Pending with others)"
+          }
+        });
+      }
+      this.isEZsignDataFetched = true;
+    });
+  }
+
+  loadInternalEZSignDocuments() {
+    this.isEZsignDataFetched = false;
+    this.ezSignDataService.getEZSignDocs().subscribe(resp => {
+      const ezSignDocs: EZSignDocResource[] = <EZSignDocResource[]>resp;
+      console.log(ezSignDocs);
+      if (ezSignDocs) {
+        this.ezSignReceiverDocsgridData = [];
+        this.ezSignReceiverDocsgridData = ezSignDocs;
+        this.ezSignReceiverDocsgridData.forEach(doc => {
+          if (doc.receiverSigningStatus === "Signed" && doc.status === "Inprogress") {
+            doc.status = doc.status + " " + "(Pending with others)"
+          }
+        });
+      }
+      this.receiverEzSignApi.api.sizeColumnsToFit();
       this.isEZsignDataFetched = true;
     });
   }
@@ -82,16 +112,14 @@ export class ReceiverezsigndocsComponent implements OnInit {
   configColDef() {
     const res = [
       {
-        headerName: 'EZSign Tracking Id', field: 'ezSignTrackingId',
+        headerName: 'EZSign Tracking Id', field: 'ezSignTrackingId', width: 150,
         cellStyle: this.changeRowColor
       },
-      { headerName: 'Sender', field: 'senderName', cellStyle: this.changeRowColor },
-      { headerName: 'Document Name', field: 'documentName', cellStyle: this.changeRowColor },
-      { headerName: 'Status', field: 'status', cellStyle: this.changeRowColor },
-      { headerName: 'Last Modified', field: 'lastModifiedDateTime',
-      cellStyle: this.changeRowColor },
+      { headerName: 'Sender', field: 'senderName', cellStyle: this.changeRowColor, width: 200 },
+      { headerName: 'Document Name', field: 'documentName', cellStyle: this.changeRowColor, width: 250 },
+      { headerName: 'Status', field: 'status', cellStyle: this.changeRowColor, width: 200 },
       {
-        headerName: 'View',
+        headerName: 'View', width: 100,
         cellRenderer: 'viewButtonRender',
         cellRendererParams: {
           onClick: this.viewEZSignDocument.bind(this),
@@ -99,13 +127,23 @@ export class ReceiverezsigndocsComponent implements OnInit {
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'Sign',
+        headerName: 'Sign', width: 100,
         cellRenderer: 'receiverEzsigningButtonRender',
         cellRendererParams: {
           onClick: this.startReceiverEzsign.bind(this)
         },
         cellStyle: this.changeRowColor
-      }
+      },
+       {
+         headerName: 'Download', width: 120,
+         cellRenderer: 'ezsignDownloadButtonRender',
+         cellRendererParams: {
+          onClick: this.downloadEzSignDocument.bind(this)
+         },
+         cellStyle: this.changeRowColor
+       },
+      { headerName: 'Last Modified', field: 'lastModifiedDateTime',
+      cellStyle: this.changeRowColor }
     ];
     this.context = { componentParent: this, ezsignfit: true };
     this.rowHeight = 40;
@@ -115,9 +153,10 @@ export class ReceiverezsigndocsComponent implements OnInit {
 
   viewEZSignDocument(selectedRow: any) {
     console.log(selectedRow.rowData);
-    this.ezSignDataService.setCacheData("case",selectedRow.rowData);
-    this.viewType="pagereview";
+    this.ezSignDataService.setCacheData("case", selectedRow.rowData);
+    this.viewType = "pagereview";
   }
+
   viewEZSignDocument_old(selectedRow: any) {
     console.log('view ezsign document');
     console.log(selectedRow);
@@ -130,18 +169,18 @@ export class ReceiverezsigndocsComponent implements OnInit {
     console.log('start ezsigning document...');
     console.log(ezSignTrackingId);
     // find the corresponding signing document
-    this.ezSignDocsgridData.forEach(doc=>{
-      if(doc.ezSignTrackingId==ezSignTrackingId)
-      {
+    this.ezSignReceiverDocsgridData.forEach(doc => {
+      if (doc.ezSignTrackingId === ezSignTrackingId) {
         console.log(doc);
-        this.ezSignDataService.setCacheData("case",doc);
-        this.viewType='signing';
+        this.ezSignDataService.setCacheData("case", doc);
+        this.viewType = 'signing';
       }
     });
   }
 
-   switchToGridView(){
+   switchToGridView() {
      this.viewType = 'grid';
+     this.loadInternalEZSignDocuments();
    }
 
    resizeAll(gridname) {
@@ -199,34 +238,53 @@ export class ReceiverezsigndocsComponent implements OnInit {
     }
   }
 
+  onGridReady(params, gridname) {
+    console.log('onGridReady');
+    console.log(params);
+    console.log(gridname);
+    params.api.sizeColumnsToFit();
+    if (gridname === 'ezsign') {
+      this.receiverEzSignApi.api = params.api;
+      this.receiverEzSignApi.columnApi = params.columnApi;
+      this.receiverEzSignApi.cols = [];
+      this.receiverEzSignApi.columnApi.getAllColumns().forEach(cc => {
+        this.receiverEzSignApi.cols.push({ colId: cc.colId, checked: true, headerName: cc.colDef.headerName });
+      });
+    }
+  }
+
+
 changeRowColor(params) {
-console.log('params');
-console.log(params);
+// console.log('params');
+// console.log(params);
 if (params.colDef.headerName === 'View' || params.colDef.headerName === 'Sign') {
   if (params.data.status === 'Sent to recipient') {
-    return { 'background-color': '#DE2A2A', 'justify-content': "center" };
+    return { 'background-color': '#f8d2d2', 'justify-content': "center" };
   } else if (params.data.status === 'Inprogress') {
-    return { 'background-color': '#D0D0D0', 'justify-content': "center" };
+    return { 'background-color': '#f1f1a6', 'justify-content': "center" };
   } else if (params.data.status === 'Signed') {
-    return { 'background-color': '#97FBB6', 'justify-content': "center" };
-  } else if (params.data.status === 'need assistance') {
-    return { 'background-color': '#FBE197', 'justify-content': "center" };
+    return { 'background-color': '#d2f8d2', 'justify-content': "center" };
   }
 } else {
     if (params.data.status === 'Sent to recipient') {
-      return { 'background-color': '#DE2A2A', 'text-align': "left" };
+      return { 'background-color': '#f8d2d2', 'text-align': "left" };
     } else if (params.data.status === 'Inprogress') {
-      return { 'background-color': '#D0D0D0', 'text-align': "left" };
+      return { 'background-color': '#f1f1a6', 'text-align': "left" };
     } else if (params.data.status === 'Signed') {
-      return { 'background-color': '#97FBB6', 'text-align': "left" };
-    } else if (params.data.status === 'need assistance') {
-      return { 'background-color': '#FBE197', 'text-align': "left" };
+      return { 'background-color': '#d2f8d2', 'text-align': "left" };
     }
   }
   }
 
   changeTab(event) {
 
+  }
+
+  downloadEzSignDocument(ezSignDocRec: any) {
+    console.log('downloadEzSignDocument...');
+    console.log(ezSignDocRec);
+    this.ezSignDataService.downloadEzsignDocument(ezSignDocRec.ezSignTrackingId,
+      ezSignDocRec.documentName);
   }
 
 }

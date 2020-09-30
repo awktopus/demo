@@ -4,7 +4,7 @@ import { Component} from '@angular/core';
 
 @Component({
     template: `
-    <button mat-icon-button style="border: none" *ngIf='ezSignDoc.status !=="Signed"'
+    <button mat-icon-button style="border: none" *ngIf='ezSignDoc.receiverSigningStatus !=="Signed"'
     (click)="invokeParentMethod(ezSignDoc.ezSignTrackingId)" matTooltip="Start ezsigning">
     <mat-icon>create</mat-icon>
    </button>
