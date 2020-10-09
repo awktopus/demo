@@ -153,8 +153,10 @@ export class ReceiverezsigndocsComponent implements OnInit {
 
   viewEZSignDocument(selectedRow: any) {
     console.log(selectedRow.rowData);
-    this.ezSignDataService.setCacheData("case", selectedRow.rowData);
-    this.viewType = "pagereview";
+   // this.ezSignDataService.setCacheData("case", selectedRow.rowData);
+   // this.viewType = "pagereview";
+    const trkID = selectedRow.rowData.ezSignTrackingId;
+    this.ezSignDataService.showEzsignPDFDoc(trkID);
   }
 
   viewEZSignDocument_old(selectedRow: any) {
