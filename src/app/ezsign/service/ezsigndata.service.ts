@@ -386,4 +386,16 @@ export class EzsigndataService implements Resolve<any> {
       link.click();
     });
   }
+
+  showEzsignPDFDoc(trackingId: string):any{
+    console.log('downloadEzsignDocument service api call..');
+    const url: string = this.auth.baseurl +
+      '/Ezsign/tracking/' + trackingId + '/signedform';
+     console.log(url);
+     this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+     });
+  }
 }
