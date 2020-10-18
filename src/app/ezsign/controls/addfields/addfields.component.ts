@@ -3,7 +3,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatSelect, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatFormField, MatSnackBar } from '@angular/material';
 import {
   ESignCase, ESignDoc, ESignCPA, ESignClient, ClientReminder, Signer,
-  EZSignPageImageData, EsignFormField, SignatureField, DateField, TextField, EZSignDocResource, SignerData, EzSignField, CompanyStaff
+  EZSignPageImageData, EsignFormField, SignatureField, DateField, TextField, EZSignDocResource, SignerData,
+  EzSignField, CompanyStaff, EzSignerFieldType, Offset
 } from '../../../esign/beans/ESignCase';
 import { EsignserviceService } from '../../../esign/service/esignservice.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -19,12 +20,13 @@ import { EzsignConfirmationDialogComponent } from '../shared/ezsign-confirmation
 import { AnyMxRecord } from 'dns';
 import { delay } from 'q';
 import { AddguestsComponent } from './addguests/addguests.component';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-addfields',
   templateUrl: './addfields.component.html',
   styleUrls: ['./addfields.component.scss']
 })
-export class AddfieldsComponent implements OnChanges, OnInit {
+export class AddfieldsComponent implements  OnInit {
   public style: object = {};
   ezSignTrackingId: string;
   docId: string;
@@ -38,6 +40,7 @@ export class AddfieldsComponent implements OnChanges, OnInit {
   formImageBlobUrl: string;
   ezSignPageImageData: SignerData;
   ezSignFields: EzSignField[] = [];
+  ezSignSignerFieldTypes: EzSignerFieldType[] = [];
   isImageDataUrlFetched = false;
   signatureFieldName: string;
 
@@ -54,19 +57,13 @@ export class AddfieldsComponent implements OnChanges, OnInit {
 
   signerData: SignerData[] = [];
   isFieldsReadyToShow = false;
-  displayedColumns: string[] = ['select', 'fieldSeqNo', 'receiverName', 'receiverEmailId',
-    'fieldType',
-    'fieldDescription', 'delete'];
+  displayedColumns: string[] = ['type', 'receiverName', 'select', 'receiverEmailId', 'delete'];
   @ViewChild('focusSignatureField') focusSignatureField: MatSelect;
   selectedFieldRow: any;
   prevSelectedSigner: CompanyStaff = null;
   constructor(private service: EzsigndataService, public dialog: MatDialog,
     private sanitizer: DomSanitizer, private router: Router, private snackBar: MatSnackBar,
     private route: ActivatedRoute) {
-  }
-
-  ngOnChanges() {
-    console.log('add fields ngOnChanges Event');
   }
 
   ngOnInit() {
@@ -76,9 +73,11 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       console.log(this.ezSignTrackingId);
       this.signerData = [];
       this.ezSignFields = [];
+      this.ezSignSignerFieldTypes = [];
       this.loadSignerData();
     });
   }
+
   loadSignerData() {
     this.service.GetSignerData(this.ezSignTrackingId).subscribe(resp => {
       console.log('load signer data:')
@@ -109,6 +108,18 @@ export class AddfieldsComponent implements OnChanges, OnInit {
         this.isFieldsReadyToShow = true;
       })();
     });
+
+    this.service.getEZSignSigners(this.ezSignTrackingId).subscribe(signers => {
+      console.log('Get ezsign signers');
+      console.log(signers);
+      if (signers) {
+        signers.forEach(element => {
+          this.add_ezsigner_field_type(element);
+        });
+      } else {
+        this.ezSignSignerFieldTypes = [];
+      }
+    })
   }
 
   sanitize(url: string) {
@@ -269,35 +280,15 @@ export class AddfieldsComponent implements OnChanges, OnInit {
   addField() {
     console.log('addField:');
     const dialogRef = this.dialog.open(AddupdatesignersComponent, {
-      width: '500px', height: '600px'
+      width: '550px', height: '750px'
     });
     dialogRef.componentInstance.addFieldsRef = this;
     dialogRef.componentInstance.setData("addfield", "Add Signer", null,
-    this.ezSignTrackingId, null);
+      this.ezSignTrackingId, null);
   }
 
   addFieldData(fieldData: EzSignField) {
     console.log('addFieldData');
-    // Step1: save Signer
-    const newSignerJson = {
-      receiverId: fieldData.receiverId,
-      receiverFirstName: fieldData.receiverFirstName,
-      receiverLastName: fieldData.receiverLastName,
-      receiverEmailId: fieldData.receiverEmailId,
-      isSenderSigner: fieldData.isSenderSigner,
-      isSender: fieldData.isSender,
-      isGuest: fieldData.isGuest,
-      isContactTobeSaved: fieldData.isContactTobeSaved,
-      isELMember: fieldData.isELMember
-    };
-    console.log(newSignerJson);
-    this.service.addNewSigner(this.ezSignTrackingId, newSignerJson).subscribe(resp => {
-      console.log('add new signer response');
-      console.log(resp);
-      if (resp) {
-        fieldData.receiverId = resp.receiverId;
-      }
-      console.log('add field - start');
       fieldData.posX = 0;
       fieldData.posY = this.ezSignPageImageData.pageHeight;
       fieldData.height = 18;
@@ -307,8 +298,82 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       console.log('add field - end');
       console.log(fieldData);
       this.saveField(fieldData);
+  }
+
+  add_signer_master_fields(fieldsData: Signer[]) {
+    console.log('add signer and master fields');
+    fieldsData.forEach(fieldData => {
+    this.service.addNewSigner(this.ezSignTrackingId, fieldData).subscribe(signers => {
+        console.log('add new signer type response');
+        console.log(signers);
+        this.ezSignSignerFieldTypes = [];
+        if (signers) {
+            signers.forEach(element => {
+              this.add_ezsigner_field_type(element);
+            });
+          } else {
+            this.ezSignSignerFieldTypes = [];
+          }
+      });
     });
   }
+
+  add_ezsigner_field_type(signerData: Signer) {
+    if (signerData) {
+      if (signerData.fieldTypes) {
+        signerData.fieldTypes.forEach(fy => {
+          let signerTypeData = new EzSignerFieldType();
+          signerTypeData.fieldName = fy.fieldName;
+          signerTypeData.fieldTypeDesc = fy.fieldTypeDesc;
+          signerTypeData.fieldTypeId = fy.fieldTypeId;
+          signerTypeData.isChecked = signerData.isChecked;
+          signerTypeData.isContactTobeSaved = signerData.isContactTobeSaved;
+          signerTypeData.isELMember = signerData.isELMember;
+          signerTypeData.isEmailReminderScheduled = signerData.isEmailReminderScheduled;
+          signerTypeData.isGuest = signerData.isGuest;
+          signerTypeData.isSender = signerData.isSender;
+          signerTypeData.isSenderSigner = signerData.isSenderSigner;
+          signerTypeData.receiverEmailId = signerData.receiverEmailId;
+          signerTypeData.receiverFirstName = signerData.receiverFirstName;
+          signerTypeData.receiverLastName = signerData.receiverLastName;
+          signerTypeData.receiverId = signerData.receiverId;
+          signerTypeData.receiverFullName = signerData.receiverFullName;
+          signerTypeData.status = signerData.status;
+          this.ezSignSignerFieldTypes.push(signerTypeData);
+          console.log('added signer master field');
+          console.log(this.ezSignSignerFieldTypes);
+        });
+      }
+    }
+  }
+
+  dropField(selectedFieldRow: EzSignerFieldType) {
+    console.log('drop field');
+    console.log(selectedFieldRow);
+    let fieldData = new EzSignField();
+    if (this.ezSignFields) {
+      fieldData.fieldSeqNo = this.ezSignFields.length + 1;
+    } else {
+    fieldData.fieldSeqNo = 1;
+  }
+    fieldData.fieldType = selectedFieldRow.fieldName;
+    fieldData.receiverId = selectedFieldRow.receiverId;
+    fieldData.receiverFirstName = selectedFieldRow.receiverFirstName;
+    fieldData.receiverLastName = selectedFieldRow.receiverLastName;
+    fieldData.receiverEmailId = selectedFieldRow.receiverEmailId;
+    fieldData.isGuest = selectedFieldRow.isGuest;
+    fieldData.isELMember = selectedFieldRow.isELMember;
+    fieldData.labelName = selectedFieldRow.fieldTypeDesc;
+    let fieldMovingOffset = new Offset();
+    fieldMovingOffset.x = 0;
+    fieldMovingOffset.y = 0;
+    let fieldEndOffset = new Offset;
+    fieldEndOffset.x = 0;
+    fieldEndOffset.y = 0;
+    fieldData.fieldMovingOffset = fieldMovingOffset;
+    fieldData.fieldEndOffset = fieldEndOffset;
+    this.addFieldData(fieldData);
+   }
 
   saveField(fieldData: EzSignField) {
     console.log('save signature field - start');
@@ -332,16 +397,16 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       boxY = 0;
     }
     let fType: number;
-    if (fieldData.fieldType === 'signature') {
+    if (fieldData.fieldType.toLowerCase() === 'signature') {
       fType = 1;
     }
-    if (fieldData.fieldType === 'text') {
+    if (fieldData.fieldType.toLowerCase() === 'text') {
       fType = 2;
     }
-    if (fieldData.fieldType === 'date') {
+    if (fieldData.fieldType.toLowerCase() === 'date') {
       fType = 3;
     }
-    if (fieldData.fieldType === 'initial') {
+    if (fieldData.fieldType.toLowerCase() === 'initial') {
       fType = 4;
     }
     const newFieldInfo = {
@@ -379,12 +444,12 @@ export class AddfieldsComponent implements OnChanges, OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Yes clicked');
-        this.deleteField(deletedFieldData);
+        this.deleteSignerField(deletedFieldData);
       }
     });
   }
 
-  deleteField(fieldData: EzSignField) {
+  deleteSignerField(fieldData: EzSignField) {
     console.log('delete field');
     console.log(fieldData);
     let fType: number;
@@ -416,6 +481,58 @@ export class AddfieldsComponent implements OnChanges, OnInit {
       });
   }
 
+
+  open_confirmation_dialog_for_signer_fieldtype_deletion(deletedFieldData: any): void {
+    const dialogRef = this.dialog.open(EzsignConfirmationDialogComponent, {
+      width: '450px', height: '200px',
+      data: "Do you confirm the deletion of this EZsigner field type and corresponding page fields?"
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Yes clicked');
+        this.delete_signer_fieldtype(deletedFieldData);
+      }
+    });
+  }
+
+  delete_signer_fieldtype(fieldData: EzSignerFieldType) {
+    console.log('delete_signer_fieldtype');
+    console.log(fieldData);
+    let fType: number;
+    if (fieldData.fieldName.toLowerCase() === 'signature') {
+      fType = 1;
+    }
+    if (fieldData.fieldName.toLowerCase() === 'text') {
+      fType = 2;
+    }
+    if (fieldData.fieldName.toLowerCase() === 'date') {
+      fType = 3;
+    }
+    if (fieldData.fieldName.toLowerCase() === 'initial') {
+      fType = 4;
+    }
+    this.service.deleteSignerFieldType(this.ezSignTrackingId, fieldData.receiverId, fType).subscribe(signers => {
+      if (signers) {
+        this.ezSignSignerFieldTypes = [];
+        signers.forEach(element => {
+          this.add_ezsigner_field_type(element);
+        });
+      } else {
+        this.ezSignSignerFieldTypes = [];
+      }
+      this.ezSignFields.forEach(fld => {
+        if (fld.receiverId === fieldData.receiverId && fld.fieldType === fieldData.fieldName.toLowerCase()) {
+          const index = this.ezSignFields.indexOf(fld, 0);
+          if (index > -1) {
+            this.ezSignFields.splice(index, 1);
+         }
+        }
+      });
+      console.log('modified ezsign fields');
+      console.log(this.ezSignFields);
+      });
+  }
+
   selectFieldRecord(event: any, selectedFieldRow: EzSignField) {
     console.log(selectedFieldRow);
     console.log(event);
@@ -444,17 +561,18 @@ export class AddfieldsComponent implements OnChanges, OnInit {
   }
 
   set_previously_selected_signer(ezSignFields: EzSignField[]) {
-    if (ezSignFields) {
-    this.ezSignFields.forEach(sf => {
-      this.prevSelectedSigner = new CompanyStaff();
-        this.prevSelectedSigner.clientId = sf.receiverId;
-        this.prevSelectedSigner.emailId = sf.receiverEmailId;
-        this.prevSelectedSigner.firstName = sf.receiverFirstName;
-        this.prevSelectedSigner.lastName = sf.receiverLastName;
-        this.prevSelectedSigner.isELMember = sf.isELMember;
-    });
-  } else {
-    this.prevSelectedSigner = null;
+    // if (ezSignFields) {
+    //   this.ezSignFields.forEach(sf => {
+    //     this.prevSelectedSigner = new CompanyStaff();
+    //     this.prevSelectedSigner.clientId = sf.receiverId;
+    //     this.prevSelectedSigner.emailId = sf.receiverEmailId;
+    //     this.prevSelectedSigner.firstName = sf.receiverFirstName;
+    //     this.prevSelectedSigner.lastName = sf.receiverLastName;
+    //     this.prevSelectedSigner.isELMember = sf.isELMember;
+    //   });
+    // } else {
+    //   this.prevSelectedSigner = null;
+    // }
   }
-  }
+
 }

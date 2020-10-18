@@ -3,7 +3,8 @@ import {
   CompanyType, ESignCPA, CompanyStaff, Company, InfoTrackLocation, Signer, SignerData,
   EzSignField,
   ESignField,
-  Offset
+  Offset,
+  SignerFieldType
 } from '../../../../esign/beans/ESignCase'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatOptionSelectionChange, MatTableDataSource } from '@angular/material';
@@ -36,8 +37,10 @@ export class AddguestsComponent implements OnInit {
     receiverEmailIdControl: new FormControl('', Validators.required),
     receiverFirstNameControl: new FormControl('', Validators.required),
     receiverLastNameControl: new FormControl(''),
-    fieldTypeControl: new FormControl('', Validators.required),
-    fieldDescControl: new FormControl('', Validators.required)
+    signHereFieldDescControl: new FormControl(''),
+    dateFieldDescControl: new FormControl(''),
+    initialFieldDescControl: new FormControl(''),
+    titleFieldDescControl: new FormControl('')
   });
   senderId = '';
   guestSigner: CompanyStaff = null;
@@ -47,6 +50,16 @@ export class AddguestsComponent implements OnInit {
   isGuestContactsFetched = false;
   guestSigner_var = '';
   isContactToBeSaved = true;
+  signHereFieldDesc: any;
+  dateFieldDesc: any;
+  intialFieldDesc: any;
+  titleFieldDesc: any;
+  isSignHereChecked = true;
+  isDateChecked = true;
+  isInitialChecked = true;
+  isTitleChecked = false;
+  fieldsData: Signer[] = [];
+
   @ViewChild('focusField') focusField: ElementRef;
   constructor(private service: EzsigndataService, public dialog: MatDialog, private route: ActivatedRoute,
     private router: Router, private snackBar: MatSnackBar,
@@ -56,7 +69,17 @@ export class AddguestsComponent implements OnInit {
 
   ngOnInit() {
     console.log('Add signers ngOnInit');
+
+    this.guestSignerForm.controls['signHereFieldDescControl'].setValue('Sign here');
+    this.guestSignerForm.controls['titleFieldDescControl'].setValue('e.g. Title here');
+    this.guestSignerForm.controls['dateFieldDescControl'].setValue('Select date');
+    this.guestSignerForm.controls['initialFieldDescControl'].setValue('Initial here');
+    this.signHereFieldDesc = "Sign here";
+    this.dateFieldDesc = "Select date";
+    this.intialFieldDesc = "Initial here";
+    this.titleFieldDesc = "e.g. Title here";
     this.isGuestContactsFetched = true;
+
     this.service.GetOrganizationGuestContacts().subscribe(results => {
       console.log('get organization guest contacts');
       this.guestSigners = <CompanyStaff[]>results;
@@ -72,10 +95,6 @@ export class AddguestsComponent implements OnInit {
       console.log(this.guestSigner_var);
       console.log(typeof searchToken);
       console.log(this.guestSigner);
-
-      // if (this.senderId === '') {
-      //   return;
-      // }
       if (this.guestSigner) {
         return;
       }
@@ -114,7 +133,6 @@ export class AddguestsComponent implements OnInit {
       let c: CompanyStaff = null;
       this.guestSigners.forEach(cc => { if (cc.clientId === value) { c = cc; } });
       this.guestSigner = c;
-      // this.guestSignerForm.controls['receiverEmailIdControl'].setValue('');
       this.guestSignerForm.controls['receiverFirstNameControl'].setValue(this.guestSigner.firstName);
       this.guestSignerForm.controls['receiverLastNameControl'].setValue(this.guestSigner.lastName);
     }
@@ -138,10 +156,6 @@ export class AddguestsComponent implements OnInit {
     console.log(this.firstName);
     console.log('last name');
     console.log(this.lastName);
-    console.log('field type');
-    console.log(this.fieldType);
-    console.log('field description');
-    console.log(this.fieldDesc);
     console.log('is contact to be saved');
     console.log(this.isContactToBeSaved);
     let temailId = "";
@@ -185,25 +199,69 @@ export class AddguestsComponent implements OnInit {
       }
     }
 
-    if (!this.fieldType) {
-      this.snackBar.open("Please select field type", '', { duration: 3000 });
-      return;
-    }
+    if (this.isSignHereChecked === false && this.isDateChecked === false
+      && this.isInitialChecked === false && this.isTitleChecked === false) {
+        this.snackBar.open("Please check field type (Signature, Date, Initial, Text)", '', { duration: 3000 });
+        return;
+      }
 
-    if (!this.fieldDesc) {
-      this.snackBar.open("Please enter field description", '', { duration: 3000 });
-      return;
-    }
+  //   this.showAddFieldSpinner = true;
+  //   let isSender = "N";
+  //   let isSenderSigner = "N";
 
-    this.showAddFieldSpinner = true;
-    let isSender = "N";
-    let isSenderSigner = "N";
+  //   let fieldData = new EzSignField();
+  //   fieldData.receiverFirstName = this.firstName;
+  //   fieldData.receiverLastName = this.lastName;
+  //   fieldData.receiverEmailId = temailId;
+  //   if (this.guestSigner) {
+  //     if (this.guestSigner.isELMember === "Y") {
+  //       fieldData.isELMember = "Y";
+  //       fieldData.isGuest = "N";
+  //     } else {
+  //       fieldData.isELMember = "N";
+  //       fieldData.isGuest = "Y";
+  //     }
+  //   } else {
+  //     fieldData.isELMember = "N";
+  //     fieldData.isGuest = "Y";
+  //   }
+  //   fieldData.isSenderSigner = isSenderSigner;
+  //   fieldData.isSender = isSender;
 
-    let fieldData = new EzSignField();
+  //   if (this.guestSigner) {
+  //     fieldData.isContactTobeSaved = false;
+  //     fieldData.receiverId = this.guestSigner.clientId;
+  //   } else {
+  //     fieldData.isContactTobeSaved = this.isContactToBeSaved;
+  //  }
+
+  //   fieldData.fieldType = this.guestSignerForm.controls['fieldTypeControl'].value;
+  //   fieldData.labelName = this.guestSignerForm.controls['fieldDescControl'].value;
+  //   let fieldMovingOffset = new Offset();
+  //   fieldMovingOffset.x = 0;
+  //   fieldMovingOffset.y = 0;
+  //   let fieldEndOffset = new Offset;
+  //   fieldEndOffset.x = 0;
+  //   fieldEndOffset.y = 0;
+  //   fieldData.fieldMovingOffset = fieldMovingOffset;
+  //   fieldData.fieldEndOffset = fieldEndOffset;
+  //   console.log('guest field data');
+  //   console.log(fieldData);
+  //   this.addFieldsRef.addFieldData(fieldData);
+  //   this.showAddFieldSpinner = false;
+  //   this.cancelPopup();
+  //   this.cancelAddSignersPopup();
+
+   let isSender = "N";
+   let isSenderSigner = "N";
+
+    let fieldData = new Signer();
+   // fieldData.receiverId = this.primarysigner.clientId;
     fieldData.receiverFirstName = this.firstName;
     fieldData.receiverLastName = this.lastName;
-    fieldData.receiverEmailId = temailId;
-    if (this.guestSigner) {
+    fieldData.receiverEmailId = this.receiverEmailId;
+
+      if (this.guestSigner) {
       if (this.guestSigner.isELMember === "Y") {
         fieldData.isELMember = "Y";
         fieldData.isGuest = "N";
@@ -225,22 +283,45 @@ export class AddguestsComponent implements OnInit {
       fieldData.isContactTobeSaved = this.isContactToBeSaved;
    }
 
-    fieldData.fieldType = this.guestSignerForm.controls['fieldTypeControl'].value;
-    fieldData.labelName = this.guestSignerForm.controls['fieldDescControl'].value;
-    let fieldMovingOffset = new Offset();
-    fieldMovingOffset.x = 0;
-    fieldMovingOffset.y = 0;
-    let fieldEndOffset = new Offset;
-    fieldEndOffset.x = 0;
-    fieldEndOffset.y = 0;
-    fieldData.fieldMovingOffset = fieldMovingOffset;
-    fieldData.fieldEndOffset = fieldEndOffset;
-    console.log('guest field data');
-    console.log(fieldData);
-    this.addFieldsRef.addFieldData(fieldData);
-    this.showAddFieldSpinner = false;
-    this.cancelPopup();
-    this.cancelAddSignersPopup();
+    let fldTypes: SignerFieldType[] = [];
+    if (this.isSignHereChecked) {
+    let fieldType = new SignerFieldType();
+    fieldType.fieldName = "signature";
+    fieldType.fieldTypeDesc = this.guestSignerForm.controls['signHereFieldDescControl'].value;
+    fieldType.fieldTypeId = 1;
+    fldTypes.push(fieldType);
+   }
+
+  if (this.isDateChecked) {
+    let fieldType = new SignerFieldType();
+    fieldType.fieldName = "date";
+    fieldType.fieldTypeDesc = this.guestSignerForm.controls['dateFieldDescControl'].value;
+    fieldType.fieldTypeId = 3;
+    fldTypes.push(fieldType);
+    }
+
+  if (this.isInitialChecked) {
+    let fieldType = new SignerFieldType();
+    fieldType.fieldName = "initial";
+    fieldType.fieldTypeDesc = this.guestSignerForm.controls['initialFieldDescControl'].value;
+    fieldType.fieldTypeId = 4;
+    fldTypes.push(fieldType);
+    }
+
+  if (this.isTitleChecked) {
+    let fieldType = new SignerFieldType();
+    fieldType.fieldName = "title";
+    fieldType.fieldTypeDesc = this.guestSignerForm.controls['titleFieldDescControl'].value;
+    fieldType.fieldTypeId = 2;
+    fldTypes.push(fieldType);
+  }
+  fieldData.fieldTypes = fldTypes;
+  this.fieldsData.push(fieldData);
+  console.log(this.fieldsData);
+    this.addFieldsRef.add_signer_master_fields(this.fieldsData);
+      this.showAddFieldSpinner = false;
+      this.cancelPopup();
+
   }
 
   saveAsContact(event) {
@@ -251,19 +332,28 @@ export class AddguestsComponent implements OnInit {
     }
   }
 
-  selectFieldType(event: any) {
-    console.log('select field type selection');
+  checkSignature(event: any) {
+    console.log('checkSignature');
     console.log(event);
+    this.isSignHereChecked = event.checked;
+  }
 
-    if (event.value === 'signature') {
-      this.guestSignerForm.controls['fieldDescControl'].setValue('Sign here');
-    } else if (event.value === 'text') {
-      this.guestSignerForm.controls['fieldDescControl'].setValue('Text field, e.g. Title Here');
-    } else if (event.value === 'date') {
-      this.guestSignerForm.controls['fieldDescControl'].setValue('Select date');
-    } else if (event.value === 'initial') {
-      this.guestSignerForm.controls['fieldDescControl'].setValue('Initial here');
-    }
+  checkDate(event: any) {
+    console.log('checkDate');
+    console.log(event);
+    this.isDateChecked = event.checked;
+  }
+
+  checkInitial(event: any) {
+    console.log('checkInitial');
+    console.log(event);
+    this.isInitialChecked = event.checked;
+  }
+
+  checkText(event: any) {
+    console.log('checkText');
+    console.log(event);
+    this.isTitleChecked = event.checked;
   }
 
   cancelPopup() {

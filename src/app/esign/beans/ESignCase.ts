@@ -290,6 +290,11 @@ export class Signer {
   status: string;
   isEmailReminderScheduled: string;
   isChecked: boolean;
+  fieldTypes?: SignerFieldType[];
+  isELMember: string;
+  isGuest: string;
+  isContactTobeSaved: boolean;
+  isAgreementAccepted?: string;
 }
 
 export class MetaData {
@@ -434,6 +439,33 @@ export class EzSignField {
   fieldMovingOffset: Offset;
   isContactTobeSaved: boolean;
   isELMember: string;
+  info: string;
+}
+
+export class EzSignerFieldType {
+  receiverId: string;
+  receiverFullName: string
+  receiverFirstName: string;
+  receiverLastName: string;
+  receiverEmailId: string;
+  isSenderSigner: string;
+  isSender: string;
+  signerSequenceNo: number;
+  status: string;
+  isEmailReminderScheduled: string;
+  isChecked: boolean;
+  isELMember: string;
+  isGuest: string;
+  isContactTobeSaved: boolean;
+  fieldTypeId: number;
+  fieldName: string;
+  fieldTypeDesc: string;
+}
+
+export class SignerFieldType {
+  fieldTypeId: number;
+  fieldName: string;
+  fieldTypeDesc: string;
 }
 
 export class Offset {

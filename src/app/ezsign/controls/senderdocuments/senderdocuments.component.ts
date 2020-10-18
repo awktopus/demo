@@ -51,6 +51,7 @@ export class SenderdocumentsComponent implements OnInit {
   private rowHeight;
   private rowClass;
   domLayout: any;
+  viewType = 'grid';
   constructor(public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
@@ -69,6 +70,7 @@ export class SenderdocumentsComponent implements OnInit {
     this.gridColumnDefs = this.configColDef();
 
     this.loadEZSignDocuments();
+    this.viewType = 'grid';
   }
 
   loadEZSignDocuments() {
@@ -173,9 +175,17 @@ export class SenderdocumentsComponent implements OnInit {
   viewEZSignDocument(selectedRow: any) {
     console.log('view ezsign document');
     console.log(selectedRow);
-    const dialogRef = this.dialog.open(EzsignPdfPopupComponent, { width: '520pt' });
-    dialogRef.componentInstance.setPDF(this.ezSignDataService.auth.baseurl +
-      '/Ezsign/tracking/' + selectedRow.rowData.ezSignTrackingId + '/signedform');
+    // const dialogRef = this.dialog.open(EzsignPdfPopupComponent, { width: '520pt' });
+    // dialogRef.componentInstance.setPDF(this.ezSignDataService.auth.baseurl +
+    //   '/Ezsign/tracking/' + selectedRow.rowData.ezSignTrackingId + '/signedform');
+      console.log(selectedRow.rowData);
+      this.ezSignDataService.setCacheData("case", selectedRow.rowData);
+      this.viewType = "pagereview";
+  }
+
+  switchToGridView() {
+    this.viewType = 'grid';
+    this.loadEZSignDocuments();
   }
 
   deleteEZSignDocument(deletedRow: any) {

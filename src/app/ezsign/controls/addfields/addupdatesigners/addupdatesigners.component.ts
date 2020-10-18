@@ -3,8 +3,9 @@ import {
   CompanyType, ESignCPA, CompanyStaff, Company, InfoTrackLocation, Signer, SignerData,
   EzSignField,
   ESignField,
-  Offset
-} from '../../../../esign/beans/ESignCase'
+  Offset,
+  SignerFieldType,
+ } from '../../../../esign/beans/ESignCase'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatOptionSelectionChange, MatTableDataSource } from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -33,13 +34,24 @@ export class AddupdatesignersComponent implements OnInit {
   fieldRecord: EzSignField;
   receiverNameInput: any;
   fieldType: any;
-  fieldDesc: any;
+  signHereFieldDesc: any;
+  dateFieldDesc: any;
+  intialFieldDesc: any;
+  titleFieldDesc: any;
   receiverEmailId: any;
+  isSignHereChecked = true;
+  isDateChecked = true;
+  isInitialChecked = true;
+  isTitleChecked = false;
+  fieldsData: Signer[] = [];
+
   signerForm: FormGroup = new FormGroup({
     receiverNameControl: new FormControl('', Validators.required),
     receiverEmailIdControl: new FormControl('', Validators.required),
-    fieldTypeControl: new FormControl('', Validators.required),
-    fieldDescControl: new FormControl('', Validators.required)
+    signHereFieldDescControl: new FormControl(''),
+    dateFieldDescControl: new FormControl(''),
+    initialFieldDescControl: new FormControl(''),
+    titleFieldDescControl: new FormControl('')
   });
   senderId = '';
   @ViewChild('focusField') focusField: ElementRef;
@@ -52,6 +64,15 @@ export class AddupdatesignersComponent implements OnInit {
   }
 
   ngOnInit() {
+
+  this.signerForm.controls['signHereFieldDescControl'].setValue('Sign here');
+  this.signerForm.controls['titleFieldDescControl'].setValue('e.g. Title here');
+  this.signerForm.controls['dateFieldDescControl'].setValue('Select date');
+  this.signerForm.controls['initialFieldDescControl'].setValue('Initial here');
+  this.signHereFieldDesc = "Sign here";
+  this.dateFieldDesc = "Select date";
+  this.intialFieldDesc = "Initial here";
+  this.titleFieldDesc = "e.g. Title here";
 
     this.service.getOrganizationEZSignSigners().subscribe(results => {
       console.log('get company staff');
@@ -138,8 +159,13 @@ export class AddupdatesignersComponent implements OnInit {
       this.snackBar.open("Please select a signer", '', { duration: 3000 });
       return ;
     }
+    if (this.isSignHereChecked === false && this.isDateChecked === false
+      && this.isInitialChecked === false && this.isTitleChecked === false) {
+        this.snackBar.open("Please check field type (Signature, Date, Initial, Text)", '', { duration: 3000 });
+        return;
+      }
     this.showAddFieldSpinner = true;
-    console.log('add field data');
+    console.log('add signer field type data from popup');
     console.log(this.primarysigner);
     let isSender = "N";
     let isSenderSigner = "N";
@@ -147,10 +173,7 @@ export class AddupdatesignersComponent implements OnInit {
       isSender = "Y";
       isSenderSigner = "Y";
     }
-    // if (typeof this.receiverNameInput === 'undefined') {
-    //   this.receiverNameInput = '';
-    // }
-    let fieldData = new EzSignField();
+    let fieldData = new Signer();
     fieldData.receiverId = this.primarysigner.clientId;
     fieldData.receiverFirstName = this.primarysigner.firstName;
     fieldData.receiverLastName = this.primarysigner.lastName;
@@ -159,35 +182,85 @@ export class AddupdatesignersComponent implements OnInit {
     fieldData.isELMember = this.primarysigner.isELMember;
     fieldData.isSenderSigner = isSenderSigner;
     fieldData.isSender = isSender;
-    fieldData.fieldType = this.signerForm.controls['fieldTypeControl'].value;
-    fieldData.labelName = this.signerForm.controls['fieldDescControl'].value;
-    let fieldMovingOffset = new Offset();
-    fieldMovingOffset.x = 0;
-    fieldMovingOffset.y = 0;
-    let fieldEndOffset = new Offset;
-    fieldEndOffset.x = 0;
-    fieldEndOffset.y = 0;
-    fieldData.fieldMovingOffset = fieldMovingOffset;
-    fieldData.fieldEndOffset = fieldEndOffset;
-    this.addFieldsRef.addFieldData(fieldData);
-    this.showAddFieldSpinner = false;
-    this.cancelPopup();
-  }
+    fieldData.isContactTobeSaved = false;
+    let fldTypes: SignerFieldType[] = [];
+    if (this.isSignHereChecked) {
+    let fieldType = new SignerFieldType();
+    fieldType.fieldName = "signature";
+    fieldType.fieldTypeDesc = this.signerForm.controls['signHereFieldDescControl'].value;
+    fieldType.fieldTypeId = 1;
+    fldTypes.push(fieldType);
+   }
 
-  selectFieldType(event: any) {
-    console.log('select field type selection');
-    console.log(event);
-
-    if (event.value === 'signature') {
-      this.signerForm.controls['fieldDescControl'].setValue('Sign here');
-    } else if (event.value === 'text') {
-      this.signerForm.controls['fieldDescControl'].setValue('Text field, e.g. Title Here');
-    } else if (event.value === 'date') {
-      this.signerForm.controls['fieldDescControl'].setValue('Select date');
-    } else if (event.value === 'initial') {
-      this.signerForm.controls['fieldDescControl'].setValue('Initial here');
+  if (this.isDateChecked) {
+    let fieldType = new SignerFieldType();
+    fieldType.fieldName = "date";
+    fieldType.fieldTypeDesc = this.signerForm.controls['dateFieldDescControl'].value;
+    fieldType.fieldTypeId = 3;
+    fldTypes.push(fieldType);
     }
+
+  if (this.isInitialChecked) {
+    let fieldType = new SignerFieldType();
+    fieldType.fieldName = "initial";
+    fieldType.fieldTypeDesc = this.signerForm.controls['initialFieldDescControl'].value;
+    fieldType.fieldTypeId = 4;
+    fldTypes.push(fieldType);
+    }
+
+  if (this.isTitleChecked) {
+    let fieldType = new SignerFieldType();
+    fieldType.fieldName = "title";
+    fieldType.fieldTypeDesc = this.signerForm.controls['titleFieldDescControl'].value;
+    fieldType.fieldTypeId = 2;
+    fldTypes.push(fieldType);
   }
+  fieldData.fieldTypes = fldTypes;
+  this.fieldsData.push(fieldData);
+  console.log(this.fieldsData);
+    this.addFieldsRef.add_signer_master_fields(this.fieldsData);
+      this.showAddFieldSpinner = false;
+      this.cancelPopup();
+  }
+
+  checkSignature(event: any) {
+    console.log('checkSignature');
+    console.log(event);
+    this.isSignHereChecked = event.checked;
+  }
+
+  checkDate(event: any) {
+    console.log('checkDate');
+    console.log(event);
+    this.isDateChecked = event.checked;
+  }
+
+  checkInitial(event: any) {
+    console.log('checkInitial');
+    console.log(event);
+    this.isInitialChecked = event.checked;
+  }
+
+  checkText(event: any) {
+    console.log('checkText');
+    console.log(event);
+    this.isTitleChecked = event.checked;
+  }
+
+  // selectFieldType(event: any) {
+  //   console.log('select field type selection');
+  //   console.log(event);
+
+  //   if (event.value === 'signature') {
+  //     this.signerForm.controls['fieldDescControl'].setValue('Sign here');
+  //   } else if (event.value === 'text') {
+  //     this.signerForm.controls['fieldDescControl'].setValue('Text field, e.g. Title Here');
+  //   } else if (event.value === 'date') {
+  //     this.signerForm.controls['fieldDescControl'].setValue('Select date');
+  //   } else if (event.value === 'initial') {
+ //     this.signerForm.controls['fieldDescControl'].setValue('Initial here');
+  //   }
+  // }
 
   cancelPopup() {
     this.dialogRef.close();
@@ -196,7 +269,7 @@ export class AddupdatesignersComponent implements OnInit {
   addGuestField() {
     console.log('addGuestField:');
     const dialogRef = this.dialog.open(AddguestsComponent, {
-      width: '600px', height: '700px'
+      width: '600px', height: '750px'
     });
     dialogRef.componentInstance.addSignersRef = this;
     dialogRef.componentInstance.addFieldsRef = this.addFieldsRef;

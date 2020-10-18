@@ -10,7 +10,9 @@
     border-radius: 10px;
   }
 
-  
+  ::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+}
   .uploadfilecontainer:hover {
     cursor: pointer;
     background-color: #9ecbec !important;

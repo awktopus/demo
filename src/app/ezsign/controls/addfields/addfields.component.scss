@@ -1,19 +1,82 @@
-.mat-column-select {
-  flex: 0 0 7%;
+
+.shape {
+  float: left;
+  position: absolute;
+  background-color: #55b954;
+  padding: 10px;
+  color: white;
+  border: 3px solid #03a9f4;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.mat-column-fieldSeqNo {
-  flex: 0 0 3%;
+::ng-deep .help-tooltip {
+  background:#AED6F1;
+  color:black;
+  font-size: 15px;
+  white-space: pre-line;
 }
 
-.mat-column-receiverName {
-  flex: 0 0 21%;
+.fieldTag {
+  float: left;
+  position: absolute;
+ // z-index: 9;
+  background-color: #55b954;
+  padding: 5px;
+  color: white;
+  font-weight: bold;
+  border: 3px solid #03a9f4;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selectedFieldTag {
+  float: left;
+  position: absolute;
+ // z-index: 9;
+  background-color: #55b954;
+  padding: 5px;
+  color: black;
+  font-weight: bold;
+  border: 3px solid grey;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-column-type {
+  flex: 0 0 5%;
   word-wrap: break-word !important;
   overflow-wrap: break-word;
 }
 
+.mat-column-receiverName {
+  flex: 0 0 25%;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word;
+}
+
+.mat-column-select {
+  flex: 0 0 25%;
+}
+
 .mat-column-receiverEmailId {
-  flex: 0 0 30%;
+  flex: 0 0 25%;
+}
+
+.mat-column-delete {
+  flex: 0 0 25%;
+}
+
+
+
+.mat-column-fieldSeqNo {
+  flex: 0 0 3%;
 }
 
 .mat-column-fieldType {
@@ -26,9 +89,7 @@
   overflow-wrap: break-word;
 }
 
-.mat-column-delete {
-  flex: 0 0 10%;
-}
+
 
 .mat-header-class {
   font-weight: bold;
@@ -73,38 +134,10 @@
 //   color:#999;
 // }
 
-.fieldTag {
-  float: left;
-  position: absolute;
- // z-index: 9;
-  background-color: #FFFFFF;
-  padding: 5px;
-  color: black;
-  font-weight: bold;
-  border-style: solid;
-  border-color:grey;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.selectedFieldTag {
-  float: left;
-  position: absolute;
- // z-index: 9;
-  background-color: #FFFFFF;
-  padding: 5px;
-  color: black;
-  font-weight: bold;
-  border-style: solid;
-  border-color:#0088ce;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .leftpane {
-  width: 55%;
+  width: 45%;
   height: 100%;
  float: left;
  margin-right: 3%; 

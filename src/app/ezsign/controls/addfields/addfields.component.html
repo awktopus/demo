@@ -25,153 +25,10 @@
   <div>
     <hr>
   </div>
-
+  <div>
+    <br/>
+  </div>
   <div class="leftpane" *ngIf="isImageDataUrlFetched">
-
-    <mat-toolbar color="primary" style="height: 30px;">
-      Add Signers and Fields
-      <span class="fill-remaining"></span>
-    </mat-toolbar>
-
-    <mat-table #table matSort [dataSource]="ezSignFields" class="mat-elevation-z8">
-
-      <mat-header-row *matHeaderRowDef="displayedColumns">
-      </mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns; matRipple">
-      </mat-row>
-
-      <ng-container matColumnDef="select">
-        <mat-header-cell *matHeaderCellDef class="mat-header-class">
-          Select</mat-header-cell>
-        <mat-cell *matCellDef="let row" >
-          <mat-checkbox class="casefield" (change)='selectFieldRecord($event,row)' [checked]="row.isSelected"></mat-checkbox>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="fieldSeqNo">
-        <mat-header-cell *matHeaderCellDef class="mat-header-class">
-          #</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          {{ row.fieldSeqNo }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="receiverName">
-        <mat-header-cell *matHeaderCellDef class="mat-header-class">Name</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          {{ row.receiverFirstName }} {{ row.receiverLastName }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="receiverEmailId">
-        <mat-header-cell *matHeaderCellDef class="mat-header-class">EmailID</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          {{ row.receiverEmailId }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="fieldType">
-        <mat-header-cell *matHeaderCellDef class="mat-header-class">Field Type</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          {{ row.fieldType }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="fieldDescription">
-        <mat-header-cell *matHeaderCellDef class="mat-header-class">Field Desc.</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          {{ row.labelName }}
-        </mat-cell>
-      </ng-container>
-
-
-      <ng-container matColumnDef="delete">
-        <mat-header-cell *matHeaderCellDef class="mat-header-class">Delete</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <button color="accent" [disabled]='status !="Uploaded"' mat-menu-item (click)="open_confirmation_dialog_for_field_deletion(row)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-cell>
-      </ng-container>
-
-    </mat-table>
-
-    <!-- <mat-table #table matSort [dataSource]="ezSignFields" class="mat-elevation-z8">
-
-      <mat-header-row *matHeaderRowDef="displayedColumns">   
-      </mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns; matRipple">
-      </mat-row>
-
-      <ng-container matColumnDef="select">
-        <mat-header-cell *matHeaderCellDef 
-        class="mat-column-select">
-          Select</mat-header-cell>
-        <mat-cell *matCellDef="let row" 
-        class="mat-column-select">
-          <mat-checkbox class="casefield" (change)='selectFieldRecord($event,row)' 
-          [checked]="row.isSelected"></mat-checkbox>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="fieldSeqNo">
-        <mat-header-cell *matHeaderCellDef 
-        style="display:flex;justify-content:left;white-space: normal;word-wrap: break-word;font-size: 14px;font-weight: bold;color:#999">
-          #</mat-header-cell>
-        <mat-cell *matCellDef="let row" 
-        style="display:flex;justify-content:left;white-space: normal;word-wrap: break-word;">
-          {{ row.fieldSeqNo }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="receiverName">
-        <mat-header-cell *matHeaderCellDef 
-        >Name</mat-header-cell>
-        <mat-cell *matCellDef="let row" 
-        >
-          {{ row.receiverFirstName }} {{ row.receiverLastName }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="receiverEmailId">
-          <mat-header-cell *matHeaderCellDef 
-          >EmailID</mat-header-cell>
-          <mat-cell *matCellDef="let row" 
-          >
-            {{ row.receiverEmailId }}
-          </mat-cell>
-        </ng-container>
-
-      <ng-container matColumnDef="fieldType">
-        <mat-header-cell *matHeaderCellDef >Field Type</mat-header-cell>
-        <mat-cell *matCellDef="let row" 
-        >
-          {{ row.fieldType }}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="fieldDescription">
-        <mat-header-cell *matHeaderCellDef >Field Desc.</mat-header-cell>
-        <mat-cell *matCellDef="let row" >
-          {{ row.labelName }}
-        </mat-cell>
-      </ng-container>
-
-      
-      <ng-container matColumnDef="delete">
-        <mat-header-cell *matHeaderCellDef >Delete</mat-header-cell>
-        <mat-cell *matCellDef="let row" >
-          <button color="accent" [disabled]='status !="Uploaded"' mat-menu-item (click)="open_confirmation_dialog_for_field_deletion(row)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-cell>
-      </ng-container>
-    </mat-table> -->
-
-    <div>
-      <br/>
-    </div>
-
     <div>
       <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Add Signer and Field" (click)="addField()">
         <mat-icon>person</mat-icon>&nbsp;ADD SIGNER & FIELD
@@ -182,9 +39,106 @@
       </button>
       &nbsp;&nbsp; -->
       <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Send Invite" (click)="previewAndSendInvite()">
-        <mat-icon>event_note</mat-icon>&nbsp;SEND INVITE
+        <mat-icon>event_note</mat-icon>&nbsp;SEND REQUEST TO SIGN
       </button>
     </div>
+    <div>
+      <br/>
+    </div>
+    <div>
+      <mat-icon>pan_tool</mat-icon>&nbsp;
+      <mat-label>Select the field label, it will drop into top left corner of the document, then and drag to the location
+        <br/> in your document, where you would like your signers to input information
+      </mat-label>
+    </div>
+    <div>
+      <br/>
+    </div>
+    <mat-toolbar color="primary" style="height: 30px;">
+      SELECT LABELS AND DRAG
+      <span class="fill-remaining"></span>
+    </mat-toolbar>
+
+    <mat-table #table matSort [dataSource]="ezSignSignerFieldTypes" class="mat-elevation-z8">
+
+      <!-- <mat-header-row *matHeaderRowDef="displayedColumns">
+      </mat-header-row> -->
+      <mat-row *matRowDef="let row; columns: displayedColumns; matRipple">
+      </mat-row>
+
+      <ng-container matColumnDef="type">
+        <mat-cell *matCellDef="let row">
+          <mat-icon *ngIf="row.fieldName == 'signature' || row.fieldName == 'Signature' " [matTooltip]="Signature">create</mat-icon>
+          <mat-icon *ngIf="row.fieldName == 'date' || row.fieldName == 'Date'" [matTooltip]="Date">today</mat-icon>
+          <mat-icon *ngIf="row.fieldName == 'initial' || row.fieldName == 'Initial'" [matTooltip]="Initial">person_pin</mat-icon>
+          <mat-icon *ngIf="row.fieldName == 'text' || row.fieldName == 'Text'" [matTooltip]="Text">text_format</mat-icon>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="receiverName">
+        <!-- <mat-header-cell *matHeaderCellDef class="mat-header-class">Label</mat-header-cell> -->
+        <mat-cell *matCellDef="let row">
+             <button [disabled]='status !="Uploaded"' 
+                class="shape" [style.width.px]="160" [style.height.px]="38"
+                matTooltip="Select signer field type" 
+                (click)="dropField(row)">
+                <table>
+                    <tr>
+                      <td>{{ row.receiverFirstName }} {{ row.receiverLastName }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ row.fieldTypeDesc }}</td>
+                    </tr>
+                  </table>
+              </button>
+
+          <!-- <div onclick="dropField(row)" [ngClass]="1 == 1 ? 'shape' : 'fieldTag'" 
+          [style.width.px]="140" [style.height.px]="18">
+            <table>
+              <tr>
+                <td>{{ row.receiverFirstName }} {{ row.receiverLastName }}</td>
+              </tr>
+              <tr>
+                <td>{{ row.fieldTypeDesc }}</td>
+              </tr>
+            </table>
+          </div> -->
+
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="select">
+        <mat-cell *matCellDef="let row">
+          <button mat-icon-button [disabled]='status !="Uploaded"' matTooltip="Select signer field type" (click)="dropField(row)">
+            <img src="/assets/imgs/ezsign_field_select.png" mat-card-avatar big>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="receiverEmailId">
+        <!-- <mat-header-cell *matHeaderCellDef class="mat-header-class">Info</mat-header-cell> -->
+        <mat-cell *matCellDef="let row">
+          <mat-icon color="primary" [matTooltip]=" 'Name: ' + row.receiverFirstName + ' ' +  row.receiverLastName + '\n' + 'Email: ' + row.receiverEmailId"
+            matTooltipClass="help-tooltip">message</mat-icon>
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="delete">
+        <!-- <mat-header-cell *matHeaderCellDef class="mat-header-class">Delete</mat-header-cell> -->
+        <mat-cell *matCellDef="let row">
+          <button color="accent" [disabled]='status !="Uploaded"' mat-icon-button matTooltip="Delete signer field type" (click)="open_confirmation_dialog_for_signer_fieldtype_deletion(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+    </mat-table>
+
+    <div>
+      <br/>
+    </div>
+
   </div>
 
   <div class="middlepane">
@@ -217,161 +171,24 @@
               (movingOffset)="onFieldMoving($event,fld.fieldSeqNo)" (endOffset)="onFieldMoveEnd($event,fld.fieldSeqNo)" [preventDefaultEvent]="true"
               *ngIf="fld.showBox && fld.isTagExists" [style.bottom.px]="fld.posY" [style.left.px]="fld.posX" [style.width.px]="fld.width"
               [style.height.px]="fld.height">
-              <label style="padding-bottom:5px">{{fld.receiverFirstName}} - {{fld.fieldType}}</label>
-              <!-- &nbsp;&nbsp; &nbsp;&nbsp;
-            <button mat-icon-button color="warn" (click)="removeSignatureField(fld.fieldSeqNo)">
-              <mat-icon>clear</mat-icon>
-            </button> -->
+
+              <!-- <label style="padding-bottom:5px">{{fld.receiverFirstName}} - {{fld.fieldType}}</label> -->
+              <mat-icon *ngIf="fld.fieldType == 'signature' || fld.fieldType == 'Signature' " [matTooltip]="Signature">create</mat-icon>
+              <mat-icon *ngIf="fld.fieldType == 'date' || fld.fieldType == 'Date'" [matTooltip]="Date">today</mat-icon>
+              <mat-icon *ngIf="fld.fieldType == 'initial' || fld.fieldType == 'Initial'" [matTooltip]="Initial">person_pin</mat-icon>
+              <mat-icon *ngIf="fld.fieldType == 'text'" [matTooltip]="Text">text_format</mat-icon>
+              <!-- <img src="/assets/imgs/ezsign_signature.jpg" mat-card-avatar small> -->
+              &nbsp;
+              <label style="padding-bottom:5px">{{fld.receiverFirstName}}</label>
+              &nbsp;
+              <button [disabled]='status !="Uploaded"' mat-icon-button color="warn" (click)="open_confirmation_dialog_for_field_deletion(fld)">
+                <mat-icon>clear</mat-icon>
+              </button>
+
             </div>
           </div>
         </div>
-
-        <!--<div *ngFor="let sigField of signatureFields">
-          <div class='signatureFieldTag' ngDraggable (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="true" (started)="onSigStart($event,sigField.fieldSeqNo)"
-            (stopped)="onSigStop($event,sigField.fieldSeqNo)" (movingOffset)="onSigMoving($event,sigField.fieldSeqNo)" (endOffset)="onSigMoveEnd($event,sigField.fieldSeqNo)"
-            [preventDefaultEvent]="true" *ngIf="sigField.showSignaturebox && sigField.isSignatureTagExists" [style.bottom.px]="sigField.signaturePosY"
-            [style.left.px]="sigField.signaturePosX" [style.width.px]="sigField.signatureWidth" [style.height.px]="sigField.signatureHeight">
-            <label style="padding-bottom:5px">{{sigField.receiverName}}</label>
-            &nbsp;&nbsp; &nbsp;&nbsp;
-            <button mat-icon-button color="warn" (click)="removeSignatureField(sigField.fieldSeqNo)">
-              <mat-icon>clear</mat-icon>
-            </button>
-          </div>
-        </div>
-
-      <div *ngFor="let textField of textFields">
-        <div class='textFieldTag' ngDraggable (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="true" (started)="onTextStart($event, textField.fieldSeqNo)"
-          (stopped)="onTextStop($event, textField.fieldSeqNo)" (movingOffset)="onTextMoving($event, textField.fieldSeqNo)"
-          [preventDefaultEvent]="true" (endOffset)="onTextMoveEnd($event , textField.fieldSeqNo)" *ngIf="textField.showTextbox && textField.isTextTagExists"
-          [style.bottom.px]="textField.textPosY" [style.left.px]="textField.textPosX" [style.width.px]="textField.textWidth"
-          [style.height.px]="textField.textHeight">
-          <label style="padding-bottom:5px">{{textField.receiverName}}</label>
-          &nbsp;&nbsp;
-          &nbsp;&nbsp;
-          <button mat-icon-button color="warn" (click)="removeTextField(textField.fieldSeqNo)">
-            <mat-icon>clear</mat-icon>
-          </button>
-        </div>
-      </div>
-
-      <div *ngFor="let dateField of dateFields">
-        <div class='dateFieldTag' ngDraggable (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="true" (started)="onDateStart($event, dateField.fieldSeqNo)"
-          (stopped)="onDateStop($event, dateField.fieldSeqNo)" (movingOffset)="onDateMoving($event, dateField.fieldSeqNo)"
-          [preventDefaultEvent]="true" (endOffset)="onDateMoveEnd($event, dateField.fieldSeqNo)" *ngIf="dateField.showDatebox && dateField.isDateTagExists"
-          [style.bottom.px]="dateField.datePosY" [style.left.px]="dateField.datePosX" [style.width.px]="dateField.dateWidth"
-          [style.height.px]="dateField.dateHeight">
-          <label style="padding-bottom:5px"> {{dateField.receiverName}}</label>
-          &nbsp;&nbsp;
-          &nbsp;&nbsp;
-          <button mat-icon-button color="warn" (click)="removeDateField(dateField.fieldSeqNo)">
-            <mat-icon>clear</mat-icon>
-          </button>
-        </div>
-      </div> -->
       </div>
     </div>
   </div>
-
-  <!-- <div class="rightpane" *ngIf="sigFieldSelected == 'signature'">
-    <div class="rightpaneheader">SIGNATURE</div>
-    <form [formGroup]="signatureFieldForm">
-      <div fxLayout="column">
-        <mat-form-field class="casefield">
-          <mat-select #focusSignatureField placeholder="Signer" formControlName="signerControl" required>
-            <mat-option *ngFor="let ezSigner of eZSigners" [value]="ezSigner.receiverId">
-              Signer {{ezSigner.receiverSeqNo}} - {{ ezSigner.receiverFirstName }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="casefield">
-          <input matInput placeholder="Label Name" formControlName="signatureLabelControl" required>
-        </mat-form-field>
-      </div>
-    </form>
-    <br/>
-    <span *ngIf='!showSigProcess1Spinner'>
-      <button mat-raised-button color="accent" (click)="saveSignatureField()" type="submit" [disabled]="signatureFieldForm.invalid">
-        SAVE
-      </button>
-    </span>
-    <mat-spinner *ngIf='showSigProcess1Spinner' diameter='40'></mat-spinner>
-    <span *ngIf='showSigProcess1Spinner'>Processing...</span>
-    &nbsp;
-    <span *ngIf='!showSigProcess2Spinner'>
-      <button mat-raised-button color="warn" matTooltip="Delete signature field" (click)="deleteSignatureField()">
-        DELETE
-      </button>
-    </span>
-    <mat-spinner *ngIf='showSigProcess2Spinner' diameter='40'></mat-spinner>
-    <span *ngIf='showSigProcess2Spinner'>Processing...</span>
-  </div>
-  <div class='rightpane' *ngIf="textFieldSelected == 'text'">
-    <div class="rightpaneheader">TEXT</div>
-    <form [formGroup]="textFieldForm">
-      <div fxLayout="column">
-        <mat-form-field class="casefield">
-          <mat-select #focusTextField placeholder="Signer" formControlName="textControl" required>
-            <mat-option *ngFor="let ezSigner of eZSigners" [value]="ezSigner.receiverId">
-              Signer {{ezSigner.receiverSeqNo}} - {{ ezSigner.receiverFirstName }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="casefield">
-          <input matInput placeholder="Label Name" formControlName="textLabelControl" required>
-        </mat-form-field>
-      </div>
-    </form>
-    <br/>
-    <span *ngIf='!showTextProcess1Spinner'>
-
-      <button mat-raised-button color="accent" (click)="saveTextField()" type="submit" [disabled]="textFieldForm.invalid">
-        SAVE
-      </button>
-    </span>
-    <mat-spinner *ngIf='showTextProcess1Spinner' diameter='40'></mat-spinner>
-    <span *ngIf='showTextProcess1Spinner'>Processing...</span>
-    &nbsp;
-    <span *ngIf='!showTextProcess2Spinner'>
-      <button mat-raised-button color="warn" matTooltip="Delete text field" (click)="deleteTextField()">
-        DELETE
-      </button>
-    </span>
-    <mat-spinner *ngIf='showTextProcess2Spinner' diameter='40'></mat-spinner>
-    <span *ngIf='showTextProcess2Spinner'>Processing...</span>
-  </div>
-  <div class='rightpane' *ngIf="dateFieldSelected == 'date'">
-    <div class="rightpaneheader">DATE</div>
-    <form [formGroup]="dateFieldForm">
-      <div fxLayout="column">
-        <mat-form-field class="casefield">
-          <mat-select #focusTextField placeholder="Signer" formControlName="dateControl" required>
-            <mat-option *ngFor="let ezSigner of eZSigners" [value]="ezSigner.receiverId">
-              Signer {{ezSigner.receiverSeqNo}} - {{ ezSigner.receiverFirstName }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="casefield">
-          <input matInput placeholder="Label Name" formControlName="dateLabelControl" required>
-        </mat-form-field>
-      </div>
-    </form>
-    <br/>
-    <span *ngIf='!showDateProcess1Spinner'>
-      <button mat-raised-button color="accent" (click)="saveDateField()" type="submit" [disabled]="dateFieldForm.invalid">
-        SAVE
-      </button>
-    </span>
-    <mat-spinner *ngIf='showDateProcess1Spinner' diameter='40'></mat-spinner>
-    <span *ngIf='showDateProcess1Spinner'>Processing...</span>
-    &nbsp;
-    <span *ngIf='!showDateProcess2Spinner'>
-      <button mat-raised-button color="warn" matTooltip="Delete date field" (click)="deleteDateField()">
-        DELETE
-      </button>
-    </span>
-    <mat-spinner *ngIf='showDateProcess2Spinner' diameter='40'></mat-spinner>
-    <span *ngIf='showDateProcess2Spinner'>Processing...</span>
-
-  </div> -->
-
 </div>

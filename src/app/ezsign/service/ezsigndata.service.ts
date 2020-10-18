@@ -166,6 +166,15 @@ export class EzsigndataService implements Resolve<any> {
     return this.http.delete(url, this.auth.getESignOptions());
   }
 
+  deleteSignerFieldType(trackingId: string, signerId: string, fieldTypeId: number): Observable<any> {
+    console.log('deleteSignerFieldType:' + trackingId + ";" + signerId);
+    const url = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID() + '/sender/' +
+      this.auth.getUserID() + '/tracking/' + trackingId + '/signer/' + signerId +
+      '/fieldtype/' + fieldTypeId + '/delete';
+    console.log('url:' + url);
+    return this.http.delete(url, this.auth.getESignOptions());
+  }
+
   getOrganizationEZSignSigners() {
     console.log('calling getOrganizationEZSignSigners server api');
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()

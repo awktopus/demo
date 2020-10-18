@@ -1,4 +1,4 @@
-<div fxLayout="column">
+<div fxLayout="column" *ngIf="viewType==='grid'">
     <div>
         <mat-spinner *ngIf='!isEZsignDataFetched' diameter='30'></mat-spinner>
         <span *ngIf='!isEZsignDataFetched'>Processing...</span>
@@ -74,7 +74,7 @@
                 <td colspan="12">
                     <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
                         <label class="heading-label">Drag and drop or Upload PDF document here</label>
-                        <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
+                        <input hidden multiple accept=".docx,.pdf" type="file" #fileInput (change)="uploadFile($event.target.files)">
                     </div>
                     <div class="files-list" *ngFor="let file of files;let i=index">
                         <p>{{ file.name }}</p>
@@ -103,23 +103,14 @@
 
     <br/>
     <div style="margin-left: 1px;margin-right: 1px" *ngIf="ezSignDocsgridData && isEZsignDataFetched">
-        <!-- <br>
-            <table width=99%>
-                <tr>
-                    <td align=left>
-                    </td>
-                    <td align=right>
-                        <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(ezsignapi)'>list_alt</mat-icon>
-                        <mat-icon class='docicon' mdbRippleRadius (click)="gridExport('ezsign')" matTooltip="Export CSV">insert_link</mat-icon>
-                        <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('ezsign')" matTooltip="Expand All">swap_horiz</mat-icon>
-                        <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('ezsign')" matTooltip="Refit">tune</mat-icon>
-                    </td>
-                </tr>
-            </table> -->
         <ag-grid-angular #agGrid id="ezSignDocsGrid" style="width: 100%;  font-size:11pt" class="ag-theme-balham" [rowData]="ezSignDocsgridData"
             [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
             [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'ezsign')"
             [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout">
         </ag-grid-angular>
     </div>
-</div>
+    </div>
+    <div *ngIf="viewType==='pagereview'">
+            <app-docreview (switchToGridView)= "switchToGridView()"></app-docreview>
+    </div>
+  
