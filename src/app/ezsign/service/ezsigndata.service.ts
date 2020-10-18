@@ -387,7 +387,7 @@ export class EzsigndataService implements Resolve<any> {
     });
   }
 
-  showEzsignPDFDoc(trackingId: string):any{
+  showEzsignPDFDoc(trackingId: string): any {
     console.log('downloadEzsignDocument service api call..');
     const url: string = this.auth.baseurl +
       '/Ezsign/tracking/' + trackingId + '/signedform';

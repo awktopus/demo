@@ -178,9 +178,11 @@ export class SenderdocumentsComponent implements OnInit {
     // const dialogRef = this.dialog.open(EzsignPdfPopupComponent, { width: '520pt' });
     // dialogRef.componentInstance.setPDF(this.ezSignDataService.auth.baseurl +
     //   '/Ezsign/tracking/' + selectedRow.rowData.ezSignTrackingId + '/signedform');
-      console.log(selectedRow.rowData);
-      this.ezSignDataService.setCacheData("case", selectedRow.rowData);
-      this.viewType = "pagereview";
+    //  console.log(selectedRow.rowData);
+    //  this.ezSignDataService.setCacheData("case", selectedRow.rowData);
+    //  this.viewType = "pagereview";
+      const trkID = selectedRow.rowData.ezSignTrackingId;
+      this.ezSignDataService.showEzsignPDFDoc(trkID);
   }
 
   switchToGridView() {

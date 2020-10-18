@@ -222,6 +222,10 @@ export class AddfieldsComponent implements  OnInit {
     //  this.activeSignatureFieldSeqNo = fieldSeqNo;
   }
   onFieldMoveEnd(event, fieldSeqNo: number) {
+    if (this.status !== "Uploaded") {
+      console.log('ezsign status is not uploaded status..you can not change field location ');
+      return;
+    }
     console.log('on Field moving end');
     console.log(event);
     console.log(fieldSeqNo);
@@ -231,7 +235,7 @@ export class AddfieldsComponent implements  OnInit {
           sf.fieldEndOffset.x = event.x;
           sf.fieldEndOffset.y = event.y;
           // this.fldEndOffset.x = event.x;
-          // this.fldEndOffset.y = event.y;
+          // this.fldEndOffset.y = event.
           this.saveField(sf);
         }
       });
@@ -334,8 +338,17 @@ export class AddfieldsComponent implements  OnInit {
           signerTypeData.isSender = signerData.isSender;
           signerTypeData.isSenderSigner = signerData.isSenderSigner;
           signerTypeData.receiverEmailId = signerData.receiverEmailId;
-          signerTypeData.receiverFirstName = signerData.receiverFirstName;
-          signerTypeData.receiverLastName = signerData.receiverLastName;
+          if (signerData.receiverFirstName === null) {
+            signerTypeData.receiverFirstName = "";
+          } else {
+            signerTypeData.receiverFirstName = signerData.receiverFirstName;
+          }
+
+          if (signerData.receiverLastName === null) {
+            signerTypeData.receiverLastName = "";
+          } else {
+            signerTypeData.receiverLastName = signerData.receiverLastName;
+          }
           signerTypeData.receiverId = signerData.receiverId;
           signerTypeData.receiverFullName = signerData.receiverFullName;
           signerTypeData.status = signerData.status;

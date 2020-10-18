@@ -259,7 +259,7 @@ export class AddguestsComponent implements OnInit {
    // fieldData.receiverId = this.primarysigner.clientId;
     fieldData.receiverFirstName = this.firstName;
     fieldData.receiverLastName = this.lastName;
-    fieldData.receiverEmailId = this.receiverEmailId;
+    fieldData.receiverEmailId = temailId;
 
       if (this.guestSigner) {
       if (this.guestSigner.isELMember === "Y") {
@@ -321,7 +321,7 @@ export class AddguestsComponent implements OnInit {
     this.addFieldsRef.add_signer_master_fields(this.fieldsData);
       this.showAddFieldSpinner = false;
       this.cancelPopup();
-
+      this.cancelAddSignersPopup();
   }
 
   saveAsContact(event) {

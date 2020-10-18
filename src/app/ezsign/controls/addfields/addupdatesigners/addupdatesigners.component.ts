@@ -269,7 +269,7 @@ export class AddupdatesignersComponent implements OnInit {
   addGuestField() {
     console.log('addGuestField:');
     const dialogRef = this.dialog.open(AddguestsComponent, {
-      width: '600px', height: '750px'
+      width: '600px', height: '850px'
     });
     dialogRef.componentInstance.addSignersRef = this;
     dialogRef.componentInstance.addFieldsRef = this.addFieldsRef;
