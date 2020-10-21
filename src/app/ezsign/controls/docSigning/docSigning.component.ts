@@ -14,7 +14,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   @Output("switchToGridView") switchToGrid: EventEmitter<any> = new EventEmitter();
   @ViewChildren(SignaturePad) public sigPadList: QueryList< SignaturePad>;
   public signaturePadOptions: any = {
-    'minWidth': 1,
+    'minWidth': 2,
     'canvasHeight': 160,
     'backgroundColor': '#ffffff'
   };
