@@ -11,6 +11,7 @@
      //border: 1px solid #ddd;
     }
     .casedoc{
+      position: relative;
       padding-right: 4px;
       padding-left:4px;
       margin-top:2px;
@@ -18,7 +19,8 @@
       direction: ltr;
       width: 68%; 
       border:1px solid lightblue;
-      word-wrap: break-word
+      word-wrap: break-word;
+      overflow-y: scroll;
      //border: 1px solid #ddd;
     }
     .consent{

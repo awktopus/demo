@@ -1,5 +1,7 @@
  
+  
  <div *ngIf="mycase" style="background:#eeeeff">
+
   <table width=95%>
   <tr>
     <td valign=top>  <font color="a0a0a0" size=-1>Tracking #</font><br>
@@ -81,15 +83,28 @@
       </tr>
     </table>
   </div>
-    <div *ngIf="viewType=='signingFormView' || viewType=='signcapview'" class='casedoc' style="word-break:break-word;white-space:normal !important;">
-       <iframe width="95%" height="600" [src]="pdfUrl | safe">
-    </iframe>
+  
+    <div *ngIf="viewType=='signingFormView' || viewType=='signcapview'" #pdfviewcontainer class='casedoc' style="word-break:break-word;white-space:normal !important;">
+      <div *ngFor="let fld of curpage.filterFields" style="position:absolute;z-index:90;background:#ccccff;border:1pt solid green"
+       [style.bottom.px]="fld.adjustposY-1" [style.left.px]="fld.adjustPosX+1" >
+       <table style="padding-top:2pt" [style.background-color]="fld.bgcolor">
+         <tr>
+           <td>  <img src="/assets/imgs/bookmark.png" width=24 > </td>
+           <td>  <b>{{fld.fieldTypeName}} </b>-  {{fld.labelName}}</td>
+           <td width=5></td>
+           <td> <mat-checkbox [checked]="fld.picked" [value]="fld.fieldSeqNo" (change)="pickField($event)"></mat-checkbox></td>
+         </tr>
+       </table>
+      </div>
+      <pdf-viewer [original-size]="true" [src]="pdfUrl" (page-rendered)="pageRendered($event)" ></pdf-viewer>
+   
 </div>
  <div *ngIf="viewType=='signcapview'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
  <form [formGroup]="signcapform">
  <table width=95%>
  <div *ngFor='let field of curpage.filterFields'>
-   <tr>
+   <tr  [style.background-color]="field.bgcolor">
+ 
        <td>
         <div *ngIf='field.fieldTypeName=="Signature"'  >
           <font color="#33699">Please sign below as:  <br><b>{{cursigner.receiverFullName}}</b></font>
@@ -113,6 +128,10 @@
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+  </td>
+  <td valign=top>
+    <br>
+    <mat-checkbox [checked]="field.picked" [value]="field.fieldSeqNo" (change)="pickField($event)"></mat-checkbox>
   </td>
   </tr>
   </div>

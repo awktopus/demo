@@ -194,15 +194,13 @@
           "version": "1.40.0",
           "resolved": "https://registry.npmjs.org/mime-db/-/mime-db-1.40.0.tgz",
           "integrity": "sha512-jYdeOMPy9vnxEqFRRo6ZvTZ8d9oPb+k18PKoYNYUe2stVEBPPwsln/qWzdbmaIvnhZ9v2P+CuecK+fpUfsV2mA==",
-          "dev": true,
-          "optional": true
+          "dev": true
         },
         "mime-types": {
           "version": "2.1.24",
           "resolved": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.24.tgz",
           "integrity": "sha512-WaFHS3MCl5fapm3oLxU4eYDw77IQM2ACcxQ9RIxfaC3ooc6PFuBMGZZsYpvoXS5D5QTWPieo1jjLdAm3TBP3cQ==",
           "dev": true,
-          "optional": true,
           "requires": {
             "mime-db": "1.40.0"
           }
@@ -950,8 +948,7 @@
             "ansi-regex": {
               "version": "2.1.1",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "aproba": {
               "version": "1.2.0",
@@ -972,14 +969,12 @@
             "balanced-match": {
               "version": "1.0.0",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "brace-expansion": {
               "version": "1.1.11",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "balanced-match": "^1.0.0",
                 "concat-map": "0.0.1"
@@ -994,20 +989,17 @@
             "code-point-at": {
               "version": "1.1.0",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "concat-map": {
               "version": "0.0.1",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "console-control-strings": {
               "version": "1.1.0",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "core-util-is": {
               "version": "1.0.2",
@@ -1124,8 +1116,7 @@
             "inherits": {
               "version": "2.0.3",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "ini": {
               "version": "1.3.5",
@@ -1137,7 +1128,6 @@
               "version": "1.0.0",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "number-is-nan": "^1.0.0"
               }
@@ -1152,7 +1142,6 @@
               "version": "3.0.4",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "brace-expansion": "^1.1.7"
               }
@@ -1160,14 +1149,12 @@
             "minimist": {
               "version": "0.0.8",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "minipass": {
               "version": "2.3.5",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "safe-buffer": "^5.1.2",
                 "yallist": "^3.0.0"
@@ -1186,7 +1173,6 @@
               "version": "0.5.1",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "minimist": "0.0.8"
               }
@@ -1267,8 +1253,7 @@
             "number-is-nan": {
               "version": "1.0.1",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "object-assign": {
               "version": "4.1.1",
@@ -1280,7 +1265,6 @@
               "version": "1.4.0",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "wrappy": "1"
               }
@@ -1366,8 +1350,7 @@
             "safe-buffer": {
               "version": "5.1.2",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "safer-buffer": {
               "version": "2.1.2",
@@ -1403,7 +1386,6 @@
               "version": "1.0.2",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "code-point-at": "^1.0.0",
                 "is-fullwidth-code-point": "^1.0.0",
@@ -1423,7 +1405,6 @@
               "version": "3.0.1",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "ansi-regex": "^2.0.0"
               }
@@ -1467,14 +1448,12 @@
             "wrappy": {
               "version": "1.0.2",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "yallist": {
               "version": "3.0.3",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             }
           }
         },
@@ -2434,6 +2413,11 @@
       "resolved": "https://registry.npmjs.org/@types/node/-/node-12.0.2.tgz",
       "integrity": "sha512-5tabW/i+9mhrfEOUcLDu2xBPsHJ+X5Orqy9FKpale3SjDA17j5AEpYq5vfy3oAeAHGcvANRCO3NV3d2D6q3NiA==",
       "dev": true
+    },
+    "@types/pdfjs-dist": {
+      "version": "2.1.5",
+      "resolved": "https://registry.npmjs.org/@types/pdfjs-dist/-/pdfjs-dist-2.1.5.tgz",
+      "integrity": "sha512-/vs9nLI/BYNo1pobKR5oEucEEcMgd8Mx1nByPNR3QhTboBwdDreQ0fHYXrGRtK3cShDDrVdApL0KhMckMuKSHw=="
     },
     "@types/q": {
       "version": "0.0.32",
@@ -4000,8 +3984,7 @@
             "ansi-regex": {
               "version": "2.1.1",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "aproba": {
               "version": "1.2.0",
@@ -4044,8 +4027,7 @@
             "code-point-at": {
               "version": "1.1.0",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "concat-map": {
               "version": "0.0.1",
@@ -4056,8 +4038,7 @@
             "console-control-strings": {
               "version": "1.1.0",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "core-util-is": {
               "version": "1.0.2",
@@ -4174,8 +4155,7 @@
             "inherits": {
               "version": "2.0.3",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "ini": {
               "version": "1.3.5",
@@ -4187,7 +4167,6 @@
               "version": "1.0.0",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "number-is-nan": "^1.0.0"
               }
@@ -4210,14 +4189,12 @@
             "minimist": {
               "version": "0.0.8",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "minipass": {
               "version": "2.3.5",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "safe-buffer": "^5.1.2",
                 "yallist": "^3.0.0"
@@ -4236,7 +4213,6 @@
               "version": "0.5.1",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "minimist": "0.0.8"
               }
@@ -4317,8 +4293,7 @@
             "number-is-nan": {
               "version": "1.0.1",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "object-assign": {
               "version": "4.1.1",
@@ -4330,7 +4305,6 @@
               "version": "1.4.0",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "wrappy": "1"
               }
@@ -4416,8 +4390,7 @@
             "safe-buffer": {
               "version": "5.1.2",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "safer-buffer": {
               "version": "2.1.2",
@@ -4453,7 +4426,6 @@
               "version": "1.0.2",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "code-point-at": "^1.0.0",
                 "is-fullwidth-code-point": "^1.0.0",
@@ -4473,7 +4445,6 @@
               "version": "3.0.1",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "ansi-regex": "^2.0.0"
               }
@@ -4517,14 +4488,12 @@
             "wrappy": {
               "version": "1.0.2",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "yallist": {
               "version": "3.0.3",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             }
           }
         },
@@ -6552,8 +6521,7 @@
         },
         "console-control-strings": {
           "version": "1.1.0",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "core-util-is": {
           "version": "1.0.2",
@@ -6656,8 +6624,7 @@
         },
         "inherits": {
           "version": "2.0.3",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "ini": {
           "version": "1.3.5",
@@ -6693,7 +6660,6 @@
         "minipass": {
           "version": "2.2.4",
           "bundled": true,
-          "optional": true,
           "requires": {
             "safe-buffer": "^5.1.1",
             "yallist": "^3.0.0"
@@ -6710,7 +6676,6 @@
         "mkdirp": {
           "version": "0.5.1",
           "bundled": true,
-          "optional": true,
           "requires": {
             "minimist": "0.0.8"
           }
@@ -6794,7 +6759,6 @@
         "once": {
           "version": "1.4.0",
           "bundled": true,
-          "optional": true,
           "requires": {
             "wrappy": "1"
           }
@@ -6870,8 +6834,7 @@
         },
         "safe-buffer": {
           "version": "5.1.1",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "safer-buffer": {
           "version": "2.1.2",
@@ -6901,7 +6864,6 @@
         "string-width": {
           "version": "1.0.2",
           "bundled": true,
-          "optional": true,
           "requires": {
             "code-point-at": "^1.0.0",
             "is-fullwidth-code-point": "^1.0.0",
@@ -6958,13 +6920,11 @@
         },
         "wrappy": {
           "version": "1.0.2",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         },
         "yallist": {
           "version": "3.0.2",
-          "bundled": true,
-          "optional": true
+          "bundled": true
         }
       }
     },
@@ -9049,15 +9009,13 @@
           "version": "1.40.0",
           "resolved": "https://registry.npmjs.org/mime-db/-/mime-db-1.40.0.tgz",
           "integrity": "sha512-jYdeOMPy9vnxEqFRRo6ZvTZ8d9oPb+k18PKoYNYUe2stVEBPPwsln/qWzdbmaIvnhZ9v2P+CuecK+fpUfsV2mA==",
-          "dev": true,
-          "optional": true
+          "dev": true
         },
         "mime-types": {
           "version": "2.1.24",
           "resolved": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.24.tgz",
           "integrity": "sha512-WaFHS3MCl5fapm3oLxU4eYDw77IQM2ACcxQ9RIxfaC3ooc6PFuBMGZZsYpvoXS5D5QTWPieo1jjLdAm3TBP3cQ==",
           "dev": true,
-          "optional": true,
           "requires": {
             "mime-db": "1.40.0"
           }
@@ -9871,6 +9829,23 @@
       "requires": {
         "@types/dragula": "^2.1.34",
         "dragula": "^3.7.2"
+      }
+    },
+    "ng2-pdf-viewer": {
+      "version": "6.3.2",
+      "resolved": "https://registry.npmjs.org/ng2-pdf-viewer/-/ng2-pdf-viewer-6.3.2.tgz",
+      "integrity": "sha512-H2tBhDd+Lq6CUzK2g54HsCcZDR2wTn1sDjYqKY3yF0Ydasl2R5ppCKynZBU/zge4EKvmHglJI120FbQMpJKDYQ==",
+      "requires": {
+        "@types/pdfjs-dist": "^2.1.4",
+        "pdfjs-dist": "^2.4.456",
+        "tslib": "^1.10.0"
+      },
+      "dependencies": {
+        "tslib": {
+          "version": "1.14.1",
+          "resolved": "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz",
+          "integrity": "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="
+        }
       }
     },
     "ng2-select2": {
@@ -10947,6 +10922,11 @@
         "safe-buffer": "^5.0.1",
         "sha.js": "^2.4.8"
       }
+    },
+    "pdfjs-dist": {
+      "version": "2.5.207",
+      "resolved": "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-2.5.207.tgz",
+      "integrity": "sha512-xGDUhnCYPfHy+unMXCLCJtlpZaaZ17Ew3WIL0tnSgKFUZXHAPD49GO9xScyszSsQMoutNDgRb+rfBXIaX/lJbw=="
     },
     "perfect-scrollbar": {
       "version": "1.4.0",
@@ -15499,8 +15479,7 @@
             "ansi-regex": {
               "version": "2.1.1",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "aproba": {
               "version": "1.2.0",
@@ -15543,8 +15522,7 @@
             "code-point-at": {
               "version": "1.1.0",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "concat-map": {
               "version": "0.0.1",
@@ -15555,8 +15533,7 @@
             "console-control-strings": {
               "version": "1.1.0",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "core-util-is": {
               "version": "1.0.2",
@@ -15673,8 +15650,7 @@
             "inherits": {
               "version": "2.0.3",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "ini": {
               "version": "1.3.5",
@@ -15686,7 +15662,6 @@
               "version": "1.0.0",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "number-is-nan": "^1.0.0"
               }
@@ -15716,7 +15691,6 @@
               "version": "2.3.5",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "safe-buffer": "^5.1.2",
                 "yallist": "^3.0.0"
@@ -15735,7 +15709,6 @@
               "version": "0.5.1",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "minimist": "0.0.8"
               }
@@ -15816,8 +15789,7 @@
             "number-is-nan": {
               "version": "1.0.1",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "object-assign": {
               "version": "4.1.1",
@@ -15829,7 +15801,6 @@
               "version": "1.4.0",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "wrappy": "1"
               }
@@ -15915,8 +15886,7 @@
             "safe-buffer": {
               "version": "5.1.2",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "safer-buffer": {
               "version": "2.1.2",
@@ -15952,7 +15922,6 @@
               "version": "1.0.2",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "code-point-at": "^1.0.0",
                 "is-fullwidth-code-point": "^1.0.0",
@@ -15972,7 +15941,6 @@
               "version": "3.0.1",
               "bundled": true,
               "dev": true,
-              "optional": true,
               "requires": {
                 "ansi-regex": "^2.0.0"
               }
@@ -16016,14 +15984,12 @@
             "wrappy": {
               "version": "1.0.2",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             },
             "yallist": {
               "version": "3.0.3",
               "bundled": true,
-              "dev": true,
-              "optional": true
+              "dev": true
             }
           }
         },

@@ -47,11 +47,13 @@ import { DocSigningComponent,DialogNoFormMessageDialogComponent, DialogMissingDa
 import { ReceiverezsigndocsComponent } from './controls/receiverezsigndocs/receiverezsigndocs.component';
 import { ReceiverEzsigningRendererComponent } from './controls/ReceiverEzsigningbutton-renderer.component';
 import { EzsignDownloadButtonRendererComponent } from './controls/EzsignDownloadbutton-renderer.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 @NgModule({
   imports: [
     CommonModule,
     EZSignRouting,
     MatExpansionModule,
+    PdfViewerModule,
     MatDividerModule,
     MatTableModule,
     MatStepperModule,

@@ -1,10 +1,11 @@
-import { Component,EventEmitter, OnInit, Output, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component,ElementRef,EventEmitter,ViewChild, OnInit, Output, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import {EzsigndataService } from '../../service/ezsigndata.service';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { MatDialog } from '@angular/material';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PdfViewerModule,PdfViewerComponent } from 'ng2-pdf-viewer';
 @Component({
   selector: 'app-docsigning',
   templateUrl: './docSigning.component.html',
@@ -13,10 +14,13 @@ import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from
 export class DocSigningComponent implements OnInit, AfterViewInit {
   @Output("switchToGridView") switchToGrid: EventEmitter<any> = new EventEmitter();
   @ViewChildren(SignaturePad) public sigPadList: QueryList< SignaturePad>;
+  @ViewChild(PdfViewerComponent) private sigpdfview: PdfViewerComponent;
+  @ViewChild('pdfviewcontainer') ele_pdfview: ElementRef;
   public signaturePadOptions: any = {
-    'minWidth': 1,
+    'minWidth':3,
     'canvasHeight': 160,
     'backgroundColor': '#ffffff'
+
   };
 
   myDate: Date = new Date();
@@ -45,6 +49,8 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   mysigs: any = {};
   showProcessSpinner = false;
   pageToSign = 0;
+  size_container :any ={};
+  size_pdf : any ={};
   constructor(private service: EzsigndataService,
     public dialog: MatDialog,private router:Router) {
 
@@ -286,8 +292,43 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
     console.log("filtered field size:", filtered_fields.length);
     this.curpage.filterFields = filtered_fields;
 }
+
+pageRendered(eve){
+  console.log("rendering pdf ...");
+  console.log(eve);
+  this.size_pdf={width:eve.source.div.clientWidth,height:eve.source.div.clientHeight,scale:eve.source.viewport.scale};
+  console.log(this.size_pdf);
+  this.size_container={width:this.ele_pdfview.nativeElement.clientWidth,height:this.ele_pdfview.nativeElement.clientHeight};
+  console.log(this.size_container);
+  this.curpage.filterFields.forEach(ff=>{
+      ff.adjustPosX=ff.posX*this.size_pdf.scale+(this.size_container.width-this.size_pdf.width)/2;
+      ff.adjustposY=ff.posY*this.size_pdf.scale;
+  });
+}
+
+pickField(event){
+  console.log(event);
+  //console.log(fld);
+    let fldseq=event.source.value;
+    this.curpage.filterFields.forEach(ff=>{
+      if(fldseq==ff.fieldSeqNo){
+        ff.picked=event.checked;
+        if(ff.picked==true){
+          ff.bgcolor="#eeffee";
+        } else {
+          ff.bgcolor="";
+        }
+      } else {
+        ff.picked=false;
+        ff.bgcolor="";
+      }
+    });
+
+}
+
 goSignCap() {
   this.viewType = "signcapview";
+  console.log(this.sigpdfview);
   this.signcapform = new FormGroup({});
   this.filterSignerFields();
   this.curpage.filterFields.forEach(field => {
