@@ -17,7 +17,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   @ViewChild(PdfViewerComponent) private sigpdfview: PdfViewerComponent;
   @ViewChild('pdfviewcontainer') ele_pdfview: ElementRef;
   public signaturePadOptions: any = {
-    'minWidth':3,
+    'minWidth': 2,
     'canvasHeight': 160,
     'backgroundColor': '#ffffff'
 
