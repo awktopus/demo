@@ -384,13 +384,17 @@ goSignCap() {
     if(field.fieldTypeName == "Date"){
       values[field.eleId] = str_today;
       //this.signcapform.setValue(values)
+      console.log("set default date");
     } else {
       values[field.eleId]  = "";
     }
-    if(field.fieldValue!=null ||field.fieldValue!=""){
+    if(field.fieldValue!=null && field.fieldValue!=""){
+      console.log("set value from store value");
       values[field.eleId]=field.fieldValue;
     }
   });
+  console.log("form values:--->");
+  console.log(values);
   this.signcapform.setValue(values);
   // iinitialized signaturepad
   console.log(this.curpage.filterFields);
