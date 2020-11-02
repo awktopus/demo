@@ -110,7 +110,7 @@
           <font color="#33699">Please sign below as:  <br><b>{{cursigner.receiverFullName}}</b></font>
               <br>
             <div  style="border:1px solid">
-           <signature-pad  [options]="signaturePadOptions"  id="{{field.labelName}}"></signature-pad>
+           <signature-pad  [options]="signaturePadOptions"  id="{{field.eleId}}"></signature-pad>
           </div>
           <div align='end' style="margin-right:20pt">
             <button align="right" small mat-icon-button color="primary" (click)='clearSigCap(field)' *ngIf='field.fieldTypeName=="Signature"'>
@@ -120,11 +120,11 @@
           </div>
           <mat-form-field *ngIf='field.fieldTypeName=="Initial" || field.fieldTypeName=="Text" '>
                 <mat-label>{{field.labelName}}</mat-label>
-                <input matInput placeholder={{field.labelName}} formControlName="{{field.labelName}}">
+                <input matInput placeholder={{field.labelName}} formControlName="{{field.eleId}}">
           </mat-form-field>
           <mat-form-field *ngIf='field.fieldTypeName=="Date"'>
           <mat-label>{{field.labelName}}</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="{{field.labelName}}">
+            <input matInput [matDatepicker]="picker" formControlName="{{field.eleId}}">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -138,12 +138,30 @@
   <tr>
   <td align=center>
       <span *ngIf='!showProcessSpinner'>
-       <button mat-raised-button color="accent"  (click)="submitSignCapData()">Submit</button>
+        <table>
+          <tr>
+            <td *ngIf='curpage.presignstatus'><button mat-raised-button color="accent"  (click)="viewPreSignPage()">View</button></td>
+            <td *ngIf='curpage.presignstatus'><button mat-raised-button color="accent"  (click)="SkipPage()">Next</button></td>
+            <td *ngIf='curpage.presignstatus'> <button mat-raised-button color="accent"  (click)="submitSignCapData()">Update</button></td>
+            <td *ngIf='!curpage.presignstatus'> <button mat-raised-button color="accent"  (click)="submitSignCapData()">Save</button></td>
+          </tr>
+        </table>
+        
+      
       </span>  
       <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
       <span *ngIf='showProcessSpinner'>Processing...</span>
       </td>
   </tr>
   </table>
-  </form>
+</form>
+ </div>
+ <div *ngIf="viewType=='finalview'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
+    <font color=green>Please review and finalize the signing.</font>
+    <table width=80%>
+      <tr>
+        <td><button mat-raised-button color="accent"  (click)="previewDoc()">Review</button></td>
+        <td><button mat-raised-button color="accent"  (click)="finalizeSigning()">Final Submit</button></td>
+      </tr>
+    </table>
  </div>

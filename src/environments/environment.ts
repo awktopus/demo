@@ -8,9 +8,9 @@ export const environment = {
   version: require('../../package.json').version,
   apiLink: 'https://labapi.everleagues.com/api',
  // apiLink: 'https://api.everleagues.com/api',
- // apiEsignLink: 'https://ellab-esign.azurewebsites.net/api',
+ apiEsignLink: 'https://ellab-esign.azurewebsites.net/api',
  // apiEsignLink: 'https://el-esign-staging.azurewebsites.net/api',
-   apiEsignLink: 'http://localhost:55940/api',
+  // apiEsignLink: 'http://localhost:55940/api',
   roomHubLink: 'https://ellabapi.azurewebsites.net/roomhub',
   orgHubLink: 'https://ellabapi.azurewebsites.net/orghub'
 };

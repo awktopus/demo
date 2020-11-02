@@ -268,10 +268,21 @@ export class EzsigndataService implements Resolve<any> {
     const url = this.auth.baseurl + '/EZSign/agreement/audit';
     return this.http.post(url, json, this.auth.getESignOptions());
   }
+
   postSubmitSignCap(json) {
     const url = this.auth.baseurl + '/EZSign/receiver/' + this.auth.getUserID() + '/formsubmit';
     return this.http.post(url, json, this.auth.getESignOptions());
   }
+    
+  postPreSubmitEzsignPage(json){
+    // api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/signedpage/presubmit
+    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+    + "/receiver/" + this.auth.getUserID() + "/signedpage/presubmit" ;
+    return this.http.post(url,json,this.auth.getESignOptions());
+  }
+
+
+  
   GetOrganizationGuestContacts() {
     console.log('calling GetOrganizationGuestContacts server api');
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
@@ -393,6 +404,51 @@ export class EzsigndataService implements Resolve<any> {
       '/Ezsign/tracking/' + trackingId + '/signedform';
      console.log(url);
      this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+     });
+  }
+
+  showEzsignPagePreview(trackId,docId,pageSeq){
+    ///api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/tracking/EZS2010260185/document/DOC202010262105491043/page/1/signedpage/preview
+    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+    + "/receiver/" + this.auth.getUserID() + "/tracking/" + trackId
+    + "/document/" + docId + "/page/" + pageSeq+ "/signedpage/preview";
+    this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+     });
+  }
+
+  previewEzsignDocPreview(trackId,docId){
+    //http://localhost:55940/api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/tracking/EZS2010260185/document/DOC202010262105491043/signeddocument/preview
+    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+    + "/receiver/" + this.auth.getUserID() + "/tracking/" + trackId
+    + "/document/" + docId +"/signeddocument/preview";
+    this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+     });
+  }
+
+  finalizeSigning(trackId,docId){
+    //http://localhost:55940/api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/tracking/EZS2010260185/document/DOC202010262105491043/signeddocument/finalsubmit
+    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+    + "/receiver/" + this.auth.getUserID() + "/tracking/" + trackId
+    + "/document/" + docId +"/signeddocument/finalsubmit";
+    console.log(this.auth.getESignOptions());
+    return this.http.post(url,{},this.auth.getESignOptions());
+  }
+
+  viewEzsignFinalDoc(trackId){
+    //http://localhost:55940/api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/user/db608b99-d878-428c-8f7a-3daad5fd596a/tracking/EZS2010260185/signeddocument
+    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+    + "/user/" + this.auth.getUserID() + "/tracking/" + trackId
+    +"/signeddocument";
+    this.getPDFBlob(url).subscribe(resp => {
       const file = new Blob([<any>resp], { type: 'application/pdf' });
       const fileURL = URL.createObjectURL(file);
       window.open(fileURL, '_blank');
