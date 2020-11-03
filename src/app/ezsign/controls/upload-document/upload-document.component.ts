@@ -5,7 +5,7 @@ import { EzsigndataService } from '../../service/ezsigndata.service';
 import { EZSignDocResource } from '../../../esign/beans/ESignCase';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
-
+import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'app-upload-document',
   templateUrl: './upload-document.component.html',
@@ -19,7 +19,9 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
   senderDocumentCompomentRef: SenderdocumentsComponent;
   showProcessSpinner = false;
   isLinear: any;
-  constructor(private ezSignDataService: EzsigndataService, private router: Router) {
+  documentTitle = null;
+  constructor(private ezSignDataService: EzsigndataService, private snackBar: MatSnackBar,
+    private router: Router) {
     //  dialogRef.disableClose = true;
   }
 
@@ -37,6 +39,9 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
       const element = event[index];
       this.files.push(element);
       this.uploadedFileName = element.name;
+      if (index === 0) {
+        this.documentTitle = element.name;
+      }
     }
   }
 
@@ -45,12 +50,24 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
     console.log(index);
     this.files.splice(index, 1);
     this.ezSignFileList = this.files;
+    this.documentTitle = null;
     console.log(this.ezSignFileList);
+    if (this.files) {
+      for (let i = 0; i < this.files.length; i++) {
+        if (i === 0) {
+          this.documentTitle = this.files[i].name;
+        }
+      }
+    }
   }
 
   createNewEZSignDocument() {
+    if (this.documentTitle === null || this.documentTitle === "") {
+      this.snackBar.open("Please enter the document title", '', { duration: 3000 });
+      return;
+    }
     this.showProcessSpinner = true;
-    this.ezSignDataService.createNewEZSignDocument(this.ezSignFileList).subscribe(resp => {
+    this.ezSignDataService.createNewEZSignDocument(this.ezSignFileList, this.documentTitle).subscribe(resp => {
       console.log(resp);
       if (resp) {
         const ezSignDoc: EZSignDocResource = <EZSignDocResource>resp;

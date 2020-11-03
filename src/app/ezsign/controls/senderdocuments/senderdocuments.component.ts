@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { GridColConfigPopupComponent } from './../../../esign/controls/history/gridcolpopup/grid-col-config-popup.component';
@@ -44,7 +44,7 @@ export class SenderdocumentsComponent implements OnInit {
   autoHeight: any;
   selectedIndex = 0;
   files: any = [];
-  ezSignDoc: File | FileList;
+  ezSignFileList: File;
   uploadedFileName: string;
   isEZsignDataFetched = false;
   showProcessSpinner = false;
@@ -52,10 +52,12 @@ export class SenderdocumentsComponent implements OnInit {
   private rowClass;
   domLayout: any;
   viewType = 'grid';
+  documentTitle = null;
   constructor(public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private ezSignDataService: EzsigndataService) {
+    private ezSignDataService: EzsigndataService,
+    private snackBar: MatSnackBar) {
     this.frameworkComponents = {
       ezsignLinkRenderer: EzsignLinkRendererComponent,
       viewButtonRender: EzsignViewButtonRendererComponent,
@@ -182,7 +184,8 @@ export class SenderdocumentsComponent implements OnInit {
     //  this.ezSignDataService.setCacheData("case", selectedRow.rowData);
     //  this.viewType = "pagereview";
       const trkID = selectedRow.rowData.ezSignTrackingId;
-      this.ezSignDataService.showEzsignPDFDoc(trkID);
+    //  this.ezSignDataService.showEzsignPDFDoc(trkID);
+      this.ezSignDataService.viewEzsignFinalDoc(trkID);
   }
 
   switchToGridView() {
@@ -288,23 +291,44 @@ export class SenderdocumentsComponent implements OnInit {
   }
 
   uploadFile(event) {
-    console.log('uploadFile');
+    console.log('upload file');
     console.log(event);
+    this.ezSignFileList = event;
     for (let index = 0; index < event.length; index++) {
       const element = event[index];
-      this.files.push(element)
-      this.ezSignDoc = element;
+      this.files.push(element);
       this.uploadedFileName = element.name;
+      if (index === 0) {
+        this.documentTitle = element.name;
+      }
     }
   }
   deleteAttachment(index) {
+    // this.files.splice(index, 1);
+    // this.ezSignDoc = null;
+    console.log('delete attachment');
+    console.log(index);
     this.files.splice(index, 1);
-    this.ezSignDoc = null;
+    this.ezSignFileList = this.files;
+    this.documentTitle = null;
+    console.log(this.ezSignFileList);
+    if (this.files) {
+      for (let i = 0; i < this.files.length; i++) {
+        if (i === 0) {
+          this.documentTitle = this.files[i].name;
+        }
+      }
+    }
   }
 
   createNewEZSignDocument() {
+    if (this.documentTitle === null || this.documentTitle === "") {
+      this.snackBar.open("Please enter the document title", '', { duration: 3000 });
+      return;
+    }
+
     this.showProcessSpinner = true;
-    this.ezSignDataService.createNewEZSignDocument(this.ezSignDoc).subscribe(resp => {
+    this.ezSignDataService.createNewEZSignDocument(this.ezSignFileList, this.documentTitle).subscribe(resp => {
       console.log(resp);
       if (resp) {
         const ezSignDoc: EZSignDocResource = <EZSignDocResource>resp;

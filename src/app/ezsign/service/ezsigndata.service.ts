@@ -75,7 +75,7 @@ export class EzsigndataService implements Resolve<any> {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
-  createNewEZSignDocument(fileToUpload: File | FileList) {
+  createNewEZSignDocument(fileToUpload: File | FileList, documentTitle: string) {
     console.log('createNewEZSignDocument');
     console.log(fileToUpload);
     // let ff: File;
@@ -92,7 +92,7 @@ export class EzsigndataService implements Resolve<any> {
     formData.append('firstName', this.auth.getUserFirstName());
     formData.append('lastName', this.auth.getUserLastName());
     formData.append('email', this.auth.getUserEmail());
-
+    formData.append("title", documentTitle);
     if (fileToUpload instanceof (FileList)) {
       // ff = fileToUpload.item(0);
       let tff: File;
@@ -116,6 +116,7 @@ export class EzsigndataService implements Resolve<any> {
     console.log(formData.getAll('firstName'));
     console.log(formData.getAll('lastName'));
     console.log(formData.getAll('email'));
+    console.log(formData.getAll('title'));
     console.log(formData);
     return this.http.post(this.auth.baseurl + '/ezsign/document', formData, this.auth.getEZSignOptions());
   }
@@ -273,16 +274,14 @@ export class EzsigndataService implements Resolve<any> {
     const url = this.auth.baseurl + '/EZSign/receiver/' + this.auth.getUserID() + '/formsubmit';
     return this.http.post(url, json, this.auth.getESignOptions());
   }
-    
-  postPreSubmitEzsignPage(json){
+
+  postPreSubmitEzsignPage(json) {
     // api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/signedpage/presubmit
-    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+    const url = this.auth.baseurl + "/ezsign/orgunit/" + this.auth.getOrgUnitID()
     + "/receiver/" + this.auth.getUserID() + "/signedpage/presubmit" ;
-    return this.http.post(url,json,this.auth.getESignOptions());
+    return this.http.post(url, json, this.auth.getESignOptions());
   }
 
-
-  
   GetOrganizationGuestContacts() {
     console.log('calling GetOrganizationGuestContacts server api');
     const url: string = this.auth.baseurl + '/ezsign/orgunit/' + this.auth.getOrgUnitID()
@@ -380,23 +379,22 @@ export class EzsigndataService implements Resolve<any> {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
-  downloadEzsignDocument(trackingId: string, attachment: any): any {
-
-    console.log('downloadEzsignDocument service api call..');
-    const url: string = this.auth.baseurl +
-      '/Ezsign/tracking/' + trackingId + '/signedform';
-     console.log(url);
-    this.getPDFBlob(url).subscribe(resp => {
-      const file = new Blob([<any>resp], { type: 'application/pdf' });
-      const fileURL = URL.createObjectURL(file);
-      console.log('set pdf:' + fileURL);
-      const link = document.createElement('a');
-      document.body.appendChild(link);
-      link.href = fileURL;
-      link.download = attachment;
-      link.click();
-    });
-  }
+  // downloadEzsignDocument(trackingId: string, attachment: any): any {
+  //   console.log('downloadEzsignDocument service api call..');
+  //   const url: string = this.auth.baseurl +
+  //     '/Ezsign/tracking/' + trackingId + '/signedform';
+  //    console.log(url);
+  //   this.getPDFBlob(url).subscribe(resp => {
+  //     const file = new Blob([<any>resp], { type: 'application/pdf' });
+  //     const fileURL = URL.createObjectURL(file);
+  //     console.log('set pdf:' + fileURL);
+  //     const link = document.createElement('a');
+  //     document.body.appendChild(link);
+  //     link.href = fileURL;
+  //     link.download = attachment;
+  //     link.click();
+  //   });
+  // }
 
   showEzsignPDFDoc(trackingId: string): any {
     console.log('downloadEzsignDocument service api call..');
@@ -410,11 +408,10 @@ export class EzsigndataService implements Resolve<any> {
      });
   }
 
-  showEzsignPagePreview(trackId,docId,pageSeq){
-    ///api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/tracking/EZS2010260185/document/DOC202010262105491043/page/1/signedpage/preview
-    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+  showEzsignPagePreview(trackId, docId, pageSeq) {
+    const url = this.auth.baseurl + "/ezsign/orgunit/" + this.auth.getOrgUnitID()
     + "/receiver/" + this.auth.getUserID() + "/tracking/" + trackId
-    + "/document/" + docId + "/page/" + pageSeq+ "/signedpage/preview";
+    + "/document/" + docId + "/page/" + pageSeq + "/signedpage/preview";
     this.getPDFBlob(url).subscribe(resp => {
       const file = new Blob([<any>resp], { type: 'application/pdf' });
       const fileURL = URL.createObjectURL(file);
@@ -422,11 +419,10 @@ export class EzsigndataService implements Resolve<any> {
      });
   }
 
-  previewEzsignDocPreview(trackId,docId){
-    //http://localhost:55940/api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/tracking/EZS2010260185/document/DOC202010262105491043/signeddocument/preview
-    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+  previewEzsignDocPreview(trackId, docId) {
+    const url = this.auth.baseurl + "/ezsign/orgunit/" + this.auth.getOrgUnitID()
     + "/receiver/" + this.auth.getUserID() + "/tracking/" + trackId
-    + "/document/" + docId +"/signeddocument/preview";
+    + "/document/" + docId + "/signeddocument/preview";
     this.getPDFBlob(url).subscribe(resp => {
       const file = new Blob([<any>resp], { type: 'application/pdf' });
       const fileURL = URL.createObjectURL(file);
@@ -434,24 +430,42 @@ export class EzsigndataService implements Resolve<any> {
      });
   }
 
-  finalizeSigning(trackId,docId){
-    //http://localhost:55940/api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/tracking/EZS2010260185/document/DOC202010262105491043/signeddocument/finalsubmit
-    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+  finalizeSigning(trackId, docId) {
+    const url = this.auth.baseurl + "/ezsign/orgunit/" + this.auth.getOrgUnitID()
     + "/receiver/" + this.auth.getUserID() + "/tracking/" + trackId
-    + "/document/" + docId +"/signeddocument/finalsubmit";
+    + "/document/" + docId + "/signeddocument/finalsubmit";
     console.log(this.auth.getESignOptions());
-    return this.http.post(url,{},this.auth.getESignOptions());
+    return this.http.post(url, {}, this.auth.getESignOptions());
   }
 
-  viewEzsignFinalDoc(trackId){
-    //http://localhost:55940/api/ezsign/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/user/db608b99-d878-428c-8f7a-3daad5fd596a/tracking/EZS2010260185/signeddocument
-    const url = this.auth.baseurl +"/ezsign/orgunit/" + this.auth.getOrgUnitID()
+  viewEzsignFinalDoc(trackId) {
+    const url = this.auth.baseurl + "/ezsign/orgunit/" + this.auth.getOrgUnitID()
     + "/user/" + this.auth.getUserID() + "/tracking/" + trackId
-    +"/signeddocument";
+    + "/signeddocument";
     this.getPDFBlob(url).subscribe(resp => {
       const file = new Blob([<any>resp], { type: 'application/pdf' });
       const fileURL = URL.createObjectURL(file);
       window.open(fileURL, '_blank');
      });
+  }
+
+  downloadEzsignDocument(trackingId: string, attachment: any): any {
+    console.log('downloadEzsignDocument service api call..');
+
+    const url = this.auth.baseurl + "/ezsign/orgunit/" + this.auth.getOrgUnitID()
+    + "/user/" + this.auth.getUserID() + "/tracking/" + trackingId
+    + "/signeddocument";
+
+    console.log(url);
+    this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      console.log('set pdf:' + fileURL);
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = fileURL;
+      link.download = attachment;
+      link.click();
+    });
   }
 }

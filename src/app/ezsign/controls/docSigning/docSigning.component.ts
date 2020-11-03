@@ -1,11 +1,12 @@
-import { Component,ElementRef,EventEmitter,ViewChild, OnInit, Output, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, ElementRef, EventEmitter, ViewChild, OnInit, Output, AfterViewInit,
+  ViewChildren, QueryList } from '@angular/core';
 import {EzsigndataService } from '../../service/ezsigndata.service';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { MatDialog } from '@angular/material';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { PdfViewerModule,PdfViewerComponent } from 'ng2-pdf-viewer';
+import { PdfViewerModule, PdfViewerComponent } from 'ng2-pdf-viewer';
 @Component({
   selector: 'app-docsigning',
   templateUrl: './docSigning.component.html',

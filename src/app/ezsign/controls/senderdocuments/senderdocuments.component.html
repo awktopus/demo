@@ -73,7 +73,7 @@
             <tr>
                 <td colspan="12">
                     <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
-                        <label class="heading-label">Drag and drop or Upload PDF document here</label>
+                        <label class="heading-label">Drag and drop or Upload PDF or Word document here</label>
                         <input hidden multiple accept=".docx,.pdf" type="file" #fileInput (change)="uploadFile($event.target.files)">
                     </div>
                     <div class="files-list" *ngFor="let file of files;let i=index">
@@ -86,8 +86,15 @@
             </tr>
 
             <tr>
-                <td colspan="12">
+                <td colspan="12">                
                     <div class="uploadbtn">
+                            <mat-form-field class="appfield" *ngIf="files.length != 0" appearance="outline">
+                                    <mat-label>Document Title</mat-label>
+                                    <input required matInput [(ngModel)]="documentTitle">
+                                    <mat-error *ngIf="documentTitle === null || documentTitle === ''">
+                                        Document Title is required
+                                    </mat-error>
+                                </mat-form-field> &nbsp; &nbsp;
                         <span *ngIf='!showProcessSpinner'>
                             <button *ngIf="files.length != 0" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="createNewEZSignDocument()">
                                 UPLOAD
@@ -109,8 +116,7 @@
             [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout">
         </ag-grid-angular>
     </div>
-    </div>
-    <div *ngIf="viewType==='pagereview'">
-            <app-docreview (switchToGridView)= "switchToGridView()"></app-docreview>
-    </div>
-  
+</div>
+<div *ngIf="viewType==='pagereview'">
+    <app-docreview (switchToGridView)="switchToGridView()"></app-docreview>
+</div>
