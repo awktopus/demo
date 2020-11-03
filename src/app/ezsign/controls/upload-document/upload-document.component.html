@@ -64,7 +64,7 @@
         <tr>
             <td colspan="12">
                 <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
-                    <label class="heading-label">Drag and drop or Upload PDF document here</label>
+                    <label class="heading-label">Drag and drop or Upload PDF or Word document here</label>
                     <input hidden multiple type="file" accept=".docx,.pdf" #fileInput (change)="uploadFile($event.target.files)">
                 </div>
 
@@ -78,8 +78,16 @@
             </td>
         </tr>
         <tr>
-            <td colspan="12">
+            <td colspan="6">
                 <div class="uploadbtn">
+                        <mat-form-field class="appfield" *ngIf="files.length != 0" appearance="outline">
+                                <mat-label>Document Title</mat-label>
+                                <input required matInput 
+                                [(ngModel)]="documentTitle">
+                                <mat-error *ngIf="documentTitle === null || documentTitle === ''">
+                                  Document Title is required
+                                </mat-error>
+                              </mat-form-field>  &nbsp; &nbsp;
                     <span *ngIf='!showProcessSpinner'>
                         <button *ngIf="files.length != 0" mat-raised-button color="accent" matTooltip="Create new ezsign document" (click)="createNewEZSignDocument()">
                             UPLOAD
