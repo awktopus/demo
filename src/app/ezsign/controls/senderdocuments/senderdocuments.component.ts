@@ -21,6 +21,7 @@ import { EzsignPdfPopupComponent } from '../shared/ezsign-pdf-popup/ezsign-pdf-p
 import { EzsignGridcolpopupComponent } from '../shared/ezsign-gridcolpopup/ezsign-gridcolpopup.component';
 import { EzSignReminderRendererComponent } from '../EzsignReminderRenderer.component';
 import { EzsignClientReminderComponent } from '../shared/ezsign-client-reminder/ezsign-client-reminder.component';
+import { EzsignDownloadButtonRendererComponent } from '../EzsignDownloadbutton-renderer.component';
 
 @Component({
   selector: 'app-ezsign-senderdocuments',
@@ -64,7 +65,8 @@ export class SenderdocumentsComponent implements OnInit {
       addSignersButtonRenderer: EzsignAddSignersButtonRendererComponent,
       historyButtonRenderer: EzsignHistoryButtonRendererComponent,
       deleteButtonRender: EzsignDeleteButtonRendererComponent,
-      reminderRenderer: EzSignReminderRendererComponent
+      reminderRenderer: EzSignReminderRendererComponent,
+      ezsignDownloadButtonRender: EzsignDownloadButtonRendererComponent,
     }
   }
 
@@ -94,7 +96,6 @@ export class SenderdocumentsComponent implements OnInit {
       },
       { headerName: 'Document Name', field: 'documentName', cellStyle: { textAlign: 'left' } },
       { headerName: 'Status', field: 'status', cellStyle: { textAlign: 'left' } },
-      { headerName: 'Last Modified', field: 'lastModifiedDateTime', cellStyle: { textAlign: 'left' } },
       {
         headerName: 'Signer Status',
         cellRenderer: 'addSignersButtonRenderer',
@@ -112,6 +113,14 @@ export class SenderdocumentsComponent implements OnInit {
         },
         cellStyle: { 'justify-content': "center" }
       },
+       {
+         headerName: 'Download',
+         cellRenderer: 'ezsignDownloadButtonRender',
+         cellRendererParams: {
+          onClick: this.downloadEzSignDocument.bind(this)
+         },
+         cellStyle: { 'justify-content': "center" }
+       },
       {
         headerName: 'Delete',
         cellRenderer: 'deleteButtonRender',
@@ -134,12 +143,21 @@ export class SenderdocumentsComponent implements OnInit {
         headerName: 'Reminder', field: 'clientReminderFlag', cellRenderer: 'reminderRenderer',
         cellStyle: { 'justify-content': "center" }
       },
+      { headerName: 'Last Modified', field: 'lastModifiedDateTime', cellStyle: { textAlign: 'left' } },
+
     ];
     this.context = { componentParent: this, ezsignfit: false };
     this.rowHeight = 40;
     this.domLayout = 'autoHeight';
     this.rowClass = 'ezsign-history-grid';
     return res;
+  }
+
+  downloadEzSignDocument(ezSignDocRec: any) {
+    console.log('downloadEzSignDocument...');
+    console.log(ezSignDocRec);
+    this.ezSignDataService.downloadEzsignDocument(ezSignDocRec.ezSignTrackingId,
+      ezSignDocRec.documentName);
   }
 
   createClientReminder(ezSignTrackingId: string): void {

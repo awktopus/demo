@@ -6509,7 +6509,8 @@
         },
         "ansi-regex": {
           "version": "2.1.1",
-          "bundled": true
+          "bundled": true,
+          "optional": true
         },
         "aproba": {
           "version": "1.2.0",
@@ -6546,7 +6547,8 @@
         },
         "code-point-at": {
           "version": "1.1.0",
-          "bundled": true
+          "bundled": true,
+          "optional": true
         },
         "concat-map": {
           "version": "0.0.1",
@@ -6670,6 +6672,7 @@
         "is-fullwidth-code-point": {
           "version": "1.0.0",
           "bundled": true,
+          "optional": true,
           "requires": {
             "number-is-nan": "^1.0.0"
           }
@@ -6921,6 +6924,7 @@
         "strip-ansi": {
           "version": "3.0.1",
           "bundled": true,
+          "optional": true,
           "requires": {
             "ansi-regex": "^2.0.0"
           }
@@ -15717,6 +15721,7 @@
               "version": "3.0.4",
               "bundled": true,
               "dev": true,
+              "optional": true,
               "requires": {
                 "brace-expansion": "^1.1.7"
               }
@@ -15724,7 +15729,8 @@
             "minimist": {
               "version": "0.0.8",
               "bundled": true,
-              "dev": true
+              "dev": true,
+              "optional": true
             },
             "minipass": {
               "version": "2.3.5",

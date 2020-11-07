@@ -160,8 +160,20 @@
     <font color=green>Please review and finalize the signing.</font>
     <table width=80%>
       <tr>
-        <td><button mat-raised-button color="accent"  (click)="previewDoc()">Review</button></td>
-        <td><button mat-raised-button color="accent"  (click)="finalizeSigning()">Final Submit</button></td>
+        <td>
+          <span *ngIf='!showReviewSpinner'>
+              <button mat-raised-button color="accent"  (click)="previewDoc()">Review</button>
+            </span>
+          <mat-spinner *ngIf='showReviewSpinner' diameter='40'></mat-spinner>
+          <span *ngIf='showReviewSpinner'>Processing...</span>
+        </td>
+        <td>
+          <span *ngIf='!showSubmitSpinner'>
+              <button mat-raised-button color="accent"  (click)="finalizeSigning()">Submit</button>
+            </span>
+          <mat-spinner *ngIf='showSubmitSpinner' diameter='40'></mat-spinner>
+          <span *ngIf='showSubmitSpinner'>Processing...</span>
+        </td>
       </tr>
     </table>
  </div>

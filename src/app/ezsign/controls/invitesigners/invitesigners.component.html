@@ -1,5 +1,3 @@
-
-
     <table>
         <tr>
           <th>
@@ -22,8 +20,18 @@
               &nbsp;&nbsp;
               <button mat-raised-button color="accent" matTooltip="Go to EZSign documents view" (click)="goToEZSignDocumentsView()">
                   <mat-icon>home</mat-icon>&nbsp;EZSIGN DOCUMENTS
+                </button> 
+                &nbsp;&nbsp;        
+              <span *ngIf='!showProcessSpinner'>
+                <button mat-raised-button color="accent" class="text-upper" (click)='sendInvite()'>
+                  <mat-icon>send</mat-icon>&nbsp;Send Invite
                 </button>
-          </td>
+              </span>
+            </td>
+            <td>
+              <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+              <span *ngIf='showProcessSpinner'>Processing...</span>
+            </td>     
         </tr>
       </table>
 
@@ -82,7 +90,7 @@
     </div>
   </div>
   
-  <table width=100%>
+  <!-- <table width=100%>
     <tr>
       <td>
         &nbsp;&nbsp;
@@ -99,6 +107,6 @@
         <span *ngIf='showProcessSpinner'>Processing...</span>
       </td>
     </tr>
-  </table>
+  </table> -->
 
 </div>

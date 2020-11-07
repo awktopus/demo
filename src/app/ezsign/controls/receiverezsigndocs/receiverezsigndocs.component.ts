@@ -22,6 +22,7 @@ import { EzSignReminderRendererComponent } from '../EzsignReminderRenderer.compo
 import { EzsignClientReminderComponent } from '../shared/ezsign-client-reminder/ezsign-client-reminder.component';
 import { ReceiverEzsigningRendererComponent } from '../ReceiverEzsigningbutton-renderer.component';
 import { EzsignDownloadButtonRendererComponent } from '../EzsignDownloadbutton-renderer.component';
+import { DocumenthistoryComponent } from '../senderdocuments/documenthistory/documenthistory.component';
 
 @Component({
   selector: 'app-receiverezsigndocs',
@@ -61,7 +62,8 @@ export class ReceiverezsigndocsComponent implements OnInit {
     this.frameworkComponents = {
       viewButtonRender: EzsignViewButtonRendererComponent,
       receiverEzsigningButtonRender: ReceiverEzsigningRendererComponent,
-      ezsignDownloadButtonRender: EzsignDownloadButtonRendererComponent
+      ezsignDownloadButtonRender: EzsignDownloadButtonRendererComponent,
+      historyButtonRenderer: EzsignHistoryButtonRendererComponent
     }
   }
 
@@ -117,15 +119,7 @@ export class ReceiverezsigndocsComponent implements OnInit {
       },
       { headerName: 'Sender', field: 'senderName', cellStyle: this.changeRowColor, width: 200 },
       { headerName: 'Document Name', field: 'documentName', cellStyle: this.changeRowColor, width: 250 },
-      { headerName: 'Status', field: 'status', cellStyle: this.changeRowColor, width: 200 },
-      {
-        headerName: 'View', width: 100,
-        cellRenderer: 'viewButtonRender',
-        cellRendererParams: {
-          onClick: this.viewEZSignDocument.bind(this),
-        },
-        cellStyle: this.changeRowColor
-      },
+      { headerName: 'Status', field: 'status', cellStyle: this.changeRowColor, width: 100 },
       {
         headerName: 'Sign', width: 100,
         cellRenderer: 'receiverEzsigningButtonRender',
@@ -134,14 +128,31 @@ export class ReceiverezsigndocsComponent implements OnInit {
         },
         cellStyle: this.changeRowColor
       },
+      {
+        headerName: 'View', width: 100,
+        cellRenderer: 'viewButtonRender',
+        cellRendererParams: {
+          onClick: this.viewEZSignDocument.bind(this),
+        },
+        cellStyle: this.changeRowColor
+      },
        {
-         headerName: 'Download', width: 120,
+         headerName: 'Download', width: 100,
          cellRenderer: 'ezsignDownloadButtonRender',
          cellRendererParams: {
           onClick: this.downloadEzSignDocument.bind(this)
          },
          cellStyle: this.changeRowColor
        },
+      {
+        headerName: 'History', width: 100,
+        cellRenderer: 'historyButtonRenderer',
+        cellRendererParams: {
+          onClick: this.openHistoryDialog.bind(this),
+          label: 'HISTORY'
+        },
+        cellStyle: this.changeRowColor
+      },
       { headerName: 'Last Modified', field: 'lastModifiedDateTime',
       cellStyle: this.changeRowColor }
     ];
@@ -151,18 +162,30 @@ export class ReceiverezsigndocsComponent implements OnInit {
     return res;
   }
 
+  openHistoryDialog(ezSignDocRow: any): void {
+    const dialogRef = this.dialog.open(DocumenthistoryComponent, {
+      width: '1200px',
+    });
+    dialogRef.componentInstance.setData(ezSignDocRow.rowData.ezSignTrackingId,
+      ezSignDocRow.rowData.documentName);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    });
+  }
+
   viewEZSignDocument(selectedRow: any) {
     console.log(selectedRow.rowData);
    // this.ezSignDataService.setCacheData("case", selectedRow.rowData);
    // this.viewType = "pagereview";
     const trkID = selectedRow.rowData.ezSignTrackingId;
-    const docId=selectedRow.rowData.docId;
-    const status:any=selectedRow.rowData.status;
-    //this.ezSignDataService.showEzsignPDFDoc(trkID);
-    if(status == "Signed"){
+    const docId = selectedRow.rowData.docId;
+    const status: any = selectedRow.rowData.status;
+    // this.ezSignDataService.showEzsignPDFDoc(trkID);
+    if (status === "Signed") {
       this.ezSignDataService.viewEzsignFinalDoc(trkID);
     } else {
-      this.ezSignDataService.previewEzsignDocPreview(trkID,docId);
+      this.ezSignDataService.previewEzsignDocPreview(trkID, docId);
     }
   }
 
