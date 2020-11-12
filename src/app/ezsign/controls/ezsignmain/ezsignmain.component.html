@@ -6,7 +6,7 @@
     </tr>
 </table>
 <mat-tab-group (focusChange)="changeTab($event)" #myTabGroup [selectedIndex]="selectedIndex">
-    <mat-tab>
+    <mat-tab *ngIf="userRole == 'ADMIN' || userRole == 'OWNER' || userRole === 'COWORKER'">
         <ng-template mat-tab-label>
             Send Documents
         </ng-template>

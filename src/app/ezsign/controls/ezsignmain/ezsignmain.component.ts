@@ -29,6 +29,7 @@ import { EzsignClientReminderComponent } from '../shared/ezsign-client-reminder/
 })
 export class EzsignMainComponent implements OnInit {
   selectedIndex: any;
+  userRole: string;
   constructor(public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
@@ -36,6 +37,16 @@ export class EzsignMainComponent implements OnInit {
 
   }
   ngOnInit() {
+  console.log('ezmain OnInit and user role:');
+  console.log(this.ezSignDataService.auth.getUserRole());
+  this.userRole = this.ezSignDataService.auth.getUserRole();
+    if (typeof this.userRole === "undefined" || this.userRole === null) {
+     // this.userRole = 'ADMIN';
+    } else {
+      this.userRole = this.userRole.toUpperCase();
+    }
+    console.log('converted role');
+    console.log(this.userRole);
   }
   changeTab(event) {
   }

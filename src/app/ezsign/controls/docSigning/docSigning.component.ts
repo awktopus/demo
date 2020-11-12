@@ -131,7 +131,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
     } else {
         // all signing done for this form
         this.viewType = "";
-        this.curseq = -1;
+        this.curseq = 0;
         console.log("need navigate back to the main page");
         this.preSignComplete();
     }
@@ -274,7 +274,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   }
 
   findSignPageSeq(cc, signer) {
-      let pseq = -1;
+      let pseq = 0;
       cc.eZSignDocPages.forEach(page => {
         console.log(page.pageSeqNo);
         let alreadysigned = this.cur_signed_pages.includes(page.pageSeqNo);
@@ -282,7 +282,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
           if (page.pageFields) {
             page.pageFields.forEach(fd => {
               if ((fd.receiverId === signer.receiverId) && (fd.status !== 'Signed')) {
-                if (pseq === -1) {
+                if (pseq === 0) {
                   pseq = page.pageSeqNo;
                 }
               }
@@ -504,7 +504,7 @@ goSignCap() {
           } else {
               // all signing done for this form
               this.viewType = "";
-              this.curseq = -1;
+              this.curseq = 0;
               console.log("need navigate back to the main page");
               this.preSignComplete();
          }

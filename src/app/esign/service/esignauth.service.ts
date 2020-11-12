@@ -33,7 +33,7 @@ export class EsignAuthService {
   enabledMenus: string[] = [];
   // 040420 - Menu PubSub refactoring - end
 
-  constructor(private http: HttpClient, private esignstate: AbstractStateSelector,
+  constructor(private http: HttpClient, public esignstate: AbstractStateSelector,
     private pubSub: PubSub, private esignlocalstate: EsignLocalStateSelector) {
     console.log('esign auth service constructor');
     this.pubSubForELToolsMenuSecurity();
@@ -126,6 +126,7 @@ export class EsignAuthService {
       return null;
     }
   }
+
   setESignToken(token: string) {
     // console.log('setting esign token:', token);
     // localStorage.setItem(this.esign_key, JSON.stringify(token));
