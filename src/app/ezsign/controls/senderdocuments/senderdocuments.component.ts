@@ -185,11 +185,18 @@ export class SenderdocumentsComponent implements OnInit {
     this.loadEZSignDocuments();
   }
 
-  showEzSignDocument(selectedRow: any) {
+  showEzSignDocument(trackID: any) {
     console.log('show ezsign document');
-    console.log(selectedRow);
-    const url = '/main/ezsign/addfields/' + selectedRow;
-    this.router.navigateByUrl(url);
+    console.log(trackID);
+    const url = '/main/ezsign/addfields/' + trackID;
+    this.ezSignDocsgridData.forEach(doc => {
+      if (doc.ezSignTrackingId === trackID) {
+        console.log(doc);
+        this.ezSignDataService.setCacheData("sendercase", doc);
+        this.router.navigateByUrl(url);
+      }
+    });
+    //this.router.navigateByUrl(url);
   }
 
   viewEZSignDocument(selectedRow: any) {

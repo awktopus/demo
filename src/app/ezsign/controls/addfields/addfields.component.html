@@ -42,18 +42,14 @@
         <mat-icon>event_note</mat-icon>&nbsp;SEND REQUEST TO SIGN
       </button>
     </div>
-    <div>
-      <br/>
-    </div>
-    <div>
-      <mat-icon>pan_tool</mat-icon>&nbsp;
-      <mat-label>Select the field label, it will drop into top left corner of the document, then and drag to the location
-        <br/> in your document, where you would like your signers to input information
-      </mat-label>
-    </div>
-    <div>
-      <br/>
-    </div>
+   <br>
+   <div style="word-break: break-all;overflow-wrap: break-word; white-space: normal;">
+      <mat-icon>pan_tool</mat-icon>
+      Select the field label, it will drop into top left corner of the document, then 
+      and drag to the location in your document, where you would like your signers to 
+      input information
+   </div>
+    <br>
     <mat-toolbar color="primary" style="height: 30px;">
       SELECT LABELS AND DRAG
       <span class="fill-remaining"></span>
@@ -82,15 +78,11 @@
                 class="shape" [style.width.px]="160" [style.height.px]="38"
                 matTooltip="Select signer field type" 
                 (click)="dropField(row)">
-                <table>
-                    <tr>
-                      <td>{{ row.receiverFirstName }} {{ row.receiverLastName }}</td>
-                    </tr>
-                    <tr>
-                      <td>{{ row.fieldTypeDesc }}</td>
-                    </tr>
-                  </table>
+             {{ row.receiverFirstName }} {{ row.receiverLastName }}
+              <br>
+                    {{ row.fieldTypeDesc }}
               </button>
+
 
           <!-- <div onclick="dropField(row)" [ngClass]="1 == 1 ? 'shape' : 'fieldTag'" 
           [style.width.px]="140" [style.height.px]="18">
@@ -108,10 +100,10 @@
       </ng-container>
 
 
-      <ng-container matColumnDef="select">
+      <ng-container matColumnDef="selecticon">
         <mat-cell *matCellDef="let row">
           <button mat-icon-button [disabled]='status !="Uploaded"' matTooltip="Select signer field type" (click)="dropField(row)">
-            <img src="/assets/imgs/ezsign_field_select.png" mat-card-avatar big>
+            <!-- img src="/assets/imgs/ezsign_field_select.png" mat-card-avatar small -->
           </button>
         </mat-cell>
       </ng-container>
@@ -163,13 +155,14 @@
       <span *ngIf='!isImageDataUrlFetched'>Processing...</span>
 
       <div style="position: relative;border: 1px solid lightgray;">
-        <img *ngIf="isImageDataUrlFetched" [src]="sanitize(formImageBlobUrl)" />
+         <!--  <img *ngIf="isImageDataUrlFetched" [src]="sanitize(formImageBlobUrl)" width="800"/> -->
+       <pdf-viewer [original-size]="true" [src]="pdfUrl" (page-rendered)="pageRendered($event)" ></pdf-viewer> 
         <div *ngIf="isFieldsReadyToShow">
           <div *ngFor="let fld of ezSignFields">
             <div [ngClass]="fld.isSelected ? 'selectedFieldTag' : 'fieldTag'" ng-drag="false" ngDraggable (edge)="checkEdge($event)"
               [bounds]="myBounds" [inBounds]="true" (started)="onFieldStart($event,fld.fieldSeqNo)" (stopped)="onFieldStop($event,fld.fieldSeqNo)"
               (movingOffset)="onFieldMoving($event,fld.fieldSeqNo)" (endOffset)="onFieldMoveEnd($event,fld.fieldSeqNo)" [preventDefaultEvent]="true"
-              *ngIf="fld.showBox && fld.isTagExists" [style.bottom.px]="fld.posY" [style.left.px]="fld.posX" [style.width.px]="fld.width"
+              *ngIf="fld.showBox && fld.isTagExists" [style.bottom.px]="fld.adjust_posY" [style.left.px]="fld.adjust_posX" [style.width.px]="fld.width"
               [style.height.px]="fld.height">
 
               <!-- <label style="padding-bottom:5px">{{fld.receiverFirstName}} - {{fld.fieldType}}</label> -->

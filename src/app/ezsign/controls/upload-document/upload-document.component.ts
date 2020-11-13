@@ -68,10 +68,12 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
     }
     this.showProcessSpinner = true;
     this.ezSignDataService.createNewEZSignDocument(this.ezSignFileList, this.documentTitle).subscribe(resp => {
+      console.log("-------> new ezsign document case");
       console.log(resp);
       if (resp) {
         const ezSignDoc: EZSignDocResource = <EZSignDocResource>resp;
         const url = '/main/ezsign/addfields/' + ezSignDoc.ezSignTrackingId;
+        this.ezSignDataService.setCacheData("sendercase", EZSignDocResource);
         this.router.navigateByUrl(url);
       }
       this.showProcessSpinner = false;

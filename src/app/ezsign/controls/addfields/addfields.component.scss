@@ -1,12 +1,12 @@
 
 .shape {
-  float: left;
+  margin-left:10pt;
   position: absolute;
   background-color: #55b954;
   padding: 10px;
   color: white;
-  border: 3px solid #03a9f4;
-  border-radius: 5px;
+  border: 1px solid #03a9f4;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,27 +50,28 @@
 }
 
 .mat-column-type {
-  flex: 0 0 5%;
+  flex: 0 0 6%;
   word-wrap: break-word !important;
   overflow-wrap: break-word;
 }
 
 .mat-column-receiverName {
-  flex: 0 0 25%;
+  flex: 0 0 35%;
   word-wrap: break-word !important;
   overflow-wrap: break-word;
+  margin-left:3px;
 }
 
-.mat-column-select {
-  flex: 0 0 25%;
+.mat-column-selecticon{
+  flex: 0 0 15%;
 }
 
 .mat-column-receiverEmailId {
-  flex: 0 0 25%;
+  flex: 0 0 15%;
 }
 
 .mat-column-delete {
-  flex: 0 0 25%;
+  flex: 0 0 15%;
 }
 
 
@@ -137,18 +138,16 @@
 
 
 .leftpane {
-  width: 45%;
+  width: 30%;
   height: 100%;
- float: left;
- margin-right: 3%; 
+ float: right;
+ margin-right: 1%; 
  // background-color: rosybrown;
  // border-collapse: collapse;
  //  text-align: center; 
 }
 
-.row{
-  white-space: nowrap;
-}
+
    .casecard
    {
     word-break:break-all;
@@ -171,7 +170,7 @@
   }
   
   .gappane {
-    width: 5%;
+    width: 2%;
     height: 100%;
    float: left;
    // background-color: rosybrown;
@@ -180,10 +179,9 @@
   }
 
 .middlepane {
-  //width: 50%;
+  width: 65%;
   //height: 100%;
   position: relative;
-  float: left;
   //background-color: royalblue;
   //border-collapse: collapse;
   // text-align: center;   ;
