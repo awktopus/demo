@@ -41,7 +41,7 @@ export class EzsignMainComponent implements OnInit {
   console.log(this.ezSignDataService.auth.getUserRole());
   this.userRole = this.ezSignDataService.auth.getUserRole();
     if (typeof this.userRole === "undefined" || this.userRole === null) {
-     // this.userRole = 'ADMIN';
+      this.userRole = 'ADMIN';
     } else {
       this.userRole = this.userRole.toUpperCase();
     }
