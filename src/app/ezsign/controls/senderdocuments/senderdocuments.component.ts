@@ -335,12 +335,28 @@ export class SenderdocumentsComponent implements OnInit {
     this.ezSignFileList = event;
     for (let index = 0; index < event.length; index++) {
       const element = event[index];
-      this.files.push(element);
-      this.uploadedFileName = element.name;
-      if (index === 0) {
+      if(!this.checkDuplicateFile(element) ){
+             this.files.push(element);
+       this.uploadedFileName = element.name;
+       if (index === 0) {
         this.documentTitle = element.name;
+        }
       }
     }
+  }
+
+  checkDuplicateFile(ff:any){
+    console.log(ff);
+    let matched=false;
+    this.files.forEach(fe=>{
+      console.log("1--->");
+      console.log(fe);
+      if((fe.name==ff.name) && fe.size==ff.size){
+        matched=true;
+      }
+    });
+    console.log(matched);
+    return matched;
   }
 
   deleteAttachment(index) {
