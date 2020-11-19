@@ -14,6 +14,7 @@ export class GuestEzsignComponent implements OnInit {
   guestToken: any = null;
   tokenStatus: any = "" ;
   resendstatus = "N";
+  mycase: any;
   constructor(private route: ActivatedRoute, private service: GuestEzsignService,
     private router: Router) {
 
@@ -27,12 +28,16 @@ export class GuestEzsignComponent implements OnInit {
       this.service.auth.runGuestEzsignAuth(this.guestToken).subscribe(res => {
          const resp: any = res;
          console.log(resp);
-         if (resp.statusCode === "200") {
+         this.mycase = resp;
+         if (resp && resp.statusCode === "200") {
             console.log("token is good routing to the doc signing page");
             this.tokenStatus = "valid";
             this.service.auth.setAuthData(resp);
             this.service.auth.setGuestToken(this.guestToken);
             this.service.auth.setEzsignGuestAuthToken(resp.guestELToolsAccessToken);
+            if (this.mycase.ezSignStatus === 'Signed') {
+              this.router.navigateByUrl("guestezsign/guestdoc");
+            }
            // this.router.navigateByUrl("guestezsign/guestdoc");
          } else if ( resp.statusCode === "406") {
             console.log(" token is good but expired");

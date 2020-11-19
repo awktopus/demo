@@ -20,7 +20,7 @@ import { GuestEZsignAuthService } from './service/guestezsignauth.service';
 // tslint:disable-next-line:max-line-length
 import {  DialogNoFormMessageDialogComponent, DialogCompletedEzsignComponent } from './guestdoc/guestdoc.component';
 import { EzsignGuestDocComponent, DialogMissingDataMessageDialogComponent, } from './guestdoc/guestdoc.component';
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +41,8 @@ import { EzsignGuestDocComponent, DialogMissingDataMessageDialogComponent, } fro
     NgxEditorModule,
     MatProgressSpinnerModule,
     AngularDraggableModule,
-    GuestEZSignRouting
+    GuestEZSignRouting,
+    PdfViewerModule
   ],
   declarations: [
     GuestEzsignComponent,
@@ -52,7 +53,7 @@ import { EzsignGuestDocComponent, DialogMissingDataMessageDialogComponent, } fro
     SafePipe,
     ],
   entryComponents: [ DialogMissingDataMessageDialogComponent,
-    DialogNoFormMessageDialogComponent,DialogCompletedEzsignComponent],
+    DialogNoFormMessageDialogComponent, DialogCompletedEzsignComponent],
   providers: [
     // AuthGuard,
     // EsignserviceService,

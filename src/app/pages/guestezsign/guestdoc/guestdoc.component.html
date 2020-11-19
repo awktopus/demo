@@ -1,208 +1,260 @@
-<p>
-  <mat-toolbar color="primary">
-    <span>EverLeagues EZsign guest portal</span>
-  </mat-toolbar>
-  
-</p>
-<div class='row'>
-  <div class='caselist'>
-    <div *ngFor="let case of mycases">
-      <mat-card *ngIf='casefilter==0||(casefilter==1&&(case.status=="Sent to recipient" || case.status=="Inprogress"))||(casefilter==2&&case.status=="Signed")' class='casecard'
-        (click)='selectcase(case.docId)' [style.background]="case.selected ? '#ffffee':''">
-        <mat-card-header>
-          <img src="/assets/imgs/esign.png" mat-card-avatar big>
-          <mat-card-title style='flex:1;'>{{case.displayName}} </mat-card-title>
-          <mat-icon *ngIf='case.selected' class='cardlbl'>check</mat-icon>
-        </mat-card-header>
-        <mat-card-content>
-          <table width=95%>
-          <tr>
-          <td valign=top>  <font color="a0a0a0" size=-1>Tracking #</font><br>
-                       
-                        <b>
-                          {{case.ezSignTrackingId}}
-                        </b>  </td>
-          <td valign=top> 
-            <font color="a0a0a0" size=-1>Date</font><br>
-                <b>{{case.lastModifiedDateTime}}</b>
-          </td>
-          </tr>
-                    <tr>
-          <td valign=top>                  <font color="a0a0a0" size=-1>Clients</font><br>
-                        <span *ngFor='let usr of case.ezSignDocSigners'>
-                        <b>
-                          {{usr.receiverFirstName}} {{usr.receiverLastName}}
-                        </b> <br>
-                        </span></td>
-          <td valign=top> 
-                   <font color="a0a0a0" size=-1>Status</font><br>
-               <b>{{tStatus(case.status)}}</b>   
-          </td>
-          </tr>
-          <tr  style="background-color:#E5F8EB">
-          <td>
-                <button mat-icon-button color="accent"  (click)="goAgreementView(case)">
-                      <mat-icon >create</mat-icon>
-                    <label style="font-weight: bold">Sign</label></button>
-          </td>
-          <td>
-                   <button mat-icon-button  color="accent" (click)='displayReviewDoc(case)'>
-                                  <mat-icon>menu</mat-icon>
-                          <label style="font-weight: bold">View</label>
-                        </button>
-          </td>
-          </tr>     
-          </table>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-  <div *ngIf="viewType=='reviewDoc'" class='casedoc' style="word-break:break-word;white-space:normal !important;">
-       <iframe width="95%" height="640" [src]="pdfUrl | safe">
-    </iframe>
-  <div *ngIf='fieldsCount>0 && signedCount<fieldsCount'>
-  <span> <font color=green>To be signed</font></span>
-  </div>
-  <div *ngIf='fieldsCount>0 && signedCount==fieldsCount'>
-  <span> <font color=green>Signed</font></span>
-  </div>
-  <div *ngIf='fieldsCount==0'>
-  <span> <font color=green>Review only</font></span>
-  </div>
-  <table width=90%>
-  <tr>
-  <td width=50% align=center>
-   <button  *ngIf='fprev' mat-button color="primary" (click)='goReviewForm(fprev)'>
-                                  <mat-icon>keyboard_arrow_left</mat-icon>
-                          <label style="font-weight: bold">Prev</label>
-   </button>
-  </td>
-  <td align=center>
-     <button  *ngIf='fnext' mat-button color="primary" (click)='goReviewForm(fnext)'>
-                          <label style="font-weight: bold">Next</label>
-                             <mat-icon>keyboard_arrow_right</mat-icon>
-   </button>
-  </td>
-  </tr>
+<mat-toolbar color="primary">
+  <h4> EVERLEAGUES EZsign Guest Portal </h4>
+</mat-toolbar>
+<div *ngIf="mycase" style="background:#eeeeff">
+  <table width=95%>
+    <tr>
+      <td valign=top>
+        <font color="a0a0a0" size=-1>Tracking #</font>
+        <br>
+        <b>
+          {{mycase.ezSignTrackingId}}
+        </b>
+      </td>
+      <td valign=top>
+        <font color="a0a0a0" size=-1>Sender Name</font>
+        <br>
+        <b>
+          {{mycase.senderName}}
+        </b>
+      </td>
+      <td valign=top>
+        <font color="a0a0a0" size=-1>Document Name</font>
+        <br>
+        <b>
+          {{mycase.displayName}}
+        </b>
+      </td>
+      <td valign=top>
+        <font color="a0a0a0" size=-1>Signers</font>
+        <br>
+        <span *ngFor='let usr of mycase.ezSignDocSigners'>
+          <b>
+            {{usr.receiverFirstName}} {{usr.receiverLastName}}
+          </b>
+          <br>
+        </span>
+      </td>
+      <td valign=top>
+        <font color="a0a0a0" size=-1>Status</font>
+        <br>
+        <b>
+          {{mycase.status}}
+        </b>
+      </td>
+      <td *ngIf="mycase.status != 'Signed' && mycase.status != 'Presigned' && viewType != 'finalview'" valign=top>
+        <font color="a0a0a0" size=-1># Page(s) to Sign</font>
+        <br>
+        <span>
+          <b>
+            {{pageToSign}}
+          </b>
+          <br>
+        </span>
+      </td>
+      <td *ngIf="mycase.status != 'Signed' && mycase.status != 'Presigned' && viewType != 'finalview'" valign=top>
+        <font color="a0a0a0" size=-1>Page Seq #</font>
+        <br>
+        <span>
+          <b>
+            {{curseq}}
+          </b>
+          <br>
+        </span>
+      </td>
+      <td valign=top>
+        <font color="a0a0a0" size=-1>Date</font>
+        <br>
+        <b>{{mycase.lastModifiedDateTime}}</b>
+      </td>
+    </tr>
+  </table>
+  <hr>
+</div>
+
+<div class="content" *ngIf="mycase != null && mycase.status == 'Signed'" 
+style="background:#eeeeff">
+  <hr>
+  <p>
+  </p> 
+    <table width=90%>
+    <tr>
+      <td align=center>
+        <font size=+2 color=green>
+          <br>
+          <br> You have signed the document. Click "Download" to download the signed document.
+        </font>
+        <br>
+        <br>     
+        <button mat-raised-button color="primary" (click)="downloadEzSignDocument()">Download</button>
+        </td>
+    </tr>
+    <tr>
+      <br/>
+    </tr>
   </table>
 </div>
- <div *ngIf="viewType == 'consentview'" class="casedoc" style="word-break:break-word;white-space:normal !important;">
-    <table>
-      <tr>
-        <td align="center">
-          <p>
-            <strong>EZSign Consent</strong>
-          </p>
-          <hr>
-        </td>
-      </tr>
-      <tr>
-        <td>
 
-            <b>Check the checkbox indicating your consent to sign this document electronically and click “BEGIN”
-              <br/> when you are ready to begin the e-sign process.</b>
-
-        </td>
-      </tr>
-      <tr>
-        <td>
-          
-            By checking the checkbox below, I agree that my electronic signatures on the following document
-             are my own and are legally valid as if I had signed the document with ink on paper, in accordance
-             with the Electronic Signatures in Global and National Commerce Act (E-SIGN) of 2000 and the
-             Uniform Electronic Transactions Act (UETA).
-          
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <mat-checkbox (change)="agreementselected=!agreementselected">I have read and agree to the above.</mat-checkbox>
-        </td>
-      </tr>
+<div *ngIf="viewType == 'consentview'" class="consent" style="word-break:break-word;white-space:normal !important;">
+  <table width=98%>
+    <tr>
+      <td align="center">
+        <p>
+          <strong>EZSign Consent</strong>
+        </p>
+        <hr>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          <b>Check the checkbox indicating your consent to sign this document electronically and click “BEGIN” when you are
+            ready to begin the e-sign process.</b>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          By checking the checkbox below, I agree that my electronic signatures on the following document are my own and are legally
+          valid as if I had signed the document with ink on paper, in accordance with the Electronic Signatures in Global
+          and National Commerce Act (E-SIGN) of 2000 and the Uniform Electronic Transactions Act (UETA).
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <mat-checkbox (change)="agreementselected=!agreementselected">I have read and agree to the above.</mat-checkbox>
+      </td>
+    </tr>
+    <br/>
+    <tr>
+      <td align="center">
+        <!-- <a routerLink="/" style="color: black" *ngIf="selected"> -->
+        <button mat-raised-button color="accent" *ngIf="agreementselected" (click)="completeConsent()">BEGIN</button>
+      </td>
+    </tr>
+    <tr>
       <br/>
+    </tr>
+  </table>
+</div>
+<div *ngIf="viewType=='signingFormView' || viewType=='signcapview'" #pdfviewcontainer class='casedoc' style="word-break:break-word;white-space:normal !important;">
+  <div *ngFor="let fld of curpage.filterFields" style="position:absolute;z-index:90;background:#ccccff;border:1pt solid green"
+    [style.bottom.px]="fld.adjustposY-1" [style.left.px]="fld.adjustPosX+1">
+    <table style="padding-top:2pt" [style.background-color]="fld.bgcolor">
       <tr>
-        <td align="center">
-          <!-- <a routerLink="/" style="color: black" *ngIf="selected"> -->
-          <button mat-raised-button color="accent" *ngIf="agreementselected" (click)="completeConsent()">BEGIN</button>
-
+        <td>
+          <img src="/assets/imgs/bookmark.png" width=24> </td>
+        <td>
+          <b>{{fld.fieldTypeName}} </b>- {{fld.labelName}}</td>
+        <td width=5></td>
+        <td>
+          <mat-checkbox [checked]="fld.picked" [value]="fld.fieldSeqNo" (change)="pickField($event)"></mat-checkbox>
         </td>
       </tr>
     </table>
   </div>
-    <div *ngIf="viewType=='signingFormView' || viewType=='signcapview'" class='casedoc' style="word-break:break-word;white-space:normal !important;">
-       <iframe width="95%" height="600" [src]="pdfUrl | safe">
-    </iframe>
-  <div *ngIf='fieldsCount>0 && signedCount==fieldsCount'>
-  <span> <font color=green>Signed</font></span>
-  </div>
-  <div *ngIf='fieldsCount==0'>
-  <span> <font color=green>Review only</font></span>
-  </div>
-  <table width=90%>
-  <tr>
-  <td colspan=2 align=center>
-     <button  *ngIf='fieldsCount>0 && signedCount < fieldsCount' mat-button color="primary" (click)='goSignCap()'>
-                                  <mat-icon>create</mat-icon>
-                          <label style="font-weight: bold">Sign</label>
-                          <font color=green> ({{signedCount}}/{{fieldsCount}}) </font>
-    </button>
-  </td>
-  </tr>
-  <tr>
-  <td width=50% align=center>
-   <button  *ngIf='fprev' mat-button color="primary" (click)='goReviewForm(fprev)'>
-                                  <mat-icon>keyboard_arrow_left</mat-icon>
-                          <label style="font-weight: bold">Prev</label>
-   </button>
-  </td>
-  <td align=center>
-     <button  *ngIf='fnext' mat-button color="primary" (click)='goReviewForm(fnext)'>
-                          <label style="font-weight: bold">Next</label>
-                             <mat-icon>keyboard_arrow_right</mat-icon>
-   </button>
-  </td>
-  </tr>
+  <pdf-viewer [original-size]="true" [src]="pdfUrl" (page-rendered)="pageRendered($event)"></pdf-viewer>
+
+</div>
+<div *ngIf="viewType=='signcapview'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
+  <form [formGroup]="signcapform">
+    <table width=95%>
+      <div *ngFor='let field of curpage.filterFields'>
+        <tr [style.background-color]="field.bgcolor">
+
+          <td>
+            <div *ngIf='field.fieldTypeName=="Signature"'>
+              <font color="#33699">Please sign below as:
+                <br>
+                <b>{{cursigner.receiverFullName}}</b>
+              </font>
+              <br>
+              <div style="border:1px solid">
+                <signature-pad [options]="signaturePadOptions" id="{{field.eleId}}"></signature-pad>
+              </div>
+              <div align='end' style="margin-right:20pt">
+                <button align="right" small mat-icon-button color="primary" (click)='clearSigCap(field)' *ngIf='field.fieldTypeName=="Signature"'>
+                  <mat-icon>refresh</mat-icon> clear
+                </button>
+              </div>
+            </div>
+            <mat-form-field *ngIf='field.fieldTypeName=="Initial" || field.fieldTypeName=="Text" '>
+              <mat-label>{{field.labelName}}</mat-label>
+              <input matInput placeholder={{field.labelName}} formControlName="{{field.eleId}}">
+            </mat-form-field>
+            <mat-form-field *ngIf='field.fieldTypeName=="Date"'>
+              <mat-label>{{field.labelName}}</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="{{field.eleId}}">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </td>
+          <td valign=top>
+            <br>
+            <mat-checkbox [checked]="field.picked" [value]="field.fieldSeqNo" (change)="pickField($event)"></mat-checkbox>
+          </td>
+        </tr>
+      </div>
+<tr>
+  <br/>
+</tr>
+      <tr>
+        <td>
+          <span *ngIf='!showProcessSpinner'>
+            <table>
+              <tr>
+                <td *ngIf='curpage.presignstatus'>
+                  <button mat-raised-button color="accent" (click)="viewPreSignPage()">View</button>
+                  &nbsp;
+                </td>
+               
+                <td *ngIf='curpage.presignstatus'>
+                  <button mat-raised-button color="accent" (click)="SkipPage()">Next</button>
+                  &nbsp;
+                </td>
+                
+                <td *ngIf='curpage.presignstatus'>
+                  <button mat-raised-button color="accent" (click)="submitSignCapData()">Update</button>
+                  &nbsp;
+                </td>
+             
+                <td *ngIf='!curpage.presignstatus'>
+                  <button mat-raised-button color="accent" (click)="submitSignCapData()">Save</button>
+                </td>
+   
+              </tr>
+            </table>
+          </span>
+          <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+          <span *ngIf='showProcessSpinner'>Processing...</span>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<div *ngIf="viewType=='finalview'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
+  <font color=green>Please review and submit the signed document.</font>
+
+  <table width=80%>
+    <tr>
+      <br/>
+    </tr>
+    <tr>
+      <td>
+        <span *ngIf='!showReviewSpinner'>
+          <button mat-raised-button color="accent" (click)="previewDoc()">Review</button>
+        </span>
+        <mat-spinner *ngIf='showReviewSpinner' diameter='40'></mat-spinner>
+        <span *ngIf='showReviewSpinner'>Processing...</span>
+        &nbsp;&nbsp;&nbsp;
+        <span *ngIf='!showSubmitSpinner'>
+          <button mat-raised-button color="accent" (click)="finalizeSigning()">Submit</button>
+        </span>
+        <mat-spinner *ngIf='showSubmitSpinner' diameter='40'></mat-spinner>
+        <span *ngIf='showSubmitSpinner'>Processing...</span>
+      </td>
+    </tr>
   </table>
 </div>
- <div *ngIf="viewType=='signcapview'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
- <form [formGroup]="signcapform">
- <table width=95%>
- <div *ngFor='let field of curpage.filterFields'>
-   <tr>
-       <td>
-        <div *ngIf='field.fieldTypeName=="Signature"'>
-          <font color="#33699" size=-1>Please sign below as:  <b>{{cursigner.receiverFullName}}</b></font>
-            <button mat-icon-button color="primary" (click)='clearSigCap(field)' *ngIf='field.fieldTypeName=="Signature"'>
-              <mat-icon>delete</mat-icon>
-              </button>
-              <br>
-              <div  style="border:1px solid">
-           <signature-pad  [options]="signaturePadOptions"  id="{{field.labelName}}"></signature-pad>
-              </div>
-          </div>
-          <mat-form-field *ngIf='field.fieldTypeName=="Initial" || field.fieldTypeName=="Text" '>
-                <mat-label>{{field.labelName}}</mat-label>
-                <input matInput placeholder={{field.labelName}} formControlName="{{field.labelName}}">
-          </mat-form-field>
-          <mat-form-field *ngIf='field.fieldTypeName=="Date"'>
-          <mat-label>{{field.labelName}}</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="{{field.labelName}}">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-  </td>
-  </tr>
-  </div>
-  <tr>
-  <td align=center>
-      <span *ngIf='!showProcessSpinner'>
-          <button mat-raised-button color="accent"  (click)="submitSignCapData()">Submit</button>
-        </span>  
-         <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
-         <span *ngIf='showProcessSpinner'>Processing...</span>
-  </td>
-  </tr>
-  </table>
-  </form>
- </div>
- </div>
