@@ -31,8 +31,22 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
   }
 
-  uploadFile(event) {
-    console.log('upload file');
+  uploadInputFile(event) {
+    console.log('upload input file');
+    console.log(event);
+    this.ezSignFileList = event;
+    for (let index = 0; index < event.length; index++) {
+      const element = event[index];
+      this.files.push(element);
+      this.uploadedFileName = element.name;
+      if (index === 0) {
+        this.documentTitle = element.name;
+      }
+    }
+  }
+
+  dragAndDropFile(event) {
+    console.log('drag and drop file');
     console.log(event);
     this.ezSignFileList = event;
     for (let index = 0; index < event.length; index++) {
@@ -73,7 +87,7 @@ export class UploadDocumentComponent implements OnInit, AfterViewInit {
       if (resp) {
         const ezSignDoc: EZSignDocResource = <EZSignDocResource>resp;
         const url = '/main/ezsign/addfields/' + ezSignDoc.ezSignTrackingId;
-        this.ezSignDataService.setCacheData("sendercase", EZSignDocResource);
+        this.ezSignDataService.setCacheData("sendercase", ezSignDoc);
         this.router.navigateByUrl(url);
       }
       this.showProcessSpinner = false;

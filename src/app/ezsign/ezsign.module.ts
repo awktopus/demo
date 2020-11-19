@@ -43,7 +43,8 @@ import { EzSignReminderRendererComponent } from './controls/EzsignReminderRender
 import { EzsignClientReminderComponent } from './controls/shared/ezsign-client-reminder/ezsign-client-reminder.component';
 import { EzsignMainComponent } from './controls/ezsignmain/ezsignmain.component';
 import { DocReviewComponent } from './controls/docReview/docReview.component';
-import { DocSigningComponent,DialogNoFormMessageDialogComponent, DialogMissingDataMessageDialogComponent} from './controls/docSigning/docSigning.component';
+import { DocSigningComponent, DialogNoFormMessageDialogComponent,
+  DialogMissingDataMessageDialogComponent} from './controls/docSigning/docSigning.component';
 import { ReceiverezsigndocsComponent } from './controls/receiverezsigndocs/receiverezsigndocs.component';
 import { ReceiverEzsigningRendererComponent } from './controls/ReceiverEzsigningbutton-renderer.component';
 import { EzsignDownloadButtonRendererComponent } from './controls/EzsignDownloadbutton-renderer.component';
@@ -112,7 +113,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     MyEzsignDocsComponent, DocReviewComponent, DocSigningComponent,
     DialogMissingDataMessageDialogComponent, DialogMissingDataMessageDialogComponent ,
     AddguestsComponent, EzsignMainComponent, EzsignClientReminderComponent,
-    DialogNoFormMessageDialogComponent, ReceiverEzsigningRendererComponent, 
+    DialogNoFormMessageDialogComponent, ReceiverEzsigningRendererComponent,
     EzsignDownloadButtonRendererComponent
     ],
   providers: [

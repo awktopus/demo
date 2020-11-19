@@ -21,7 +21,7 @@ export class GuestEZsignAuthService {
   }
 
   getAuthdata() {
-    if (this._authData){
+    if (this._authData) {
       return this._authData;
     } else {
       return {};
@@ -32,7 +32,7 @@ export class GuestEZsignAuthService {
     return this.getAuthdata().ezSignTrackingId;
   }
 
-  getSingerClientID() {
+  getSignerClientID() {
     return this.getAuthdata().receiverId;
   }
 
@@ -88,5 +88,4 @@ export class GuestEZsignAuthService {
     header = header.append('Authorization', 'Bearer ' + token);
     return { 'headers': header };
   }
-
 }

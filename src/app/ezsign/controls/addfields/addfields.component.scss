@@ -56,14 +56,10 @@
 }
 
 .mat-column-receiverName {
-  flex: 0 0 35%;
+  flex: 0 0 55%;
   word-wrap: break-word !important;
   overflow-wrap: break-word;
   margin-left:3px;
-}
-
-.mat-column-selecticon{
-  flex: 0 0 15%;
 }
 
 .mat-column-receiverEmailId {
@@ -74,6 +70,10 @@
   flex: 0 0 15%;
 }
 
+
+.mat-column-selecticon{
+  flex: 0 0 15%;
+}
 
 
 .mat-column-fieldSeqNo {

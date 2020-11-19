@@ -3,7 +3,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatSelect, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatFormField, MatSnackBar } from '@angular/material';
 import {
   ESignCase, ESignDoc, ESignCPA, ESignClient, ClientReminder, Signer,
-  EZSignPageImageData, EsignFormField, SignatureField, DateField, TextField, EZSignDocResource, SignerData,
+  EZSignPageImageData, EsignFormField, SignatureField, DateField, TextField, EZSignDocResource,
+  SignerData,
   EzSignField, CompanyStaff, EzSignerFieldType, Offset
 } from '../../../esign/beans/ESignCase';
 import { EsignserviceService } from '../../../esign/service/esignservice.service';
@@ -44,10 +45,10 @@ export class AddfieldsComponent implements  OnInit {
   ezSignSignerFieldTypes: EzSignerFieldType[] = [];
   isImageDataUrlFetched = false;
   signatureFieldName: string;
-  mycase:any={};
+  mycase: any = {};
   showspinner = false;
   eZSigners: Signer[] = [];
-  pdfUrl:any = null;
+  pdfUrl: any = null;
   inBounds = true;
   edge = {
     top: true,
@@ -55,10 +56,10 @@ export class AddfieldsComponent implements  OnInit {
     left: true,
     right: true
   };
-  pdfview:any ={};
+  pdfview: any = {};
   signerData: SignerData[] = [];
   isFieldsReadyToShow = false;
-  displayedColumns: string[] = ['type', 'receiverName', 'selecticon', 'receiverEmailId', 'delete'];
+  displayedColumns: string[] = ['type', 'receiverName', 'receiverEmailId', 'delete'];
   @ViewChild('focusSignatureField') focusSignatureField: MatSelect;
   selectedFieldRow: any;
   prevSelectedSigner: CompanyStaff = null;
@@ -77,7 +78,7 @@ export class AddfieldsComponent implements  OnInit {
       this.ezSignSignerFieldTypes = [];
       this.mycase = this.service.getCacheData("sendercase");
       console.log(this.mycase);
-      this.pageSeqNo=this.mycase.eZSignDocPages[0].pageSeqNo;
+      this.pageSeqNo = this.mycase.eZSignDocPages[0].pageSeqNo;
       this.loadSignerData();
     });
   }
@@ -97,36 +98,36 @@ export class AddfieldsComponent implements  OnInit {
     });
   }
 
-  pageRendered(eve){
+  pageRendered(eve) {
     console.log(eve);
-    this.pdfview = {isReady:true,width: eve.source.div.clientWidth, height: eve.source.div.clientHeight, scale:
-      eve.source.viewport.scale,offsetLeft:eve.source.div.offsetLeft,offsetTop:eve.source.div.offsetTop};
+    this.pdfview = {isReady: true, width: eve.source.div.clientWidth, height: eve.source.div.clientHeight, scale:
+      eve.source.viewport.scale, offsetLeft: eve.source.div.offsetLeft, offsetTop: eve.source.div.offsetTop};
     console.log(this.pdfview);
     this.adjustview();
   }
 
-  adjustfield(fd){
-    if(this.pdfview && this.pdfview.isReady){
-      (<any>fd).adjust_posX=fd.posX*this.pdfview.scale + this.pdfview.offsetLeft;
-      (<any>fd).adjust_posY=fd.posY*this.pdfview.scale + this.pdfview.offsetTop;
+  adjustfield(fd) {
+    if (this.pdfview && this.pdfview.isReady) {
+      (<any>fd).adjust_posX = fd.posX * this.pdfview.scale + this.pdfview.offsetLeft;
+      (<any>fd).adjust_posY = fd.posY * this.pdfview.scale + this.pdfview.offsetTop;
     } else {
-        (<any>fd).adjust_posX=fd.posX;
-        (<any>fd).adjust_posY=fd.posY;
+        (<any>fd).adjust_posX = fd.posX;
+        (<any>fd).adjust_posY = fd.posY;
     }
   }
-  adjustview(){
+  adjustview() {
       console.log("adjust view called");
-      if(this.ezSignFields){
-        if(this.pdfview && this.pdfview.isReady){
+      if (this.ezSignFields) {
+        if (this.pdfview && this.pdfview.isReady) {
           this.ezSignFields.forEach( fd => {
-            (<any>fd).adjust_posX=fd.posX*this.pdfview.scale + this.pdfview.offsetLeft;
-            (<any>fd).adjust_posY=fd.posY*this.pdfview.scale + this.pdfview.offsetTop;
+            (<any>fd).adjust_posX = fd.posX * this.pdfview.scale + this.pdfview.offsetLeft;
+            (<any>fd).adjust_posY = fd.posY * this.pdfview.scale + this.pdfview.offsetTop;
         });
         } else {
           console.log("view not initialized yet");
           this.ezSignFields.forEach( fd => {
-              (<any>fd).adjust_posX=fd.posX;
-              (<any>fd).adjust_posY=fd.posY;
+              (<any>fd).adjust_posX = fd.posX;
+              (<any>fd).adjust_posY = fd.posY;
           });
         }
       }
@@ -174,7 +175,7 @@ export class AddfieldsComponent implements  OnInit {
         this.ezSignSignerFieldTypes = [];
       }
     });
-    this.displayPDFDocPage(this.mycase.docId,this.pageSeqNo,"N");
+    this.displayPDFDocPage(this.mycase.docId, this.pageSeqNo, "N");
   }
 
   sanitize(url: string) {
@@ -182,7 +183,7 @@ export class AddfieldsComponent implements  OnInit {
   }
 
   loadEZSignDocPage(docId: string, pageSeqNo: any, actionType: string) {
-    this.displayPDFDocPage(this.docId,pageSeqNo,"N");
+    this.displayPDFDocPage(this.docId, pageSeqNo, "N");
     this.service.GetPageSignerData(this.ezSignTrackingId, docId, pageSeqNo).subscribe(resp => {
       console.log('Get page signer response:')
       this.ezSignPageImageData = resp;
@@ -447,11 +448,11 @@ export class AddfieldsComponent implements  OnInit {
   saveField(fieldData: EzSignField) {
     console.log('save signature field - start');
     console.log(fieldData);
-    let fd:any = fieldData;
+    let fd: any = fieldData;
     let boxX = fd.adjust_posX;
     let boxY = fd.adjust_posY;
     if (fd.fieldEndOffset.x ) {
-      boxX =fd.adjust_posX + fd.fieldEndOffset.x;
+      boxX = fd.adjust_posX + fd.fieldEndOffset.x;
     } else {
       boxX = fd.adjust_posX + fd.fieldEndOffset.x;
     }
@@ -461,8 +462,8 @@ export class AddfieldsComponent implements  OnInit {
       boxY = fd.adjust_posY - fd.fieldEndOffset.y;
     }
     // now pdfview scaling and offset correction
-    boxX = (boxX - this.pdfview.offsetLeft)/this.pdfview.scale;
-    boxY = (boxY - this.pdfview.offsetTop)/this.pdfview.scale;
+    boxX = (boxX - this.pdfview.offsetLeft) / this.pdfview.scale;
+    boxY = (boxY - this.pdfview.offsetTop) / this.pdfview.scale;
 
     if (boxX < 0) {
       boxX = 0;

@@ -196,7 +196,7 @@ export class SenderdocumentsComponent implements OnInit {
         this.router.navigateByUrl(url);
       }
     });
-    //this.router.navigateByUrl(url);
+    // this.router.navigateByUrl(url);
   }
 
   viewEZSignDocument(selectedRow: any) {
@@ -315,8 +315,8 @@ export class SenderdocumentsComponent implements OnInit {
     // dialogRef.componentInstance.senderDocumentCompomentRef = this;
   }
 
-  uploadFile(event) {
-    console.log('upload file');
+  uploadInputFile(event) {
+    console.log('upload input file');
     console.log(event);
     this.ezSignFileList = event;
     for (let index = 0; index < event.length; index++) {
@@ -328,6 +328,21 @@ export class SenderdocumentsComponent implements OnInit {
       }
     }
   }
+
+  dragAndDropFile(event) {
+    console.log('drag and drop file');
+    console.log(event);
+    this.ezSignFileList = event;
+    for (let index = 0; index < event.length; index++) {
+      const element = event[index];
+      this.files.push(element);
+      this.uploadedFileName = element.name;
+      if (index === 0) {
+        this.documentTitle = element.name;
+      }
+    }
+  }
+
   deleteAttachment(index) {
     // this.files.splice(index, 1);
     // this.ezSignDoc = null;
@@ -357,8 +372,8 @@ export class SenderdocumentsComponent implements OnInit {
       console.log(resp);
       if (resp) {
         const ezSignDoc: EZSignDocResource = <EZSignDocResource>resp;
-        //  this.loadEZSignDocuments();
         const url = '/main/ezsign/addfields/' + ezSignDoc.ezSignTrackingId;
+        this.ezSignDataService.setCacheData("sendercase", ezSignDoc);
         this.router.navigateByUrl(url);
       }
       this.showProcessSpinner = false;

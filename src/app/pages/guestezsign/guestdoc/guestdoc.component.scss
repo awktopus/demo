@@ -2,6 +2,17 @@
    .row{
         white-space: nowrap;
     }
+     .consent{
+        padding-right: 4px;
+        padding-left:4px;
+        margin-top:2px;
+        float: left;
+        direction: ltr;
+        width: 90%; 
+        border:1px solid lightblue;
+        word-wrap: break-word
+       //border: 1px solid #ddd;
+      }
     .caselist {
       padding-right: 2px;
       padding-left:2px;
@@ -26,29 +37,57 @@
       border:1px solid gold;
       //border: 1px solid #ddd;
     }
+
+    // .signcapcls{
+    //   padding-right: 4px;
+    //   padding-left:4px;
+    //   margin-top:2px;
+    //   float: left;
+    //   direction: ltr;
+    //   width: 30%; 
+    //   min-height:480pt;
+    //   border:1px solid lightblue;
+    //  //border: 1px solid #ddd;
+    // }
+
     .signcapcls{
-      padding-right: 4px;
-      padding-left:4px;
-      margin-top:2px;
-      float: left;
-      direction: ltr;
-      width: 30%; 
-      min-height:480pt;
-      border:1px solid lightblue;
-     //border: 1px solid #ddd;
-    }
+        padding-right: 4px;
+        padding-left:4px;
+        margin-top:2px;
+        float: left;
+        direction: ltr;
+        width: 30%; 
+        min-height:480pt;
+       //border: 1px solid #ddd;
+      }
+
+    // .casedoc{
+    //   padding-right: 4px;
+    //   padding-left:8px;
+    //   margin-top:2px;
+    //   float: left;
+    //   direction: ltr;
+    //   width: 35%; 
+    //   min-height:480pt;
+    //   border:1px solid lightblue;
+    //   word-wrap: break-word
+    //  //border: 1px solid #ddd;
+    // }
+
     .casedoc{
-      padding-right: 4px;
-      padding-left:8px;
-      margin-top:2px;
-      float: left;
-      direction: ltr;
-      width: 35%; 
-      min-height:480pt;
-      border:1px solid lightblue;
-      word-wrap: break-word
-     //border: 1px solid #ddd;
-    }
+        position: relative;
+        padding-right: 4px;
+        padding-left:4px;
+        margin-top:2px;
+        float: left;
+        direction: ltr;
+        width: 68%; 
+        border:1px solid lightblue;
+        word-wrap: break-word;
+        overflow-y: scroll;
+       //border: 1px solid #ddd;
+      }
+
     .cardlbl{
       float: right;
       right:10px !important;

@@ -18,13 +18,13 @@
           {{usr.receiverFirstName}} {{usr.receiverLastName}}
         </b> <br>
         </span></td>
-        <td valign=top><font color="a0a0a0" size=-1># Page to Sign</font><br>
+        <td valign=top *ngIf="mycase.status != 'Signed' && mycase.status != 'Presigned' && viewType != 'finalview'"><font color="a0a0a0" size=-1># Page(s) to Sign</font><br>
           <span >
           <b>
             {{pageToSign}}
           </b> <br>
           </span></td>
-          <td valign=top><font color="a0a0a0" size=-1>Page Seq #</font><br>
+          <td valign=top *ngIf="mycase.status != 'Signed' && mycase.status != 'Presigned' && viewType != 'finalview'"><font color="a0a0a0" size=-1>Page Seq #</font><br>
             <span >
             <b>
               {{curseq}}
@@ -161,14 +161,16 @@
     <font color=green>Please review and finalize the signing.</font>
     <table width=80%>
       <tr>
+          <br/>
+      </tr>
+      <tr>
         <td>
           <span *ngIf='!showReviewSpinner'>
               <button mat-raised-button color="accent"  (click)="previewDoc()">Review</button>
             </span>
           <mat-spinner *ngIf='showReviewSpinner' diameter='40'></mat-spinner>
           <span *ngIf='showReviewSpinner'>Processing...</span>
-        </td>
-        <td>
+       &nbsp;&nbsp;
           <span *ngIf='!showSubmitSpinner'>
               <button mat-raised-button color="accent"  (click)="finalizeSigning()">Submit</button>
             </span>
