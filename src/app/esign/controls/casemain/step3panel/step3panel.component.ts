@@ -102,14 +102,17 @@ export class Step3panelComponent implements OnInit {
   }
 
   createAnotherCase() {
-    this.showAnotherCasespinner = true;
-   console.log('showCaseTemplatesPopup');
-   this.router.navigateByUrl('main/esign/history/reviewcases');
-    const dialogRef = this.dialog.open(CasetemplatesComponent, {
-      width: '1260px'
-    });
-    dialogRef.componentInstance.setData('casepanel');
-    this.showAnotherCasespinner = false;
+
+  this.router.navigateByUrl('main/esign/case/newcaseID');
+
+  //  this.showAnotherCasespinner = true;
+  //  console.log('showCaseTemplatesPopup');
+  //  this.router.navigateByUrl('main/esign/history/reviewcases');
+  //   const dialogRef = this.dialog.open(CasetemplatesComponent, {
+  //     width: '1260px'
+  //   });
+  //   dialogRef.componentInstance.setData('casepanel');
+  //   this.showAnotherCasespinner = false;
   }
 }
 

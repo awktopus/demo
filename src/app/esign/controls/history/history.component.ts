@@ -459,11 +459,12 @@ export class HistoryComponent implements OnInit, AfterViewInit {
   }
 
   showCaseTemplatesPopup() {
-    console.log('showCaseTemplatesPopup');
-    const dialogRef = this.dialog.open(CasetemplatesComponent, {
-      width: '1260px'
-    });
-    dialogRef.componentInstance.historyref = this;
+    this.router.navigateByUrl('main/esign/case/newcaseID');
+    // console.log('showCaseTemplatesPopup');
+    // const dialogRef = this.dialog.open(CasetemplatesComponent, {
+    //   width: '1260px'
+    // });
+    // dialogRef.componentInstance.historyref = this;
   }
   createNewCaseFromPrevious(caseId: string) {
     console.log('history: create new case from previous:' + caseId);

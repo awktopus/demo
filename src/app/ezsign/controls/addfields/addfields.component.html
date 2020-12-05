@@ -38,17 +38,15 @@
         <mat-icon>border_inner</mat-icon>&nbsp;ADD GUEST
       </button>
       &nbsp;&nbsp; -->
-      <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Send Invite" (click)="previewAndSendInvite()">
+      <!-- <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Send Invite" (click)="previewAndSendInvite()">
         <mat-icon>event_note</mat-icon>&nbsp;SEND REQUEST TO SIGN
-      </button>
+      </button> -->
     </div>
-   <br>
-   <div style="word-break: break-all;overflow-wrap: break-word; white-space: normal;">
+    <br>
+    <div style="word-break: break-all;overflow-wrap: break-word; white-space: normal;">
       <mat-icon>pan_tool</mat-icon>
-      Select the field label, it will drop into top left corner of the document, then 
-      and drag to the location in your document, where you would like your signers to 
-      input information
-   </div>
+      Click the field label to drop it into the top left corner of the <br/> document, then drag it to the desired location in your document
+    </div>
     <br>
     <mat-toolbar color="primary" style="height: 30px;">
       SELECT LABELS AND DRAG
@@ -74,14 +72,11 @@
       <ng-container matColumnDef="receiverName">
         <!-- <mat-header-cell *matHeaderCellDef class="mat-header-class">Label</mat-header-cell> -->
         <mat-cell *matCellDef="let row">
-             <button [disabled]='status !="Uploaded"' 
-                class="shape" [style.width.px]="160" [style.height.px]="38"
-                matTooltip="Select signer field type" 
-                (click)="dropField(row)">
-             {{ row.receiverFirstName }} {{ row.receiverLastName }}
-              <br>
-                    {{ row.fieldTypeDesc }}
-              </button>
+          <button [disabled]='status !="Uploaded"' class="shape" [style.width.px]="160" [style.height.px]="38" matTooltip="Select signer field type"
+            (click)="dropField(row)">
+            {{ row.receiverFirstName }} {{ row.receiverLastName }}
+            <br> {{ row.fieldTypeDesc }}
+          </button>
 
 
           <!-- <div onclick="dropField(row)" [ngClass]="1 == 1 ? 'shape' : 'fieldTag'" 
@@ -133,37 +128,49 @@
 
   </div>
 
-  <div class="middlepane">
-    <div *ngIf="pageCount > 1 && isImageDataUrlFetched">
-      <mat-spinner *ngIf='isPreviousPageLoading' diameter='20'></mat-spinner>
-      <span *ngIf='isPreviousPageLoading'>Processing...</span>
-      <button *ngIf="pageSeqNo > 1 && !isPreviousPageLoading" mat-icon-button color="warn" (click)="showPreviousPage()">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-      &nbsp;
-      <label class="heading-label">Page {{pageSeqNo}} of {{pageCount}}</label>
-      &nbsp;
-      <mat-spinner *ngIf='isNextPageLoading' diameter='20'></mat-spinner>
-      <span *ngIf='isNextPageLoading'>Processing...</span>
-      <button *ngIf="pageSeqNo < pageCount && !isNextPageLoading" mat-icon-button color="warn" (click)="showNextPage()">
-        <mat-icon>chevron_right</mat-icon>
-      </button>
-    </div>
-
+  <div class="middlepane">   
+      <table>
+        <tr>
+          <td>
+            <div *ngIf="pageCount > 1 && isImageDataUrlFetched">
+              <mat-spinner *ngIf='isPreviousPageLoading' diameter='20'></mat-spinner>
+              <span *ngIf='isPreviousPageLoading'>Processing...</span>
+              <button *ngIf="pageSeqNo > 1 && !isPreviousPageLoading" mat-icon-button color="warn" (click)="showPreviousPage()">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              &nbsp;
+              <label class="heading-label">Page {{pageSeqNo}} of {{pageCount}}</label>
+              &nbsp;
+              <mat-spinner *ngIf='isNextPageLoading' diameter='20'></mat-spinner>
+              <span *ngIf='isNextPageLoading'>Processing...</span>
+              <button *ngIf="pageSeqNo < pageCount && !isNextPageLoading" mat-icon-button color="warn" (click)="showNextPage()">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          </td>   
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td>
+            <button [disabled]='status !="Uploaded" && isImageDataUrlFetched' mat-raised-button color="accent" matTooltip="Send Invite"
+              (click)="previewAndSendInvite()">
+              <mat-icon>event_note</mat-icon>&nbsp;SEND REQUEST TO SIGN
+            </button>
+          </td>
+        </tr>
+      </table>
     <div [ngClass]="{ 'top-b': !edge?.top, 'bottom-b': !edge?.bottom, 'left-b': !edge?.left, 'right-b': !edge?.right }" #myBounds>
       <mat-spinner *ngIf='!isImageDataUrlFetched' diameter='20'></mat-spinner>
       <span *ngIf='!isImageDataUrlFetched'>Processing...</span>
 
       <div style="position: relative;border: 1px solid lightgray;">
-         <!--  <img *ngIf="isImageDataUrlFetched" [src]="sanitize(formImageBlobUrl)" width="800"/> -->
-       <pdf-viewer [original-size]="true" [src]="pdfUrl" (page-rendered)="pageRendered($event)" ></pdf-viewer> 
+        <!--  <img *ngIf="isImageDataUrlFetched" [src]="sanitize(formImageBlobUrl)" width="800"/> -->
+        <pdf-viewer [original-size]="true" [src]="pdfUrl" (page-rendered)="pageRendered($event)"></pdf-viewer>
         <div *ngIf="isFieldsReadyToShow">
           <div *ngFor="let fld of ezSignFields">
             <div [ngClass]="fld.isSelected ? 'selectedFieldTag' : 'fieldTag'" ng-drag="false" ngDraggable (edge)="checkEdge($event)"
               [bounds]="myBounds" [inBounds]="true" (started)="onFieldStart($event,fld.fieldSeqNo)" (stopped)="onFieldStop($event,fld.fieldSeqNo)"
               (movingOffset)="onFieldMoving($event,fld.fieldSeqNo)" (endOffset)="onFieldMoveEnd($event,fld.fieldSeqNo)" [preventDefaultEvent]="true"
-              *ngIf="fld.showBox && fld.isTagExists" [style.bottom.px]="fld.adjust_posY" [style.left.px]="fld.adjust_posX" [style.width.px]="fld.width"
-              [style.height.px]="fld.height">
+              *ngIf="fld.showBox && fld.isTagExists" [style.bottom.px]="fld.adjust_posY" [style.left.px]="fld.adjust_posX"
+              [style.width.px]="fld.width" [style.height.px]="fld.height">
 
               <!-- <label style="padding-bottom:5px">{{fld.receiverFirstName}} - {{fld.fieldType}}</label> -->
               <mat-icon *ngIf="fld.fieldType == 'signature' || fld.fieldType == 'Signature' " [matTooltip]="Signature">create</mat-icon>
