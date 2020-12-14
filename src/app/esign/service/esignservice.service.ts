@@ -15,6 +15,7 @@ export class EsignserviceService  {
   CPAID = '';  // we need to change this later
   esign_key = 'ESIGN_AUTH';
   role: string;
+  CLIENT_CACHEDATA:any = {};
   constructor(private http: HttpClient, public auth: EsignAuthService) {
   }
 
@@ -708,7 +709,6 @@ bulkTaxCaseArchive(bulkCaseArchivejson) {
 
 
   // IET related server api - start
-
   getCompanyTypes() {
     console.log('calling getCompanyTypes server api');
     const url: string = this.auth.baseurl + '/iet/Lookups/CompanyTypes';
@@ -930,6 +930,19 @@ bulkTaxCaseArchive(bulkCaseArchivejson) {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
+  getClientCacheData(){
+    return this.CLIENT_CACHEDATA;
+  }
+
+  setClientCacheData(cc:any,signer:any,type:any, formSeq:any){
+    this.CLIENT_CACHEDATA={
+      case:cc,
+      signer:signer,
+      signer_type:type,
+      seq:formSeq
+    };
+    return this.CLIENT_CACHEDATA;
+  }
 
 }
 
