@@ -1,0 +1,39 @@
+<div fxLayout="column" *ngIf="viewType==='grid'">
+  <div>
+      <mat-spinner *ngIf='!isUSTaxDataFetched' diameter='30'></mat-spinner>
+      <span *ngIf='!isUSTaxDataFetched'>Processing...</span>
+  </div>
+  <br>
+  <table width=90% *ngIf='isUSTaxDataFetched'>
+      <tr>
+          <td width=45%>
+              <button mat-icon-button *ngIf="usTaxReceiverDocsgridData" matTooltip="refresh" (click)="loadUSTaxDocuments()">
+                  <mat-icon>refresh</mat-icon>&nbsp;REFRESH
+              </button>
+          </td>
+          <td align=right>
+              <div *ngIf="usTaxReceiverDocsgridData && isUSTaxDataFetched">
+                  <mat-icon class='docicon' mdbRippleRadius matTooltip="Config Columns" (click)='openColumnConfig(usTaxReceiverApi)'>list_alt</mat-icon>
+                  <mat-icon class='docicon' mdbRippleRadius (click)="gridExport('ustax')" matTooltip="Export CSV">insert_link</mat-icon>
+                  <mat-icon class='docicon' mdbRippleRadius (click)="resizeAll('ustax')" matTooltip="Expand All">swap_horiz</mat-icon>
+                  <mat-icon class='docicon' mdbRippleRadius (click)="fitsizeAll('ustax')" matTooltip="Refit">tune</mat-icon>
+              </div>
+          </td>
+      </tr>
+  </table>
+
+  <br/>
+  <div style="margin-left: 1px;margin-right: 1px" *ngIf="usTaxReceiverDocsgridData && isUSTaxDataFetched">
+      <ag-grid-angular #agGrid id="usTaxReceiverDocsGrid" style="width: 88%;  font-size:11pt" class="ag-theme-balham" [rowData]="usTaxReceiverDocsgridData"
+          [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+          [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'ustax')"
+          [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout" (gridReady)="onGridReady($event,'ustax')">
+      </ag-grid-angular>
+  </div>
+</div>
+<!-- <div *ngIf="viewType==='signing'">
+    <app-docsigning (switchToGridView)= "switchToGridView()"></app-docsigning>
+</div>
+<div *ngIf="viewType==='pagereview'">
+    <app-docreview (switchToGridView)= "switchToGridView()"></app-docreview>
+</div> -->

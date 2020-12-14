@@ -15,6 +15,7 @@ import { EsignSettingsComponent } from './controls/settings/esign-settings.compo
 import { IdentityComponent } from './controls/settings/identity/identity.component';
 import { EmailsettingsComponent } from './controls/settings/emailsettings/emailsettings.component';
 import { ArchiveComponent } from './controls/archive/archive.component';
+import { ReceivercasesComponent } from './controls/receivercases/receivercases.component';
 export const esignRoutes: Routes = [
     {
         path: '',
@@ -104,7 +105,12 @@ export const esignRoutes: Routes = [
         path: 'archive/:type',
         canActivate: [AuthGuard, ESignGuard],
         component: ArchiveComponent
-    }
+    },
+    {
+        path: 'receivercases',
+        canActivate: [AuthGuard, ESignGuard],
+        component: ReceivercasesComponent
+    },
 ];
 
 export const esignRouting: ModuleWithProviders = RouterModule.forChild(esignRoutes);

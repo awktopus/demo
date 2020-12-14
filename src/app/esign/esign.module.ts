@@ -67,6 +67,11 @@ import { MoreOptionsRendererComponent } from './controls/history/MoreOptionsRend
 import { MoreOptionsRenderer2Component } from './controls/archive/MoreOptionsRenderer2.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { SinglecasearchiveComponent } from './controls/archive/singlecasearchive/singlecasearchive.component';
+import { ReceivercasesComponent } from './controls/receivercases/receivercases.component';
+import { ReceiverustaxdocsComponent } from './controls/receivercases/receiverustaxdocs/receiverustaxdocs.component';
+import { USTaxDownloadButtonRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxDownloadbutton-renderer.component';
+import { USTaxEzsigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxEzsigningbutton-renderer.component';
+import { USTaxViewButtonRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxViewbutton-renderer.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -90,7 +95,9 @@ import { SinglecasearchiveComponent } from './controls/archive/singlecasearchive
     AngularDraggableModule, MatTreeModule, MatIconModule, MatButtonModule,
     AgGridModule.withComponents([AuditRendererComponent, RouterLinkRendererComponent,
       ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent,
-    FilingStatusRendererComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component]),
+    FilingStatusRendererComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component,
+    USTaxDownloadButtonRendererComponent,
+    USTaxEzsigningRendererComponent, USTaxViewButtonRendererComponent]),
   ],
   declarations: [
     GridColConfigPopupComponent,
@@ -137,7 +144,11 @@ import { SinglecasearchiveComponent } from './controls/archive/singlecasearchive
     FilingStatusRendererComponent,
     FilingstatuspopupComponent,
     ArchiveComponent,
-    BulkarchiveComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component, SinglecasearchiveComponent
+    BulkarchiveComponent, MoreOptionsRendererComponent,
+    MoreOptionsRenderer2Component, SinglecasearchiveComponent,
+    ReceivercasesComponent, ReceiverustaxdocsComponent,
+    USTaxDownloadButtonRendererComponent,
+    USTaxEzsigningRendererComponent, USTaxViewButtonRendererComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
      RejectreasonpopupComponent, EmailpopupComponent, UploadscanpopupComponent,
@@ -146,7 +157,8 @@ import { SinglecasearchiveComponent } from './controls/archive/singlecasearchive
      SignerselectionComponent,
     GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent,
     CasetemplatesComponent, FilingstatuspopupComponent, ArchiveComponent,
-    BulkarchiveComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component, SinglecasearchiveComponent],
+    BulkarchiveComponent, MoreOptionsRendererComponent,
+    MoreOptionsRenderer2Component, SinglecasearchiveComponent],
   providers: [
     ESignGuard,
     // AuthGuard,

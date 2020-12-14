@@ -39,6 +39,11 @@
             *ngIf='isAccountingFirm && isClient'>
             <mat-icon>assignment</mat-icon>
           </px-gdn-sideitem>
+
+          <px-gdn-sideitem title="My US Tax Cases" [routerLinkUrl]="'esign/receivercases'"
+          *ngIf='isAccountingFirm && isClient'>
+          <mat-icon>assignment</mat-icon>
+        </px-gdn-sideitem>
         </px-gdn-sideitem>
 
         <px-gdn-sideitem title="Income & Expense" *ngIf='isIETfunctionAccessible' 

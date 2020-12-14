@@ -11,11 +11,20 @@ export class EsignserviceService  {
   // this is pass along the case information between components
   private _case: BehaviorSubject<ESignCase> = new BehaviorSubject((new ESignCase()));
   public readonly cur_case: Observable<ESignCase> = this._case.asObservable();
+  cacheData = {};
   esignauth = null;
   CPAID = '';  // we need to change this later
   esign_key = 'ESIGN_AUTH';
   role: string;
   constructor(private http: HttpClient, public auth: EsignAuthService) {
+  }
+
+  setCacheData(key, value) {
+    this.cacheData[key] = value;
+  }
+
+  getCacheData(key) {
+    return this.cacheData[key];
   }
 
   getEsignReviewForms(caseId) {
@@ -313,6 +322,12 @@ export class EsignserviceService  {
   getESignCases() {
     const url: string = this.auth.baseurl + '/clients/OrgUnitId/' +
       this.auth.getOrgUnitID() + '/client/' + this.auth.getUserID() + '/cases';
+    return this.http.get(url, this.auth.getESignOptions())
+  }
+
+  getUSTaxCases() {
+    const url: string = this.auth.baseurl + '/cases/OrgUnitId/' +
+      this.auth.getOrgUnitID() + '/client/' + this.auth.getUserID() + '/USTaxCases';
     return this.http.get(url, this.auth.getESignOptions())
   }
 
