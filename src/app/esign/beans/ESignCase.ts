@@ -35,6 +35,16 @@ export class ESignCase {
   taxYear: string;
 }
 
+export class USTaxCase {
+caseId: string;
+caseStatus: string;
+returnName: string;
+createdDateTime: string;
+isPrimarySignerForm: boolean;
+isSecondarySignerForm: boolean;
+isPaperSignForm: boolean;
+}
+
 export interface ESignCate {
   id: number;
   name: string;

@@ -10,10 +10,13 @@ import { EzsignDownloadButtonRendererComponent } from '../../../../ezsign/contro
 import { DocumenthistoryComponent } from '../../../../ezsign/controls/senderdocuments/documenthistory/documenthistory.component';
 import { EzsignGridcolpopupComponent } from '../../../../ezsign/controls/shared/ezsign-gridcolpopup/ezsign-gridcolpopup.component';
 import { USTaxViewButtonRendererComponent } from './USTaxViewbutton-renderer.component';
-import { USTaxEzsigningRendererComponent } from './USTaxEzsigningbutton-renderer.component';
 import { USTaxDownloadButtonRendererComponent } from './USTaxDownloadbutton-renderer.component';
 import { GridColConfigPopupComponent } from '../../history/gridcolpopup/grid-col-config-popup.component';
 import { AuditpopupComponent } from '../../history/auditpopup/auditpopup.component';
+import { USTaxCase } from '../../../beans/ESignCase';
+import { USTaxPrimarySigningRendererComponent } from './USTaxPrimarySigningbutton-renderer.component';
+import { USTaxSecondarySigningRendererComponent } from './USTaxSecondarySigningbutton-renderer.component';
+import { USTaxPaperSigningRendererComponent } from './USTaxPaperSigningbutton-renderer.component';
 
 @Component({
   selector: 'app-receiverustaxdocs',
@@ -23,7 +26,8 @@ import { AuditpopupComponent } from '../../history/auditpopup/auditpopup.compone
 export class ReceiverustaxdocsComponent implements OnInit {
 
   isLinear = false;
-  usTaxReceiverDocsgridData: any;
+  usTaxReceiverDocsgridData: USTaxCase[] = [];
+  usTaxAllCases: any = [];
   gridColumnDefs: any;
   ezsignctrl: FormControl = new FormControl();
   search_val: string;
@@ -52,7 +56,9 @@ export class ReceiverustaxdocsComponent implements OnInit {
     private service: EsignserviceService) {
     this.frameworkComponents = {
       viewButtonRender: USTaxViewButtonRendererComponent,
-      usTaxESignButtonRender: USTaxEzsigningRendererComponent,
+      usTaxPrimarySignButtonRender: USTaxPrimarySigningRendererComponent,
+      usTaxSecondarySignButtonRender: USTaxSecondarySigningRendererComponent,
+      usTaxPaperSignButtonRender: USTaxPaperSigningRendererComponent,
       downloadButtonRender: USTaxDownloadButtonRendererComponent,
       auditRender: AuditRendererComponent
     }
@@ -67,45 +73,60 @@ export class ReceiverustaxdocsComponent implements OnInit {
 
   loadUSTaxDocuments() {
     this.isUSTaxDataFetched = false;
+
     this.service.getUSTaxCases().subscribe(resp => {
-       this.usTaxReceiverDocsgridData = resp;
-      console.log(this.usTaxReceiverDocsgridData)
-      // this.service.getEZSignDocs().subscribe(resp => {
-      //   const ezSignDocs: EZSignDocResource[] = <EZSignDocResource[]>resp;
-      //   console.log(ezSignDocs);
-      //   if (ezSignDocs) {
-      //     this.usTaxReceiverDocsgridData = [];
-      //     this.usTaxReceiverDocsgridData = ezSignDocs;
-      //     this.usTaxReceiverDocsgridData.forEach(doc => {
-      //       if (doc.receiverSigningStatus === "Signed" && doc.status === "Inprogress") {
-      //         doc.status = doc.status + " " + "(Pending with others)"
-      //       }
-      //     });
-      //   }
+      this.usTaxAllCases = <any[]>resp;
+      console.log(this.usTaxAllCases);
+      if (this.usTaxAllCases) {
+        this.usTaxReceiverDocsgridData = [];
+
+        this.usTaxAllCases.forEach(caseRec => {
+          let caseR = new USTaxCase();
+          caseR.caseId = caseRec.caseId;
+          caseR.returnName = caseRec.returnName;
+          caseR.createdDateTime = caseRec.createdDateTime;
+          caseR.caseStatus = caseRec.caseStatus;
+          let isPaperForm = false;
+          if (caseRec.forms) {
+            caseRec.forms.forEach(form => {
+              if (form.approvedForEsign === 'N' && !isPaperForm) {
+                caseR.isPaperSignForm = true;
+                isPaperForm = true;
+              }
+            });
+          }
+          if (caseRec.signers) {
+            caseRec.signers.forEach(signer => {
+              if (signer.type === 'PRIMARY_SIGNER' &&
+                signer.receiverId === this.service.auth.getUserID()) {
+                caseR.isPrimarySignerForm = true;
+              } else if (signer.type !== 'SECONDARY_SIGNER') {
+                caseR.isPrimarySignerForm = false;
+              }
+              if (signer.type === 'SECONDARY_SIGNER' &&
+                signer.receiverId === this.service.auth.getUserID()) {
+                caseR.isSecondarySignerForm = true;
+              } else if (signer.type !== 'PRIMARY_SIGNER') {
+                caseR.isSecondarySignerForm = false;
+              }
+            });
+          }
+          this.usTaxReceiverDocsgridData.push(caseR);
+        });
+
+        console.log(this.usTaxReceiverDocsgridData);
+      }
       this.isUSTaxDataFetched = true;
     });
   }
 
+
   loadInternalUSTaxDocuments() {
     this.isUSTaxDataFetched = false;
-    this.service.getUSTaxCases().subscribe(resp => {
-      this.usTaxReceiverDocsgridData = resp;
-     console.log(this.usTaxReceiverDocsgridData)
-     // this.service.getEZSignDocs().subscribe(resp => {
-     //   const ezSignDocs: EZSignDocResource[] = <EZSignDocResource[]>resp;
-     //   console.log(ezSignDocs);
-     //   if (ezSignDocs) {
-     //     this.usTaxReceiverDocsgridData = [];
-     //     this.usTaxReceiverDocsgridData = ezSignDocs;
-     //     this.usTaxReceiverDocsgridData.forEach(doc => {
-     //       if (doc.receiverSigningStatus === "Signed" && doc.status === "Inprogress") {
-     //         doc.status = doc.status + " " + "(Pending with others)"
-     //       }
-     //     });
-     //   }
-      this.usTaxReceiverApi.api.sizeColumnsToFit();
-      this.isUSTaxDataFetched = true;
-    });
+
+    this.usTaxReceiverApi.api.sizeColumnsToFit();
+    this.isUSTaxDataFetched = true;
+
   }
 
   configColDef() {
@@ -118,7 +139,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
       { headerName: 'Status', field: 'caseStatus', cellStyle: this.changeRowColor, width: 100 },
       {
         headerName: 'Primary Sign', width: 120,
-        cellRenderer: 'usTaxESignButtonRender',
+        cellRenderer: 'usTaxPrimarySignButtonRender',
         cellRendererParams: {
           onClick: this.startReceiverUSTaxSign.bind(this)
         },
@@ -126,7 +147,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
       },
       {
         headerName: 'Secondary Sign', width: 120,
-        cellRenderer: 'usTaxESignButtonRender',
+        cellRenderer: 'usTaxSecondarySignButtonRender',
         cellRendererParams: {
           onClick: this.startReceiverUSTaxSign.bind(this)
         },
@@ -134,7 +155,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
       },
       {
         headerName: 'Paper Sign', width: 120,
-        cellRenderer: 'usTaxESignButtonRender',
+        cellRenderer: 'usTaxPaperSignButtonRender',
         cellRendererParams: {
           onClick: this.startReceiverUSTaxSign.bind(this)
         },

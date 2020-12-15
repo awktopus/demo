@@ -70,8 +70,10 @@ import { SinglecasearchiveComponent } from './controls/archive/singlecasearchive
 import { ReceivercasesComponent } from './controls/receivercases/receivercases.component';
 import { ReceiverustaxdocsComponent } from './controls/receivercases/receiverustaxdocs/receiverustaxdocs.component';
 import { USTaxDownloadButtonRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxDownloadbutton-renderer.component';
-import { USTaxEzsigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxEzsigningbutton-renderer.component';
 import { USTaxViewButtonRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxViewbutton-renderer.component';
+import { USTaxPrimarySigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxPrimarySigningbutton-renderer.component';
+import { USTaxSecondarySigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxSecondarySigningbutton-renderer.component';
+import { USTaxPaperSigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxPaperSigningbutton-renderer.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -97,7 +99,10 @@ import { USTaxViewButtonRendererComponent } from './controls/receivercases/recei
       ReminderRendererComponent, NotesRendererComponent, NewCaseRendererComponent,
     FilingStatusRendererComponent, MoreOptionsRendererComponent, MoreOptionsRenderer2Component,
     USTaxDownloadButtonRendererComponent,
-    USTaxEzsigningRendererComponent, USTaxViewButtonRendererComponent]),
+    USTaxPrimarySigningRendererComponent,
+    USTaxSecondarySigningRendererComponent,
+    USTaxPaperSigningRendererComponent,
+    USTaxViewButtonRendererComponent]),
   ],
   declarations: [
     GridColConfigPopupComponent,
@@ -148,7 +153,9 @@ import { USTaxViewButtonRendererComponent } from './controls/receivercases/recei
     MoreOptionsRenderer2Component, SinglecasearchiveComponent,
     ReceivercasesComponent, ReceiverustaxdocsComponent,
     USTaxDownloadButtonRendererComponent,
-    USTaxEzsigningRendererComponent, USTaxViewButtonRendererComponent
+    USTaxPrimarySigningRendererComponent,
+    USTaxSecondarySigningRendererComponent,
+    USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
      RejectreasonpopupComponent, EmailpopupComponent, UploadscanpopupComponent,
