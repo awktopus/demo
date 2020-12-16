@@ -86,6 +86,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
           caseR.returnName = caseRec.returnName;
           caseR.createdDateTime = caseRec.createdDateTime;
           caseR.caseStatus = caseRec.caseStatus;
+          caseR.docId = caseRec.docId;
           let isPaperForm = false;
           if (caseRec.forms) {
             caseRec.forms.forEach(form => {
@@ -124,9 +125,50 @@ export class ReceiverustaxdocsComponent implements OnInit {
   loadInternalUSTaxDocuments() {
     this.isUSTaxDataFetched = false;
 
-    this.usTaxReceiverApi.api.sizeColumnsToFit();
-    this.isUSTaxDataFetched = true;
-
+    this.service.getUSTaxCases().subscribe(resp => {
+      this.usTaxAllCases = <any[]>resp;
+      console.log(this.usTaxAllCases);
+      if (this.usTaxAllCases) {
+        this.usTaxReceiverDocsgridData = [];
+        this.usTaxAllCases.forEach(caseRec => {
+          let caseR = new USTaxCase();
+          caseR.caseId = caseRec.caseId;
+          caseR.returnName = caseRec.returnName;
+          caseR.createdDateTime = caseRec.createdDateTime;
+          caseR.caseStatus = caseRec.caseStatus;
+          caseR.docId = caseRec.docId;
+          let isPaperForm = false;
+          if (caseRec.forms) {
+            caseRec.forms.forEach(form => {
+              if (form.approvedForEsign === 'N' && !isPaperForm) {
+                caseR.isPaperSignForm = true;
+                isPaperForm = true;
+              }
+            });
+          }
+          if (caseRec.signers) {
+            caseRec.signers.forEach(signer => {
+              if (signer.type === 'PRIMARY_SIGNER' &&
+                signer.receiverId === this.service.auth.getUserID()) {
+                caseR.isPrimarySignerForm = true;
+              } else if (signer.type !== 'SECONDARY_SIGNER') {
+                caseR.isPrimarySignerForm = false;
+              }
+              if (signer.type === 'SECONDARY_SIGNER' &&
+                signer.receiverId === this.service.auth.getUserID()) {
+                caseR.isSecondarySignerForm = true;
+              } else if (signer.type !== 'PRIMARY_SIGNER') {
+                caseR.isSecondarySignerForm = false;
+              }
+            });
+          }
+          this.usTaxReceiverDocsgridData.push(caseR);
+        });
+        console.log(this.usTaxReceiverDocsgridData);
+        this.usTaxReceiverApi.api.sizeColumnsToFit();
+      }
+      this.isUSTaxDataFetched = true;
+    });
   }
 
   configColDef() {
@@ -204,22 +246,6 @@ export class ReceiverustaxdocsComponent implements OnInit {
     });
     dialogRef.componentInstance.setCaseInfo(usTaxCaseId);
   }
-
-  viewUSTaxDocument(selectedRow: any) {
-    console.log(selectedRow.rowData);
-    // this.service.setCacheData("case", selectedRow.rowData);
-    // this.viewType = "pagereview";
-    const trkID = selectedRow.rowData.ezSignTrackingId;
-    const docId = selectedRow.rowData.docId;
-    const status: any = selectedRow.rowData.status;
-    // this.service.showEzsignPDFDoc(trkID);
-    // if (status === "Signed") {
-    //   this.service.viewEzsignFinalDoc(trkID);
-    // } else {
-    //   this.service.previewEzsignDocPreview(trkID, docId);
-    // }
-  }
-
 
   startReceiverUSTaxSign(usTaxCaseRow: any) {
     console.log('start signing US Tax document...');
@@ -332,11 +358,21 @@ export class ReceiverustaxdocsComponent implements OnInit {
     }
   }
 
-  downloadUSTaxSignedDocument(ezSignDocRec: any) {
+  downloadUSTaxSignedDocument(selectedRow: any) {
     console.log('downloadUSTaxSignedDocument...');
-    console.log(ezSignDocRec);
-    // this.service.downloadESignedDoc(ezSignDocRec.ezSignTrackingId,
-    //   ezSignDocRec.documentName);
+    console.log(selectedRow);
+    this.service.downloadUSTaxSignedDocument(selectedRow.caseId,
+      selectedRow.returnName);
+  }
+
+  viewUSTaxDocument(selectedRow: any) {
+    console.log('View US Tax document');
+    console.log(selectedRow);
+    if (selectedRow.rowData.caseStatus === "Signed") {
+      this.service.viewUSTaxSignedFinalDocument(selectedRow.rowData.caseId);
+    } else {
+      this.service.previewUSTaxDocument(selectedRow.rowData.caseId, selectedRow.rowData.docId);
+    }
   }
 
 }

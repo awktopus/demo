@@ -37,6 +37,7 @@ export class ESignCase {
 
 export class USTaxCase {
 caseId: string;
+docId: string;
 caseStatus: string;
 returnName: string;
 createdDateTime: string;

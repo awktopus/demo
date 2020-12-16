@@ -74,6 +74,7 @@ import { USTaxViewButtonRendererComponent } from './controls/receivercases/recei
 import { USTaxPrimarySigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxPrimarySigningbutton-renderer.component';
 import { USTaxSecondarySigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxSecondarySigningbutton-renderer.component';
 import { USTaxPaperSigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxPaperSigningbutton-renderer.component';
+import { UstaxPdfPopupComponent } from './controls/receivercases/shared/ustax-pdf-popup/ustax-pdf-popup.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -155,7 +156,7 @@ import { USTaxPaperSigningRendererComponent } from './controls/receivercases/rec
     USTaxDownloadButtonRendererComponent,
     USTaxPrimarySigningRendererComponent,
     USTaxSecondarySigningRendererComponent,
-    USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent
+    USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent, UstaxPdfPopupComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
      RejectreasonpopupComponent, EmailpopupComponent, UploadscanpopupComponent,

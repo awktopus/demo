@@ -16,7 +16,7 @@ export class EsignserviceService  {
   CPAID = '';  // we need to change this later
   esign_key = 'ESIGN_AUTH';
   role: string;
-  CLIENT_CACHEDATA:any = {};
+  CLIENT_CACHEDATA: any = {};
   constructor(private http: HttpClient, public auth: EsignAuthService) {
   }
 
@@ -945,18 +945,61 @@ bulkTaxCaseArchive(bulkCaseArchivejson) {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
-  getClientCacheData(){
+  getClientCacheData() {
     return this.CLIENT_CACHEDATA;
   }
 
-  setClientCacheData(cc:any,signer:any,type:any, formSeq:any){
-    this.CLIENT_CACHEDATA={
-      case:cc,
-      signer:signer,
-      signer_type:type,
-      seq:formSeq
+  setClientCacheData(cc: any, signer: any, type: any, formSeq: any) {
+    this.CLIENT_CACHEDATA = {
+      case: cc,
+      signer: signer,
+      signer_type: type,
+      seq: formSeq
     };
     return this.CLIENT_CACHEDATA;
+  }
+
+
+  downloadUSTaxSignedDocument(caseId: string, documentName: string) {
+    console.log('downloadUSTaxSignedDocument service api call..');
+
+    const url = this.auth.baseurl + "/cases/orgunit/" + this.auth.getOrgUnitID()
+    + "/user/" + this.auth.getUserID() + "/case/" + caseId
+    + "/signeddocument";
+
+    console.log(url);
+    this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      console.log('set pdf:' + fileURL);
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = fileURL;
+      link.download = documentName;
+      link.click();
+    });
+  }
+
+  previewUSTaxDocument(caseId, docId) {
+    const url = this.auth.baseurl + "/cases/orgunit/" + this.auth.getOrgUnitID()
+    + "/receiver/" + this.auth.getUserID() + "/case/" + caseId
+    + "/document/" + docId + "/signeddocument/preview";
+    this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+     });
+  }
+
+  viewUSTaxSignedFinalDocument(caseId) {
+    const url = this.auth.baseurl + "/cases/orgunit/" + this.auth.getOrgUnitID()
+    + "/user/" + this.auth.getUserID() + "/case/" + caseId
+    + "/signeddocument";
+    this.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+     });
   }
 
 }
