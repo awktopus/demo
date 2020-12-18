@@ -16,10 +16,6 @@ export class EsignserviceService  {
   CPAID = '';  // we need to change this later
   esign_key = 'ESIGN_AUTH';
   role: string;
-<<<<<<< HEAD
-=======
-  CLIENT_CACHEDATA: any = {};
->>>>>>> 403922e3a9a197b9bea1766012f5ae8c1af9cccc
   constructor(private http: HttpClient, public auth: EsignAuthService) {
   }
 
