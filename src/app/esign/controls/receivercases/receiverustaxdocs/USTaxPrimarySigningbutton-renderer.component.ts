@@ -23,7 +23,7 @@ export class USTaxPrimarySigningRendererComponent implements ICellRendererAngula
 
     public invokeParentMethod(usTaxDoc) {
         console.log(this.params);
-        this.params.context.componentParent.startReceiverUSTaxSign(usTaxDoc);
+        this.params.context.componentParent.startPrimaryUSTaxSign(usTaxDoc);
     }
 
     refresh(): boolean {

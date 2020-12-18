@@ -1,14 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EsignserviceService } from '../../../service/esignservice.service';
 import { AuditRendererComponent } from '../../history/AuditRenderer.component';
-import { EzsignViewButtonRendererComponent } from '../../../../ezsign/controls/Ezsignviewbutton-renderer.component';
-import { ReceiverEzsigningRendererComponent } from '../../../../ezsign/controls/ReceiverEzsigningbutton-renderer.component';
-import { EzsignDownloadButtonRendererComponent } from '../../../../ezsign/controls/EzsignDownloadbutton-renderer.component';
-import { DocumenthistoryComponent } from '../../../../ezsign/controls/senderdocuments/documenthistory/documenthistory.component';
-import { EzsignGridcolpopupComponent } from '../../../../ezsign/controls/shared/ezsign-gridcolpopup/ezsign-gridcolpopup.component';
 import { USTaxViewButtonRendererComponent } from './USTaxViewbutton-renderer.component';
 import { USTaxDownloadButtonRendererComponent } from './USTaxDownloadbutton-renderer.component';
 import { GridColConfigPopupComponent } from '../../history/gridcolpopup/grid-col-config-popup.component';
@@ -17,6 +12,7 @@ import { USTaxCase } from '../../../beans/ESignCase';
 import { USTaxPrimarySigningRendererComponent } from './USTaxPrimarySigningbutton-renderer.component';
 import { USTaxSecondarySigningRendererComponent } from './USTaxSecondarySigningbutton-renderer.component';
 import { USTaxPaperSigningRendererComponent } from './USTaxPaperSigningbutton-renderer.component';
+import { CaseSecurityComponent } from '../../casesecurity/casesecurity.component';
 
 @Component({
   selector: 'app-receiverustaxdocs',
@@ -50,6 +46,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
   private rowHeight;
   private rowClass;
   domLayout: any;
+  @ViewChild(CaseSecurityComponent) private casesecurity: CaseSecurityComponent;
   constructor(public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
@@ -141,7 +138,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
         headerName: 'Primary Sign', width: 120,
         cellRenderer: 'usTaxPrimarySignButtonRender',
         cellRendererParams: {
-          onClick: this.startReceiverUSTaxSign.bind(this)
+          onClick: this.startPrimaryUSTaxSign.bind(this)
         },
         cellStyle: this.changeRowColor
       },
@@ -149,7 +146,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
         headerName: 'Secondary Sign', width: 120,
         cellRenderer: 'usTaxSecondarySignButtonRender',
         cellRendererParams: {
-          onClick: this.startReceiverUSTaxSign.bind(this)
+          onClick: this.startSecondaryUSTaxSign.bind(this)
         },
         cellStyle: this.changeRowColor
       },
@@ -157,7 +154,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
         headerName: 'Paper Sign', width: 120,
         cellRenderer: 'usTaxPaperSignButtonRender',
         cellRendererParams: {
-          onClick: this.startReceiverUSTaxSign.bind(this)
+          onClick: this.startPaperUSTaxSign.bind(this)
         },
         cellStyle: this.changeRowColor
       },
@@ -220,21 +217,145 @@ export class ReceiverustaxdocsComponent implements OnInit {
     // }
   }
 
-
-  startReceiverUSTaxSign(usTaxCaseRow: any) {
-    console.log('start signing US Tax document...');
+  startSecondaryUSTaxSign(usTaxCaseRow: any) {
+    console.log('start secondary signing US Tax document...');
     console.log(usTaxCaseRow);
     // find the corresponding signing document
-    this.usTaxReceiverDocsgridData.forEach(doc => {
+    this.usTaxAllCases.forEach(doc => {
       if (doc.caseId === usTaxCaseRow.caseId) {
-        console.log(doc);
+        
         this.service.setCacheData("case", doc);
-        this.viewType = 'signing';
+        console.log(doc);
+        console.log(usTaxCaseRow);
+        // need add signer and signer type
+        this.prepareSigning(doc,"SECONDARY_SIGNER");
+        //this.viewType = 'security';
       }
     });
   }
+  startPrimaryUSTaxSign(usTaxCaseRow: any) {
+    console.log('start primary signing US Tax document...');
+    console.log(usTaxCaseRow);
+    // find the corresponding signing document
+    this.usTaxAllCases.forEach(doc => {
+      if (doc.caseId === usTaxCaseRow.caseId) {
+        
+        this.service.setCacheData("case", doc);
+        console.log(doc);
+        console.log(usTaxCaseRow);
+        // need add signer and signer type
+        this.prepareSigning(doc,"PRIMARY_SIGNER");
+        //this.viewType = 'security';
+      }
+    });
+  }
+  startPaperUSTaxSign(usTaxCaseRow: any) {
+    console.log('start Paper signing US Tax document...');
+    console.log(usTaxCaseRow);
+    // find the corresponding signing document
+    // find the corresponding signing document
+    this.usTaxAllCases.forEach(doc => {
+      if (doc.caseId === usTaxCaseRow.caseId) {
+        
+        this.service.setCacheData("case", doc);
+        console.log(doc);
+        console.log(usTaxCaseRow);
+        // need add signer and signer type
+        this.preparePaperSigning(doc,"Paper");
+        //this.viewType = 'security';
+      }
+    });
+  }
+  preparePaperSigning(cc, signer_type){
+    let userId=this.service.auth.getUserID();
+    let signer=null;
+    console.log("current user ID");
+    console.log(userId);
+    cc.signers.forEach(ss=>{
+      if(ss.receiverId===userId)
+      {
+        signer=ss;
+        console.log("signer...");
+        console.log(signer);
+      }
+    });
+    if(signer){
+      // now find the form and signing form and form seq
+      let frm=this.findFirstPaperForm(cc,signer);
+      console.log("found one");
+      console.log(frm);
+      frm.caseId=cc.caseId;
+      frm.docId=cc.docId;
+      this.service.setCacheData("form",frm);
+      this.service.setCacheData("signer",signer);
+      this.service.setCacheData("formSeq",frm.seqNo);
+      this.service.setCacheData("signer_type",signer_type);
+      this.viewType="security";
+    }
+  }
+  prepareSigning(cc, signer_type){
+    let userId=this.service.auth.getUserID();
+    let signer=null;
+    console.log("current user ID");
+    console.log(userId);
+    cc.signers.forEach(ss=>{
+      if(ss.receiverId===userId&&(ss.type===signer_type))
+      {
+        signer=ss;
+        console.log("signer...");
+        console.log(signer);
+      }
+    });
+    if(signer){
+      // now find the form and signing form and form seq
+      let frm=this.findFirstForm(cc,signer,(signer_type=="PRIMARY_SIGNER"));
+      console.log("found one");
+      console.log(frm);
+      frm.caseId=cc.caseId;
+      frm.docId=cc.docId;
+      this.service.setCacheData("form",frm);
+      this.service.setCacheData("signer",signer);
+      this.service.setCacheData("formSeq",frm.seqNo);
+      this.service.setCacheData("signer_type","PRIMARY_SIGNER");
+      if(this.casesecurity){
+        console.log("load data from parent");
+        this.casesecurity.loadSecurityQuestion();
+      }
+      this.viewType="security";
+    }
+  }
+  findFirstPaperForm(cc,ss){
+    let frm=null;
+    if(ss.receiverId==this.service.auth.getUserID())
+    {
 
-  switchToGridView() {
+    }
+    return frm;
+  }
+  findFirstForm(cc,ss,isPrimary){
+    let frm=null;
+    if(ss.receiverId==this.service.auth.getUserID())
+    {
+      cc.forms.forEach(page=>{
+        if(page.formFields){
+          page.formFields.forEach(fd=>{
+            if ((fd.receiverId === ss.receiverId) && (fd.fieldStatus !== 'Signed')) {
+              if(((fd.fieldTypeName.indexOf("_TP_")>-1)&&isPrimary)||((fd.fieldTypeName.indexOf("_SP_")>-1)&&(!isPrimary)))
+              { 
+                if(frm==null) {
+                frm=page;
+                }
+              }
+            }
+          });
+        }
+      });
+    }
+    return frm;
+  }
+
+  switchToGridView(data) {
+    console.log(data);
     this.viewType = 'grid';
     this.loadInternalUSTaxDocuments();
   }

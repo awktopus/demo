@@ -74,6 +74,7 @@ import { USTaxViewButtonRendererComponent } from './controls/receivercases/recei
 import { USTaxPrimarySigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxPrimarySigningbutton-renderer.component';
 import { USTaxSecondarySigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxSecondarySigningbutton-renderer.component';
 import { USTaxPaperSigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxPaperSigningbutton-renderer.component';
+import { CaseSecurityComponent } from './controls/casesecurity/casesecurity.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -102,6 +103,7 @@ import { USTaxPaperSigningRendererComponent } from './controls/receivercases/rec
     USTaxPrimarySigningRendererComponent,
     USTaxSecondarySigningRendererComponent,
     USTaxPaperSigningRendererComponent,
+    CaseSecurityComponent,
     USTaxViewButtonRendererComponent]),
   ],
   declarations: [
@@ -155,7 +157,8 @@ import { USTaxPaperSigningRendererComponent } from './controls/receivercases/rec
     USTaxDownloadButtonRendererComponent,
     USTaxPrimarySigningRendererComponent,
     USTaxSecondarySigningRendererComponent,
-    USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent
+    USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent,
+    CaseSecurityComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
      RejectreasonpopupComponent, EmailpopupComponent, UploadscanpopupComponent,
@@ -165,7 +168,7 @@ import { USTaxPaperSigningRendererComponent } from './controls/receivercases/rec
     GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent,
     CasetemplatesComponent, FilingstatuspopupComponent, ArchiveComponent,
     BulkarchiveComponent, MoreOptionsRendererComponent,
-    MoreOptionsRenderer2Component, SinglecasearchiveComponent],
+    MoreOptionsRenderer2Component, SinglecasearchiveComponent,CaseSecurityComponent],
   providers: [
     ESignGuard,
     // AuthGuard,

@@ -16,7 +16,6 @@ export class EsignserviceService  {
   CPAID = '';  // we need to change this later
   esign_key = 'ESIGN_AUTH';
   role: string;
-  CLIENT_CACHEDATA:any = {};
   constructor(private http: HttpClient, public auth: EsignAuthService) {
   }
 
@@ -945,19 +944,9 @@ bulkTaxCaseArchive(bulkCaseArchivejson) {
     return this.http.get(url, this.auth.getESignOptions());
   }
 
-  getClientCacheData(){
-    return this.CLIENT_CACHEDATA;
+  getEsignForms(caseId) {
+    const url = this.auth.baseurl +'/cases/case/' + caseId + '/ustaxforms';
+    return this.http.get(url,this.auth.getESignOptions());
   }
-
-  setClientCacheData(cc:any,signer:any,type:any, formSeq:any){
-    this.CLIENT_CACHEDATA={
-      case:cc,
-      signer:signer,
-      signer_type:type,
-      seq:formSeq
-    };
-    return this.CLIENT_CACHEDATA;
-  }
-
 }
 

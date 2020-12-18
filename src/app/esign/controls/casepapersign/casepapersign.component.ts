@@ -23,7 +23,7 @@ export class CasePaperSignComponent implements OnInit {
   }
 
   goFormPage() {
-    this.router.navigate(['/main/esign/mycases/caseform/' + this.mycaseID]);
+    //this.router.navigate(['/main/esign/mycases/caseform/' + this.mycaseID]);
   }
 
   goFormViewPage() {

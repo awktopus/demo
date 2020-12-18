@@ -23,7 +23,7 @@ export class USTaxPaperSigningRendererComponent implements ICellRendererAngularC
 
     public invokeParentMethod(usTaxDoc) {
         console.log(this.params);
-        this.params.context.componentParent.startReceiverUSTaxSign(usTaxDoc);
+        this.params.context.componentParent.startPaperUSTaxSign(usTaxDoc);
     }
 
     refresh(): boolean {

@@ -4,8 +4,100 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<div *ngIf="viewType == 'consentview'" class="consent" style="word-break:break-word;white-space:normal !important;">
-  <h2>ESign Agreement</h2><p></p>
+<div *ngIf="viewType == 'Security'" class="casedoc">
+  <table width=90%>
+    <tr>
+      <td align=center width="100%">
+        <p>
+          <strong>Identity Verification</strong>
+        </p>
+        <hr>
+      </td>
+    </tr>
+    <tr>
+      <td align=center width="100%">
+        <h5>{{signer.firstName}} {{signer.lastName}}</h5>
+        <td>
+    </tr>
+    <tr>
+      <td align=center>
+        <div style='width:80%; word-break:break-all;white-space:normal !important;'>
+          <font color='warning' size=-1>
+            <i>Tax authorities requires us to verify your identity prior to accepting your signature,
+              <br> please answer the following question(s)</i>
+          </font>
+        </div>
+      </td>
+      <td></td>
+    </tr>
+  </table>
+  <br>
+  <table width=100%>
+    <tr>
+      <td align=right width=40%>
+        <span *ngIf="cliIdQuestion1" class='casecard'>
+          {{cliIdQuestion1.question}}
+        </span>
+      </td>
+      <td align=left width=30%>
+        <mat-form-field *ngIf="cliIdQuestion1" class="questionfield">
+          <input matInput placeholder="Answer here" [(ngModel)]="cliIdAnswer1">
+        </mat-form-field>
+      </td>
+      <td align=left width=30%>
+        <label *ngIf="message1" style="color: orangered">{{message1}}</label>
+      </td>
+    </tr>
+    <tr>
+      <td align=right>
+        <span *ngIf="cliIdQuestion2" class='casecard'>
+          {{cliIdQuestion2.question}}
+        </span>
+      </td>
+      <td align=left>
+        <mat-form-field *ngIf="cliIdQuestion2" class="questionfield">
+          <input matInput placeholder="Answer here" [(ngModel)]="cliIdAnswer2">
+        </mat-form-field>
+      </td>
+      <td align=left>
+        <label *ngIf="message2" style="color: orangered">{{message2}}</label>
+      </td>
+    </tr>
+    <tr>
+      <td align=right>
+        <span *ngIf="cliIdQuestion3" class='casecard'>
+          {{cliIdQuestion3.question}}
+        </span>
+      </td>
+      <td align=left>
+        <mat-form-field *ngIf="cliIdQuestion3" class="questionfield">
+          <input matInput placeholder="Answer here" [(ngModel)]="cliIdAnswer3">
+        </mat-form-field>
+      </td>
+      <td align=left>
+        <label *ngIf="message3" style="color: orangered">{{message3}}</label>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td align=right>
+        <button mat-raised-button color="accent" class="text-upper" (click)="validateAnswer()">
+          Submit
+        </button>
+      </td>
+      <td align=center><button mat-raised-button color="accent" (click)="switchToGrid.emit({view:'grid'})">Cancel</button></td>
+    </tr>
+  </table>
+</div>
+
+<div class="consent" *ngIf="viewType=='Agreement'" style="word-break:break-word;white-space:normal !important;">
+ <table width=80%>
+   <tr><td><h4>ESign Agreement</h4></td><td><button mat-icon-button color="primary" (click)="switchToGrid.emit({view:'grid'})">
+    Back
+    <mat-icon>
+      reply</mat-icon>
+  </button></td></tr>
+ </table>         
   <hr>
     <p><b>This E-Sign Disclosure and Consent Notice (&quot;Notice&quot;) applies to all communications, as defined below, for services provided by Western Union Financial Services, Inc. and our affiliates (&quot;Western Union&quot; or &quot;We&quot;). Under this Notice, communications you receive in electronic form from us will be considered &quot;in writing.&quot;</b></p>
     <p><b>By using Western Union electronic and online services (&quot;Electronic Services&quot;) you hereby consent to this Notice and affirm that you have access to the hardware and software requirements identified below. In addition, you must review and accept the terms of these services. If you choose not to consent to this Notice or you withdraw your consent, you will be restricted from using Electronic Services.</b></p>
@@ -36,6 +128,6 @@
     <p><br>
     <br>
     </p>
-    <button mat-raised-button color="accent"  (click)="goFormViewPage()">I Concur</button>
-<button mat-raised-button color="accent" (click)="goFormPage()">I Disagree</button>
+    <button mat-raised-button color="accent"  (click)="completeConsent()">I Concur</button>
+<button mat-raised-button color="accent" (click)="switchToGrid.emit({view:'grid'})">I Disagree</button>
 </div>
