@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { USTaxPrimarySigningRendererComponent } from './USTaxPrimarySigningbutto
 import { USTaxSecondarySigningRendererComponent } from './USTaxSecondarySigningbutton-renderer.component';
 import { USTaxPaperSigningRendererComponent } from './USTaxPaperSigningbutton-renderer.component';
 import { CaseSecurityComponent } from '../../casesecurity/casesecurity.component';
+import { USTaxViewCoverReviewButtonRendererComponent } from './USTaxViewCoverReviewbutton-renderer.component';
 
 @Component({
   selector: 'app-receiverustaxdocs',
@@ -53,6 +54,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
     private service: EsignserviceService) {
     this.frameworkComponents = {
       viewButtonRender: USTaxViewButtonRendererComponent,
+      viewCoverReviewButtonRender: USTaxViewCoverReviewButtonRendererComponent,
       usTaxPrimarySignButtonRender: USTaxPrimarySigningRendererComponent,
       usTaxSecondarySignButtonRender: USTaxSecondarySigningRendererComponent,
       usTaxPaperSignButtonRender: USTaxPaperSigningRendererComponent,
@@ -177,6 +179,14 @@ export class ReceiverustaxdocsComponent implements OnInit {
       { headerName: 'Return Name', field: 'returnName', cellStyle: this.changeRowColor, width: 120 },
       { headerName: 'Status', field: 'caseStatus', cellStyle: this.changeRowColor, width: 100 },
       {
+        headerName: 'Cover & Review', width: 120,
+        cellRenderer: 'viewCoverReviewButtonRender',
+        cellRendererParams: {
+          onClick: this.viewCoverLetterAndReviewDocs.bind(this)
+        },
+        cellStyle: this.changeRowColor
+      },
+      {
         headerName: 'Primary Sign', width: 120,
         cellRenderer: 'usTaxPrimarySignButtonRender',
         cellRendererParams: {
@@ -201,7 +211,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
         cellStyle: this.changeRowColor
       },
       {
-        headerName: 'View', width: 100,
+        headerName: 'Signed US Tax', width: 100,
         cellRenderer: 'viewButtonRender',
         cellRendererParams: {
           onClick: this.viewUSTaxDocument.bind(this),
@@ -245,19 +255,24 @@ export class ReceiverustaxdocsComponent implements OnInit {
   }
 
 
+  viewCoverLetterAndReviewDocs(usTaxCaseRow: any) {
+    console.log('view cover letter and review documents...');
+    console.log(usTaxCaseRow);
+  }
+
+
   startSecondaryUSTaxSign(usTaxCaseRow: any) {
     console.log('start secondary signing US Tax document...');
     console.log(usTaxCaseRow);
     // find the corresponding signing document
     this.usTaxAllCases.forEach(doc => {
       if (doc.caseId === usTaxCaseRow.caseId) {
-        
         this.service.setCacheData("case", doc);
         console.log(doc);
         console.log(usTaxCaseRow);
         // need add signer and signer type
-        this.prepareSigning(doc,"SECONDARY_SIGNER");
-        //this.viewType = 'security';
+        this.prepareSigning(doc, "SECONDARY_SIGNER");
+        // this.viewType = 'security';
       }
     });
   }
@@ -267,13 +282,12 @@ export class ReceiverustaxdocsComponent implements OnInit {
     // find the corresponding signing document
     this.usTaxAllCases.forEach(doc => {
       if (doc.caseId === usTaxCaseRow.caseId) {
-        
         this.service.setCacheData("case", doc);
         console.log(doc);
         console.log(usTaxCaseRow);
         // need add signer and signer type
-        this.prepareSigning(doc,"PRIMARY_SIGNER");
-        //this.viewType = 'security';
+        this.prepareSigning(doc, "PRIMARY_SIGNER");
+        // this.viewType = 'security';
       }
     });
   }
@@ -284,94 +298,91 @@ export class ReceiverustaxdocsComponent implements OnInit {
     // find the corresponding signing document
     this.usTaxAllCases.forEach(doc => {
       if (doc.caseId === usTaxCaseRow.caseId) {
-        
         this.service.setCacheData("case", doc);
         console.log(doc);
         console.log(usTaxCaseRow);
         // need add signer and signer type
-        this.preparePaperSigning(doc,"Paper");
-        //this.viewType = 'security';
+        this.preparePaperSigning(doc, "Paper");
+        // this.viewType = 'security';
       }
     });
   }
-  preparePaperSigning(cc, signer_type){
-    let userId=this.service.auth.getUserID();
-    let signer=null;
+
+  preparePaperSigning(cc, signer_type) {
+    let userId = this.service.auth.getUserID();
+    let signer = null;
     console.log("current user ID");
     console.log(userId);
-    cc.signers.forEach(ss=>{
-      if(ss.receiverId===userId)
-      {
-        signer=ss;
+    cc.signers.forEach(ss => {
+      if (ss.receiverId === userId) {
+        signer = ss;
         console.log("signer...");
         console.log(signer);
       }
     });
-    if(signer){
+
+    if (signer) {
       // now find the form and signing form and form seq
-      let frm=this.findFirstPaperForm(cc,signer);
+      let frm = this.findFirstPaperForm(cc, signer);
       console.log("found one");
       console.log(frm);
-      frm.caseId=cc.caseId;
-      frm.docId=cc.docId;
-      this.service.setCacheData("form",frm);
-      this.service.setCacheData("signer",signer);
-      this.service.setCacheData("formSeq",frm.seqNo);
-      this.service.setCacheData("signer_type",signer_type);
-      this.viewType="security";
+      frm.caseId = cc.caseId;
+      frm.docId = cc.docId;
+      this.service.setCacheData("form", frm);
+      this.service.setCacheData("signer", signer);
+      this.service.setCacheData("formSeq", frm.seqNo);
+      this.service.setCacheData("signer_type", signer_type);
+      this.viewType = "security";
     }
   }
-  prepareSigning(cc, signer_type){
-    let userId=this.service.auth.getUserID();
-    let signer=null;
+  prepareSigning(cc, signer_type) {
+    let userId = this.service.auth.getUserID();
+    let signer = null;
     console.log("current user ID");
     console.log(userId);
-    cc.signers.forEach(ss=>{
-      if(ss.receiverId===userId&&(ss.type===signer_type))
-      {
-        signer=ss;
+    cc.signers.forEach(ss => {
+      if ( ss.receiverId === userId && (ss.type === signer_type)) {
+        signer = ss;
         console.log("signer...");
         console.log(signer);
       }
     });
-    if(signer){
+
+    if (signer) {
       // now find the form and signing form and form seq
-      let frm=this.findFirstForm(cc,signer,(signer_type=="PRIMARY_SIGNER"));
+      let frm = this.findFirstForm(cc, signer, (signer_type === "PRIMARY_SIGNER"));
       console.log("found one");
       console.log(frm);
-      frm.caseId=cc.caseId;
-      frm.docId=cc.docId;
-      this.service.setCacheData("form",frm);
-      this.service.setCacheData("signer",signer);
-      this.service.setCacheData("formSeq",frm.seqNo);
-      this.service.setCacheData("signer_type","PRIMARY_SIGNER");
-      if(this.casesecurity){
+      frm.caseId = cc.caseId;
+      frm.docId = cc.docId;
+      this.service.setCacheData("form", frm);
+      this.service.setCacheData("signer", signer);
+      this.service.setCacheData("formSeq", frm.seqNo);
+      this.service.setCacheData("signer_type", "PRIMARY_SIGNER");
+      if (this.casesecurity) {
         console.log("load data from parent");
         this.casesecurity.loadSecurityQuestion();
       }
-      this.viewType="security";
+      this.viewType = "security";
     }
   }
-  findFirstPaperForm(cc,ss){
-    let frm=null;
-    if(ss.receiverId==this.service.auth.getUserID())
-    {
+  findFirstPaperForm(cc, ss) {
+    let frm = null;
+    if (ss.receiverId === this.service.auth.getUserID()) {
 
     }
     return frm;
   }
-  findFirstForm(cc,ss,isPrimary){
-    let frm=null;
-    if(ss.receiverId==this.service.auth.getUserID())
-    {
-      cc.forms.forEach(page=>{
-        if(page.formFields){
-          page.formFields.forEach(fd=>{
+  findFirstForm(cc, ss , isPrimary) {
+    let frm = null;
+    if (ss.receiverId === this.service.auth.getUserID()) {
+      cc.forms.forEach(page => {
+        if (page.formFields) {
+          page.formFields.forEach(fd => {
             if ((fd.receiverId === ss.receiverId) && (fd.fieldStatus !== 'Signed')) {
-              if(((fd.fieldTypeName.indexOf("_TP_")>-1)&&isPrimary)||((fd.fieldTypeName.indexOf("_SP_")>-1)&&(!isPrimary)))
-              { 
-                if(frm==null) {
-                frm=page;
+              if (((fd.fieldTypeName.indexOf("_TP_") > -1) && isPrimary) || ((fd.fieldTypeName.indexOf("_SP_") > -1) && (!isPrimary))) {
+                if (frm == null) {
+                frm = page;
                 }
               }
             }
