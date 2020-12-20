@@ -289,7 +289,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
         console.log(doc);
         console.log(usTaxCaseRow);
         // need add signer and signer type
-        this.preparePaperSigning(doc,"Paper");
+        this.preparePaperSigning(doc,"PAPER");
         //this.viewType = 'security';
       }
     });
@@ -310,15 +310,17 @@ export class ReceiverustaxdocsComponent implements OnInit {
     if(signer){
       // now find the form and signing form and form seq
       let frm=this.findFirstPaperForm(cc,signer);
-      console.log("found one");
-      console.log(frm);
-      frm.caseId=cc.caseId;
-      frm.docId=cc.docId;
-      this.service.setCacheData("form",frm);
-      this.service.setCacheData("signer",signer);
-      this.service.setCacheData("formSeq",frm.seqNo);
-      this.service.setCacheData("signer_type",signer_type);
-      this.viewType="security";
+      if(frm!=null){
+        console.log("found paper");
+        console.log(frm);
+        frm.caseId=cc.caseId;
+        frm.docId=cc.docId;
+        this.service.setCacheData("form",frm);
+        this.service.setCacheData("signer",signer);
+        this.service.setCacheData("formSeq",frm.seqNo);
+        this.service.setCacheData("signer_type",signer_type);
+        this.viewType="security";
+      }
     }
   }
   prepareSigning(cc, signer_type){
@@ -356,7 +358,14 @@ export class ReceiverustaxdocsComponent implements OnInit {
     let frm=null;
     if(ss.receiverId==this.service.auth.getUserID())
     {
-
+      cc.forms.forEach(page=>{
+        if(page.approvedForEsign === 'N'&&page.pageStatus=="ESign"){
+            if(ss.type=="PRIMARY_SIGNER")
+            {
+              frm=page;
+            }
+        }
+      });
     }
     return frm;
   }
@@ -365,7 +374,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
     if(ss.receiverId==this.service.auth.getUserID())
     {
       cc.forms.forEach(page=>{
-        if(page.formFields){
+        if(page.formFields&&page.approvedForEsign === 'Y'){
           page.formFields.forEach(fd=>{
             if ((fd.receiverId === ss.receiverId) && (fd.fieldStatus !== 'Signed')) {
               if(((fd.fieldTypeName.indexOf("_TP_")>-1)&&isPrimary)||((fd.fieldTypeName.indexOf("_SP_")>-1)&&(!isPrimary)))
@@ -384,8 +393,18 @@ export class ReceiverustaxdocsComponent implements OnInit {
 
   switchToGridView(data) {
     console.log(data);
-    this.viewType = 'grid';
-    this.loadInternalUSTaxDocuments();
+    if(data.view==='grid'){
+      this.viewType = 'grid';
+      if(data.refresh){
+        this.loadUSTaxDocuments();
+      }
+    } else if(data.view ==='paper') {
+      this.viewType = 'paper';
+    } 
+      else if(data.view ==='signing') {
+      this.viewType = 'signing';
+    }
+    //this.loadInternalUSTaxDocuments();
   }
 
   resizeAll(gridname) {

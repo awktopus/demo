@@ -84,7 +84,8 @@ export class CaseSecurityComponent implements OnInit {
       this.viewType="Agreement";
     }
     else if(signertype=="PAPER"){
-      this.switchToGrid.emit({view:'paper'});
+      this.viewType="paperagreement";
+      //this.switchToGrid.emit({view:'paper'});
     }
   }
 
@@ -181,10 +182,16 @@ export class CaseSecurityComponent implements OnInit {
       auditInfo: 'Client read and agreed the consent',
       updatedBy: firstName
     }
+    const signertype=this.service.getCacheData("signer_type");
     this.service.updateCaseActivityLog(this.form.caseId, activityLog).subscribe(respAL => {
       const obj = <any>respAL;
       if (obj.statusCode === '200') {
-        this.switchToGrid.emit({view:'signing'});
+        //this.switchToGrid.emit({view:'signing'});
+        if(signertype=="PAPER"){
+          this.switchToGrid.emit({view:'paper'});
+        } else {
+          this.switchToGrid.emit({view:'signing'});
+        }
       }
     });
   }

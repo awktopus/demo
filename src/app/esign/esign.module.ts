@@ -76,6 +76,9 @@ import { USTaxSecondarySigningRendererComponent } from './controls/receivercases
 import { USTaxPaperSigningRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxPaperSigningbutton-renderer.component';
 import { CaseSecurityComponent } from './controls/casesecurity/casesecurity.component';
 import { UstaxPdfPopupComponent } from './controls/receivercases/shared/ustax-pdf-popup/ustax-pdf-popup.component';
+import { CasePaperSignComponent } from './controls/casepapersign/casepapersign.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { CaseSigningComponent } from './controls/casesigning/casesigning.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -85,6 +88,7 @@ import { UstaxPdfPopupComponent } from './controls/receivercases/shared/ustax-pd
     MatTableModule,
     MatStepperModule,
     MatFormFieldModule,
+    PdfViewerModule,
     // MDBBootstrapModule.forRoot(),
     SignaturePadModule,
     MatSortModule,
@@ -104,7 +108,7 @@ import { UstaxPdfPopupComponent } from './controls/receivercases/shared/ustax-pd
     USTaxPrimarySigningRendererComponent,
     USTaxSecondarySigningRendererComponent,
     USTaxPaperSigningRendererComponent,
-    CaseSecurityComponent,
+    CaseSecurityComponent,CasePaperSignComponent,CaseSigningComponent,
     USTaxViewButtonRendererComponent]),
   ],
   declarations: [
@@ -159,7 +163,7 @@ import { UstaxPdfPopupComponent } from './controls/receivercases/shared/ustax-pd
     USTaxPrimarySigningRendererComponent,
     USTaxSecondarySigningRendererComponent,
     USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent,
-    CaseSecurityComponent,
+    CaseSecurityComponent,CasePaperSignComponent,CaseSigningComponent,
     USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent, UstaxPdfPopupComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
@@ -169,8 +173,8 @@ import { UstaxPdfPopupComponent } from './controls/receivercases/shared/ustax-pd
      SignerselectionComponent,
     GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent,
     CasetemplatesComponent, FilingstatuspopupComponent, ArchiveComponent,
-    BulkarchiveComponent, MoreOptionsRendererComponent,
-    MoreOptionsRenderer2Component, SinglecasearchiveComponent,CaseSecurityComponent],
+    BulkarchiveComponent, MoreOptionsRendererComponent,CaseSigningComponent,
+    MoreOptionsRenderer2Component, SinglecasearchiveComponent,CaseSecurityComponent,CasePaperSignComponent],
   providers: [
     ESignGuard,
     // AuthGuard,

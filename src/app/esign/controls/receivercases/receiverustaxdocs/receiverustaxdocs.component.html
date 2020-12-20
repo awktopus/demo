@@ -34,6 +34,12 @@
 <div *ngIf="viewType==='security'">
     <app-casesecurity (switchToGridView)= "switchToGridView($event)"></app-casesecurity>
 </div>
+<div *ngIf="viewType==='paper'">
+    <app-casepapersign (switchToGridView)= "switchToGridView($event)"></app-casepapersign>
+</div>
+<div *ngIf="viewType==='signing'">
+    <app-casesigning (switchToGridView)= "switchToGridView($event)"></app-casesigning>
+</div>
 <!--
 <div *ngIf="viewType==='pagereview'">
     <app-docreview (switchToGridView)= "switchToGridView()"></app-docreview>
