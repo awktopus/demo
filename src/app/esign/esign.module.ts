@@ -79,6 +79,7 @@ import { UstaxPdfPopupComponent } from './controls/receivercases/shared/ustax-pd
 import { CasePaperSignComponent } from './controls/casepapersign/casepapersign.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { CaseSigningComponent } from './controls/casesigning/casesigning.component';
+import { USTaxViewCoverReviewButtonRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxViewCoverReviewbutton-renderer.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -109,7 +110,7 @@ import { CaseSigningComponent } from './controls/casesigning/casesigning.compone
     USTaxSecondarySigningRendererComponent,
     USTaxPaperSigningRendererComponent,
     CaseSecurityComponent,CasePaperSignComponent,CaseSigningComponent,
-    USTaxViewButtonRendererComponent]),
+    USTaxViewButtonRendererComponent, USTaxViewCoverReviewButtonRendererComponent]),
   ],
   declarations: [
     GridColConfigPopupComponent,
@@ -164,6 +165,7 @@ import { CaseSigningComponent } from './controls/casesigning/casesigning.compone
     USTaxSecondarySigningRendererComponent,
     USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent,
     CaseSecurityComponent,CasePaperSignComponent,CaseSigningComponent,
+    CaseSecurityComponent, USTaxViewCoverReviewButtonRendererComponent,
     USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent, UstaxPdfPopupComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
@@ -174,7 +176,8 @@ import { CaseSigningComponent } from './controls/casesigning/casesigning.compone
     GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent,
     CasetemplatesComponent, FilingstatuspopupComponent, ArchiveComponent,
     BulkarchiveComponent, MoreOptionsRendererComponent,CaseSigningComponent,
-    MoreOptionsRenderer2Component, SinglecasearchiveComponent,CaseSecurityComponent,CasePaperSignComponent],
+    BulkarchiveComponent, MoreOptionsRendererComponent,CasePaperSignComponent,
+    MoreOptionsRenderer2Component, SinglecasearchiveComponent, CaseSecurityComponent],
   providers: [
     ESignGuard,
     // AuthGuard,
