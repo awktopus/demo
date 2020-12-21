@@ -1,0 +1,17 @@
+<table width=60%>
+    <tr>
+        <td><h5>Case Review Document</h5></td>
+        <td><button mat-icon-button color="primary" (click)="switchToGrid.emit({view:'grid'})">
+            Back
+            <mat-icon>
+              reply</mat-icon>
+          </button></td>
+    </tr>
+</table>
+<div style="margin-left: 1px;margin-right: 1px" *ngIf="reviewdocgridData && reviewdocgridData.length>0 && dataloaded">
+    <ag-grid-angular #agGrid id="reviewdocgrid" style="width: 60%;  font-size:11pt"  [rowData]="reviewdocgridData" class="ag-theme-balham"
+        [enableSorting]="true" [statusBar]="statusBar" [enableFilter]="true" [columnDefs]="gridColumnDefs" [enableColResize]="true"
+        [pagination]="true" [paginationPageSize]="20" [frameworkComponents]="frameworkComponents" [context]="context" (firstDataRendered)="onFirstDataRendered($event,'reviewdoc')"
+        [rowHeight]="rowHeight" [rowClass]="rowClass" [domLayout]="domLayout" (gridReady)="onGridReady($event,'reviewdoc')">
+    </ag-grid-angular>
+</div>

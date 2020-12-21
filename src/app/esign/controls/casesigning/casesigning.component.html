@@ -36,7 +36,7 @@
   <hr>
 </div>
 
-<div  #pdfviewcontainer class='casedoc' style="word-break:break-word;white-space:normal !important;">
+<div *ngIf="viewType=='signing'" #pdfviewcontainer class='casedoc' style="word-break:break-word;white-space:normal !important;">
   <div *ngFor="let fld of form.filterFields" style="position:absolute;z-index:90;background:#ccccff;border:1pt solid green"
    [style.bottom.px]="fld.adjustposY-1" [style.left.px]="fld.adjustPosX+1" >
    <table style="padding-top:2pt" [style.background-color]="fld.bgcolor">
@@ -50,7 +50,7 @@
   </div>
   <pdf-viewer [original-size]="true" [src]="pdfUrl" (page-rendered)="pageRendered($event)" ></pdf-viewer>
 </div>
-<div class='signcapcls' style="word-break:break-word;white-space:normal !important;">
+<div  *ngIf="viewType=='signing'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
   <form [formGroup]="signcapform">
   <table width=95%>
   <div *ngFor='let field of form.filterFields'>
@@ -87,7 +87,7 @@
        <span *ngIf='!showProcessSpinner'>
          <table>
            <tr>
-             <td *ngIf='form.presignstatus'><button mat-raised-button color="accent"  (click)="viewPreSignPage()">View</button></td>
+             <td *ngIf='form.presignstatus'><button mat-raised-button color="accent"  (click)="viewPreSignPage()">Existing Signing</button></td>
              <td *ngIf='form.presignstatus'><button mat-raised-button color="accent"  (click)="SkipPage()">Next</button></td>
              <td *ngIf='form.presignstatus'> <button mat-raised-button color="accent"  (click)="submitSignCapData()">Update</button></td>
              <td *ngIf='!form.presignstatus'> <button mat-raised-button color="accent"  (click)="submitSignCapData()">Save</button></td>
@@ -103,3 +103,27 @@
    </table>
  </form>
   </div>
+
+  <div *ngIf="viewType=='finalview'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
+    <font color=green>Please review and press the submit button to finish signing.</font>
+    <table width=80%>
+      <tr>
+          <br/>
+      </tr>
+      <tr>
+        <td>
+          <span *ngIf='!showReviewSpinner'>
+              <button mat-raised-button color="accent"  (click)="previewDoc()">Review</button>
+            </span>
+          <mat-spinner *ngIf='showReviewSpinner' diameter='40'></mat-spinner>
+          <span *ngIf='showReviewSpinner'>Processing...</span>
+       &nbsp;&nbsp;
+          <span *ngIf='!showSubmitSpinner'>
+              <button mat-raised-button color="accent"  (click)="finalize()">Submit</button>
+            </span>
+          <mat-spinner *ngIf='showSubmitSpinner' diameter='40'></mat-spinner>
+          <span *ngIf='showSubmitSpinner'>Processing...</span>
+        </td>
+      </tr>
+    </table>
+ </div>

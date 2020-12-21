@@ -985,5 +985,20 @@ bulkTaxCaseArchive(bulkCaseArchivejson) {
      });
   }
 
+  preSubmitSigningForm(jsondata:any){
+    //http://localhost:55940/api/cases/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/db608b99-d878-428c-8f7a-3daad5fd596a/signedpage/presubmit
+    const url= this.auth.baseurl+"/cases/orgunit/"+this.auth.getOrgUnitID()+"/receiver/"+this.auth.getUserID()
+    +"/signedpage/presubmit";
+    return this.http.post(url,jsondata,this.auth.getESignOptions());
+  }
+
+  finalizeSigning(caseId,docId,signer_type)
+  {
+    //http://localhost:55940/api/cases/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/cf0907c8-dafd-4235-a793-5afce024b1f0/case/CS2012040391/document/DOC202012041449212207/signeddocument/finalsubmit
+    const url = this.auth.baseurl + "/cases/orgunit/" + this.auth.getOrgUnitID()
+    + "/receiver/" + this.auth.getUserID() + "/case/" + caseId
+    + "/document/" + docId + "/signeddocument/finalsubmit";
+    return this.http.post(url, {type:signer_type}, this.auth.getESignOptions());
+  }
 }
 

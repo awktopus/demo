@@ -78,8 +78,10 @@ import { CaseSecurityComponent } from './controls/casesecurity/casesecurity.comp
 import { UstaxPdfPopupComponent } from './controls/receivercases/shared/ustax-pdf-popup/ustax-pdf-popup.component';
 import { CasePaperSignComponent } from './controls/casepapersign/casepapersign.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { CaseSigningComponent } from './controls/casesigning/casesigning.component';
+import { CaseSigningComponent, DialogMissingEsignDataComponent } from './controls/casesigning/casesigning.component';
 import { USTaxViewCoverReviewButtonRendererComponent } from './controls/receivercases/receiverustaxdocs/USTaxViewCoverReviewbutton-renderer.component';
+import { CaseReviewComponent } from './controls/casereview/casereview.component';
+import { CaseReviewDocViewButtonRendererComponent } from './controls/casereview/CaseReviewDocViewButton-renderer.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -108,8 +110,8 @@ import { USTaxViewCoverReviewButtonRendererComponent } from './controls/receiver
     USTaxDownloadButtonRendererComponent,
     USTaxPrimarySigningRendererComponent,
     USTaxSecondarySigningRendererComponent,
-    USTaxPaperSigningRendererComponent,
-    CaseSecurityComponent,CasePaperSignComponent,CaseSigningComponent,
+    USTaxPaperSigningRendererComponent,CaseReviewComponent,CaseReviewDocViewButtonRendererComponent,
+    CaseSecurityComponent,CasePaperSignComponent,CaseSigningComponent,DialogMissingEsignDataComponent,
     USTaxViewButtonRendererComponent, USTaxViewCoverReviewButtonRendererComponent]),
   ],
   declarations: [
@@ -162,10 +164,10 @@ import { USTaxViewCoverReviewButtonRendererComponent } from './controls/receiver
     ReceivercasesComponent, ReceiverustaxdocsComponent,
     USTaxDownloadButtonRendererComponent,
     USTaxPrimarySigningRendererComponent,
-    USTaxSecondarySigningRendererComponent,
+    USTaxSecondarySigningRendererComponent,CaseReviewDocViewButtonRendererComponent,
     USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent,
-    CaseSecurityComponent,CasePaperSignComponent,CaseSigningComponent,
-    CaseSecurityComponent, USTaxViewCoverReviewButtonRendererComponent,
+    CaseSecurityComponent,CasePaperSignComponent,CaseSigningComponent,CaseReviewComponent,
+    CaseSecurityComponent, USTaxViewCoverReviewButtonRendererComponent,DialogMissingEsignDataComponent,
     USTaxPaperSigningRendererComponent, USTaxViewButtonRendererComponent, UstaxPdfPopupComponent
     ],
   entryComponents: [AddnotepopupComponent, Cover1Component, PdfpopupComponent,
@@ -175,6 +177,7 @@ import { USTaxViewCoverReviewButtonRendererComponent } from './controls/receiver
      SignerselectionComponent,
     GridColConfigPopupComponent, AuditpopupComponent, EditSigboxComponent,
     CasetemplatesComponent, FilingstatuspopupComponent, ArchiveComponent,
+    DialogMissingEsignDataComponent ,CaseReviewComponent,CaseReviewDocViewButtonRendererComponent,
     BulkarchiveComponent, MoreOptionsRendererComponent,CaseSigningComponent,
     BulkarchiveComponent, MoreOptionsRendererComponent,CasePaperSignComponent,
     MoreOptionsRenderer2Component, SinglecasearchiveComponent, CaseSecurityComponent],

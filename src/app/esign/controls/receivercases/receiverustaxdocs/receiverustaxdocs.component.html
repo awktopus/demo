@@ -31,6 +31,9 @@
       </ag-grid-angular>
   </div>
 </div>
+<div *ngIf="viewType==='review'">
+    <app-casereview (switchToGridView)= "switchToGridView($event)"></app-casereview>
+</div>
 <div *ngIf="viewType==='security'">
     <app-casesecurity (switchToGridView)= "switchToGridView($event)"></app-casesecurity>
 </div>
