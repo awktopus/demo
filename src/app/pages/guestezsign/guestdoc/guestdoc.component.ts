@@ -566,7 +566,10 @@ export class EzsignGuestDocComponent implements OnInit {
       if (fd.fieldTypeName === 'Signature') {
         // fd.signatureDataUrl = this.myinput[fd.eleId];
         fd.fieldValue = this.myinput[fd.eleId];
-      } else {
+      } if (fd.fieldTypeName === 'Date') {
+        let rDate: Date = new Date(this.myinput[fd.eleId]);
+        fd.fieldValue = rDate;
+       } else {
         fd.fieldValue = this.myinput[fd.eleId];
       }
       fddata.push(fd);

@@ -73,46 +73,46 @@ export class ReceiverustaxdocsComponent implements OnInit {
   loadUSTaxDocuments() {
     this.isUSTaxDataFetched = false;
 
-    this.service.getUSTaxCases().subscribe(resp => {
+    this.service.GetClientUSTaxCaseWorkList().subscribe(resp => {
       this.usTaxAllCases = <any[]>resp;
       console.log(this.usTaxAllCases);
       if (this.usTaxAllCases) {
-        this.usTaxReceiverDocsgridData = [];
-
-        this.usTaxAllCases.forEach(caseRec => {
-          let caseR = new USTaxCase();
-          caseR.caseId = caseRec.caseId;
-          caseR.returnName = caseRec.returnName;
-          caseR.createdDateTime = caseRec.createdDateTime;
-          caseR.caseStatus = caseRec.caseStatus;
-          caseR.docId = caseRec.docId;
-          let isPaperForm = false;
-          if (caseRec.forms) {
-            caseRec.forms.forEach(form => {
-              if (form.approvedForEsign === 'N' && !isPaperForm) {
-                caseR.isPaperSignForm = true;
-                isPaperForm = true;
-              }
-            });
-          }
-          if (caseRec.signers) {
-            caseRec.signers.forEach(signer => {
-              if (signer.type === 'PRIMARY_SIGNER' &&
-                signer.receiverId === this.service.auth.getUserID()) {
-                caseR.isPrimarySignerForm = true;
-              } else if (signer.type !== 'SECONDARY_SIGNER') {
-                caseR.isPrimarySignerForm = false;
-              }
-              if (signer.type === 'SECONDARY_SIGNER' &&
-                signer.receiverId === this.service.auth.getUserID()) {
-                caseR.isSecondarySignerForm = true;
-              } else if (signer.type !== 'PRIMARY_SIGNER') {
-                caseR.isSecondarySignerForm = false;
-              }
-            });
-          }
-          this.usTaxReceiverDocsgridData.push(caseR);
-        });
+        this.usTaxReceiverDocsgridData = this.usTaxAllCases;
+        // this.usTaxReceiverDocsgridData = [];
+        // this.usTaxAllCases.forEach(caseRec => {
+        //   let caseR = new USTaxCase();
+        //   caseR.caseId = caseRec.caseId;
+        //   caseR.returnName = caseRec.returnName;
+        //   caseR.createdDateTime = caseRec.createdDateTime;
+        //   caseR.caseStatus = caseRec.caseStatus;
+        //   caseR.docId = caseRec.docId;
+        //   let isPaperForm = false;
+        //   if (caseRec.forms) {
+        //     caseRec.forms.forEach(form => {
+        //       if (form.approvedForEsign === 'N' && !isPaperForm) {
+        //         caseR.isPaperSignForm = true;
+        //         isPaperForm = true;
+        //       }
+        //     });
+        //   }
+        //   if (caseRec.signers) {
+        //     caseRec.signers.forEach(signer => {
+        //       if (signer.type === 'PRIMARY_SIGNER' &&
+        //         signer.receiverId === this.service.auth.getUserID()) {
+        //         caseR.isPrimarySignerForm = true;
+        //       } else if (signer.type !== 'SECONDARY_SIGNER') {
+        //         caseR.isPrimarySignerForm = false;
+        //       }
+        //       if (signer.type === 'SECONDARY_SIGNER' &&
+        //         signer.receiverId === this.service.auth.getUserID()) {
+        //         caseR.isSecondarySignerForm = true;
+        //       } else if (signer.type !== 'PRIMARY_SIGNER') {
+        //         caseR.isSecondarySignerForm = false;
+        //       }
+        //     });
+        //   }
+        //   this.usTaxReceiverDocsgridData.push(caseR);
+        // });
 
         console.log(this.usTaxReceiverDocsgridData);
       }
@@ -123,48 +123,15 @@ export class ReceiverustaxdocsComponent implements OnInit {
 
   loadInternalUSTaxDocuments() {
     this.isUSTaxDataFetched = false;
-
-    this.service.getUSTaxCases().subscribe(resp => {
+    this.service.GetClientUSTaxCaseWorkList().subscribe(resp => {
       this.usTaxAllCases = <any[]>resp;
       console.log(this.usTaxAllCases);
       if (this.usTaxAllCases) {
-        this.usTaxReceiverDocsgridData = [];
-        this.usTaxAllCases.forEach(caseRec => {
-          let caseR = new USTaxCase();
-          caseR.caseId = caseRec.caseId;
-          caseR.returnName = caseRec.returnName;
-          caseR.createdDateTime = caseRec.createdDateTime;
-          caseR.caseStatus = caseRec.caseStatus;
-          caseR.docId = caseRec.docId;
-          let isPaperForm = false;
-          if (caseRec.forms) {
-            caseRec.forms.forEach(form => {
-              if (form.approvedForEsign === 'N' && !isPaperForm) {
-                caseR.isPaperSignForm = true;
-                isPaperForm = true;
-              }
-            });
-          }
-          if (caseRec.signers) {
-            caseRec.signers.forEach(signer => {
-              if (signer.type === 'PRIMARY_SIGNER' &&
-                signer.receiverId === this.service.auth.getUserID()) {
-                caseR.isPrimarySignerForm = true;
-              } else if (signer.type !== 'SECONDARY_SIGNER') {
-                caseR.isPrimarySignerForm = false;
-              }
-              if (signer.type === 'SECONDARY_SIGNER' &&
-                signer.receiverId === this.service.auth.getUserID()) {
-                caseR.isSecondarySignerForm = true;
-              } else if (signer.type !== 'PRIMARY_SIGNER') {
-                caseR.isSecondarySignerForm = false;
-              }
-            });
-          }
-          this.usTaxReceiverDocsgridData.push(caseR);
-        });
+        this.usTaxReceiverDocsgridData = this.usTaxAllCases;
         console.log(this.usTaxReceiverDocsgridData);
         this.usTaxReceiverApi.api.sizeColumnsToFit();
+      } else {
+        this.usTaxReceiverDocsgridData = null;
       }
       this.isUSTaxDataFetched = true;
     });
@@ -302,8 +269,8 @@ export class ReceiverustaxdocsComponent implements OnInit {
         console.log(doc);
         console.log(usTaxCaseRow);
         // need add signer and signer type
-        this.preparePaperSigning(doc,"PAPER");
-        //this.viewType = 'security';
+        this.preparePaperSigning(doc, "PAPER");
+        // this.viewType = 'security';
       }
     });
   }
@@ -323,17 +290,17 @@ export class ReceiverustaxdocsComponent implements OnInit {
 
     if (signer) {
       // now find the form and signing form and form seq
-      let frm=this.findFirstPaperForm(cc,signer);
-      if(frm!=null){
+      let frm = this.findFirstPaperForm(cc, signer);
+      if (frm != null) {
         console.log("found paper");
         console.log(frm);
-        frm.caseId=cc.caseId;
-        frm.docId=cc.docId;
-        this.service.setCacheData("form",frm);
-        this.service.setCacheData("signer",signer);
-        this.service.setCacheData("formSeq",frm.seqNo);
-        this.service.setCacheData("signer_type",signer_type);
-        this.viewType="security";
+        frm.caseId = cc.caseId;
+        frm.docId = cc.docId;
+        this.service.setCacheData("form", frm);
+        this.service.setCacheData("signer", signer);
+        this.service.setCacheData("formSeq", frm.seqNo);
+        this.service.setCacheData("signer_type", signer_type);
+        this.viewType = "security";
       }
     }
   }
@@ -368,28 +335,25 @@ export class ReceiverustaxdocsComponent implements OnInit {
       this.viewType = "security";
     }
   }
-  findFirstPaperForm(cc,ss){
-    let frm=null;
-    if(ss.receiverId==this.service.auth.getUserID())
-    {
-      cc.forms.forEach(page=>{
-        if(page.approvedForEsign === 'N'&&page.pageStatus=="ESign"){
-            if(ss.type=="PRIMARY_SIGNER")
-            {
-              frm=page;
+  findFirstPaperForm(cc, ss) {
+    let frm = null;
+    if ( ss.receiverId === this.service.auth.getUserID()) {
+      cc.forms.forEach(page => {
+        if (page.approvedForEsign === 'N' && page.pageStatus === "ESign") {
+            if (ss.type === "PRIMARY_SIGNER") {
+              frm = page;
             }
         }
       });
     }
     return frm;
   }
-  findFirstForm(cc,ss,isPrimary){
-    let frm=null;
-    if(ss.receiverId==this.service.auth.getUserID())
-    {
-      cc.forms.forEach(page=>{
-        if(page.formFields&&page.approvedForEsign === 'Y'){
-          page.formFields.forEach(fd=>{
+  findFirstForm(cc, ss, isPrimary) {
+    let frm = null;
+    if (ss.receiverId === this.service.auth.getUserID()) {
+      cc.forms.forEach(page => {
+        if (page.formFields && page.approvedForEsign === 'Y') {
+          page.formFields.forEach(fd => {
             if ((fd.receiverId === ss.receiverId) && (fd.fieldStatus !== 'Signed')) {
               if (((fd.fieldTypeName.indexOf("_TP_") > -1) && isPrimary) || ((fd.fieldTypeName.indexOf("_SP_") > -1) && (!isPrimary))) {
                 if (frm == null) {
@@ -406,18 +370,17 @@ export class ReceiverustaxdocsComponent implements OnInit {
 
   switchToGridView(data) {
     console.log(data);
-    if(data.view==='grid'){
+    if (data.view === 'grid') {
       this.viewType = 'grid';
-      if(data.refresh){
+      if (data.refresh) {
         this.loadUSTaxDocuments();
       }
-    } else if(data.view ==='paper') {
+    } else if (data.view === 'paper') {
       this.viewType = 'paper';
-    } 
-      else if(data.view ==='signing') {
+    } else if (data.view === 'signing') {
       this.viewType = 'signing';
     }
-    //this.loadInternalUSTaxDocuments();
+    // this.loadInternalUSTaxDocuments();
   }
 
   resizeAll(gridname) {

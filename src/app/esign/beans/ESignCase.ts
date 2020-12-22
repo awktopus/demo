@@ -36,6 +36,10 @@ export class ESignCase {
 }
 
 export class USTaxCase {
+  orgUnitId: string;
+  senderId: string;
+  senderName: string;
+  senderEmailId: string;
 caseId: string;
 docId: string;
 caseStatus: string;
@@ -44,6 +48,7 @@ createdDateTime: string;
 isPrimarySignerForm: boolean;
 isSecondarySignerForm: boolean;
 isPaperSignForm: boolean;
+isApprovedForEsign: boolean;
 }
 
 export interface ESignCate {

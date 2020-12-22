@@ -1,6 +1,8 @@
-import { Component, ElementRef, EventEmitter, ViewChild, OnInit, Output, AfterViewInit,
-  ViewChildren, QueryList } from '@angular/core';
-import {EzsigndataService } from '../../service/ezsigndata.service';
+import {
+  Component, ElementRef, EventEmitter, ViewChild, OnInit, Output, AfterViewInit,
+  ViewChildren, QueryList
+} from '@angular/core';
+import { EzsigndataService } from '../../service/ezsigndata.service';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { MatDialog } from '@angular/material';
@@ -14,7 +16,7 @@ import { PdfViewerModule, PdfViewerComponent } from 'ng2-pdf-viewer';
 })
 export class DocSigningComponent implements OnInit, AfterViewInit {
   @Output("switchToGridView") switchToGrid: EventEmitter<any> = new EventEmitter();
-  @ViewChildren(SignaturePad) public sigPadList: QueryList< SignaturePad>;
+  @ViewChildren(SignaturePad) public sigPadList: QueryList<SignaturePad>;
   @ViewChild(PdfViewerComponent) private sigpdfview: PdfViewerComponent;
   @ViewChild('pdfviewcontainer') ele_pdfview: ElementRef;
   public signaturePadOptions: any = {
@@ -28,7 +30,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   type: string;
   selected: any = false;
   selectedPaperConsent: any = false;
- // mycases: any = [];
+  // mycases: any = [];
   mycase: any;
   casefilter = 0;
   selectedcase: any = {};
@@ -41,7 +43,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   fnext: any = null;
   curpage: any = null;
   viewType: any = "";
-  pdfUrl:  any;
+  pdfUrl: any;
   fieldsCount = 0;
   signedCount = 0;
   agreementselected = false;
@@ -60,9 +62,10 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
 
   }
   ngAfterViewInit(): void {
-   // throw new Error("Method not implemented.");
+    // throw new Error("Method not implemented.");
   }
   ngOnInit() {
+    console.log('doc signing ng on init');
     this.mycase = this.service.getCacheData("case");
     console.log(this.mycase);
     this.curcase = this.mycase;
@@ -85,7 +88,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   prepareData() {
 
     if (this.mycase) {
-    const userID = this.service.auth.getUserID();
+      const userID = this.service.auth.getUserID();
       let cc = this.mycase;
       // not calculation display names
       if (cc.documentName.length < 40) {
@@ -109,7 +112,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
           });
         }
       });
-  }
+    }
   }
   displayReviewDoc(cc: any) {
     console.log(cc);
@@ -123,17 +126,17 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
     console.log("the next page seq:", nextseq);
     console.log(nextseq);
     if (nextseq > -1) {
-       // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.mycase,pageSeq:nextseq,signer:this.signer});
-       this.curseq = nextseq;
-       this.prepareReviewData();
-       this.countTotalUnsignedPages();
-       this.goSignCap();
+      // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.mycase,pageSeq:nextseq,signer:this.signer});
+      this.curseq = nextseq;
+      this.prepareReviewData();
+      this.countTotalUnsignedPages();
+      this.goSignCap();
     } else {
-        // all signing done for this form
-        this.viewType = "";
-        this.curseq = -1;
-        console.log("need navigate back to the main page");
-        this.preSignComplete();
+      // all signing done for this form
+      this.viewType = "";
+      this.curseq = -1;
+      console.log("need navigate back to the main page");
+      this.preSignComplete();
     }
     this.showProcessSpinner = false;
   }
@@ -142,9 +145,9 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
     let cc = this.mycase;
     let signer: any = null;
     cc.ezSignDocSigners.forEach(ss => {
-        if (ss.receiverId === this.service.auth.getUserID()) {
-          signer = ss;
-        }
+      if (ss.receiverId === this.service.auth.getUserID()) {
+        signer = ss;
+      }
     });
     let firstseq = this.findSignPageSeq(cc, signer);
     // now display the document
@@ -179,10 +182,10 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
       });
       this.fieldsCount = 0;
       // tslint:disable-next-line: whitespace
-      this.signedCount=0;
+      this.signedCount = 0;
       if (this.curpage.pageFields) {
         // tslint:disable-next-line: whitespace
-        this.curpage.pageFields.forEach(fd=> {
+        this.curpage.pageFields.forEach(fd => {
           console.log(this.curcase);
           if (fd.receiverId === this.cursigner.receiverId) {
             this.fieldsCount = this.fieldsCount + 1;
@@ -212,7 +215,7 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
 
     this.service.getPDFBlob(url).subscribe(resp => {
       console.log('got data back!!');
-      const file = new Blob([<any>resp], {type: 'application/pdf'});
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
       const fileURL = URL.createObjectURL(file);
       this.pdfUrl = fileURL;
     });
@@ -228,14 +231,14 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   }
 
 
-   goAgreementView (cc: any ) {
+  goAgreementView(cc: any) {
     this.viewType = "";
     let signer: any = null;
     this.agreementselected = false;
-    cc.ezSignDocSigners.forEach( ss => {
-        if (ss.receiverId === this.service.auth.getUserID()) {
-          signer = ss;
-        }
+    cc.ezSignDocSigners.forEach(ss => {
+      if (ss.receiverId === this.service.auth.getUserID()) {
+        signer = ss;
+      }
     });
 
     let firstseq = this.findSignPageSeq(cc, signer);
@@ -251,12 +254,12 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   }
 
   countTotalUnsignedPages() {
-    let count = 0 ;
+    let count = 0;
     let cc = this.curcase;
     let signer = this.cursigner;
     cc.eZSignDocPages.forEach(page => {
       console.log(page.pageSeqNo);
-      if ( page.status !== "Signed") {
+      if (page.status !== "Signed") {
         if (page.pageFields) {
           let found = false;
           page.pageFields.forEach(fd => {
@@ -274,23 +277,23 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
   }
 
   findSignPageSeq(cc, signer) {
-      let pseq = -1;
-      cc.eZSignDocPages.forEach(page => {
-        console.log(page.pageSeqNo);
-        let alreadysigned = this.cur_signed_pages.includes(page.pageSeqNo);
-        if ( page.status !== "Signed" && (!alreadysigned)) {
-          if (page.pageFields) {
-            page.pageFields.forEach(fd => {
-              if ((fd.receiverId === signer.receiverId) && (fd.status !== 'Signed')) {
-                if (pseq === -1) {
-                  pseq = page.pageSeqNo;
-                }
+    let pseq = -1;
+    cc.eZSignDocPages.forEach(page => {
+      console.log(page.pageSeqNo);
+      let alreadysigned = this.cur_signed_pages.includes(page.pageSeqNo);
+      if (page.status !== "Signed" && (!alreadysigned)) {
+        if (page.pageFields) {
+          page.pageFields.forEach(fd => {
+            if ((fd.receiverId === signer.receiverId) && (fd.status !== 'Signed')) {
+              if (pseq === -1) {
+                pseq = page.pageSeqNo;
               }
-            });
-          }
+            }
+          });
         }
-      });
-      return pseq;
+      }
+    });
+    return pseq;
   }
 
   completeConsent() {
@@ -299,15 +302,15 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
       if (resp) {
         console.log(resp);
         this.cursigner.isAgreementAccepted = (<any>resp).isAgreementAccepted;
-       // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.case,pageSeq:this.pageSeq,signer:this.signer});
-       this.goSignCap();
+        // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.case,pageSeq:this.pageSeq,signer:this.signer});
+        this.goSignCap();
       }
     });
     // here we are reset the signing seq
     this.cur_signed_pages = [];
   }
 
- filterSignerFields() {
+  filterSignerFields() {
     let filtered_fields = [];
     let presubmit = false;
     this.curpage.pageFields.forEach(fd => {
@@ -320,36 +323,38 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
     console.log("filtered field size:", filtered_fields.length);
     this.curpage.filterFields = filtered_fields;
     this.curpage.filterFields.forEach(ffd => {
-        if (ffd.status === "Presigned" && (!this.curpage.presignstatus)) {
-          this.curpage.presignstatus = true;
-        }
+      if (ffd.status === "Presigned" && (!this.curpage.presignstatus)) {
+        this.curpage.presignstatus = true;
+      }
     });
     console.log(this.curcase);
     console.log(this.curpage);
-}
+  }
 
-viewPreSignPage() {
-  var trackId = this.curcase.ezSignTrackingId;
-  var docId = this.curcase.docId;
-  var pageseq = this.curpage.pageSeqNo;
-  this.service.showEzsignPagePreview(trackId, docId, pageseq);
-}
-pageRendered(eve) {
-  console.log("rendering pdf ...");
-  console.log(eve);
-  this.size_pdf = {width: eve.source.div.clientWidth, height: eve.source.div.clientHeight, scale:
-    eve.source.viewport.scale};
-  console.log(this.size_pdf);
-  this.size_container = {width: this.ele_pdfview.nativeElement.clientWidth, height: this.ele_pdfview.nativeElement.clientHeight};
-  console.log(this.size_container);
-  this.curpage.filterFields.forEach(ff => {
+  viewPreSignPage() {
+    var trackId = this.curcase.ezSignTrackingId;
+    var docId = this.curcase.docId;
+    var pageseq = this.curpage.pageSeqNo;
+    this.service.showEzsignPagePreview(trackId, docId, pageseq);
+  }
+  pageRendered(eve) {
+    console.log("rendering pdf ...");
+    console.log(eve);
+    this.size_pdf = {
+      width: eve.source.div.clientWidth, height: eve.source.div.clientHeight, scale:
+        eve.source.viewport.scale
+    };
+    console.log(this.size_pdf);
+    this.size_container = { width: this.ele_pdfview.nativeElement.clientWidth, height: this.ele_pdfview.nativeElement.clientHeight };
+    console.log(this.size_container);
+    this.curpage.filterFields.forEach(ff => {
       ff.adjustPosX = ff.posX * this.size_pdf.scale + (this.size_container.width - this.size_pdf.width) / 2;
       ff.adjustposY = ff.posY * this.size_pdf.scale;
-  });
-}
+    });
+  }
 
-pickField(event) {
-  console.log(event);
+  pickField(event) {
+    console.log(event);
     let fldseq = event.source.value;
     this.curpage.filterFields.forEach(ff => {
       if (fldseq === ff.fieldSeqNo) {
@@ -365,87 +370,89 @@ pickField(event) {
       }
     });
 
-}
+  }
 
-goSignCap() {
-
-  this.signcapform = new FormGroup({});
-  this.filterSignerFields();
-  let str_today = new Date().toISOString().split('T')[0];
-  let values = {};
-  this.curpage.filterFields.forEach(field => {
-    field.eleId = "ele_" + field.fieldSeqNo;
-    this.signcapform.addControl(field.eleId, new FormControl('', Validators.required));
-    if (field.fieldTypeName === "Date") {
-      values[field.eleId] = str_today;
-      console.log("set default date");
-    } else {
-      values[field.eleId]  = "";
-    }
-    if (field.fieldValue !== null && field.fieldValue !== "") {
-      console.log("set value from store value");
-      values[field.eleId] = field.fieldValue;
-    }
-  });
-  console.log("form values:--->");
-  console.log(values);
-  this.signcapform.setValue(values);
-  // iinitialized signaturepad
-  console.log(this.curpage.filterFields);
-  console.log(this.cursigner);
-  console.log(this.signcapform);
-  this.viewType = "signcapview";
-  this.initSigCap();
- }
-
- initSigCap() {
-   this.myinput = {};
-   this.mysigs = {};
-   let index = 0;
-   this.curpage.pageFields.forEach( fd => {
-    this.myinput[fd.eleId] = "";
-    if (fd.fieldTypeName === "Signature" ) {
-      if (fd.fieldValue !== "") {
-     //   res[index].fromDataURL(fd.fieldValue);
+  goSignCap() {
+    console.log('go sign cap');
+    this.signcapform = new FormGroup({});
+    this.filterSignerFields();
+    let str_today = new Date().toISOString().split('T')[0];
+    let values = {};
+    console.log(this.curpage.filterFields);
+    this.curpage.filterFields.forEach(field => {
+      field.eleId = "ele_" + field.fieldSeqNo;
+      this.signcapform.addControl(field.eleId, new FormControl('', Validators.required));
+      if (field.fieldTypeName === "Date") {
+        console.log("set default date");
+        values[field.eleId] = str_today;
+      } else {
+        values[field.eleId] = "";
       }
-      index = index + 1;
-    }
+      if (field.fieldValue !== null && field.fieldValue !== "") {
+        console.log("set value from store value");
+        values[field.eleId] = field.fieldValue;
+      }
+    });
+    console.log("form values:--->");
+    console.log(values);
+    this.signcapform.setValue(values);
+    // iinitialized signaturepad
+    console.log(this.curpage.filterFields);
+    console.log(this.cursigner);
+    console.log(this.signcapform);
+    this.viewType = "signcapview";
+    this.initSigCap();
+  }
 
-  });
+  initSigCap() {
+    this.myinput = {};
+    this.mysigs = {};
+    let index = 0;
+    this.curpage.pageFields.forEach(fd => {
+      this.myinput[fd.eleId] = "";
+      if (fd.fieldTypeName === "Signature") {
+        if (fd.fieldValue !== "") {
+          //   res[index].fromDataURL(fd.fieldValue);
+        }
+        index = index + 1;
+      }
 
-  console.log(this.mysigs);
-  console.log(this.myinput);
-  setTimeout(() => { this.loadPreSignature();
-  }, 100);
-}
+    });
 
- loadPreSignature() {
+    console.log(this.mysigs);
+    console.log(this.myinput);
+    setTimeout(() => {
+      this.loadPreSignature();
+    }, 100);
+  }
+
+  loadPreSignature() {
     let res = this.sigPadList.toArray();
     let index = 0;
-    this.curpage.pageFields.forEach( fd => {
+    this.curpage.pageFields.forEach(fd => {
       this.myinput[fd.eleId] = "";
-      if (fd.fieldTypeName === "Signature" ) {
+      if (fd.fieldTypeName === "Signature") {
         if (fd.fieldValue !== "") {
-         res[index].fromDataURL(fd.fieldValue);
+          res[index].fromDataURL(fd.fieldValue);
         }
         index = index + 1;
       }
     });
- }
+  }
 
- clearSigCap(field) {
-  console.log(this.sigPadList.toArray());
-  let id = field.eleId;
-  console.log(id);
-  let index = 0;
-  let res = this.sigPadList.toArray();
-  this.curpage.filterFields.forEach(fd => {
-    if (fd.eleId === id) {
-      console.log(fd.eleId, "  ", id , index);
-      res[index].clear();
-    }
-    if (fd.fieldTypeName === 'Signature') {index = index + 1; }
-  });
+  clearSigCap(field) {
+    console.log(this.sigPadList.toArray());
+    let id = field.eleId;
+    console.log(id);
+    let index = 0;
+    let res = this.sigPadList.toArray();
+    this.curpage.filterFields.forEach(fd => {
+      if (fd.eleId === id) {
+        console.log(fd.eleId, "  ", id, index);
+        res[index].clear();
+      }
+      if (fd.fieldTypeName === 'Signature') { index = index + 1; }
+    });
   }
 
   getInput() {
@@ -454,7 +461,7 @@ goSignCap() {
     // console.log(fields);
     let sigindex = 0;
     let res = this.sigPadList.toArray();
-    this.curpage.filterFields.forEach( fd => {
+    this.curpage.filterFields.forEach(fd => {
       if (fd.fieldTypeName === 'Signature') {
         this.mysigs[fd.eleId] = res[sigindex];
         sigindex = sigindex + 1;
@@ -465,7 +472,7 @@ goSignCap() {
       const lbl = fd.eleId;
       if (fd.fieldTypeName === 'Signature') {
         if (this.mysigs[lbl].isEmpty()) {
-            this.myinput[lbl] = "";
+          this.myinput[lbl] = "";
           allfilled = false;
         } else {
           this.myinput[lbl] = this.mysigs[lbl].toDataURL();
@@ -487,28 +494,28 @@ goSignCap() {
 
       let json = this.buildJson();
       this.service.postPreSubmitEzsignPage(json).subscribe(async res => {
-          this.curcase = res;
-          console.log(this.curcase);
-          // we also need to update the case list
+        this.curcase = res;
+        console.log(this.curcase);
+        // we also need to update the case list
         //  this.reloadCaseData();
-          this.cur_signed_pages.push(this.curseq);
-          let nextseq = this.findSignPageSeq(this.curcase, this.cursigner);
-          console.log("the next page seq:", nextseq);
-          console.log(nextseq);
-          if (nextseq > -1) {
-             // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.mycase,pageSeq:nextseq,signer:this.signer});
-             this.curseq = nextseq;
-             this.prepareReviewData();
-             this.countTotalUnsignedPages();
-             this.goSignCap();
-          } else {
-              // all signing done for this form
-              this.viewType = "";
-              this.curseq = -1;
-              console.log("need navigate back to the main page");
-              this.preSignComplete();
-         }
-          this.showProcessSpinner = false;
+        this.cur_signed_pages.push(this.curseq);
+        let nextseq = this.findSignPageSeq(this.curcase, this.cursigner);
+        console.log("the next page seq:", nextseq);
+        console.log(nextseq);
+        if (nextseq > -1) {
+          // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.mycase,pageSeq:nextseq,signer:this.signer});
+          this.curseq = nextseq;
+          this.prepareReviewData();
+          this.countTotalUnsignedPages();
+          this.goSignCap();
+        } else {
+          // all signing done for this form
+          this.viewType = "";
+          this.curseq = -1;
+          console.log("need navigate back to the main page");
+          this.preSignComplete();
+        }
+        this.showProcessSpinner = false;
       });
     } else {
       this.showProcessSpinner = false;
@@ -535,24 +542,29 @@ goSignCap() {
     var docId = this.curcase.docId;
     this.service.finalizeSigning(trackId, docId).subscribe(resp => {
       console.log(resp);
-         this.curpage = null;
-         this.curcase = null;
-         this.switchToGrid.emit();
-         this.showSubmitSpinner = false;
+      this.curpage = null;
+      this.curcase = null;
+      this.switchToGrid.emit();
+      this.showSubmitSpinner = false;
     });
   }
   buildJson() {
     // build fields
+    console.log('build json');
     console.log(this.signcapform);
     var fddata = [];
-    this.curpage.filterFields.forEach( fd => {
-        if (fd.fieldTypeName === 'Signature') {
-          // fd.signatureDataUrl = this.myinput[fd.eleId];
-          fd.fieldValue = this.myinput[fd.eleId];
-        } else {
-          fd.fieldValue = this.myinput[fd.eleId];
-        }
-        fddata.push(fd);
+    console.log(this.curpage.filterFields);
+    this.curpage.filterFields.forEach(fd => {
+      if (fd.fieldTypeName === 'Signature') {
+        // fd.signatureDataUrl = this.myinput[fd.eleId];
+        fd.fieldValue = this.myinput[fd.eleId];
+      } if (fd.fieldTypeName === 'Date') {
+        let rDate: Date = new Date(this.myinput[fd.eleId]);
+        fd.fieldValue = rDate;
+       } else {
+        fd.fieldValue = this.myinput[fd.eleId];
+      }
+      fddata.push(fd);
     });
     let json = {
       ezSignTrackingId: this.curcase.ezSignTrackingId,
@@ -574,9 +586,9 @@ goSignCap() {
   selector: 'dialog-noform_message-dialog',
   templateUrl: 'dialog-noform_message-dialog.html',
 })
-export class DialogNoFormMessageDialogComponent {}
+export class DialogNoFormMessageDialogComponent { }
 @Component({
   selector: 'dialog-missingdata-message-dialog',
   templateUrl: 'dialog-missingdata-message-dialog.html',
 })
-export class DialogMissingDataMessageDialogComponent {}
+export class DialogMissingDataMessageDialogComponent { }

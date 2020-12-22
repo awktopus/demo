@@ -6,6 +6,12 @@
       </button>
     </td>
     <td>
+        <button [disabled]='status !="Uploaded" && isImageDataUrlFetched' mat-raised-button color="accent" matTooltip="Send Invite"
+        (click)="previewAndSendInvite()">
+        <mat-icon>event_note</mat-icon>&nbsp;SEND REQUEST TO SIGN
+      </button>
+    </td>
+    <td>
       <label class="heading-label">Document Title:</label>
       <label class="heading-label2">{{title}}</label>
     </td>
@@ -25,9 +31,6 @@
   <div>
     <hr>
   </div>
-  <div>
-    <br/>
-  </div>
   <div class="leftpane" *ngIf="isImageDataUrlFetched">
     <div>
       <button [disabled]='status !="Uploaded"' mat-raised-button color="accent" matTooltip="Add Signer and Field" (click)="addField()">
@@ -45,7 +48,8 @@
     <br>
     <div style="word-break: break-all;overflow-wrap: break-word; white-space: normal;">
       <mat-icon>pan_tool</mat-icon>
-      Click the field label to drop it into the top left corner of the <br/> document, then drag it to the desired location in your document
+      Click the field label to drop it into the top left corner of the
+      <br/> document, then drag it to the desired location in your document
     </div>
     <br>
     <mat-toolbar color="primary" style="height: 30px;">
@@ -128,35 +132,25 @@
 
   </div>
 
-  <div class="middlepane">   
-      <table>
-        <tr>
-          <td>
-            <div *ngIf="pageCount > 1 && isImageDataUrlFetched">
-              <mat-spinner *ngIf='isPreviousPageLoading' diameter='20'></mat-spinner>
-              <span *ngIf='isPreviousPageLoading'>Processing...</span>
-              <button *ngIf="pageSeqNo > 1 && !isPreviousPageLoading" mat-icon-button color="warn" (click)="showPreviousPage()">
-                <mat-icon>chevron_left</mat-icon>
-              </button>
-              &nbsp;
-              <label class="heading-label">Page {{pageSeqNo}} of {{pageCount}}</label>
-              &nbsp;
-              <mat-spinner *ngIf='isNextPageLoading' diameter='20'></mat-spinner>
-              <span *ngIf='isNextPageLoading'>Processing...</span>
-              <button *ngIf="pageSeqNo < pageCount && !isNextPageLoading" mat-icon-button color="warn" (click)="showNextPage()">
-                <mat-icon>chevron_right</mat-icon>
-              </button>
-            </div>
-          </td>   
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td>
-            <button [disabled]='status !="Uploaded" && isImageDataUrlFetched' mat-raised-button color="accent" matTooltip="Send Invite"
-              (click)="previewAndSendInvite()">
-              <mat-icon>event_note</mat-icon>&nbsp;SEND REQUEST TO SIGN
-            </button>
-          </td>
-        </tr>
-      </table>
+  <div class="middlepane">
+    <div style="display:flex; flex-direction: row; justify-content: left; align-items: left">
+      <div *ngIf="pageCount > 1 && isImageDataUrlFetched">
+        <mat-spinner *ngIf='isPreviousPageLoading' diameter='20'></mat-spinner>
+        <span *ngIf='isPreviousPageLoading'>Processing...</span>
+        <button *ngIf="pageSeqNo > 1 && !isPreviousPageLoading" mat-icon-button color="warn" (click)="showPreviousPage()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        &nbsp;
+        <label class="heading-label">Page {{pageSeqNo}} of {{pageCount}}</label>
+        &nbsp;
+        <mat-spinner *ngIf='isNextPageLoading' diameter='20'></mat-spinner>
+        <span *ngIf='isNextPageLoading'>Processing...</span>
+        <button *ngIf="pageSeqNo < pageCount && !isNextPageLoading" mat-icon-button color="warn" (click)="showNextPage()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+
     <div [ngClass]="{ 'top-b': !edge?.top, 'bottom-b': !edge?.bottom, 'left-b': !edge?.left, 'right-b': !edge?.right }" #myBounds>
       <mat-spinner *ngIf='!isImageDataUrlFetched' diameter='20'></mat-spinner>
       <span *ngIf='!isImageDataUrlFetched'>Processing...</span>

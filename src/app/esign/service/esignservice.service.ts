@@ -331,6 +331,12 @@ export class EsignserviceService  {
     return this.http.get(url, this.auth.getESignOptions())
   }
 
+  GetClientUSTaxCaseWorkList() {
+    const url: string = this.auth.baseurl + '/cases/OrgUnitId/' +
+      this.auth.getOrgUnitID() + '/client/' + this.auth.getUserID() + '/USTaxCases/worklist';
+    return this.http.get(url, this.auth.getESignOptions())
+  }
+
   getESignReviewPDF(caseID: string) {
     const url: string = this.auth.baseurl + '/clients/OrgUnitId/' +
       this.auth.getOrgUnitID() + '/client/' + this.auth.getUserID() + '/reviewforms/' + caseID;
