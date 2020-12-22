@@ -240,30 +240,23 @@ export class ReceiverustaxdocsComponent implements OnInit {
     console.log('start secondary signing US Tax document...');
     console.log(usTaxCaseRow);
     // find the corresponding signing document
-    this.usTaxAllCases.forEach(doc => {
-      if (doc.caseId === usTaxCaseRow.caseId) {
-        this.service.setCacheData("case", doc);
-        console.log(doc);
-        console.log(usTaxCaseRow);
+    this.service.getEsignForms(usTaxCaseRow.caseId).subscribe(doc=>{
+      this.service.setCacheData("case", doc);
+      console.log(doc);
         // need add signer and signer type
         this.prepareSigning(doc, "SECONDARY_SIGNER");
         // this.viewType = 'security';
-      }
     });
   }
   startPrimaryUSTaxSign(usTaxCaseRow: any) {
     console.log('start primary signing US Tax document...');
     console.log(usTaxCaseRow);
     // find the corresponding signing document
-    this.usTaxAllCases.forEach(doc => {
-      if (doc.caseId === usTaxCaseRow.caseId) {
-        this.service.setCacheData("case", doc);
-        console.log(doc);
-        console.log(usTaxCaseRow);
-        // need add signer and signer type
-        this.prepareSigning(doc, "PRIMARY_SIGNER");
-        // this.viewType = 'security';
-      }
+    this.service.getEsignForms(usTaxCaseRow.caseId).subscribe(doc=>{
+      this.service.setCacheData("case", doc);
+      console.log(doc);
+      // need add signer and signer type
+      this.prepareSigning(doc, "PRIMARY_SIGNER");
     });
   }
   startPaperUSTaxSign(usTaxCaseRow: any) {
@@ -271,15 +264,12 @@ export class ReceiverustaxdocsComponent implements OnInit {
     console.log(usTaxCaseRow);
     // find the corresponding signing document
     // find the corresponding signing document
-    this.usTaxAllCases.forEach(doc => {
-      if (doc.caseId === usTaxCaseRow.caseId) {
-      
-        console.log(doc);
-        console.log(usTaxCaseRow);
+    this.service.getEsignForms(usTaxCaseRow.caseId).subscribe(doc=>{
+      this.service.setCacheData("case", doc);
+      console.log(doc);
         // need add signer and signer type
         this.preparePaperSigning(doc, "PAPER");
         // this.viewType = 'security';
-      }
     });
   }
 

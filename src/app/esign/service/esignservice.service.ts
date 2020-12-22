@@ -997,7 +997,10 @@ bulkTaxCaseArchive(bulkCaseArchivejson) {
     +"/signedpage/presubmit";
     return this.http.post(url,jsondata,this.auth.getESignOptions());
   }
-
+  getEsignForms(caseId) {
+    const url = this.auth.baseurl +'/cases/case/' + caseId + '/ustaxforms';
+    return this.http.get(url,this.auth.getESignOptions());
+  }
   finalizeSigning(caseId,docId,signer_type)
   {
     //http://localhost:55940/api/cases/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/cf0907c8-dafd-4235-a793-5afce024b1f0/case/CS2012040391/document/DOC202012041449212207/signeddocument/finalsubmit
