@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EsignserviceService } from '../../service/esignservice.service';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+
 @Component({
   selector: 'app-casesigning',
   templateUrl: './casesigning.component.html',
@@ -10,6 +12,7 @@ import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from
 })
 export class CaseSigningComponent implements OnInit {
   mycase:any;
+  showReviewSpinner=false;
   seq:any;
   form:any;
   signer:any;
@@ -19,6 +22,8 @@ export class CaseSigningComponent implements OnInit {
   myinput = {};
   mysigs = {};
   signcapform: FormGroup = new FormGroup({});
+  showProcessSpinner:any;
+  viewType='signing';
   @ViewChild('pdfviewcontainer') ele_pdfview: ElementRef;
   @Output("switchToGridView") switchToGrid: EventEmitter<any> = new EventEmitter();
   @ViewChildren(SignaturePad) public sigPadList :QueryList< SignaturePad>;
@@ -27,7 +32,8 @@ export class CaseSigningComponent implements OnInit {
     'canvasHeight': 160,
     'backgroundColor': '#ffffff'
   };
-  constructor(private route: ActivatedRoute, private router: Router, private service: EsignserviceService) {
+  constructor(private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
+    private service: EsignserviceService) {
    }
 
   ngOnInit() {
@@ -135,9 +141,7 @@ export class CaseSigningComponent implements OnInit {
       }
   
     });
-  
-    console.log(this.mysigs);
-    console.log(this.myinput);
+
     setTimeout(() => { this.loadPreSignature();}, 100);
   }
   
@@ -147,10 +151,15 @@ export class CaseSigningComponent implements OnInit {
     this.form.filterFields.forEach( fd => {
       this.myinput[fd.eleId] = "";
       if (fd.fieldControlType === "SIGNATURE" ) {
+        if(fd.fieldValue==null){
+          fd.fieldValue="";
+        }
         if (fd.fieldValue !== "") {
          res[index].fromDataURL(fd.fieldValue);
+         console.log(fd.value);
         }
         index = index + 1;
+       // console.log(res[index].isEmpty());
       }
     });
   }
@@ -188,4 +197,193 @@ pickField(event) {
       if (fd.fieldControlType === "SIGNATURE") {index = index + 1; }
     });
     }
+
+    getInput() {
+      let fields = this.form.filterFields;
+      let allfilled = true;
+       console.log(fields);
+      let sigindex = 0;
+      let res = this.sigPadList.toArray();
+      this.form.filterFields.forEach( fd => {
+        if (fd.fieldControlType === 'SIGNATURE') {
+          this.mysigs[fd.eleId] = res[sigindex];
+          sigindex = sigindex + 1;
+        }
+      });
+      this.myinput = this.signcapform.value;
+      fields.forEach(fd => {
+        const lbl = fd.eleId;
+        if (fd.fieldControlType === 'SIGNATURE') {
+          if (this.mysigs[lbl].isEmpty()) {
+              this.myinput[lbl] = "";
+            allfilled = false;
+          } else {
+            this.myinput[lbl] = this.mysigs[lbl].toDataURL();
+          }
+        } else {
+          if (this.myinput[lbl] == null || this.myinput[lbl] === "") {
+            allfilled = false;
+          }
+        }
+      });
+      //console.log(this.myinput);
+      return allfilled;
+    }
+  
+    buildJson() {
+      // build fields
+      console.log(this.signcapform);
+      var fddata = [];
+      this.form.filterFields.forEach( fd => {
+          fd.fieldValue = this.myinput[fd.eleId];
+          fddata.push(fd);
+      });
+      let json = {
+        caseId: this.form.caseId,
+        status: "",
+        docId: this.form.docId,
+        type: this.signer.type,
+        form: {
+          seqNo: this.form.seqNo,
+          pageStatus: "",
+          contentMergeFlag: "",
+          formFields: fddata
+        }
+      };
+      return json;
+    }
+
+    gotoNextForm(nextform){
+      console.log("goto next form");
+      this.service.setCacheData("case",this.mycase);
+      this.service.setCacheData("form",nextform);
+      this.service.setCacheData("seq",nextform.seqNo);
+      // signer are the same
+      this.form=nextform;
+      this.form.caseId=this.mycase.caseId;
+      this.form.docId=this.mycase.docId;
+      this.seq=this.form.seqNo;
+      this.prepareData();
+    }
+
+    async submitSignCapData(){
+  
+      if(this.getInput()){
+        console.log(this.myinput);
+        let json=this.buildJson();
+       console.log(json);
+        
+        this.service.preSubmitSigningForm(json).subscribe(async res=>{
+            console.log(this.mycase);
+            let ary_seq=this.mycase.signedformseq;
+            ary_seq.push(this.form.seqNo);
+            this.mycase=res;
+            // fix pagefield issues
+            this.mycase.signedformseq=ary_seq;
+            console.log(this.mycase);
+            //this.pubSubEsignService.next(PubSubEsignService.EZSIGNDOC_UPDATE,{case:this.case});
+            console.log(this.mycase);
+            console.log(this.signer);
+            let newform=this.findNextSigningForm(this.mycase,this.signer);
+            console.log("the next form");
+            console.log(newform);
+            if(newform!=null){
+                // here we navigate 
+                console.log("goto next form");
+                this.gotoNextForm(newform);
+            } else{
+                // all signing done
+                //this.goEZSign();
+                // this should go to finalization pages
+                //console.log(" go to finalize");
+                this.goFinalize();
+            }
+        });
+       
+      } 
+      else 
+      {
+        this.showProcessSpinner = false;
+        console.log("Missing data");
+        this.dialog.open(DialogMissingEsignDataComponent);
+      }
+    }
+  
+  findNextSigningForm(cc, ss)
+  {
+    let frm=null;
+    cc.forms.forEach(pp => {
+      let alreadysigned = cc.signedformseq.includes(pp.seqNo);
+      if ( pp.pageStatus !== "Signed" && (!alreadysigned)) {
+        if (pp.formFields) {
+          pp.formFields.forEach(fd => {
+            if ((fd.receiverId === ss.receiverId) && (fd.fieldStatus !== 'Signed')) {
+              if(((ss.type=="PRIMARY_SIGNER")&&(fd.fieldTypeName.indexOf("_TP_")>-1))||
+              ((ss.type=="SECONDARY_SIGNER")&&(fd.fieldTypeName.indexOf("_SP_")>-1)))
+              {
+                if(frm==null)
+                {
+                  frm=pp;
+                }
+              }
+            }
+          });
+        }
+      }
+    });
+    return frm;
+  }
+
+
+  viewPreSignPage() {
+    var caseId = this.mycase.caseId;
+    var docId = this.mycase.docId;
+    var pageseq = this.form.seqNo;
+    //http://localhost:55940/api/cases/orgunit/4a55653e-fcab-4736-91af-30f25ab208d3/receiver/cf0907c8-dafd-4235-a793-5afce024b1f0/case/CS2012030362/document/DOC202012030518011066/page/6/signedpage/preview
+    const url=this.service.auth.baseurl+"/cases/orgunit/"+this.service.auth.getUserID()+"/receiver/"+this.service.auth.getUserID()
+    +"/case/"+caseId+"/document/"+docId+"/page/"+pageseq+"/signedpage/preview";
+    this.service.getPDFBlob(url).subscribe(resp=>{
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+    });
+  }
+
+  SkipPage() {
+    this.mycase.signedformseq.push(this.seq);
+    let nextform = this.findNextSigningForm(this.mycase, this.signer);
+    if (nextform!=null) {
+       // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.mycase,pageSeq:nextseq,signer:this.signer});
+      this.gotoNextForm(nextform);
+    } else {
+        // all signing done for this form
+        // show final page
+      this.goFinalize();
+    }
+    this.showProcessSpinner = false;
+  }
+
+  goFinalize(){
+    console.log("finalize signing");
+    this.viewType='finalview';
+  }
+
+  previewDoc() {
+    this.service.previewUSTaxDocument(this.form.caseId,this.form.docId);
+  }
+
+  async finalize(){
+    
+    this.service.finalizeSigning(this.form.caseId,this.form.docId,this.signer.type).subscribe(resp=>{
+      console.log(resp);
+      this.switchToGrid.emit({view:'grid',refresh:true});
+    });
+    
+  }
 }
+
+@Component({
+  selector: 'dialog-missing-esign-data',
+  templateUrl: 'dialog-missing-esign-data.html',
+})
+export class DialogMissingEsignDataComponent {}

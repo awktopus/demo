@@ -221,10 +221,18 @@ export class ReceiverustaxdocsComponent implements OnInit {
     dialogRef.componentInstance.setCaseInfo(usTaxCaseId);
   }
 
-
   viewCoverLetterAndReviewDocs(usTaxCaseRow: any) {
     console.log('view cover letter and review documents...');
-    console.log(usTaxCaseRow);
+    this.usTaxAllCases.forEach(doc => {
+      if (doc.caseId === usTaxCaseRow.rowData.caseId) {
+        this.service.setCacheData("case", doc);
+        console.log(doc);
+        console.log(usTaxCaseRow);
+        // need add signer and signer type
+        // this.viewType = 'security';
+        this.viewType="review";
+      }
+    });
   }
 
 
@@ -265,7 +273,7 @@ export class ReceiverustaxdocsComponent implements OnInit {
     // find the corresponding signing document
     this.usTaxAllCases.forEach(doc => {
       if (doc.caseId === usTaxCaseRow.caseId) {
-        this.service.setCacheData("case", doc);
+      
         console.log(doc);
         console.log(usTaxCaseRow);
         // need add signer and signer type
@@ -294,13 +302,15 @@ export class ReceiverustaxdocsComponent implements OnInit {
       if (frm != null) {
         console.log("found paper");
         console.log(frm);
-        frm.caseId = cc.caseId;
-        frm.docId = cc.docId;
-        this.service.setCacheData("form", frm);
-        this.service.setCacheData("signer", signer);
-        this.service.setCacheData("formSeq", frm.seqNo);
-        this.service.setCacheData("signer_type", signer_type);
-        this.viewType = "security";
+        frm.caseId=cc.caseId;
+        frm.docId=cc.docId;
+        cc.signedformseq=[];
+        this.service.setCacheData("case", cc);
+        this.service.setCacheData("form",frm);
+        this.service.setCacheData("signer",signer);
+        this.service.setCacheData("formSeq",frm.seqNo);
+        this.service.setCacheData("signer_type",signer_type);
+        this.viewType="security";
       }
     }
   }
@@ -320,19 +330,26 @@ export class ReceiverustaxdocsComponent implements OnInit {
     if (signer) {
       // now find the form and signing form and form seq
       let frm = this.findFirstForm(cc, signer, (signer_type === "PRIMARY_SIGNER"));
-      console.log("found one");
-      console.log(frm);
-      frm.caseId = cc.caseId;
-      frm.docId = cc.docId;
-      this.service.setCacheData("form", frm);
-      this.service.setCacheData("signer", signer);
-      this.service.setCacheData("formSeq", frm.seqNo);
-      this.service.setCacheData("signer_type", "PRIMARY_SIGNER");
-      if (this.casesecurity) {
-        console.log("load data from parent");
-        this.casesecurity.loadSecurityQuestion();
+      if(frm){
+        console.log("found one");
+        console.log(frm);
+        frm.caseId = cc.caseId;
+        frm.docId = cc.docId;
+        cc.signedformseq=[];
+        this.service.setCacheData("case", cc);
+    
+        this.service.setCacheData("form", frm);
+        this.service.setCacheData("signer", signer);
+        this.service.setCacheData("formSeq", frm.seqNo);
+        this.service.setCacheData("signer_type", "PRIMARY_SIGNER");
+        if (this.casesecurity) {
+          console.log("load data from parent");
+          this.casesecurity.loadSecurityQuestion();
+        }
+        this.viewType = "security";
+      } else {
+        console.log("no more form");
       }
-      this.viewType = "security";
     }
   }
   findFirstPaperForm(cc, ss) {
