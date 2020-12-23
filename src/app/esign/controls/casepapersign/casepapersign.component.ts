@@ -16,6 +16,7 @@ export class CasePaperSignComponent implements OnInit {
   signer:any;
   paperform: FormGroup = new FormGroup({});
   nonEsignfiles: File;
+  showSubmitSpinner=false;
   @Output("switchToGridView") switchToGrid: EventEmitter<any> = new EventEmitter();
   constructor(private route: ActivatedRoute, private router: Router, private service: EsignserviceService) {
    }

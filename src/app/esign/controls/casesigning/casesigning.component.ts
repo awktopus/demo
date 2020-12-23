@@ -22,7 +22,8 @@ export class CaseSigningComponent implements OnInit {
   myinput = {};
   mysigs = {};
   signcapform: FormGroup = new FormGroup({});
-  showProcessSpinner:any;
+  showProcessSpinner:any=false;
+  showSubmitSpinner:any=false;
   viewType='signing';
   @ViewChild('pdfviewcontainer') ele_pdfview: ElementRef;
   @Output("switchToGridView") switchToGrid: EventEmitter<any> = new EventEmitter();
@@ -272,7 +273,7 @@ pickField(event) {
         console.log(this.myinput);
         let json=this.buildJson();
        console.log(json);
-        
+        this.showProcessSpinner=true;
         this.service.preSubmitSigningForm(json).subscribe(async res=>{
             console.log(this.mycase);
             let ary_seq=this.mycase.signedformseq;
@@ -298,6 +299,7 @@ pickField(event) {
                 //console.log(" go to finalize");
                 this.goFinalize();
             }
+            this.showProcessSpinner = false;
         });
        
       } 
@@ -369,13 +371,23 @@ pickField(event) {
   }
 
   previewDoc() {
-    this.service.previewUSTaxDocument(this.form.caseId,this.form.docId);
+    this.showReviewSpinner=true;
+    const url = this.service.auth.baseurl + "/cases/orgunit/" + this.service.auth.getOrgUnitID()
+    + "/receiver/" + this.service.auth.getUserID() + "/case/" + this.form.caseId
+    + "/document/" + this.form.docId + "/signeddocument/preview";
+    this.service.getPDFBlob(url).subscribe(resp => {
+      const file = new Blob([<any>resp], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      this.showReviewSpinner=false;
+      window.open(fileURL, '_blank');
+     });
   }
 
   async finalize(){
-    
+    this.showSubmitSpinner=true;
     this.service.finalizeSigning(this.form.caseId,this.form.docId,this.signer.type).subscribe(resp=>{
       console.log(resp);
+      this.showSubmitSpinner=false;
       this.switchToGrid.emit({view:'grid',refresh:true});
     });
     
