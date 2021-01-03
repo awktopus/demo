@@ -65,7 +65,8 @@ export class EsignAuthService {
               this.enabledMenus.push(this.MENU_ITEM_EZSIGN);
               this.enabledMenus.push(this.HEALTH_CHECK_MENU);
             }
-            if (currentOrgUser.role.toUpperCase() === 'CLIENT') {
+            if (currentOrgUser.role.toUpperCase() === 'CLIENT'
+                && this.industryId.toUpperCase() === 'ACCOUNT') {
               this.enabledMenus.push(this.TAX_MENU);
               this.enabledMenus.push(this.TAX_MY_TAX_CASE);
             }
