@@ -12,7 +12,7 @@
 </table>
 
 <div>
-  <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='40'></mat-spinner>
+  <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='20'></mat-spinner>
   <span *ngIf='!isInfoTrackerDataFetched'>Processing...</span>
 </div>
 
@@ -41,7 +41,7 @@
               <mat-icon>refresh</mat-icon>
             </button>
           </span>
-          <mat-spinner *ngIf='showRefreshSpinner' diameter='40'></mat-spinner>
+          <mat-spinner *ngIf='showRefreshSpinner' diameter='20'></mat-spinner>
         </form>
       </td>
       <td align=right>

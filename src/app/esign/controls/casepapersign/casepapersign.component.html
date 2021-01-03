@@ -62,7 +62,7 @@
       </td-file-input>
     </td>
     <td align=center >
-      <mat-spinner *ngIf='showSubmitSpinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showSubmitSpinner' diameter='20'></mat-spinner>
           <span *ngIf='showSubmitSpinner'>Processing Final Signing...</span>
       <button mat-raised-button color="accent" [disabled]="!nonEsignfiles" *ngIf='!showSubmitSpinner'
       class="row text-upper" (click)="uploadNonEsignForm(form,signer,'nonesign',nonEsignfiles)">Submit</button>

@@ -158,13 +158,13 @@
   </tr>
   <tr>
   <td width=50% align=center>
-   <button  *ngIf='fprev' mat-button color="primary" (click)='goReviewForm(fprev)'>
+   <button  *ngIf='fprev' mat-button color="primary"  (click)='goReviewForm(fprev)'>
                                   <mat-icon>keyboard_arrow_left</mat-icon>
                           <label style="font-weight: bold">Prev</label>
    </button>
   </td>
   <td align=center>
-     <button  *ngIf='fnext' mat-button color="primary" (click)='goReviewForm(fnext)'>
+     <button  *ngIf='fnext' mat-button color="primary"  (click)='goReviewForm(fnext)'>
                           <label style="font-weight: bold">Next</label>
                              <mat-icon>keyboard_arrow_right</mat-icon>
    </button>
@@ -204,9 +204,9 @@
   <tr>
   <td align=center>
       <span *ngIf='!showProcessSpinner'>
-       <button mat-raised-button color="accent"  (click)="submitSignCapData()">Submit</button>
+       <button mat-raised-button color="accent" class="text-upper"  (click)="submitSignCapData()">Submit</button>
       </span>  
-      <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+      <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
       <span *ngIf='showProcessSpinner'>Processing...</span>
       </td>
   </tr>

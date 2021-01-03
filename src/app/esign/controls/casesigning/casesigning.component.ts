@@ -103,15 +103,18 @@ export class CaseSigningComponent implements OnInit {
   setUpSigCap() {
 
     this.signcapform = new FormGroup({});
-   
     let str_today = new Date().toISOString().split('T')[0];
     let values = {};
     this.form.filterFields.forEach(field => {
       field.eleId = "ele_" + field.fieldSeqNo;
       this.signcapform.addControl(field.eleId, new FormControl('', Validators.required));
       if (field.fieldControlType === "DATE") {
-        values[field.eleId] = str_today;
-        console.log("set default date");
+        let rDate: Date = new Date();
+      //  values[field.eleId] = str_today;
+      //  values[field.eleId] =   rDate.getMonth() + 1 + '/' + rDate.getDate() + '/' + rDate.getFullYear();
+      values[field.eleId] = rDate;
+      console.log("set default date");
+        console.log(values[field.eleId]);
       } else {
         values[field.eleId]  = "";
       }
@@ -363,6 +366,10 @@ pickField(event) {
       this.goFinalize();
     }
     this.showProcessSpinner = false;
+  }
+
+  editSigning() {
+
   }
 
   goFinalize(){

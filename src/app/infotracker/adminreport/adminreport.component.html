@@ -12,7 +12,7 @@
 </table>
 
 <div>
-  <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='40'></mat-spinner>
+  <mat-spinner *ngIf='!isInfoTrackerDataFetched' diameter='20'></mat-spinner>
   <span *ngIf='!isInfoTrackerDataFetched'>Processing...</span>
 </div>
 
@@ -119,7 +119,7 @@
         <mat-icon>check_circle_outline</mat-icon>
       </button>
     </span>
-    <mat-spinner *ngIf='showReviewSpinner' diameter='40'></mat-spinner>
+    <mat-spinner *ngIf='showReviewSpinner' diameter='20'></mat-spinner>
     <span *ngIf='showReviewSpinner'>Processing...</span>
     &nbsp; &nbsp;
 
@@ -129,7 +129,7 @@
         <mat-icon>check_circle_outline</mat-icon>
       </button>
     </span>
-    <mat-spinner *ngIf='showAddendumSpinner' diameter='40'></mat-spinner>
+    <mat-spinner *ngIf='showAddendumSpinner' diameter='20'></mat-spinner>
     <span *ngIf='showAddendumSpinner'>Processing...</span>
     &nbsp; &nbsp;
 
@@ -208,7 +208,7 @@
                     <mat-icon>refresh</mat-icon>
                   </button>
                 </span>
-                <mat-spinner *ngIf='showRefreshSpinner' diameter='40'></mat-spinner>
+                <mat-spinner *ngIf='showRefreshSpinner' diameter='20'></mat-spinner>
               </form>
             </td>    
             <td align="left">

@@ -14,7 +14,7 @@
       <span *ngIf='!showreviewfilesspinner'>
         <button mat-raised-button color="accent" [disabled]="!reviewfiles" class="row text-upper" (click)="uploadDoc('review',reviewfiles)">Submit</button>
       </span>
-      <mat-spinner *ngIf='showreviewfilesspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showreviewfilesspinner' diameter='20'></mat-spinner>
       <span *ngIf='showreviewfilesspinner'>Processing...</span>
     </td>
   </tr>
@@ -33,7 +33,7 @@
       <span *ngIf='!showspinner'>
         <button mat-raised-button color="accent" [disabled]="!esignfiles" class="row text-upper" (click)="uploadScanDoc('esign',esignfiles)">Upload And Scan</button>
       </span>
-      <mat-spinner *ngIf='showspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showspinner' diameter='20'></mat-spinner>
       <span *ngIf='showspinner'>Processing...</span>
     </td>
   </tr>
@@ -52,7 +52,7 @@
       <span *ngIf='!showpaymentfilesspinner'>
         <button mat-raised-button color="accent" [disabled]="!paymentfiles" class="text-upper" (click)="uploadDoc('paymentvoucher',paymentfiles)">Submit</button>
       </span>
-      <mat-spinner *ngIf='showpaymentfilesspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showpaymentfilesspinner' diameter='20'></mat-spinner>
       <span *ngIf='showpaymentfilesspinner'>Processing...</span>
     </td>
   </tr>
@@ -71,7 +71,7 @@
       <span *ngIf='!showpaperfilesspinner'>
         <button mat-raised-button color="accent" [disabled]="!paperfiles" class="text-upper" (click)="uploadDoc('paper',paperfiles)">Submit</button>
       </span>
-      <mat-spinner *ngIf='showpaperfilesspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showpaperfilesspinner' diameter='20'></mat-spinner>
       <span *ngIf='showpaperfilesspinner'>Processing...</span>
     </td>
   </tr>
@@ -90,7 +90,7 @@
       <span *ngIf='!showk1filesspinner'>
         <button mat-raised-button color="accent" [disabled]="!k1files" class="text-upper" (click)="uploadDoc('k1',k1files)">Submit</button>
       </span>
-      <mat-spinner *ngIf='showk1filesspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showk1filesspinner' diameter='20'></mat-spinner>
       <span *ngIf='showk1filesspinner'>Processing...</span>
     </td>
   </tr>

@@ -16,7 +16,7 @@
         <button mat-raised-button color="accent" class="text-upper" [disabled]='(mycase.status !== "Review" || sendToClientOption === "2")'
           (click)="sendToClient()">Approve and Send to Client</button>
       </span>
-      <mat-spinner *ngIf='showSendToClientspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showSendToClientspinner' diameter='20'></mat-spinner>
       <span *ngIf='showSendToClientspinner'>Processing...</span>
       
       &nbsp;&nbsp;

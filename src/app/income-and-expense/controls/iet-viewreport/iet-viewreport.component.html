@@ -6,7 +6,7 @@
   </tr>
 </table>
 <div>
-  <mat-spinner *ngIf='!isIETDataFetched' diameter='40'></mat-spinner>
+  <mat-spinner *ngIf='!isIETDataFetched' diameter='20'></mat-spinner>
   <span *ngIf='!isIETDataFetched'>Processing...</span>
 </div>
 <table class="trackertable4" *ngIf='isIETDataFetched'>
@@ -64,7 +64,7 @@
           <mat-icon class="iconcss" (click)="downloadYearlyReceipts()">cloud_download</mat-icon>
         </button>
       </span>
-      <mat-spinner *ngIf='showDownloadSpinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showDownloadSpinner' diameter='20'></mat-spinner>
       <span *ngIf='showDownloadSpinner'>Processing...</span>
    </td>
     <td colspan="6" align="left">

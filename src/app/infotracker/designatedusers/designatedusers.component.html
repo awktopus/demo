@@ -5,7 +5,7 @@
   </button>
 </span>
 <div>
-  <mat-spinner *ngIf='!isUsersLoaded' diameter='40'></mat-spinner>
+  <mat-spinner *ngIf='!isUsersLoaded' diameter='20'></mat-spinner>
   <span *ngIf='!isUsersLoaded'>Processing...</span>
 </div>
 
@@ -53,7 +53,7 @@
         <mat-icon>loop</mat-icon>
       </button>
     </span>
-    <mat-spinner *ngIf='showUpdateUsersSpinner' diameter='40'></mat-spinner>
+    <mat-spinner *ngIf='showUpdateUsersSpinner' diameter='20'></mat-spinner>
     <span *ngIf='showUpdateUsersSpinner'>Processing...</span>
   </div>
 </div>

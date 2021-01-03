@@ -7,7 +7,7 @@
 
 <div>
   <br/>
-  <mat-spinner *ngIf='!isDataFetched' diameter='40'></mat-spinner>
+  <mat-spinner *ngIf='!isDataFetched' diameter='20'></mat-spinner>
   <span *ngIf='!isDataFetched'>Processing...</span>
 </div>
 
@@ -202,7 +202,7 @@
           <mat-icon>check_circle_outline</mat-icon>
         </button>
       </span>
-      <mat-spinner *ngIf='showSubmitSpinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showSubmitSpinner' diameter='20'></mat-spinner>
       <span *ngIf='showSubmitSpinner'>Processing...</span>
       &nbsp; &nbsp;
 
@@ -213,7 +213,7 @@
           <mat-icon>edit</mat-icon>
         </button>
       </span>
-      <mat-spinner *ngIf='showEditSpinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showEditSpinner' diameter='20'></mat-spinner>
       <span *ngIf='showEditSpinner'>Processing...</span>
       &nbsp; &nbsp;
 
@@ -223,7 +223,7 @@
           <mat-icon>check_circle_outline</mat-icon>
         </button>
       </span>
-      <mat-spinner *ngIf='showAddendumSpinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showAddendumSpinner' diameter='20'></mat-spinner>
       <span *ngIf='showAddendumSpinner'>Processing...</span>
       &nbsp; &nbsp;
     </div>

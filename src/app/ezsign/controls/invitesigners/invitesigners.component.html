@@ -6,7 +6,7 @@
         </tr>
       </table>
       <div>
-        <mat-spinner *ngIf='!isInvitationReadyToShow' diameter='40'></mat-spinner>
+        <mat-spinner *ngIf='!isInvitationReadyToShow' diameter='20'></mat-spinner>
         <span *ngIf='!isInvitationReadyToShow'>Processing...</span>
       </div>
       <table class="trackertable4" *ngIf='isInvitationReadyToShow'>
@@ -29,7 +29,7 @@
               </span>
             </td>
             <td>
-              <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+              <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
               <span *ngIf='showProcessSpinner'>Processing...</span>
             </td>     
         </tr>
@@ -103,7 +103,7 @@
         </span>
       </td>
       <td>
-        <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+        <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
         <span *ngIf='showProcessSpinner'>Processing...</span>
       </td>
     </tr>

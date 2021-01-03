@@ -19,14 +19,14 @@
 <span *ngIf='!showSavespinner'>
   <button mat-raised-button color="accent" class="text-upper" [disabled]='(mycase.status != "Validated") || (!reviewcpa)' (click)='sendToReview()'>Send for Review</button>
 </span>
-<mat-spinner *ngIf='showSavespinner' diameter='40'></mat-spinner>
+<mat-spinner *ngIf='showSavespinner' diameter='20'></mat-spinner>
 <span *ngIf='showSavespinner'>Processing...</span>
 <br>
 <br>
 <span *ngIf='!showAnotherCasespinner'>
   <button mat-raised-button color="accent" class="text-upper" (click)='createAnotherCase()'>Create Another Case</button>
 </span>
-<mat-spinner *ngIf='showAnotherCasespinner' diameter='40'></mat-spinner>
+<mat-spinner *ngIf='showAnotherCasespinner' diameter='20'></mat-spinner>
 <span *ngIf='showAnotherCasespinner'>Processing...</span>
 <br>
 <br>

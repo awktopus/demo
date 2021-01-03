@@ -22,7 +22,7 @@
                   <button mat-raised-button color="primary" (click)='updateCaseFilingStatus()' type="submit" 
                   [disabled]="filingStatusForm.invalid">UPDATE</button>
                 </span>
-                <mat-spinner *ngIf='showActionSpinner' diameter='30'></mat-spinner>
+                <mat-spinner *ngIf='showActionSpinner' diameter='20'></mat-spinner>
                 <span *ngIf='showActionSpinner'>Processing...</span>
                 &nbsp;
                 <button mat-raised-button color="warn" class="text-upper" (click)='closeme()'>CANCEL</button>

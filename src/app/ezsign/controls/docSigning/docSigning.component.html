@@ -137,20 +137,20 @@
   </tr>
   </div>
   <tr>
-  <td align=center>
+  <td align=left>
       <span *ngIf='!showProcessSpinner'>
         <table>
           <tr>
-            <td *ngIf='curpage.presignstatus'><button mat-raised-button color="accent"  (click)="viewPreSignPage()">View</button></td>
-            <td *ngIf='curpage.presignstatus'><button mat-raised-button color="accent"  (click)="SkipPage()">Next</button></td>
-            <td *ngIf='curpage.presignstatus'> <button mat-raised-button color="accent"  (click)="submitSignCapData()">Update</button></td>
-            <td *ngIf='!curpage.presignstatus'> <button mat-raised-button color="accent"  (click)="submitSignCapData()">Save</button></td>
+            <td *ngIf='curpage.presignstatus'><button mat-raised-button color="accent" class="text-upper"  (click)="viewPreSignPage()">View</button></td>
+            <td *ngIf='curpage.presignstatus'><button mat-raised-button color="accent" class="text-upper" (click)="SkipPage()">Next</button></td>
+            <td *ngIf='curpage.presignstatus'> <button mat-raised-button color="accent" class="text-upper" (click)="submitSignCapData()">Update</button></td>
+            <td *ngIf='!curpage.presignstatus'> <button mat-raised-button color="accent" class="text-upper" (click)="submitSignCapData()">Save</button></td>
           </tr>
         </table>
         
       
       </span>  
-      <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+      <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
       <span *ngIf='showProcessSpinner'>Processing...</span>
       </td>
   </tr>
@@ -166,15 +166,17 @@
       <tr>
         <td>
           <span *ngIf='!showReviewSpinner'>
-              <button mat-raised-button color="accent"  (click)="previewDoc()">Review</button>
+              <button mat-raised-button color="accent" class="text-upper" (click)="previewDoc()">Review</button>
             </span>
-          <mat-spinner *ngIf='showReviewSpinner' diameter='40'></mat-spinner>
+          <mat-spinner *ngIf='showReviewSpinner' diameter='20'></mat-spinner>
           <span *ngIf='showReviewSpinner'>Processing...</span>
-       &nbsp;&nbsp;
+          &nbsp;&nbsp; 
+          <button mat-raised-button color="accent" class="text-upper"  (click)="editSigning()">Edit</button>
+          &nbsp;&nbsp;   
           <span *ngIf='!showSubmitSpinner'>
-              <button mat-raised-button color="accent"  (click)="finalizeSigning()">Submit</button>
+              <button mat-raised-button color="accent" class="text-upper"  (click)="finalizeSigning()">Submit</button>
             </span>
-          <mat-spinner *ngIf='showSubmitSpinner' diameter='40'></mat-spinner>
+          <mat-spinner *ngIf='showSubmitSpinner' diameter='20'></mat-spinner>
           <span *ngIf='showSubmitSpinner'>Processing...</span>
         </td>
       </tr>

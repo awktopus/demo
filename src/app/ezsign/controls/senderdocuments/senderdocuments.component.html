@@ -1,6 +1,6 @@
 <div fxLayout="column" *ngIf="viewType==='grid'">
     <div>
-        <mat-spinner *ngIf='!isEZsignDataFetched' diameter='30'></mat-spinner>
+        <mat-spinner *ngIf='!isEZsignDataFetched' diameter='20'></mat-spinner>
         <span *ngIf='!isEZsignDataFetched'>Processing...</span>
     </div>
     <br>
@@ -100,7 +100,7 @@
                                 UPLOAD
                             </button>
                         </span>
-                        <mat-spinner *ngIf='showProcessSpinner' diameter='40'></mat-spinner>
+                        <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
                         <span *ngIf='showProcessSpinner'>Processing...</span>
                     </div>
                 </td>

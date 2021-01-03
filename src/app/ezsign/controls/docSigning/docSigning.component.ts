@@ -384,7 +384,10 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
       this.signcapform.addControl(field.eleId, new FormControl('', Validators.required));
       if (field.fieldTypeName === "Date") {
         console.log("set default date");
-        values[field.eleId] = str_today;
+       // values[field.eleId] = str_today;
+       let rDate: Date = new Date();
+       values[field.eleId] = rDate;
+       console.log(values[field.eleId]);
       } else {
         values[field.eleId] = "";
       }
@@ -580,6 +583,9 @@ export class DocSigningComponent implements OnInit, AfterViewInit {
     return json;
   }
 
+  editSigning() {
+
+  }
 }
 
 @Component({

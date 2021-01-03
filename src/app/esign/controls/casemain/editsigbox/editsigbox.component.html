@@ -1,5 +1,5 @@
 <div class='sigformlyr'>
-  <mat-spinner *ngIf='!isImageDataUrlFetched' diameter='40'></mat-spinner>
+  <mat-spinner *ngIf='!isImageDataUrlFetched' diameter='20'></mat-spinner>
   <span *ngIf='!isImageDataUrlFetched'>Processing...</span>
   <img *ngIf="isImageDataUrlFetched" [src]="sanitize(formImageBlobUrl)" />
   <div class='tpSignatureTag' ngDraggable (started)="onPriSigStart($event)" (stopped)="onPriSigStop($event)" (movingOffset)="onPriSigMoving($event)"
@@ -34,7 +34,7 @@
         <span *ngIf='!showspinner'>
           <button *ngIf="isImageDataUrlFetched" mat-raised-button color="accent" class="text-upper" (click)='saveEdit()'>Save</button>
         </span>
-        <mat-spinner *ngIf='showspinner' diameter='40'></mat-spinner>
+        <mat-spinner *ngIf='showspinner' diameter='20'></mat-spinner>
         <span *ngIf='showspinner'>Processing...</span>
       </td>
       <td width=24% align=center>

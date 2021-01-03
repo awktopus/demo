@@ -33,13 +33,13 @@
     <span *ngIf='!showSavespinner'>
       <button mat-raised-button color="accent" class="text-upper" [disabled]=" (noedit) && (!(cnew))" (click)='saveTemplate()'>save</button>
     </span>
-    <mat-spinner *ngIf='showSavespinner' diameter='30'></mat-spinner>
+    <mat-spinner *ngIf='showSavespinner' diameter='20'></mat-spinner>
     <span *ngIf='showSavespinner'>Processing...</span>
     &nbsp;
     <span *ngIf='!showDeleteSpinner'>
       <button mat-raised-button color="accent" class="text-upper" [disabled]="(noedit)" (click)='deleteCoverTmplt()'>Delete</button>
     </span>
-    <mat-spinner *ngIf='showDeleteSpinner' diameter='30'></mat-spinner>
+    <mat-spinner *ngIf='showDeleteSpinner' diameter='20'></mat-spinner>
     <span *ngIf='showDeleteSpinner'>Processing...</span>  
   </div>
 </div>

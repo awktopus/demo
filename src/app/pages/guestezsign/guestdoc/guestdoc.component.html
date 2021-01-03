@@ -206,28 +206,28 @@ style="background:#eeeeff">
             <table>
               <tr>
                 <td *ngIf='curpage.presignstatus'>
-                  <button mat-raised-button color="accent" (click)="viewPreSignPage()">View</button>
+                  <button mat-raised-button color="accent" class="text-upper" (click)="viewPreSignPage()">View</button>
                   &nbsp;
                 </td>
                
                 <td *ngIf='curpage.presignstatus'>
-                  <button mat-raised-button color="accent" (click)="SkipPage()">Next</button>
+                  <button mat-raised-button color="accent" class="text-upper" (click)="SkipPage()">Next</button>
                   &nbsp;
                 </td>
                 
                 <td *ngIf='curpage.presignstatus'>
-                  <button mat-raised-button color="accent" (click)="submitSignCapData()">Update</button>
+                  <button mat-raised-button color="accent" class="text-upper" (click)="submitSignCapData()">Update</button>
                   &nbsp;
                 </td>
              
                 <td *ngIf='!curpage.presignstatus'>
-                  <button mat-raised-button color="accent" (click)="submitSignCapData()">Save</button>
+                  <button mat-raised-button color="accent" class="text-upper" (click)="submitSignCapData()">Save</button>
                 </td>
    
               </tr>
             </table>
           </span>
-          <mat-spinner *ngIf='showProcessSpinner' diameter='30'></mat-spinner>
+          <mat-spinner *ngIf='showProcessSpinner' diameter='20'></mat-spinner>
           <span *ngIf='showProcessSpinner'>Processing...</span>
         </td>
       </tr>
@@ -235,7 +235,7 @@ style="background:#eeeeff">
   </form>
 </div>
 <div *ngIf="viewType=='finalview'" class='signcapcls' style="word-break:break-word;white-space:normal !important;">
-  <font color=green>Please review and submit the signed document.</font>
+  <font color=green>Please review and press the submit button to finish signing.</font>
 
   <table width=80%>
     <tr>
@@ -244,15 +244,17 @@ style="background:#eeeeff">
     <tr>
       <td>
         <span *ngIf='!showReviewSpinner'>
-          <button mat-raised-button color="accent" (click)="previewDoc()">Review</button>
+          <button mat-raised-button color="accent" class="text-upper" (click)="previewDoc()">Review</button>
         </span>
-        <mat-spinner *ngIf='showReviewSpinner' diameter='40'></mat-spinner>
+        <mat-spinner *ngIf='showReviewSpinner' diameter='20'></mat-spinner>
         <span *ngIf='showReviewSpinner'>Processing...</span>
-        &nbsp;&nbsp;&nbsp;
-        <span *ngIf='!showSubmitSpinner'>
-          <button mat-raised-button color="accent" (click)="finalizeSigning()">Submit</button>
+        &nbsp;&nbsp;
+        <button mat-raised-button color="accent" class="text-upper" (click)="editSigning()">Edit</button>
+        &nbsp;&nbsp;
+         <span *ngIf='!showSubmitSpinner'>
+          <button mat-raised-button color="accent" class="text-upper" (click)="finalizeSigning()">Submit</button>
         </span>
-        <mat-spinner *ngIf='showSubmitSpinner' diameter='40'></mat-spinner>
+        <mat-spinner *ngIf='showSubmitSpinner' diameter='20'></mat-spinner>
         <span *ngIf='showSubmitSpinner'>Processing...</span>
       </td>
     </tr>

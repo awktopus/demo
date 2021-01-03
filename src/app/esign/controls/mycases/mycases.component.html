@@ -185,7 +185,7 @@
           <p>
             <strong>Identity Verification</strong>
           </p>
-          <hr>
+         <hr>
         </td>
       </tr>
       <tr>
@@ -212,7 +212,7 @@
           <span *ngIf="cliIdQuestion1" class='casecard'>
             {{cliIdQuestion1.question}}
           </span>
-        </td>
+        </td>     
         <td align=left width=30%>
           <mat-form-field *ngIf="cliIdQuestion1" class="questionfield">
             <input matInput placeholder="Answer here" [(ngModel)]="cliIdAnswer1">
@@ -445,7 +445,7 @@
       <span *ngIf='!showspinner'>
         <button mat-raised-button color="accent" (click)='submitCap()'>Submit</button>
       </span>
-      <mat-spinner *ngIf='showspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showspinner' diameter='20'></mat-spinner>
       <span *ngIf='showspinner'>Processing...</span>
     </p>
   </div>

@@ -138,7 +138,7 @@
             <mat-icon>check_circle_outline</mat-icon>
           </button>
         </span>
-        <mat-spinner *ngIf='showAddspinner' diameter='40'></mat-spinner>
+        <mat-spinner *ngIf='showAddspinner' diameter='20'></mat-spinner>
         <span *ngIf='showAddspinner'>Processing...</span>
         &nbsp; &nbsp;
         
@@ -149,7 +149,7 @@
             <mat-icon>loop</mat-icon>
           </button>
         </span>
-        <mat-spinner *ngIf='showEditspinner' diameter='40'></mat-spinner>
+        <mat-spinner *ngIf='showEditspinner' diameter='20'></mat-spinner>
         <span *ngIf='showEditspinner'>Processing...</span>
       </div>
     </div>
@@ -257,7 +257,7 @@
       </span>
     </td>
     <td>
-      <mat-spinner *ngIf='showAddspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showAddspinner' diameter='20'></mat-spinner>
       <span *ngIf='showAddspinner'>Processing...</span>
       <span *ngIf='!showEditspinner'>
         <button *ngIf='operation =="editreceipt"' mat-raised-button color="accent" class="text-upper" (click)="finalizeUpdateReceipt()">
@@ -266,7 +266,7 @@
       </span>
     </td>
     <td>
-      <mat-spinner *ngIf='showEditspinner' diameter='40'></mat-spinner>
+      <mat-spinner *ngIf='showEditspinner' diameter='20'></mat-spinner>
       <span *ngIf='showEditspinner'>Processing...</span>
       <button mat-raised-button color="accent" class="text-upper" (click)="cancelAddReceipt()">
         Cancel
