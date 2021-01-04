@@ -10,8 +10,8 @@ export const environment = {
  // apiLink: 'https://api.everleagues.com/api',
 //  apiEsignLink: 'https://ellab-esign.azurewebsites.net/api',
  // apiEsignLink: 'https://el-esign-staging.azurewebsites.net/api',
-  apiEsignLink: 'http://localhost:55940/api',
- // apiEsignLink: "https://elqa-tools.azurewebsites.net/api",
+ // apiEsignLink: 'http://localhost:55940/api',
+ apiEsignLink: "https://elqa-tools.azurewebsites.net/api",
  // roomHubLink: 'https://ellabapi.azurewebsites.net/roomhub',
   orgHubLink: 'https://ellabapi.azurewebsites.net/orghub'
 };

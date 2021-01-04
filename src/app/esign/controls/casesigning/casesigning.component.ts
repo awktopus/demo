@@ -369,7 +369,11 @@ pickField(event) {
   }
 
   editSigning() {
-
+    // reset signing sequences
+    this.mycase.signedformseq=[];
+    this.viewType="signing";
+    let nextform = this.findNextSigningForm(this.mycase, this.signer);
+    this.gotoNextForm(nextform);
   }
 
   goFinalize(){

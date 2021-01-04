@@ -600,7 +600,18 @@ export class EzsignGuestDocComponent implements OnInit {
   }
 
   editSigning() {
-
+    console.log("reset signing sequences");
+    this.cur_signed_pages=[];
+    let nextseq = this.findSignPageSeq(this.curcase, this.cursigner);
+    console.log("the next page seq:", nextseq);
+    console.log(nextseq);
+    if (nextseq > -1) {
+      // this.paramRouter.navigate('/tools/ezsign/ezsignsigningview', {case: this.mycase,pageSeq:nextseq,signer:this.signer});
+      this.curseq = nextseq;
+      this.prepareReviewData();
+      this.countTotalUnsignedPages();
+      this.goSignCap();
+    }
   }
 
 }
