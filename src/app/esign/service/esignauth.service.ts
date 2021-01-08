@@ -90,7 +90,20 @@ export class EsignAuthService {
   }
   isEsignAuth(): boolean {
     // const auth = localStorage.getItem(this.esign_key);
-    if (this.getESignToken()) { return true; } else { return false; }
+    let res=this.esignlocalstate.getESignAccessToken();
+    if(res){
+      if(res.accessToken){
+        console.log("found access token");
+        if(res.tokenUserId === this.getUserID())
+        {
+          console.log("user Matched");
+          return true;
+        } else {
+          console.log("user unmatched");
+        }
+      }
+    } 
+    return false;
   }
 
   updateOrg(newOrg: any) {
@@ -128,12 +141,12 @@ export class EsignAuthService {
     }
   }
 
-  setESignToken(token: string) {
+  setESignToken(token: string,userId) {
     // console.log('setting esign token:', token);
     // localStorage.setItem(this.esign_key, JSON.stringify(token));
     // this.esignauth = token;
     // localStorage.setItem(this.KEY_ESign, token);
-    this.esignlocalstate.setESignAccessToken(token);
+    this.esignlocalstate.setESignAccessToken(token,userId);
   }
 
   runESignAuth() {
