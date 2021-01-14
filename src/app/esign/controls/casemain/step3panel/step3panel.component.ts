@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, EventEmitter, Output } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {Cover1Component} from './coverletter/cover1/cover1.component';
 import {ESignCoverletterConfig} from '../../../beans/ESignCoverLetterConfig';
@@ -7,6 +7,7 @@ import { EsignserviceService } from '../../../service/esignservice.service';
 import { forEach } from '@angular/router/src/utils/collection';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CasetemplatesComponent } from './../../history/casetemplates/casetemplates.component';
+import { EsignuiserviceService } from '../../../service/esignuiservice.service';
 @Component({
   selector: 'app-step3panel',
   templateUrl: './step3panel.component.html',
@@ -22,7 +23,9 @@ export class Step3panelComponent implements OnInit {
   reviewcpa: ESignCPA;
   showSavespinner = false;
   showAnotherCasespinner = false;
-  constructor( public dialog: MatDialog, private service: EsignserviceService, private router: Router) {
+  @Output("parentCaseControl") parentCaseControl: EventEmitter<any> = new EventEmitter();
+  constructor( public dialog: MatDialog, private service: EsignserviceService,
+    private uiservice: EsignuiserviceService, private router: Router) {
 
     this.cpas = []; // need service to pull this data
     this.coverletter_type = null;
@@ -102,17 +105,8 @@ export class Step3panelComponent implements OnInit {
   }
 
   createAnotherCase() {
-
-  this.router.navigateByUrl('main/esign/case/newcaseID');
-
-  //  this.showAnotherCasespinner = true;
-  //  console.log('showCaseTemplatesPopup');
-  //  this.router.navigateByUrl('main/esign/history/reviewcases');
-  //   const dialogRef = this.dialog.open(CasetemplatesComponent, {
-  //     width: '1260px'
-  //   });
-  //   dialogRef.componentInstance.setData('casepanel');
-  //   this.showAnotherCasespinner = false;
+    this.parentCaseControl.emit({"value": "newCaseEvent"});
+    // this.router.navigateByUrl('main/esign/case/newcaseID');
   }
 }
 

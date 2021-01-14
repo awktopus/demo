@@ -70,7 +70,7 @@
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>Classification, Validation and Send for Review</ng-template>
-            <app-step3panel></app-step3panel>
+            <app-step3panel (parentCaseControl)="handleCreateNewCaseEvent($event)"></app-step3panel>
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>Approve and Send to Client</ng-template>

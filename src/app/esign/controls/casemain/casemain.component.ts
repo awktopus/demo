@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Step1panelComponent } from './step1panel/step1panel.component';
 import { EsignuiserviceService } from '../../service/esignuiservice.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatStepper } from '@angular/material';
 @Component({
   selector: 'app-casemain',
   templateUrl: './casemain.component.html',
@@ -16,6 +17,7 @@ export class CasemainComponent implements OnInit, AfterViewInit {
   coverletter_type: String;
   mycaseID: string;
   @ViewChild(Step1panelComponent) cstep1: Step1panelComponent;
+  @ViewChild(MatStepper) stepper: MatStepper;
   constructor(private service: EsignserviceService,
     private uiservice: EsignuiserviceService, private router: Router,
     private route: ActivatedRoute) {
@@ -64,7 +66,7 @@ export class CasemainComponent implements OnInit, AfterViewInit {
             this.cstep1.setInitCase(existingCase, 'update-case');
             console.log('set stepper');
             this.uiservice.setStepper(0);
-         });
+          });
         }
       } else {
         console.log(this.mycaseID);
@@ -103,5 +105,19 @@ export class CasemainComponent implements OnInit, AfterViewInit {
   }
   navigateCaseManagement() {
     this.router.navigateByUrl('main/esign/history/reviewcases');
+  }
+
+  handleCreateNewCaseEvent(event) {
+    console.log('Inside handle create new case event');
+    console.log(event);
+    console.log('Stepper control - before');
+    console.log(this.ui_ctrl);
+    const cc = new ESignCase();
+    this.service.updateCase(cc);
+    this.cstep1.setInitCase(cc, 'newcase');
+    this.stepper.reset();
+    this.uiservice.setStepper(0);
+    console.log('Stepper control - after');
+    console.log(this.ui_ctrl);
   }
 }
